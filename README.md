@@ -2,7 +2,7 @@
 
 ## Contents
 
-- [Getting Started](#getting-started)
+- [Getting started](#getting-started)
 - [Stack](#stack)
 - [Code style](#code-style)
 - [Styling](#styling)
@@ -15,6 +15,8 @@
 - Clone the project
 - `npm install`
 - `npm run dev`
+- Open a second terminal
+- `npm run styleguidist` - for developing components and checking component documentation
 
 ## Stack
 
@@ -62,6 +64,8 @@ Styles are written in Emotion, but applied using [Destyle](https://github.com/sy
 
 Destyle allows us to build more reusable components, by simply providing a namespace for our styles, which we can then attach styles to from elsewhere in the app. This makes it easier to override styles when the component is used in other projects.
 
+Note that for now, destyle does not have access to default props.
+
 See the [Reusable components](#reusable-components) section for a guide on how to structure component styles.
 
 ## Style guide
@@ -72,6 +76,8 @@ There's an example component in the `bb-components` directory that shows how to 
 
 In addition to using Flow for self-documenting, each component in `bb-components` should have a readme named `{component-name}.md` where you can embed component examples using markdown.
 
+Note that because we use Destyle on the components, the default export is not a React Component, and will confuse React Styleguidist. To solve this, we can simply export both the component and the wrapped (destyled) component, with the wrapped being the default, and the base component being a named export. Check the example component for an example.
+
 ## Reusable components
 
 There are two component directores. `components` and `bb-components`. `components` is intended for project-specific things like the header, layout, etc. `bb-components` is intended to be the home of reusable components like form controls, buttons, alerts, etc.
@@ -79,6 +85,27 @@ There are two component directores. `components` and `bb-components`. `component
 The `bb-components` should only define the most important, skeleton styles. Most theming of components should be done from the `theme/components` folder in the project. This way, we can use the project's theme variables, and the `bb-components` are easily portable to other projects.
 
 ### Building components
+
+There are a few guidlines we should follow to keep our components consistent across the project.
+
+- Create function components by default. Upgrade to Class components when necessary.
+- The ordering of your code in a component should be:
+  - `// @flow`
+  - import statements
+  - any initialization of imports or variables
+  - any type definitions (E.g. `type Props`)
+  - component
+  - any redux connect functions
+  - default export
+- For class components, the ordering of methods should be:
+  - constructor
+  - lifecycle methods
+  - utility methods
+  - event handlers
+  - render
+- (Request for comment) For function components, destructure props in the parameters. For Class components, destructure `this.props` in the first line of the render function. Always include `...rest` and spread it to the root element of your component `<div className={styles.root} {...rest}> ... </div>`. It is good practice to destructure so that you can safely spread `rest` to the root element, and avoid writing `props.myParameter` throughout.
+
+### Building `bb-components`
 
 To build a `bb-component`, copy and rename the example component and it's files.
 
