@@ -1,4 +1,4 @@
 import './theme'
 import './globals/globals'
 
-import './components/bb-button'
+import './components/bb-example'

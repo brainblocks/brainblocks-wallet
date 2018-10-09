@@ -4,8 +4,8 @@ import theme from '../theme'
 
 export const styles = {
   root: props => css`
-    background: green;
+    border: 2px solid blue;
   `
 }
 
-addStyles('BB-Button', styles)
+addStyles('BB-Example', styles)

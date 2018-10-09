@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Button from '~/bb-components/button/Button'
+import Button from '~/bb-components/example-component/ExampleComponent'
 import { api as userAPI } from '~/state/user'
 
 const Index = props => {
