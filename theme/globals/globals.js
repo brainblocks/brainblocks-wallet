@@ -35,6 +35,7 @@ injectGlobal`
   a {
     color: ${theme.color.links.link};
     transition: color .3s ease;
+    text-decoration: none;
     &:hover {
       color: ${theme.color.links.hover};
     }

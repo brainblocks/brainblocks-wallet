@@ -73,7 +73,7 @@ const theme = {
     small: 640,
     tablet: 768,
     desktop: 1020,
-    large: 1140
+    large: 1280
   },
   buttons: {
     borderRadius: 14

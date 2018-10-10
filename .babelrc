@@ -1,4 +1,16 @@
 {
   "presets": ["next/babel", "@babel/flow"],
-  "plugins": [["babel-plugin-root-import"]]
+  "plugins": [
+    ["babel-plugin-root-import"],
+    [
+      "emotion",
+      {
+        "sourceMap": false,
+        "autoLabel": true,
+        "labelFormat": "[filename]--[local]",
+        "cssPropOptimization": true
+      }
+    ],
+    ["inline-react-svg"]
+  ]
 }

@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import theme from '../theme'
 
 export const pageWidth = css`
-  width: 92%;
+  width: 100%;
   max-width: ${theme.layout.pageWidth}px;
   margin-left: auto;
   margin-right: auto;

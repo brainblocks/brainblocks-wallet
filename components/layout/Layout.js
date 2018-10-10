@@ -1,11 +1,24 @@
 import React from 'react'
 import { destyle } from 'destyle'
+import Head from 'next/head'
 import Header from '~/components/header/Header'
 import Footer from '~/components/footer/Footer'
 
 const Layout = ({ styles, children, ...rest }) => {
   return (
     <div className={styles.root}>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"
+          rel="stylesheet"
+        />
+        <title>My page title</title>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width"
+          key="viewport"
+        />
+      </Head>
       <div className={styles.header}>
         <Header />
       </div>
