@@ -82,7 +82,7 @@ Note that because we use Destyle on the components, the default export is not a 
 
 There are two component directores. `components` and `bb-components`. `components` is intended for project-specific things like the header, layout, etc. `bb-components` is intended to be the home of reusable components like form controls, buttons, alerts, etc.
 
-The `bb-components` should only define the most important, skeleton styles. Most theming of components should be done from the `theme/components` folder in the project. This way, we can use the project's theme variables, and the `bb-components` are easily portable to other projects.
+The `bb-components` should only define the most important, skeleton styles. Most theming of components should be done from the `theme/components` folder in the project. This way, we can use the project's theme variables, and the `bb-components` are easily portable to other projects. To apply the `bb-component` styles, simply import the `{component}.style.js` file into `bb-components/styles.js`.
 
 ### Building components
 

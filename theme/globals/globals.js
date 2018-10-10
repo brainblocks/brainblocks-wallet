@@ -11,12 +11,12 @@ injectGlobal`
   body, html {
     margin: 0;
     padding: 0;
-    font-family: ${theme.type.baseFontFamily};
-    background: #FFF;
     color: ${theme.color.text.base};
-    font-size: ${theme.type.baseFontSize}px;
+    font-family: ${theme.type.baseFontFamily};
     line-height: ${theme.type.baseLineHeight};
     font-weight: ${theme.type.baseFontWeight};
+    font-size: ${theme.type.baseFontSize}px;
+    background: ${theme.color.palette.darkBlue};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
