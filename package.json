@@ -8,17 +8,19 @@
     "build": "next build",
     "start": "next start",
     "flow": "flow",
-    "styleguidist": "npx styleguidist server"
+    "styleguidist": "npx styleguidist server",
+    "test": ""
   },
   "author": "BrainBlocks",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "color": "^3.0.0",
+    "color": "^3.1.0",
     "destyle": "^0.2.3",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
     "immer": "^1.7.2",
+    "mdi-react": "^4.4.0",
     "moment": "^2.22.2",
     "next": "^7.0.1",
     "react": "^16.5.2",

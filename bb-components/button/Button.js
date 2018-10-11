@@ -3,30 +3,35 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 
 type Props = {
-  /** Click handler for button */
-  onClick?: (SyntheticEvent<>) => mixed,
   /** Button contents */
   children: React.Node,
+  el?: 'button' | 'a',
   type?: 'primary' | 'secondary',
+  /** Whether to fill the available width */
+  block?: boolean,
+  /** Custom color */
+  color?: string,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
 
 /**
- * ExampleComponent.
+ * Button.
  */
-export const ExampleComponent = ({
+export const Button = ({
   styles,
-  onClick,
   children,
+  block = false,
+  el = 'button',
   type = 'secondary',
   ...rest
 }: Props) => {
+  const El = el
   return (
-    <button className={styles.root} onClick={onClick} {...rest}>
+    <El className={styles.root} {...rest}>
       {children}
-    </button>
+    </El>
   )
 }
 
-export default destyle(ExampleComponent, 'BB-Example')
+export default destyle(Button, 'BB-Button')

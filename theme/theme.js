@@ -76,7 +76,7 @@ const theme = {
     large: 1280
   },
   buttons: {
-    borderRadius: 14
+    borderRadius: 10
   }
 }
 
