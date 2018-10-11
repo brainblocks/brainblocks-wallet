@@ -3,6 +3,7 @@ const path = require('path')
 module.exports = {
   components: 'bb-components/**/[A-Z]*.js',
   require: [
+    path.join(__dirname, 'node_modules/focus-visible/dist/focus-visible.js'),
     path.join(__dirname, 'bb-components/styles'),
     path.join(__dirname, 'theme/index')
   ],

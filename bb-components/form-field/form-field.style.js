@@ -5,6 +5,7 @@ import theme from '../theme'
 export const styles = {
   root: props => css`
     display: flex;
+    align-items: center;
     background: #fff;
     padding: 0.25em 0.5em;
     border: 1px solid #ddd;

@@ -1,3 +1,4 @@
+import 'focus-visible/dist/focus-visible.js'
 import App, { Container } from 'next/app'
 import React from 'react'
 import withReduxStore from '~/utils/with-redux-store'

@@ -3,6 +3,9 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 
 type Props = {
+  /** Whether to show a `textarea` instead of an `input` */
+  multiline?: boolean,
+  rows?: number,
   /** Change handler for field */
   onChange: (SyntheticEvent<>) => mixed,
   /** Component must always be controlled */
@@ -12,17 +15,20 @@ type Props = {
 }
 
 /**
- * TextField.
+ * Input.
  */
-export const TextField = ({ styles, onChange, value = '', ...rest }: Props) => {
+export const Input = ({
+  styles,
+  multiline,
+  onChange,
+  value,
+  rows = 3,
+  ...rest
+}: Props) => {
+  const El = multiline ? 'textarea' : 'input'
   return (
-    <input
-      className={styles.root}
-      onChange={onChange}
-      value={value}
-      {...rest}
-    />
+    <El className={styles.root} onChange={onChange} value={value} {...rest} />
   )
 }
 
-export default destyle(TextField, 'BB-TextField')
+export default destyle(Input, 'BB-Input')

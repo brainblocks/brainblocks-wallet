@@ -8,7 +8,9 @@ injectGlobal`
   *:after {
     box-sizing: border-box;
   }
-  :focus:not(:focus-visible) { outline: none; }
+  .js-focus-visible :focus:not([data-focus-visible-added]) {
+    outline: none;
+  }
   body, html {
     margin: 0;
     padding: 0;

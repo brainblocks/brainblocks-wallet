@@ -63,7 +63,7 @@ const Header = ({ styles, children, router, ...rest }) => {
           <div className={styles.userMenu}>
             <img
               className={styles.userAvatar}
-              src="http://profilepicturesdp.com/wp-content/uploads/2018/07/tayjongbt-gaming-profile-pictures.jpg"
+              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=28"
               alt="User name"
             />
             <span className={styles.userName}>User name</span>

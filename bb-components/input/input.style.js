@@ -4,8 +4,12 @@ import theme from '../theme'
 
 export const styles = {
   root: props => css`
-    border: none;
+    border: 1px solid #eee;
+    ${!!props.multiline &&
+      css`
+        height: ${(props.rows || 3) * 32}px;
+      `};
   `
 }
 
-addStyles('BB-TextField', styles)
+addStyles('BB-Input', styles)

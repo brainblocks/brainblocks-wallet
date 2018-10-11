@@ -6,7 +6,7 @@ type Props = {
   /** Button contents */
   children: React.Node,
   el?: 'button' | 'a',
-  type?: 'primary' | 'secondary',
+  type?: 'primary' | 'secondary' | 'util',
   /** Whether to fill the available width */
   block?: boolean,
   /** Custom color */

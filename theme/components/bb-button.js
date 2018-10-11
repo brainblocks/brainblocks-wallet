@@ -1,5 +1,6 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
+import Color from 'color'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
@@ -29,6 +30,20 @@ export const styles = {
       ? css`
           text-transform: uppercase;
           font-size: 18px;
+        `
+      : null};
+    ${props.type === 'util'
+      ? css`
+          text-transform: uppercase;
+          font-size: 14px;
+          padding: 0.4em 0.8em;
+          border-radius: ${theme.borderRadius.sm}px;
+          background: ${props.color || theme.color.gray.midLight};
+          &:hover {
+            background: ${Color(props.color || theme.color.gray.midLight)
+              .darken(0.2)
+              .toString()};
+          }
         `
       : null};
     &:hover {
