@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     background: ${props.color ? props.color : '#eee'};
     display: inline-block;

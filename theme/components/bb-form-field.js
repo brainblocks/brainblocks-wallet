@@ -4,7 +4,7 @@ import Color from 'color'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     align-items: center;
     border-radius: ${theme.borderRadius.md}px;

@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     display: grid;
     grid-template-columns: repeat(12, 1fr);

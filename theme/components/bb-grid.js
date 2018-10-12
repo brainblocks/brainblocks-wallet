@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     grid-gap: ${props.gutter
       ? `${props.gutter}px`

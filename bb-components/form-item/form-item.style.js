@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     display: flex;
     flex-wrap: wrap;

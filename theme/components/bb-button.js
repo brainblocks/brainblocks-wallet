@@ -4,7 +4,7 @@ import Color from 'color'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     cursor: pointer;
     border-radius: ${theme.buttons.borderRadius}px;

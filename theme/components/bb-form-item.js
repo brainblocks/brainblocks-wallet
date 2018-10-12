@@ -3,7 +3,7 @@ import { addStyles } from 'destyle'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
-export const styles = {
+const styles = {
   root: props => css`
     align-items: baseline;
   `,
