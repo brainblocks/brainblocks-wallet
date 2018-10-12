@@ -6,6 +6,7 @@ export const pageWidth = css`
   max-width: ${theme.layout.pageWidth}px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 ${theme.layout.pagePadding}px;
 `
 
 export const resetList = css`

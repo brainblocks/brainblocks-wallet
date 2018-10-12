@@ -1,8 +1,9 @@
+// @flow
 import React from 'react'
 import { destyle } from 'destyle'
 import Head from 'next/head'
-import Header from '~/components/header/Header'
-import Footer from '~/components/footer/Footer'
+import Header from './Header'
+import Footer from './Footer'
 
 const Layout = ({ styles, children, ...rest }) => {
   return (

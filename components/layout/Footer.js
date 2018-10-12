@@ -5,7 +5,10 @@ const Footer = ({ styles, children, ...rest }) => {
   return (
     <div className={styles.root}>
       <div className={styles.pageWidth}>
-        <div className={styles.inner}>Footer</div>
+        <div className={styles.inner}>
+          &copy; BrainBlocks {new Date().getFullYear()}.{' '}
+          <a href="#">Help / Suggestions</a>
+        </div>
       </div>
     </div>
   )

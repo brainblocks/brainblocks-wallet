@@ -14,9 +14,15 @@ const Button = require('../button/Button').default
     label="Item label"
     description="Here is some help text..."
     extra="Extra!"
+    fieldId="input"
   >
     <FormField adornEnd={<Button type="util">Copy</Button>}>
-      <Input placeholder="Placeholder..." value="" onChange={() => null} />
+      <Input
+        id="input"
+        placeholder="Placeholder..."
+        value=""
+        onChange={() => null}
+      />
     </FormField>
   </FormItem>
 </div>
@@ -42,9 +48,10 @@ const opts = [
     label="Item label"
     description="Here is some help text..."
     extra="Extra!"
+    fieldId="select"
   >
     <FormField adornStart={<UserIcon />}>
-      <Select options={opts} value="one" onChange={() => null} />
+      <Select id="select" options={opts} value="one" onChange={() => null} />
     </FormField>
   </FormItem>
 </div>
@@ -64,10 +71,12 @@ const Button = require('../button/Button').default
     label="Item label"
     description="Here is some help text..."
     extra="Extra!"
+    fieldId="textarea"
   >
     <FormField>
       <Input
         multiline
+        id="textarea"
         rows={3}
         placeholder="Placeholder..."
         value=""

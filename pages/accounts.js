@@ -11,12 +11,10 @@ const Index = props => {
   return (
     <Layout>
       <Head>
-        <title>Dashboard</title>
+        <title>Accounts</title>
       </Head>
-      <PageHeader title="Dashboard" indentTitle />
-      <PageContent pad background>
-        Transactions...
-      </PageContent>
+      <PageHeader title="Accounts" />
+      <PageContent>List accounts</PageContent>
     </Layout>
   )
 }

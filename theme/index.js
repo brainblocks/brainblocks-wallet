@@ -10,6 +10,10 @@ import './components/bb-input'
 import './components/bb-select'
 
 // Components ===
+
+// Layout
 import './components/layout'
 import './components/header'
+import './components/page-header'
+import './components/page-content'
 import './components/footer'

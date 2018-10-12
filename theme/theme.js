@@ -66,7 +66,8 @@ const theme = {
     headerIndent: 18
   },
   layout: {
-    pageWidth: 980
+    pageWidth: 1016,
+    pagePadding: 18
   },
   bp: {
     mobile: 480,

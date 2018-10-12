@@ -33,7 +33,7 @@ export const styles = {
     }
     li {
       display: inline-block;
-      margin-right: 2.5em;
+      margin-right: 2.2em;
       &.is-active {
         a {
           color: #fff;
@@ -50,6 +50,8 @@ export const styles = {
       }
     }
     svg {
+      width: 15px;
+      height: 15px;
       margin-right: 10px;
     }
     path {
