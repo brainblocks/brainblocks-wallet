@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
+import TransactionsList from '~/components/transactions/TransactionsList'
 import { api as userAPI } from '~/state/user'
 
 const Index = props => {
@@ -15,7 +16,7 @@ const Index = props => {
       </Head>
       <PageHeader title="Dashboard" indentTitle />
       <PageContent pad background>
-        Transactions...
+        <TransactionsList account="all" />
       </PageContent>
     </Layout>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
 import { destyle } from 'destyle'
 
-const Footer = ({ styles, children, ...rest }) => {
+const Footer = ({ styles, ...rest }) => {
   return (
     <div className={styles.root}>
       <div className={styles.pageWidth}>

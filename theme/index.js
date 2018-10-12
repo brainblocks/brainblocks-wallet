@@ -17,3 +17,7 @@ import './components/header'
 import './components/page-header'
 import './components/page-content'
 import './components/footer'
+
+// Transactions
+import './components/transactions-list'
+import './components/transaction-image'

@@ -21,7 +21,7 @@ const menuItems = [
   },
   {
     href: '/send-receive',
-    title: 'Send / Receive',
+    title: 'Send & Receive',
     icon: <SendReceiveIcon />
   },
   {

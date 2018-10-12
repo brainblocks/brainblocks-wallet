@@ -10,13 +10,13 @@ const styles = {
   pageWidth,
   inner: css`
     text-align: center;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.5);
     font-size: ${theme.type.baseFontSize - 2}px;
     p {
       margin: 0;
     }
     a {
-      color: rgba(255, 255, 255, 0.75);
+      color: rgba(255, 255, 255, 0.5);
       &:hover {
         color: #fff;
       }

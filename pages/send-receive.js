@@ -13,9 +13,9 @@ const SendReceive = props => {
   return (
     <Layout>
       <Head>
-        <title>Send or Receive</title>
+        <title>Send & Receive</title>
       </Head>
-      <PageHeader title="Send or Receive" indentTitle />
+      <PageHeader title="Send & Receive" indentTitle />
       <PageContent pad background>
         <FormItem
           label="Item label"

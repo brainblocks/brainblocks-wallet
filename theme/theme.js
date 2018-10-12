@@ -34,13 +34,15 @@ const theme = {
       disabled: '#CCCCCC'
     },
     borders: {
-      sep: '#F3F3F3'
+      sep: '#ededed'
     },
     status: {
       error: '#E44545',
+      errorLight: '#FFD2D2',
       warning: '#EBB756',
       info: color.palette.lightBlue,
-      success: '#7CCA7D'
+      success: '#7CCA7D',
+      successLight: '#C9F9CE'
     },
     links: {
       link: color.palette.lightBlue,
