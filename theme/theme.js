@@ -31,7 +31,7 @@ const theme = {
       base: color.gray.dark,
       light: '#AAAAAA',
       headings: color.gray.darkest,
-      disabled: '#CCCCCC'
+      disabled: '#D3D3D3'
     },
     borders: {
       sep: '#ededed'
@@ -40,7 +40,9 @@ const theme = {
       error: '#E44545',
       errorLight: '#FFD2D2',
       warning: '#EBB756',
+      warningLight: '#FBE6BE',
       info: color.palette.lightBlue,
+      infoLight: '#C9E5F9',
       success: '#7CCA7D',
       successLight: '#C9F9CE'
     },

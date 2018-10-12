@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
+import NanoAddress from '~/bb-components/nano-address/NanoAddress'
 import TransactionImage from './TransactionImage'
 
 const accounts = {
@@ -70,7 +71,6 @@ const transactions = {
     fromAddress:
       'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
     note: '',
-    accountType: 'nano',
     accountId: 'abcd',
     status: 'confirmed',
     note: ''
@@ -84,8 +84,9 @@ const transactions = {
     type: 'receive',
     fromType: 'account',
     fromAccount: 'abcd',
+    image:
+      'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=44',
     note: '',
-    accountType: 'account',
     accountId: 'abcd',
     status: 'confirmed',
     note: 'Thanks for the beers'
@@ -98,12 +99,27 @@ const transactions = {
     valueFiat: 5.32,
     type: 'send',
     toType: 'contact',
+    image:
+      'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=44',
     toContact: 'abcd',
     note: '',
-    accountType: 'nano',
     accountId: 'abcd',
     status: 'pending',
     note: 'Electricity Bill'
+  },
+  nop: {
+    id: 'nop',
+    timestamp: 1539314703941,
+    amountNano: 2.1,
+    valueUsd: 5.32,
+    valueFiat: 5.32,
+    type: 'transfer',
+    fromAccount: 'abcd',
+    toAccount: 'efg',
+    note: '',
+    accountId: 'abcd',
+    status: 'confirmed',
+    note: ''
   }
 }
 
@@ -141,12 +157,18 @@ class TransactionsList extends React.Component<Props, State> {
           <td className={styles.contactCol}>
             {tx.type === 'receive' && (
               <>
-                {tx.fromType === 'address' && <span>{tx.fromAddress}</span>}
+                {tx.fromType === 'address' && (
+                  <span>
+                    <NanoAddress address={tx.fromAddress} />
+                  </span>
+                )}
                 {tx.fromType === 'account' && <span>{tx.fromAccount}</span>}
               </>
             )}
           </td>
-          <td className={styles.noteCol}>{tx.note}</td>
+          <td className={styles.noteCol}>
+            {tx.note || <span className={styles.noNote}>No description</span>}
+          </td>
           <td className={styles.valueCol}>{tx.amountNano}</td>
           <td className={styles.actionCol}>v</td>
         </tr>

@@ -2,6 +2,10 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
+const td = css`
+  vertical-align: middle;
+`
+
 const styles = {
   root: css`
     padding: 0 0 30px;
@@ -26,21 +30,35 @@ const styles = {
     }
   `,
   imgCol: css`
+    ${td};
     text-align: center;
+    padding-right: 24px;
   `,
   accountCol: css`
+    ${td};
     text-align: left;
   `,
   contactCol: css`
+    ${td};
     text-align: left;
   `,
   noteCol: css`
+    ${td};
     text-align: left;
+    td& {
+      font-size: 12px;
+      color: ${theme.color.text.light};
+    }
+  `,
+  noNote: css`
+    color: ${theme.color.text.disabled};
   `,
   valueCol: css`
+    ${td};
     text-align: right;
   `,
   actionCol: css`
+    ${td};
     text-align: center;
   `
 }
