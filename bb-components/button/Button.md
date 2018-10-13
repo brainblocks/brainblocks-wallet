@@ -3,7 +3,8 @@ Button example:
 Props are spread to the root element, so if you use `el="a"` you can add `href`, `target`, etc. If you use `el="button"` (the default) you can add `onClick`, etc.
 
 ```js
-<div
+const UserIcon = require('mdi-react/UserIcon')
+;<div
   style={{
     display: 'flex',
     justifyContent: 'space-around',
@@ -22,5 +23,11 @@ Props are spread to the root element, so if you use `el="a"` you can add `href`,
     </Button>
   </div>
   <Button color="green">Custom Color</Button>
+  <Button type="icon">
+    <UserIcon />
+  </Button>
+  <Button type="icon" size="44">
+    <UserIcon />
+  </Button>
 </div>
 ```

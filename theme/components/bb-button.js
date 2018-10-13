@@ -20,6 +20,10 @@ const styles = {
     ${backgroundGradient(props.color || theme.color.palette.teal, true)};
     background-position: left top;
     background-size: 200% 150%;
+    &:hover {
+      color: #fff;
+      background-size: 100% 100%;
+    }
     ${props.block
       ? css`
           padding-left: 0.5em;
@@ -46,10 +50,32 @@ const styles = {
           }
         `
       : null};
-    &:hover {
-      color: #fff;
-      background-size: 100% 100%;
-    }
+    ${props.type === 'icon'
+      ? css`
+          padding: 0;
+          width: ${props.size || 24}px;
+          height: ${props.size || 24}px;
+          border-radius: 100%;
+          background: transparent;
+          color: ${theme.color.text.base};
+          position: relative;
+          &:hover {
+            background: ${theme.color.gray.light};
+            color: ${theme.color.text.headings};
+          }
+          svg {
+            width: ${(props.size || 24) * 0.5}px;
+            height: ${(props.size || 24) * 0.5}px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
+          path {
+            fill: currentColor;
+          }
+        `
+      : null};
   `
 }
 

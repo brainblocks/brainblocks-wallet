@@ -41,9 +41,9 @@ const theme = {
       errorLight: '#FFD2D2',
       warning: '#EBB756',
       warningLight: '#FBE6BE',
-      info: color.palette.lightBlue,
+      info: '#4090CA',
       infoLight: '#C9E5F9',
-      success: '#7CCA7D',
+      success: '#60B061',
       successLight: '#C9F9CE'
     },
     links: {

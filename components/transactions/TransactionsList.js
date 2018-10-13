@@ -1,21 +1,22 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import { destyle } from 'destyle'
-import NanoAddress from '~/bb-components/nano-address/NanoAddress'
-import TransactionImage from './TransactionImage'
+import TransactionListItem from './TransactionListItem'
 
 const accounts = {
   abcd: {
     id: 'abcd',
     balance: 55,
     name: 'Spending',
-    color: 'purple'
+    color: 'purple',
+    type: 'nano'
   },
   efg: {
     id: 'efg',
     balance: 12.3456,
     name: 'Trading',
-    color: 'gold'
+    color: 'gold',
+    type: 'nano'
   },
   hij: {
     id: 'hij',
@@ -55,7 +56,6 @@ const transactions = {
     toAddress:
       'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
     note: '',
-    accountType: 'nano',
     accountId: 'abcd',
     status: 'pending',
     note: 'Electricity Bill'
@@ -71,7 +71,7 @@ const transactions = {
     fromAddress:
       'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
     note: '',
-    accountId: 'abcd',
+    accountId: 'efg',
     status: 'confirmed',
     note: ''
   },
@@ -87,7 +87,7 @@ const transactions = {
     image:
       'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=44',
     note: '',
-    accountId: 'abcd',
+    accountId: 'hij',
     status: 'confirmed',
     note: 'Thanks for the beers'
   },
@@ -128,57 +128,30 @@ type Props = {
   account: 'all'
 }
 
-type State = {
-  expandedTransactions: string[]
-}
-
-class TransactionsList extends React.Component<Props, State> {
-  state = {
-    expandedTransactions: []
-  }
-
+class TransactionsList extends React.Component<Props> {
   /**
    * Render the transactions as table rows
    */
   renderTransactions = txKeys => {
     const { styles, account } = this.props
-
     return txKeys.map((txId, i) => {
       const tx = transactions[txId]
-
       return (
-        <tr key={`tx${i}`}>
-          <td className={styles.imgCol}>
-            <TransactionImage transaction={tx} />
-          </td>
-          {account === 'all' && (
-            <td className={styles.accountCol}>{accounts[tx.accountId].name}</td>
-          )}
-          <td className={styles.contactCol}>
-            {tx.type === 'receive' && (
-              <>
-                {tx.fromType === 'address' && (
-                  <span>
-                    <NanoAddress address={tx.fromAddress} />
-                  </span>
-                )}
-                {tx.fromType === 'account' && <span>{tx.fromAccount}</span>}
-              </>
-            )}
-          </td>
-          <td className={styles.noteCol}>
-            {tx.note || <span className={styles.noNote}>No description</span>}
-          </td>
-          <td className={styles.valueCol}>{tx.amountNano}</td>
-          <td className={styles.actionCol}>v</td>
-        </tr>
+        <TransactionListItem
+          key={txId}
+          transaction={tx}
+          account={account === 'all' ? accounts[tx.accountId] : null}
+        />
       )
     })
   }
 
+  /**
+   * @todo - order txKeys by timestamp before return
+   */
   render() {
     const { styles, account = 'all', ...rest } = this.props
-    const txKeys = Object.keys(transactions) // @todo - order this list by timestamp
+    const txKeys = Object.keys(transactions)
 
     return (
       <div className={styles.root} {...rest}>

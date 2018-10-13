@@ -31,12 +31,13 @@ const styles = {
   `,
   imgCol: css`
     ${td};
-    text-align: center;
+    text-align: left;
     padding-right: 24px;
   `,
   accountCol: css`
     ${td};
     text-align: left;
+    width: 23%;
   `,
   contactCol: css`
     ${td};
@@ -45,10 +46,10 @@ const styles = {
   noteCol: css`
     ${td};
     text-align: left;
-    td& {
-      font-size: 12px;
-      color: ${theme.color.text.light};
-    }
+  `,
+  note: css`
+    font-size: 12px;
+    color: ${theme.color.text.light};
   `,
   noNote: css`
     color: ${theme.color.text.disabled};
@@ -57,9 +58,29 @@ const styles = {
     ${td};
     text-align: right;
   `,
+  amountNano: props => css`
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: ${theme.type.baseFontSize};
+    color: ${theme.color.status.error}; /* send by default */
+    ${props.transaction.type === 'receive' &&
+      css`
+        color: ${theme.color.status.success};
+      `} ${props.transaction.type === 'transfer' &&
+      css`
+        color: ${theme.color.status.info};
+      `};
+  `,
+  timeAgo: css`
+    display: block;
+    margin-top: 0.2em;
+    color: ${theme.color.text.light};
+    font-size: ${theme.type.baseFontSize - 2}px;
+  `,
   actionCol: css`
     ${td};
     text-align: center;
+    padding-left: 12px;
   `
 }
 

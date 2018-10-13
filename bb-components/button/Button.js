@@ -4,9 +4,12 @@ import { destyle } from 'destyle'
 
 type Props = {
   /** Button contents */
-  children: React.Node,
+  children?: React.Node,
   el?: 'button' | 'a',
-  type?: 'primary' | 'secondary' | 'util',
+  /** Only used for styling */
+  type?: 'primary' | 'secondary' | 'util' | 'icon',
+  /** Size - used for `icon` type */
+  size?: number,
   /** Whether to fill the available width */
   block?: boolean,
   /** Custom color */

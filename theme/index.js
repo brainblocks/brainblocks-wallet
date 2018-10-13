@@ -8,6 +8,7 @@ import './components/bb-form-item'
 import './components/bb-form-field'
 import './components/bb-input'
 import './components/bb-select'
+import './components/bb-key-value'
 
 // Components ===
 
@@ -21,3 +22,6 @@ import './components/footer'
 // Transactions
 import './components/transactions-list'
 import './components/transaction-image'
+
+// Accounts
+import './components/account-title'
