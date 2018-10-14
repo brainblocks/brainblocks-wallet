@@ -11,7 +11,7 @@ const hasLeftBorder = css`
     top: 4px;
     bottom: 4px;
     left: 0;
-    width: 2px;
+    width: 1px;
     background: rgba(255, 255, 255, 0.15);
   }
 `

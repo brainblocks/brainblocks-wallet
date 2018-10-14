@@ -30,7 +30,7 @@ const styles = {
       `};
   `,
   value: props => css`
-    margin-top: 0.2em;
+    margin-top: 6px;
     ${props.theme === 'header' &&
       css`
         color: #fff;
@@ -41,6 +41,16 @@ const styles = {
       css`
         font-size: ${theme.type.baseFontSize - 1}px;
         color: ${theme.color.text.light};
+      `};
+    ${props.size === 'lg' &&
+      css`
+        font-size: 42px;
+        font-weight: 500;
+        line-height: 1;
+      `};
+    ${props.size === 'sm' &&
+      css`
+        font-size: 18px;
       `};
   `
 }

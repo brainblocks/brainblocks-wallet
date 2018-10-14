@@ -29,6 +29,23 @@ const styles = {
         outline: none;
       }
     }
+    ${props.theme === 'outlined-on-dark' &&
+      css`
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        input,
+        select,
+        textarea {
+          color: #fff;
+          padding-top: 0.8em;
+          padding-bottom: 0.8em;
+          padding-left: 1em;
+        }
+        &:focus-within {
+          box-shadow: none;
+          border-color: rgba(255, 255, 255, 0.4);
+        }
+      `};
   `,
   adornStart: css`
     flex-grow: 0 !important;

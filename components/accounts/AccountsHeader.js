@@ -2,8 +2,10 @@
 import React from 'react'
 import { destyle } from 'destyle'
 import { formatNano, formatFiat, formatPercent } from '~/functions/format'
+import { convert } from '~/functions/convert'
 import KeyValue from '~/bb-components/key-value/KeyValue'
 import Button from '~/bb-components/button/Button'
+import ArrowUpIcon from '~/static/svg/icons/arrow-up.svg'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 
 type Props = {
@@ -36,7 +38,11 @@ const AccountsHeader = ({
         />
       </div>
       <div className={styles.value}>
-        <KeyValue theme="header" label="Value" value="$24,128.83" />
+        <KeyValue
+          theme="header"
+          label="Value"
+          value={formatFiat(convert(balance, 'nano', nanoPrice))}
+        />
       </div>
       <div className={styles.price}>
         <KeyValue
@@ -51,7 +57,8 @@ const AccountsHeader = ({
           label="Last 24h"
           value={
             <span>
-              <ArrowDownIcon /> {formatPercent(nano24hChange, true)}
+              {nano24hChange > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}{' '}
+              {formatPercent(nano24hChange, true)}
             </span>
           }
         />

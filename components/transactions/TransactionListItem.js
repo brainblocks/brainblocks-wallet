@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
+import { formatTimeAgo, formatNano } from '~/functions/format'
 import Button from '~/bb-components/button/Button'
 import NanoAddress from '~/bb-components/nano-address/NanoAddress'
 import KeyValue from '~/bb-components/key-value/KeyValue'
@@ -91,9 +92,9 @@ class TransactionListItem extends React.Component<Props, State> {
           <span className={styles.amountNano}>
             {tx.type === 'receive' && '+ '}
             {tx.type === 'send' && '- '}
-            {tx.amountNano} NANO
+            {formatNano(tx.amountNano)} NANO
           </span>
-          <span className={styles.timeAgo}>3 days ago</span>
+          <span className={styles.timeAgo}>{formatTimeAgo(tx.timestamp)}</span>
         </td>
         <td className={styles.actionCol}>
           <Button type="icon" size="24" style={{ marginRight: -6 }}>
@@ -105,4 +106,4 @@ class TransactionListItem extends React.Component<Props, State> {
   }
 }
 
-export default destyle(TransactionListItem, 'TransactionsList')
+export default destyle(TransactionListItem, 'TransactionListItem')

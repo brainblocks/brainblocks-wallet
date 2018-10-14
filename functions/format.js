@@ -5,7 +5,8 @@ import 'moment/locale/zh-cn'*/
 
 function formatNano(nanoVal, decimals = 3) {
   return new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: decimals
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: 2
   }).format(nanoVal)
 }
 

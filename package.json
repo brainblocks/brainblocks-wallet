@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "classnames": "^2.2.6",
     "color": "^3.1.0",
     "destyle": "^0.2.3",
     "emotion": "^9.2.12",

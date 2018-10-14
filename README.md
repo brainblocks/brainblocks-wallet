@@ -84,6 +84,40 @@ There are two component directores. `components` and `bb-components`. `component
 
 The `bb-components` should only define the most important, skeleton styles. Most theming of components should be done from the `theme/components` folder in the project. This way, we can use the project's theme variables, and the `bb-components` are easily portable to other projects. To apply the `bb-component` styles, simply import the `{component}.style.js` file into `bb-components/styles.js`.
 
+As much as possible, wherever a DOM element in your component has a className given by destyle, you should allow for it to be concatenated (using emotion's `cx` function) with a custom className passed via props. The order here matters, as emotion will combine the classNames into a single set of concatenated styles. Custom classes should be _after_ the default class. E.g.
+
+```js
+// @flow
+import * as React from 'react'
+import { destyle } from 'destyle'
+import { cx } from 'emotion'
+import type { ClassName } from '~/types'
+
+type Props = {
+  /** Extra class(es) for button element */
+  buttonClass?: ClassName,
+  /** Given by destyle. Do not pass this to the component as a prop. */
+  styles: Object
+}
+
+export const Button = ({
+  styles,
+  children
+  buttonClass,
+  ...rest
+}: Props) => {
+  return (
+    <button className={cx(styles.root, buttonClass)} {...rest}>
+      {children}
+    </button>
+  )
+}
+
+export default destyle(Button, 'BB-Button')
+```
+
+Not all existing BB Components do this yet as it was discovered after many of them were built. If you're editing a BB Component that doesn't do this, please add it in while you're there :)
+
 ### Building components
 
 There are a few guidlines we should follow to keep our components consistent across the project.

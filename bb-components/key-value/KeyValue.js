@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import classNames from 'classnames'
+import type { ClassName } from '~/types'
+import { cx } from 'emotion'
 
 type Props = {
   label: string,
@@ -11,11 +12,11 @@ type Props = {
   /** Dom element for value */
   valueEl?: string,
   /** Extra classes for wrapper element */
-  wrapperClass?: string | Array<string | Object> | Object,
+  wrapperClass?: ClassName,
   /** Extra classes for key element */
-  keyClass?: string | Array<string | Object> | Object,
+  keyClass?: ClassName,
   /** Extra classes for value element */
-  valueClass?: string | Array<string | Object> | Object,
+  valueClass?: ClassName,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -40,11 +41,9 @@ export const KeyValue = ({
   const KeyEl = keyEl
   const ValueEl = valueEl
   return (
-    <Wrapper className={classNames(styles.root, wrapperClass)}>
-      <KeyEl className={classNames(styles.key, keyClass)}>{label}</KeyEl>
-      <ValueEl className={classNames(styles.value, valueClass)}>
-        {value}
-      </ValueEl>
+    <Wrapper className={cx(styles.root, wrapperClass)}>
+      <KeyEl className={cx(styles.key, keyClass)}>{label}</KeyEl>
+      <ValueEl className={cx(styles.value, valueClass)}>{value}</ValueEl>
     </Wrapper>
   )
 }

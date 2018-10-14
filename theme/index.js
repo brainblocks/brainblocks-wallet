@@ -21,8 +21,12 @@ import './components/footer'
 
 // Transactions
 import './components/transactions-list'
+import './components/transaction-list-item'
 import './components/transaction-image'
 
 // Accounts
-import './components/accounts-header'
 import './components/account-title'
+
+// Sections
+import './components/dashboard-header'
+import './components/accounts-header'
