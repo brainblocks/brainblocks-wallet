@@ -8,7 +8,7 @@ const color = {
     darkest: '#000'
   },
   palette: {
-    lightPurple: '#A29BFE',
+    purple: '#A29BFE',
     gold: '#FDCB6E',
     darkBlue: '#1A2D58',
     green: '#60B061',

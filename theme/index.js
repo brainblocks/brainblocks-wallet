@@ -25,6 +25,8 @@ import './components/transaction-list-item'
 import './components/transaction-image'
 
 // Accounts
+import './components/accounts-list'
+import './components/account-list-item'
 import './components/account-title'
 
 // Sections

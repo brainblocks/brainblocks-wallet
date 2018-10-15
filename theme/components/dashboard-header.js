@@ -4,6 +4,7 @@ import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
 const hasLeftBorder = css`
+  margin-left: 24px;
   padding-left: 24px;
   position: relative;
   &:before {
@@ -29,7 +30,6 @@ const styles = {
     margin-right: ${theme.spacing.paddingLg.desktop}px;
   `,
   sendReceiveBtn: css`
-    margin-right: ${theme.spacing.paddingLg.desktop}px;
     text-align: left;
     flex-basis: 154px;
     position: relative;
@@ -60,6 +60,7 @@ const styles = {
     flex-basis: 33%;
     flex-grow: 1;
     border-radius: ${theme.borderRadius.md + 3}px;
+    margin-left: ${theme.spacing.paddingLg.desktop}px;
   `,
   // Info section
   selector: css`
@@ -69,7 +70,7 @@ const styles = {
   infoRow1: css`
     padding-left: 18px;
     display: flex;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     align-items: flex-end;
   `,
   balance: css`
@@ -90,16 +91,12 @@ const styles = {
     padding-left: 18px;
     display: flex;
   `,
-  value: css`
-    flex-grow: 0.8;
-  `,
+  value: css``,
   price: css`
     ${hasLeftBorder};
-    flex-grow: 0.8;
   `,
   change: props => css`
     ${hasLeftBorder};
-    flex-grow: 0.8;
     svg {
       width: 14px;
       height: 14px;

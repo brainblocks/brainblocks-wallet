@@ -64,8 +64,8 @@ const styles = {
             color: ${theme.color.text.headings};
           }
           svg {
-            width: ${(props.size || 24) * 0.5}px;
-            height: ${(props.size || 24) * 0.5}px;
+            width: ${props.iconSize || (props.size || 24) * 0.5}px;
+            height: ${props.iconSize || (props.size || 24) * 0.5}px;
             position: absolute;
             left: 50%;
             top: 50%;

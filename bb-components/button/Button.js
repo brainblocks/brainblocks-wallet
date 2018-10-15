@@ -12,6 +12,8 @@ type Props = {
   type?: 'primary' | 'secondary' | 'util' | 'icon',
   /** Size - used for `icon` type */
   size?: number,
+  /** Icon size - some icons appear bigger than others, this lets you manually normalize */
+  iconSize?: number,
   /** Whether to fill the available width */
   block?: boolean,
   /** Custom color */
@@ -19,7 +21,8 @@ type Props = {
   /** Extra class(es) for button element */
   buttonClass?: ClassName,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  destyleNames: string
 }
 
 /**
@@ -28,10 +31,13 @@ type Props = {
 export const Button = ({
   styles,
   children,
+  size,
+  iconSize,
   block = false,
   el = 'button',
   type = 'secondary',
   buttonClass,
+  destyleNames,
   ...rest
 }: Props) => {
   const El = el

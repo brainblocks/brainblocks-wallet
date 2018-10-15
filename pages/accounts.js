@@ -6,7 +6,10 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import AccountsHeader from '~/components/accounts/AccountsHeader'
+import AccountsList from '~/components/accounts/AccountsList'
 import { api as userAPI } from '~/state/user'
+
+import mockState from '~/state/mockState'
 
 const Index = props => {
   return (
@@ -21,7 +24,23 @@ const Index = props => {
           nano24hChange={-2.31}
         />
       </PageHeader>
-      <PageContent>List accounts</PageContent>
+      <PageContent>
+        {/** @todo this is a hacky, temporary title */}
+        <h3 style={{ marginTop: 0 }}>BrainBlocks Wallets</h3>
+        <AccountsList
+          type="nano"
+          nanoPrice={3.24}
+          accounts={mockState.accounts}
+        />
+        {/** @todo this is a hacky, temporary title */}
+        <h3 style={{ marginTop: 0 }}>Vaults</h3>
+        <AccountsList
+          type="vault"
+          nanoPrice={3.24}
+          accounts={mockState.accounts}
+          nanoAddresses={mockState.nanoAddresses}
+        />
+      </PageContent>
     </Layout>
   )
 }
