@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-Example', props => ({
+  root: css`
     background: #eee;
     ${props.type === 'primary' &&
       css`
@@ -11,6 +11,4 @@ const styles = {
         color: #fff;
       `};
   `
-}
-
-addStyles('BB-Example', styles)
+}))

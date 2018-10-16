@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-FormField', {
+  root: css`
     display: flex;
     align-items: center;
     background: #fff;
@@ -16,6 +16,4 @@ const styles = {
   adornEnd: css`
     margin-left: 0.66em;
   `
-}
-
-addStyles('BB-FormField', styles)
+})

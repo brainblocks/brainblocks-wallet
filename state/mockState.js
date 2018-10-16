@@ -21,7 +21,7 @@ export default {
         type: 'vault',
         seed: 'abcd',
         name: 'Vault',
-        color: 'purple',
+        color: 'gold',
         addresses: [
           'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
           'xrb_112345b3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7ji12345'

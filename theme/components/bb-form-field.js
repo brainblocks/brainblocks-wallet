@@ -4,8 +4,8 @@ import Color from 'color'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-FormField', props => ({
+  root: css`
     align-items: center;
     border-radius: ${theme.borderRadius.md}px;
     background: #fff;
@@ -59,6 +59,4 @@ const styles = {
     flex-grow: 0 !important;
     margin: 0 1em 0 0;
   `
-}
-
-addStyles('BB-FormField', styles)
+}))

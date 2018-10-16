@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-Select', {
+  root: css`
     appearance: none;
     border: 1px solid #eee;
     background: transparent;
@@ -15,6 +15,4 @@ const styles = {
       display: none;
     }
   `
-}
-
-addStyles('BB-Select', styles)
+})

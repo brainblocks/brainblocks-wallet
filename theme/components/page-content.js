@@ -3,10 +3,10 @@ import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 import { pageWidth } from '~/theme/globals/utils'
 
-const styles = {
+addStyles('PageContent', props => ({
   root: css``,
   pageWidth,
-  inner: props => css`
+  inner: css`
     margin: auto;
     min-height: 300px;
     ${!!props.background &&
@@ -21,7 +21,7 @@ const styles = {
         }
       `};
   `,
-  content: props => css`
+  content: css`
     margin: auto;
     ${!!props.pad &&
       css`
@@ -31,6 +31,4 @@ const styles = {
         }
       `};
   `
-}
-
-addStyles('PageContent', styles)
+}))

@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
-const styles = {
+addStyles('TransactionsList', {
   root: css`
     padding: 0 0 30px;
   `,
@@ -41,6 +41,4 @@ const styles = {
   valueCol: css`
     text-align: right;
   `
-}
-
-addStyles('TransactionsList', styles)
+})

@@ -2,10 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
-const styles = {
+addStyles('Layout', {
   root: css``,
   header: css``,
   footer: css``
-}
-
-addStyles('Layout', styles)
+})

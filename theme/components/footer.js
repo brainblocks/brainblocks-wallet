@@ -3,7 +3,7 @@ import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 import { pageWidth } from '~/theme/globals/utils'
 
-const styles = {
+addStyles('Footer', {
   root: css`
     padding: 12px 0;
   `,
@@ -22,6 +22,4 @@ const styles = {
       }
     }
   `
-}
-
-addStyles('Footer', styles)
+})

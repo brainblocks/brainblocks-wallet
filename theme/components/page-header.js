@@ -3,7 +3,7 @@ import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 import { pageWidth } from '~/theme/globals/utils'
 
-const styles = {
+addStyles('PageHeader', props => ({
   root: css`
     padding: 0 0 30px;
   `,
@@ -11,7 +11,7 @@ const styles = {
   inner: css`
     position: relative;
   `,
-  title: props => css`
+  title: css`
     margin: 0 0 20px;
     color: #fff;
     font-size: 18px;
@@ -30,6 +30,4 @@ const styles = {
     }
   `,
   content: css``
-}
-
-addStyles('PageHeader', styles)
+}))

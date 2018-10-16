@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-FormItem', {
+  root: css`
     display: flex;
     flex-wrap: wrap;
   `,
@@ -19,6 +19,4 @@ const styles = {
   description: css`
     flex: 0 0 100%;
   `
-}
-
-addStyles('BB-FormItem', styles)
+})

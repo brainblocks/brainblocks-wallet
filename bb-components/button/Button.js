@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import { cx } from 'emotion'
-import type { ClassName } from '~/types'
 
 type Props = {
   /** Button contents */
@@ -18,8 +16,6 @@ type Props = {
   block?: boolean,
   /** Custom color */
   color?: string,
-  /** Extra class(es) for button element */
-  buttonClass?: ClassName,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
   destyleNames: string
@@ -36,13 +32,12 @@ export const Button = ({
   block = false,
   el = 'button',
   type = 'secondary',
-  buttonClass,
   destyleNames,
   ...rest
 }: Props) => {
   const El = el
   return (
-    <El className={cx(styles.root, buttonClass)} {...rest}>
+    <El className={styles.root} {...rest}>
       {children}
     </El>
   )

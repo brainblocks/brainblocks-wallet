@@ -66,7 +66,14 @@ Destyle allows us to build more reusable components, by simply providing a names
 
 Note that for now, destyle does not have access to default props.
 
-See the [Reusable components](#reusable-components) section for a guide on how to structure component styles.
+### Structuring styles
+
+The general rules for styling are:
+
+- BB Components should only have skeleton styles in the `{bb-component}.styles.js` file
+- BB Components can be more fully themed in the project's `theme/components` directory
+- You can pass arbitrary props to any `destyle`'d component and use those props in your styles
+- You can also add contextual styles (E.g. _BB Buttons that are in the header should have these styles_) by adding the contextual styles in the containing component (_the header_), and passing them to the child component (_the BB Button_) in the `destyleMerge` prop.
 
 ## Style guide
 
@@ -83,40 +90,6 @@ Note that because we use Destyle on the components, the default export is not a 
 There are two component directores. `components` and `bb-components`. `components` is intended for project-specific things like the header, layout, etc. `bb-components` is intended to be the home of reusable components like form controls, buttons, alerts, etc.
 
 The `bb-components` should only define the most important, skeleton styles. Most theming of components should be done from the `theme/components` folder in the project. This way, we can use the project's theme variables, and the `bb-components` are easily portable to other projects. To apply the `bb-component` styles, simply import the `{component}.style.js` file into `bb-components/styles.js`.
-
-As much as possible, wherever a DOM element in your component has a className given by destyle, you should allow for it to be concatenated (using emotion's `cx` function) with a custom className passed via props. The order here matters, as emotion will combine the classNames into a single set of concatenated styles. Custom classes should be _after_ the default class. E.g.
-
-```js
-// @flow
-import * as React from 'react'
-import { destyle } from 'destyle'
-import { cx } from 'emotion'
-import type { ClassName } from '~/types'
-
-type Props = {
-  /** Extra class(es) for button element */
-  buttonClass?: ClassName,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
-}
-
-export const Button = ({
-  styles,
-  children
-  buttonClass,
-  ...rest
-}: Props) => {
-  return (
-    <button className={cx(styles.root, buttonClass)} {...rest}>
-      {children}
-    </button>
-  )
-}
-
-export default destyle(Button, 'BB-Button')
-```
-
-Not all existing BB Components do this yet as it was discovered after many of them were built. If you're editing a BB Component that doesn't do this, please add it in while you're there :)
 
 ### Building components
 
@@ -137,7 +110,7 @@ There are a few guidlines we should follow to keep our components consistent acr
   - utility methods
   - event handlers
   - render
-- (Request for comment) For function components, destructure props in the parameters. For Class components, destructure `this.props` in the first line of the render function. Always include `...rest` and spread it to the root element of your component `<div className={styles.root} {...rest}> ... </div>`. It is good practice to destructure so that you can safely spread `rest` to the root element, and avoid writing `props.myParameter` throughout.
+- For function components, destructure props in the parameters. For Class components, destructure `this.props` in the first line of the render function. Always include `...rest` and spread it to the root element of your component `<div className={styles.root} {...rest}> ... </div>`. It is good practice to destructure so that you can safely spread `rest` to the root element, and avoid writing `props.myParameter` throughout.
 
 ### Building `bb-components`
 

@@ -2,8 +2,10 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+const styles = {}
+
+addStyles('BB-Input', props => {
+  root: css`
     border: none;
     background: transparent;
     font-size: 15px;
@@ -20,6 +22,4 @@ const styles = {
       color: ${theme.color.text.light};
     }
   `
-}
-
-addStyles('BB-Input', styles)
+})

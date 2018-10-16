@@ -2,13 +2,13 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('AccountTitle', props => ({
+  root: css`
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
   `,
-  icon: props => css`
+  icon: css`
     width: 21px;
     height: 21px;
     margin-right: 10px;
@@ -21,7 +21,7 @@ const styles = {
       fill: ${props.color === 'light' ? '#FFF' : '#000'};
     }
   `,
-  title: props => css`
+  title: css`
     flex-grow: 1;
     position: relative;
     bottom: 4px;
@@ -36,7 +36,7 @@ const styles = {
         color: #fff;
       `};
   `,
-  subTitle: props => css`
+  subTitle: css`
     flex-basis: 100%;
     margin: 4px 0 0;
     color: ${theme.color.text.light};
@@ -46,6 +46,4 @@ const styles = {
         color: rgba(255, 255, 255, 0.6);
       `};
   `
-}
-
-addStyles('AccountTitle', styles)
+}))

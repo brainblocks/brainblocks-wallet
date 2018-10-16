@@ -49,7 +49,11 @@ class AccountListItem extends React.Component<Props, State> {
               <AccountTitle
                 sub={true}
                 backgroundcolor={account.color}
-                destyleNames="AccountListItem--AccountTitle"
+                destyleMerge={{
+                  icon: styles.accountTitleIcon,
+                  title: styles.accountTitleTitle,
+                  subTitle: styles.accountTitleSubTitle
+                }}
                 account={account}
               />
             </div>
@@ -62,7 +66,10 @@ class AccountListItem extends React.Component<Props, State> {
                     <small style={{ fontSize: '80%' }}>NANO</small>
                   </span>
                 }
-                destyleNames="AccountListItem--KeyValue"
+                destyleMerge={{
+                  key: styles.keyValueKey,
+                  value: styles.keyValueValue
+                }}
                 backgroundcolor={account.color}
                 theme="header"
               />
@@ -71,7 +78,10 @@ class AccountListItem extends React.Component<Props, State> {
               <KeyValue
                 label="Value"
                 value={formatFiat(convert(account.balance, 'nano', nanoPrice))}
-                destyleNames="AccountListItem--KeyValue"
+                destyleMerge={{
+                  key: styles.keyValueKey,
+                  value: styles.keyValueValue
+                }}
                 backgroundcolor={account.color}
                 theme="header"
               />
@@ -82,7 +92,7 @@ class AccountListItem extends React.Component<Props, State> {
                   type="icon"
                   size={36}
                   backgroundcolor={account.color}
-                  destyleNames="AccountListItem--IconButton"
+                  destyleMerge={{ root: styles.iconButton }}
                   onClick={this.handleToggleExpand}
                 >
                   <ChevronDownIcon
@@ -101,7 +111,7 @@ class AccountListItem extends React.Component<Props, State> {
                   size={36}
                   iconSize={24}
                   backgroundcolor={account.color}
-                  destyleNames="AccountListItem--IconButton"
+                  destyleMerge={{ root: styles.iconButton }}
                 >
                   <SendReceiveIcon />
                 </Button>
@@ -112,7 +122,7 @@ class AccountListItem extends React.Component<Props, State> {
                 type="icon"
                 size={36}
                 backgroundcolor={account.color}
-                destyleNames="AccountListItem--IconButton"
+                destyleMerge={{ root: styles.iconButton }}
               >
                 <MoreIcon />
               </Button>
@@ -128,10 +138,42 @@ class AccountListItem extends React.Component<Props, State> {
                     <NanoAddress address={nanoAddresses.byId[addr].address} />
                   </div>
                   <div className={styles.info1}>
-                    <span>
+                    <span className={styles.subRowValuePrimary}>
                       {formatNano(nanoAddresses.byId[addr].balance)}{' '}
                       <small style={{ fontSize: '80%' }}>NANO</small>
                     </span>
+                  </div>
+                  <div className={styles.info2}>
+                    <span className={styles.subRowValueSecondary}>
+                      {formatFiat(
+                        convert(
+                          nanoAddresses.byId[addr].balance,
+                          'nano',
+                          nanoPrice
+                        )
+                      )}
+                    </span>
+                  </div>
+                  <div className={styles.action1}>
+                    <Button
+                      type="icon"
+                      size={36}
+                      iconSize={24}
+                      backgroundcolor={account.color}
+                      destyleMerge={{ root: styles.iconButton }}
+                    >
+                      <SendReceiveIcon />
+                    </Button>
+                  </div>
+                  <div className={styles.action2}>
+                    <Button
+                      type="icon"
+                      size={36}
+                      backgroundcolor={account.color}
+                      destyleMerge={{ root: styles.iconButton }}
+                    >
+                      <MoreIcon />
+                    </Button>
                   </div>
                 </div>
               ))}

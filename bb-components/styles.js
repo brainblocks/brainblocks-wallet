@@ -1,6 +1,8 @@
 /**
  * Import this file to your project _before_ adding your own theme styles
  */
+import './destyleConfig'
+
 import './example-component/example-component.style'
 
 import './grid/grid.style'

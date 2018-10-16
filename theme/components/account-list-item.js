@@ -3,181 +3,136 @@ import { addStyles } from 'destyle'
 import Color from 'color'
 import theme from '../theme'
 
-const contrastThreshold = 1.5
+addStyles('AccountListItem', props => {
+  // constants
+  const contrastThreshold = 1.55
+  const backgroundColor = theme.color.palette[props.account.color] || '#FFF'
+  const whiteContrast = Color(backgroundColor).contrast(Color('white'))
+  const isLightTextVersion = whiteContrast > contrastThreshold
+  const colorPrimary = isLightTextVersion ? '#FFF' : '#000'
+  const colorSecondary = isLightTextVersion
+    ? 'rgba(255,255,255,0.6)'
+    : 'rgba(0,0,0,0.6)'
 
-function getBackgroundColor(props) {
-  return theme.color.palette[props.account.color] || '#FFF'
-}
-
-function getWhiteContrast(color) {
-  return Color(color).contrast(Color('white'))
-}
-
-const row = css`
-  padding: ${theme.spacing.paddingMd.desktop}px;
-  display: flex;
-  align-items: center;
-`
-
-const leftPadding = css`
-  padding-left: ${theme.spacing.paddingMd.desktop}px;
-`
-
-const action = props => css`
-  flex-basis: 7%;
-  text-align: center;
-  path {
-    ${getWhiteContrast(props.backgroundColor) > contrastThreshold
-      ? css`
-          fill: rgba(255, 255, 255, 0.6);
-        `
-      : css`
-          fill: rgba(0, 0, 0, 0.6);
-        `};
-  }
-`
-
-const styles = {
-  root: props => css`
-    background: ${getBackgroundColor(props)};
-    overflow: hidden;
-    border-radius: ${theme.borderRadius.md}px;
-  `,
-  visible: css``,
-  row1: css`
-    ${row};
-  `,
-  title: css`
-    flex-basis: 44%;
-    flex-grow: 1;
-  `,
-  info1: css`
-    ${leftPadding};
-    flex-basis: 21%;
-    flex-grow: 0.8;
-  `,
-  info2: css`
-    ${leftPadding};
-    flex-basis: 21%;
-    flex-grow: 0.8;
-  `,
-  action1: props => css`
-    ${leftPadding};
-    ${action(props)};
-    flex-grow: 1;
-  `,
-  action2: props => css`
-    ${leftPadding};
-    ${action(props)};
-    flex-basis: auto;
-    flex-grow: 0;
-    justify-self: flex-end;
-  `,
-  dropdown: props => css`
-    background: ${Color(getBackgroundColor(props))
-      .desaturate(0.2)
-      .darken(0.1)
-      .toString()};
-  `,
-  subRow: css`
-    ${row};
-    position: relative;
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 3px;
-      right: 3px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    &:first-child {
-      &:before {
-        border-top: none;
-      }
+  // helpers
+  const row = css`
+    padding: ${theme.spacing.paddingMd.desktop}px;
+    display: flex;
+    align-items: center;
+  `
+  const leftPadding = css`
+    padding-left: ${theme.spacing.paddingMd.desktop}px;
+  `
+  const action = css`
+    flex-basis: 7%;
+    text-align: center;
+    path {
+      fill: ${colorSecondary};
     }
   `
-}
 
-addStyles('AccountListItem', styles)
-
-addStyles('AccountListItem--KeyValue', {
-  key: props =>
-    css`
-      ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-        ? css`
-            color: rgba(255, 255, 255, 0.6);
-          `
-        : css`
-            color: rgba(0, 0, 0, 0.5);
-          `};
+  // styles
+  return {
+    // layout
+    root: css`
+      background: ${backgroundColor};
+      overflow: hidden;
+      border-radius: ${theme.borderRadius.md}px;
     `,
-  value: props =>
-    css`
+    visible: css``,
+    row1: css`
+      ${row};
+    `,
+    title: css`
+      flex-basis: 44%;
+      flex-grow: 1;
+    `,
+    info1: css`
+      ${leftPadding};
+      flex-basis: 21%;
+      flex-grow: 0.8;
+    `,
+    info2: css`
+      ${leftPadding};
+      flex-basis: 21%;
+      flex-grow: 0.8;
+    `,
+    action1: css`
+      ${leftPadding};
+      ${action};
+      flex-grow: 1;
+    `,
+    action2: css`
+      ${leftPadding};
+      ${action};
+      flex-basis: auto;
+      flex-grow: 0;
+      justify-self: flex-end;
+    `,
+    dropdown: css`
+      background: ${Color(backgroundColor)
+        .desaturate(0.2)
+        .darken(0.1)
+        .toString()};
+    `,
+    subRow: css`
+      ${row};
+      padding-top: ${theme.spacing.paddingMd.desktop * 0.66}px;
+      padding-bottom: ${theme.spacing.paddingMd.desktop * 0.66}px;
+      position: relative;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 3px;
+        right: 3px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      &:first-child {
+        &:before {
+          border-top: none;
+        }
+      }
+    `,
+    // child styles
+    accountTitleIcon: css`
+      path {
+        fill: ${colorPrimary};
+      }
+    `,
+    accountTitleTitle: css`
+      color: ${colorPrimary};
+    `,
+    accountTitleSubTitle: css`
+      color: ${colorSecondary};
+    `,
+    keyValueKey: css`
+      color: ${colorSecondary};
+    `,
+    keyValueValue: css`
       font-size: 18px;
       margin-top: 4px;
-      ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-        ? css`
-            color: #fff;
-          `
-        : css`
-            color: #000;
-          `};
-    `
-})
-
-addStyles('AccountListItem--AccountTitle', {
-  icon: props =>
-    css`
+      color: ${colorPrimary};
+    `,
+    iconButton: css`
+      &:hover {
+        background: ${isLightTextVersion
+          ? 'rgba(255,255,255,0.2)'
+          : 'rgba(0,0,0,0.15)'};
+      }
       path {
-        ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-          ? css`
-              fill: #fff;
-            `
-          : css`
-              fill: #000;
-            `};
+        fill: ${colorSecondary};
       }
     `,
-  title: props =>
-    css`
-      ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-        ? css`
-            color: #fff;
-          `
-        : css`
-            color: #000;
-          `};
+    subRowValuePrimary: css`
+      font-size: 14px;
+      font-weight: 700;
+      color: ${colorPrimary};
     `,
-  subTitle: props =>
-    css`
-      ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-        ? css`
-            color: rgba(255, 255, 255, 0.6);
-          `
-        : css`
-            color: rgba(0, 0, 0, 0.6);
-          `};
+    subRowValueSecondary: css`
+      font-size: 14px;
+      font-weight: 700;
+      color: ${colorSecondary};
     `
-})
-
-addStyles('AccountListItem--IconButton', {
-  root: props => css`
-    ${getWhiteContrast(props.backgroundcolor) > contrastThreshold
-      ? css`
-          &:hover {
-            background: rgba(255, 255, 255, 0.2);
-          }
-          path {
-            fill: rgba(255, 255, 255, 0.6);
-          }
-        `
-      : css`
-          &:hover {
-            background: rgba(0, 0, 0, 0.15);
-          }
-          path {
-            fill: rgba(0, 0, 0, 0.6);
-          }
-        `};
-  `
+  }
 })

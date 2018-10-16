@@ -2,13 +2,13 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-Grid', props => ({
+  root: css`
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-gap: ${props.gutter ? `${props.gutter}px` : `${theme.spacing.md}px`};
   `,
-  item: props => css`
+  item: css`
     grid-column-end: ${props.span ? `span ${props.span}` : `span 12`};
     ${
       props.spanMobile
@@ -56,6 +56,4 @@ const styles = {
         : null
     }
   `
-}
-
-addStyles('BB-Grid', styles)
+}))

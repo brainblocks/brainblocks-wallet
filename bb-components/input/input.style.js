@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
+addStyles('BB-Input', props => ({
   root: props => css`
     border: 1px solid #eee;
     ${!!props.multiline &&
@@ -10,6 +10,4 @@ const styles = {
         height: ${(props.rows || 3) * 32}px;
       `};
   `
-}
-
-addStyles('BB-Input', styles)
+}))

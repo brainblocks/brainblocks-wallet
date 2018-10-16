@@ -3,7 +3,7 @@ import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 import { pageWidth, resetList } from '~/theme/globals/utils'
 
-const styles = {
+addStyles('Header', {
   root: css`
     padding: 44px 0;
   `,
@@ -82,6 +82,4 @@ const styles = {
     color: #fff;
     font-size: ${theme.type.baseFontSize - 1}px;
   `
-}
-
-addStyles('Header', styles)
+})

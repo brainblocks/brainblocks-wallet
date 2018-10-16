@@ -2,8 +2,10 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+const styles = {}
+
+addStyles('BB-Grid', props => ({
+  root: css`
     grid-gap: ${props.gutter
       ? `${props.gutter}px`
       : `${theme.spacing.paddingLg.mobile}px`};
@@ -18,6 +20,4 @@ const styles = {
           }
         `};
   `
-}
-
-addStyles('BB-Grid', styles)
+}))

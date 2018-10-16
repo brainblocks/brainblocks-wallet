@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-Button', props => ({
+  root: css`
     background: ${props.color ? props.color : '#eee'};
     display: inline-block;
     padding: 0.75em 1.25em;
@@ -20,6 +20,4 @@ const styles = {
         width: 100%;
       `};
   `
-}
-
-addStyles('BB-Button', styles)
+}))

@@ -3,8 +3,8 @@ import { addStyles } from 'destyle'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
-const styles = {
-  root: props => css`
+addStyles('BB-FormItem', {
+  root: css`
     align-items: baseline;
   `,
   label: css`
@@ -31,6 +31,4 @@ const styles = {
       margin: 0;
     }
   `
-}
-
-addStyles('BB-FormItem', styles)
+})

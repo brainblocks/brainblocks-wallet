@@ -74,7 +74,11 @@ const DashboardHeader = ({
               }
             />
           </div>
-          <Button type="icon" buttonClass={styles.moreButton} size={26}>
+          <Button
+            type="icon"
+            destyleMerge={{ root: styles.moreButton }}
+            size={26}
+          >
             <MoreIcon />
           </Button>
         </div>
@@ -111,7 +115,7 @@ const DashboardHeader = ({
         </div>
       </div>
       <Button
-        buttonClass={styles.sendReceiveBtn}
+        destyleMerge={{ root: styles.sendReceiveBtn }}
         color={theme.color.palette.green}
       >
         <span className={styles.sendReceiveBtnInner}>
