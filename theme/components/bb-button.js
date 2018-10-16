@@ -72,9 +72,6 @@ addStyles('BB-Button', props => {
               top: 50%;
               transform: translate(-50%, -50%);
             }
-            path {
-              fill: currentColor;
-            }
           `
         : null};
     `

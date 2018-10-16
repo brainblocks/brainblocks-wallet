@@ -135,7 +135,10 @@ class AccountListItem extends React.Component<Props, State> {
               {account.addresses.map(addr => (
                 <div className={styles.subRow} key={`address-${addr}`}>
                   <div className={styles.title}>
-                    <NanoAddress address={nanoAddresses.byId[addr].address} />
+                    <NanoAddress
+                      destyleMerge={{ root: styles.nanoAddress }}
+                      address={nanoAddresses.byId[addr].address}
+                    />
                   </div>
                   <div className={styles.info1}>
                     <span className={styles.subRowValuePrimary}>

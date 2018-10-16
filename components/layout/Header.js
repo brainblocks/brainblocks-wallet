@@ -5,7 +5,7 @@ import { destyle } from 'destyle'
 import DashboardIcon from '~/static/svg/icons/dashboard.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
-import SecurityIcon from '~/static/svg/icons/security.svg'
+import SecurityIcon from '~/static/svg/icons/shield.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
 
 const menuItems = [

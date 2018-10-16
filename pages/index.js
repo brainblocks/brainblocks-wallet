@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Head from 'next/head'
+import Typography from '~/bb-components/typography/Typography'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
@@ -39,8 +40,9 @@ class Index extends Component {
           />
         </PageHeader>
         <PageContent pad background>
-          {/** @todo this is a hacky, temporary title */}
-          <h2 style={{ marginTop: 0 }}>Transactions</h2>
+          <Typography el="h2" spaceBelow={1}>
+            Transactions
+          </Typography>
           <TransactionsList account={selectedAccount} />
         </PageContent>
       </Layout>

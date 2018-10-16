@@ -45,6 +45,7 @@ const styles = addStyles('TransactionImage', props => {
         `}
     `,
     icon: css`
+      overflow: hidden;
       display: block;
       width: 16px;
       height: 16px;
@@ -62,7 +63,18 @@ const styles = addStyles('TransactionImage', props => {
       }
       ${!!props.transaction.image &&
         css`
-          background: #fff;
+          ${props.transaction.type === 'send' &&
+            css`
+              background: ${theme.color.status.errorLight};
+            `}
+          ${props.transaction.type === 'receive' &&
+            css`
+              background: ${theme.color.status.successLight};
+            `}
+          ${props.transaction.type === 'transfer' &&
+            css`
+              background: ${theme.color.status.infoLight};
+            `}
           border-radius: 100%;
           left: auto;
           top: auto;
@@ -70,25 +82,19 @@ const styles = addStyles('TransactionImage', props => {
           bottom: -3px;
           transform: none;
           svg {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
           }
         `};
     `,
     sendIcon: css`
-      path {
-        fill: ${theme.color.status.error};
-      }
+      color: ${theme.color.status.error};
     `,
     receiveIcon: css`
-      path {
-        fill: ${theme.color.status.success};
-      }
+      color: ${theme.color.status.success};
     `,
     transferIcon: css`
-      path {
-        fill: ${theme.color.status.info};
-      }
+      color: ${theme.color.status.info};
     `
   }
 })

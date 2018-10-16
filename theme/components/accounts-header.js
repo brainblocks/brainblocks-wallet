@@ -36,14 +36,12 @@ addStyles('AccountsHeader', props => {
     change: css`
       ${hasLeftBorder};
       flex-grow: 0.8;
+      color: ${props.nano24hChange > 0
+        ? theme.color.status.success
+        : theme.color.status.error};
       svg {
         width: 14px;
         height: 14px;
-      }
-      path {
-        fill: ${props.nano24hChange > 0
-          ? theme.color.status.success
-          : theme.color.status.error};
       }
     `,
     new: css`

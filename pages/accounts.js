@@ -2,6 +2,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Head from 'next/head'
+import Typography from '~/bb-components/typography/Typography'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
@@ -25,15 +26,17 @@ const Index = props => {
         />
       </PageHeader>
       <PageContent>
-        {/** @todo this is a hacky, temporary title */}
-        <h3 style={{ marginTop: 0 }}>BrainBlocks Wallets</h3>
+        <Typography el="h3" color="heavyOnDark" spaceBelow={1}>
+          BrainBlocks Wallets
+        </Typography>
         <AccountsList
           type="nano"
           nanoPrice={3.24}
           accounts={mockState.accounts}
         />
-        {/** @todo this is a hacky, temporary title */}
-        <h3 style={{ marginTop: 0 }}>Vaults</h3>
+        <Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={3}>
+          Vaults
+        </Typography>
         <AccountsList
           type="vault"
           nanoPrice={3.24}

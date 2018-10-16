@@ -12,7 +12,7 @@ addStyles('AccountListItem', props => {
   const colorPrimary = isLightTextVersion ? '#FFF' : '#000'
   const colorSecondary = isLightTextVersion
     ? 'rgba(255,255,255,0.6)'
-    : 'rgba(0,0,0,0.6)'
+    : 'rgba(0,0,0,0.5)'
 
   // helpers
   const row = css`
@@ -26,9 +26,7 @@ addStyles('AccountListItem', props => {
   const action = css`
     flex-basis: 7%;
     text-align: center;
-    path {
-      fill: ${colorSecondary};
-    }
+    color: ${colorSecondary};
   `
 
   // styles
@@ -96,9 +94,7 @@ addStyles('AccountListItem', props => {
     `,
     // child styles
     accountTitleIcon: css`
-      path {
-        fill: ${colorPrimary};
-      }
+      color: ${colorPrimary};
     `,
     accountTitleTitle: css`
       color: ${colorPrimary};
@@ -115,14 +111,16 @@ addStyles('AccountListItem', props => {
       color: ${colorPrimary};
     `,
     iconButton: css`
+      color: ${colorSecondary};
       &:hover {
+        color: ${colorPrimary};
         background: ${isLightTextVersion
           ? 'rgba(255,255,255,0.2)'
           : 'rgba(0,0,0,0.15)'};
       }
-      path {
-        fill: ${colorSecondary};
-      }
+    `,
+    nanoAddress: css`
+      color: ${colorPrimary};
     `,
     subRowValuePrimary: css`
       font-size: 14px;

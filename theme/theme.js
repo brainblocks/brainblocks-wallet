@@ -60,10 +60,21 @@ const theme = {
     headingFontWeight: 700,
     headingLineHeight: 1.125,
     monoFontFamily: '"Source Code Pro", monospace',
-    monoFontWeight: 500
+    monoFontWeight: 500,
+    sizes: {
+      p: 14,
+      span: 14,
+      h1: 18,
+      h2: 18,
+      h3: 16,
+      h4: 15,
+      h5: 14,
+      h6: 13
+    }
   },
   borderRadius: { sm: 6, md: 10, lg: 20 },
   spacing: {
+    rhythmUnit: 12,
     paddingSm: { mobile: 10, tablet: 10, desktop: 12 },
     paddingMd: { mobile: 16, tablet: 22, desktop: 28 },
     paddingLg: { mobile: 22, tablet: 28, desktop: 36 },

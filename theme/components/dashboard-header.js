@@ -82,9 +82,7 @@ addStyles('DashboardHeader', props => {
       position: relative;
       bottom: 6px;
       background: rgba(255, 255, 255, 0.15);
-      path {
-        fill: ${theme.color.palette.darkBlue};
-      }
+      color: ${theme.color.palette.darkBlue};
       &:hover {
         background: rgba(255, 255, 255, 0.4);
       }
@@ -99,14 +97,12 @@ addStyles('DashboardHeader', props => {
     `,
     change: css`
       ${hasLeftBorder};
+      color: ${props.nano24hChange > 0
+        ? theme.color.status.success
+        : theme.color.status.error};
       svg {
         width: 14px;
         height: 14px;
-      }
-      path {
-        fill: ${props.nano24hChange > 0
-          ? theme.color.status.success
-          : theme.color.status.error};
       }
     `,
     new: css`

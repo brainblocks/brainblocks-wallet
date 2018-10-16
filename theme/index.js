@@ -2,6 +2,7 @@ import './globals/globals'
 
 // BB components ===
 import './components/bb-example'
+import './components/bb-typography'
 import './components/bb-grid'
 import './components/bb-button'
 import './components/bb-form-item'

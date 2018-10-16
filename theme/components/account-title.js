@@ -14,11 +14,9 @@ addStyles('AccountTitle', props => ({
     margin-right: 10px;
     display: flex;
     align-items: flex-end;
+    color: ${props.color === 'light' ? '#FFF' : '#000'};
     svg {
       height: auto;
-    }
-    path {
-      fill: ${props.color === 'light' ? '#FFF' : '#000'};
     }
   `,
   title: css`

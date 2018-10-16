@@ -12,13 +12,19 @@ const TransactionImage = ({ styles, transaction, ...rest }) => {
       </div>
       <span className={styles.icon}>
         {transaction.type === 'send' && (
-          <SendIcon className={styles.sendIcon} />
+          <span className={styles.sendIcon}>
+            <SendIcon />
+          </span>
         )}
         {transaction.type === 'receive' && (
-          <ReceiveIcon className={styles.receiveIcon} />
+          <span className={styles.receiveIcon}>
+            <ReceiveIcon />
+          </span>
         )}
         {transaction.type === 'transfer' && (
-          <TransferIcon className={styles.transferIcon} />
+          <span className={styles.transferIcon}>
+            <TransferIcon />
+          </span>
         )}
       </span>
     </div>

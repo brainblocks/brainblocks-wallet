@@ -11,6 +11,22 @@
         "cssPropOptimization": true
       }
     ],
-    ["inline-react-svg"]
+    [
+      "inline-react-svg",
+      {
+        "svgo": {
+          "plugins": [
+            {
+              "removeAttrs": { "attrs": "fill" }
+            },
+            {
+              "addClassesToSVGElement": {
+                "classNames": ["bb-svg-icon"]
+              }
+            }
+          ]
+        }
+      }
+    ]
   ]
 }

@@ -54,9 +54,6 @@ addStyles('Header', {
       height: 15px;
       margin-right: 10px;
     }
-    path {
-      fill: currentColor;
-    }
   `,
   userMenu: css`
     display: flex;

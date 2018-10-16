@@ -46,5 +46,8 @@ injectGlobal`
   .pageWidth {
     ${pageWidth};
   }
+  .bb-svg-icon {
+    fill: currentColor;
+  }
 }
 `

@@ -5,6 +5,7 @@ import './destyleConfig'
 
 import './example-component/example-component.style'
 
+import './typography/typography.style'
 import './grid/grid.style'
 import './button/button.style'
 import './form-item/form-item.style'
