@@ -46,6 +46,15 @@ addStyles('BB-FormField', props => ({
           border-color: rgba(255, 255, 255, 0.4);
         }
       `};
+    ${props.valid === false &&
+      css`
+        background: ${theme.color.status.errorLight};
+        input,
+        select,
+        textarea {
+          color: ${theme.color.status.error};
+        }
+      `};
   `,
   adornStart: css`
     flex-grow: 0 !important;

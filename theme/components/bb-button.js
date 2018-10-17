@@ -23,7 +23,7 @@ addStyles('BB-Button', props => {
       ${backgroundGradient(backgroundColor, true)};
       background-position: left top;
       background-size: 200% 150%;
-      &:hover {
+      &:hover:not(:disabled) {
         color: #fff;
         background-size: 101% 101%;
       }
@@ -47,7 +47,7 @@ addStyles('BB-Button', props => {
             padding: 0.4em 0.8em;
             border-radius: ${theme.borderRadius.sm}px;
             background: ${props.color || theme.color.gray.midLight};
-            &:hover {
+            &:hover:not(:disabled) {
               background: ${Color(props.color || theme.color.gray.midLight)
                 .darken(0.2)
                 .toString()};
@@ -63,7 +63,7 @@ addStyles('BB-Button', props => {
             background: transparent;
             color: ${theme.color.text.base};
             position: relative;
-            &:hover {
+            &:hover:not(:disabled) {
               background: ${theme.color.gray.light};
               color: ${theme.color.text.headings};
             }
@@ -77,6 +77,11 @@ addStyles('BB-Button', props => {
             }
           `
         : null};
+      ${props.disabled &&
+        css`
+          cursor: default;
+          opacity: 0.5;
+        `};
     `
   }
 })
