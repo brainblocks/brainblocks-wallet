@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'next/router'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
@@ -13,10 +14,10 @@ const SendReceive = props => {
       </Head>
       <PageHeader title="Send & Receive" indentTitle />
       <PageContent pad background>
-        <SendReceiveTabs />
+        <SendReceiveTabs router={props.router} />
       </PageContent>
     </Layout>
   )
 }
 
-export default SendReceive
+export default withRouter(SendReceive)

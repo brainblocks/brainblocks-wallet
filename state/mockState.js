@@ -6,14 +6,18 @@ export default {
         balance: 55,
         name: 'Spending',
         color: 'purple',
-        type: 'nano'
+        type: 'nano',
+        address:
+          'xrb_112345b3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7ji12345'
       },
       efg: {
         id: 'efg',
         balance: 12.3456,
         name: 'Trading',
         color: 'gold',
-        type: 'nano'
+        type: 'nano',
+        address:
+          'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji'
       },
       hij: {
         id: 'hij',

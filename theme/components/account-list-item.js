@@ -112,7 +112,7 @@ addStyles('AccountListItem', props => {
     `,
     iconButton: css`
       color: ${colorSecondary};
-      &:hover {
+      &:hover:not(:disabled) {
         color: ${colorPrimary};
         background: ${isLightTextVersion
           ? 'rgba(255,255,255,0.2)'

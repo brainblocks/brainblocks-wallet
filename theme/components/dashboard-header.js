@@ -35,7 +35,7 @@ addStyles('DashboardHeader', props => {
       text-align: left;
       flex-basis: 154px;
       position: relative;
-      background-size: 100% 100%;
+      background-size: 101% 101%;
       svg {
         margin-bottom: 6px;
         width: 28px;
@@ -46,7 +46,7 @@ addStyles('DashboardHeader', props => {
         text-align: left;
         font-size: ${theme.type.baseFontSize + 2}px;
       }
-      &:hover {
+      &:hover:not(:disabled) {
         background-size: 150% 200%;
       }
     `,

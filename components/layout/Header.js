@@ -56,7 +56,7 @@ const Header = ({ styles, children, router, ...rest }) => {
                   className={router.pathname === item.href ? 'is-active' : ''}
                   key={`menu-item-${i}`}
                 >
-                  <Link href={item.href}>
+                  <Link prefetch href={item.href}>
                     <a>
                       {item.icon}
                       <span>{item.title}</span>

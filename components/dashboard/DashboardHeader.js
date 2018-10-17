@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import Link from 'next/link'
 import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import { formatNano, formatFiat, formatPercent } from '~/functions/format'
@@ -114,15 +115,22 @@ const DashboardHeader = ({
           </div>
         </div>
       </div>
-      <Button
-        destyleMerge={{ root: styles.sendReceiveBtn }}
-        color={theme.color.palette.green}
+      <Link
+        href={{
+          pathname: '/send-receive',
+          query: { from: account === 'all' ? null : account }
+        }}
       >
-        <span className={styles.sendReceiveBtnInner}>
-          <SendReceiveIcon />
-          <span className="send-receive-button-text">Send &amp; Receive</span>
-        </span>
-      </Button>
+        <Button
+          destyleMerge={{ root: styles.sendReceiveBtn }}
+          color={theme.color.palette.green}
+        >
+          <span className={styles.sendReceiveBtnInner}>
+            <SendReceiveIcon />
+            <span className="send-receive-button-text">Send &amp; Receive</span>
+          </span>
+        </Button>
+      </Link>
       <div className={styles.chart} />
     </div>
   )

@@ -13,6 +13,7 @@ import AccountSelector from '~/components/accounts/AccountSelector'
 import mockState from '~/state/mockState'
 
 type Props = {
+  router: Object,
   styles: Object
 }
 
@@ -26,13 +27,16 @@ type State = {
 }
 
 class SendForm extends Component<Props, State> {
-  state = {
-    from: mockState.accounts.allIds[0],
-    to: '',
-    message: '',
-    amountField: 0,
-    toFieldValid: true,
-    btnDisabled: true
+  constructor(props) {
+    super(props)
+    this.state = {
+      from: props.router.query.from || mockState.accounts.allIds[0],
+      to: props.router.query.to || '',
+      message: '',
+      amountField: props.router.query.amount || 0,
+      toFieldValid: true,
+      btnDisabled: true
+    }
   }
 
   isToFieldValid = (value: string) => {
@@ -64,7 +68,7 @@ class SendForm extends Component<Props, State> {
   }
 
   render() {
-    const { styles } = this.props
+    const { styles, router } = this.props
     const {
       from,
       to,

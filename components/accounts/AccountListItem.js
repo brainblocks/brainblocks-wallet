@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import Link from 'next/link'
 import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import AccountTitle from './AccountTitle'
@@ -106,15 +107,22 @@ class AccountListItem extends React.Component<Props, State> {
                 </Button>
               )}
               {account.type === 'nano' && (
-                <Button
-                  type="icon"
-                  size={36}
-                  iconSize={24}
-                  backgroundcolor={account.color}
-                  destyleMerge={{ root: styles.iconButton }}
+                <Link
+                  href={{
+                    pathname: 'send-receive',
+                    query: { from: account.id }
+                  }}
                 >
-                  <SendReceiveIcon />
-                </Button>
+                  <Button
+                    type="icon"
+                    size={36}
+                    iconSize={24}
+                    backgroundcolor={account.color}
+                    destyleMerge={{ root: styles.iconButton }}
+                  >
+                    <SendReceiveIcon />
+                  </Button>
+                </Link>
               )}
             </div>
             <div className={styles.action2}>

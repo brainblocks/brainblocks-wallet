@@ -4,10 +4,18 @@ import { destyle } from 'destyle'
 import TabsComponents from '~/bb-components/tabs/Tabs'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
 import SendForm from './SendForm'
+import ReceiveForm from './ReceiveForm'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
+const tabIndexMap = {
+  send: 0,
+  receive: 1,
+  transfer: 2
+}
+
 type Props = {
+  router: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -18,7 +26,7 @@ type State = {
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: 0
+    activeTab: tabIndexMap[this.props.router.query.type] || 0
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -28,7 +36,7 @@ class SendReceiveTabs extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, ...rest } = this.props
+    const { styles, router, ...rest } = this.props
     const { activeTab } = this.state
     return (
       <div className={styles.root}>
@@ -40,9 +48,11 @@ class SendReceiveTabs extends React.Component<Props, State> {
           </TabList>
 
           <TabPanel>
-            <SendForm />
+            <SendForm router={router} />
           </TabPanel>
-          <TabPanel>Receive</TabPanel>
+          <TabPanel>
+            <ReceiveForm router={router} />
+          </TabPanel>
           <TabPanel>Transfer</TabPanel>
         </SwitchTabs>
       </div>

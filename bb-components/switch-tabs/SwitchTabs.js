@@ -31,8 +31,10 @@ class SwitchTabs extends React.Component<Props> {
     let tabWidth = 0
     if (this.tabs) {
       activeTab = this.tabs.querySelectorAll('.react-tabs__tab')[selectedIndex]
-      tabLeft = activeTab.offsetLeft
-      tabWidth = activeTab.offsetWidth
+      if (activeTab) {
+        tabLeft = activeTab.offsetLeft
+        tabWidth = activeTab.offsetWidth
+      }
     }
     return (
       <Tabs
