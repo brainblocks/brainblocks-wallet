@@ -75,6 +75,7 @@ const styles = addStyles('TransactionImage', props => {
             css`
               background: ${theme.color.status.infoLight};
             `}
+          border: 2px solid #FFF;
           border-radius: 100%;
           left: auto;
           top: auto;

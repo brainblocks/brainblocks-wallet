@@ -39,7 +39,7 @@ class Index extends Component {
             nano24hChange={-2.31}
           />
         </PageHeader>
-        <PageContent pad background>
+        <PageContent pad background="white">
           <Typography el="h2" spaceBelow={1}>
             Transactions
           </Typography>

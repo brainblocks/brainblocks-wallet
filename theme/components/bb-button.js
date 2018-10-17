@@ -5,6 +5,8 @@ import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
 addStyles('BB-Button', props => {
+  const backgroundColor =
+    theme.color.palette[props.color] || props.color || theme.color.palette.teal
   return {
     root: css`
       cursor: pointer;
@@ -18,12 +20,12 @@ addStyles('BB-Button', props => {
       transition: all 0.3s ease;
       will-change: background-size;
       transform: translate3d(0, 0, 0);
-      ${backgroundGradient(props.color || theme.color.palette.teal, true)};
+      ${backgroundGradient(backgroundColor, true)};
       background-position: left top;
       background-size: 200% 150%;
       &:hover {
         color: #fff;
-        background-size: 100% 100%;
+        background-size: 101% 101%;
       }
       ${props.block
         ? css`
@@ -33,6 +35,7 @@ addStyles('BB-Button', props => {
         : null};
       ${props.type === 'primary'
         ? css`
+            padding: 1.2em 2em;
             text-transform: uppercase;
             font-size: 18px;
           `

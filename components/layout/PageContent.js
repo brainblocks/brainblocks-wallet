@@ -11,7 +11,7 @@ type Props = {
   styles: Object,
   /** Used by destyle */
   pad?: false,
-  background?: false,
+  background?: boolean | string,
   children: React.Node
 }
 
@@ -19,7 +19,7 @@ const PageContent = ({
   title,
   indentTitle = false,
   pad = false,
-  background = false,
+  background,
   styles,
   children,
   ...rest

@@ -26,7 +26,7 @@ const Index = props => {
         />
       </PageHeader>
       <PageContent>
-        <Typography el="h3" color="heavyOnDark" spaceBelow={1}>
+        <Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={1}>
           BrainBlocks Wallets
         </Typography>
         <AccountsList

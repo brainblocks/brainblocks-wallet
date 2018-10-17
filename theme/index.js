@@ -10,6 +10,7 @@ import './components/bb-form-field'
 import './components/bb-input'
 import './components/bb-select'
 import './components/bb-key-value'
+import './components/bb-tabs'
 
 // Components ===
 
@@ -29,6 +30,10 @@ import './components/transaction-image'
 import './components/accounts-list'
 import './components/account-list-item'
 import './components/account-title'
+
+// Send / Receive
+import './components/send-receive-tabs'
+import './components/send-form'
 
 // Sections
 import './components/dashboard-header'
