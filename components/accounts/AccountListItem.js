@@ -110,7 +110,7 @@ class AccountListItem extends React.Component<Props, State> {
                 <Link
                   href={{
                     pathname: 'send-receive',
-                    query: { from: account.id }
+                    query: { tab: 'send', from: account.id }
                   }}
                 >
                   <Button

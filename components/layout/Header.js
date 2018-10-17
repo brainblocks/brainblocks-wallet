@@ -25,7 +25,7 @@ const menuItems = [
     icon: <SendReceiveIcon />
   },
   {
-    href: '/settings',
+    href: '/security',
     title: 'Security',
     icon: <SecurityIcon />
   },

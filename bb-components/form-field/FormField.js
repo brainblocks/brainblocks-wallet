@@ -9,6 +9,7 @@ type Props = {
   adornEnd: React.Node,
   /** Field */
   children: React.Node,
+  valid?: boolean,
   /** Arbitrary theme which can be used for styling */
   theme?: string,
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -24,6 +25,7 @@ export const FormField = ({
   adornStart,
   adornEnd,
   theme,
+  valid,
   ...rest
 }: Props) => {
   return (

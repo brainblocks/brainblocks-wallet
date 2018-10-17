@@ -21,6 +21,9 @@ import './components/page-header'
 import './components/page-content'
 import './components/footer'
 
+// Dashboard
+import './components/dashboard-header'
+
 // Transactions
 import './components/transactions-list'
 import './components/transaction-list-item'
@@ -30,11 +33,11 @@ import './components/transaction-image'
 import './components/accounts-list'
 import './components/account-list-item'
 import './components/account-title'
+import './components/accounts-header'
 
 // Send / Receive
 import './components/send-receive-tabs'
 import './components/send-form'
 
-// Sections
-import './components/dashboard-header'
-import './components/accounts-header'
+// Settings
+import './components/settings-tabs'

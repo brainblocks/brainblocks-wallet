@@ -118,7 +118,7 @@ const DashboardHeader = ({
       <Link
         href={{
           pathname: '/send-receive',
-          query: { from: account === 'all' ? null : account }
+          query: { tab: 'send', from: account === 'all' ? null : account }
         }}
       >
         <Button

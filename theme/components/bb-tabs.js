@@ -11,7 +11,6 @@ setStyles('BB-Tabs', ({ variant, activeTabLeft, activeTabWidth }) => {
       return {
         tabs: css`
           text-align: center;
-          opacity: ${1 + activeTabLeft};
           .react-tabs__tab-list {
             ${resetList};
             position: relative;
@@ -59,6 +58,32 @@ setStyles('BB-Tabs', ({ variant, activeTabLeft, activeTabWidth }) => {
           }
           .react-tabs__tab-panel {
             text-align: left;
+          }
+        `
+      }
+    case 'side':
+      return {
+        tabs: css`
+          .react-tabs__tab-list {
+            ${resetList};
+          }
+          .react-tabs__tab {
+            cursor: pointer;
+            display: block;
+            padding: 0;
+            color: ${Color(theme.color.text.light)
+              .darken(0.2)
+              .toString()};
+            font-weight: bold;
+            transition: color 0.2s ease;
+            &:hover {
+              color: ${Color(theme.color.text.light)
+                .darken(0.4)
+                .toString()};
+            }
+            &--selected {
+              color: #000 !important;
+            }
           }
         `
       }

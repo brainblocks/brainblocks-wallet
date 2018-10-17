@@ -8,7 +8,7 @@ addStyles('PageContent', ({ background, pad }) => ({
   pageWidth,
   inner: css`
     margin: auto;
-    min-height: 300px;
+    min-height: ${theme.layout.pageMinHeight}px;
     ${!!background &&
       css`
         background: ${theme.color.gray.lightest};
@@ -17,6 +17,7 @@ addStyles('PageContent', ({ background, pad }) => ({
             background: #fff;
           `}
         border-radius: ${theme.borderRadius.lg}px;
+        overflow: hidden;
         @media (max-width: ${theme.layout.pageWidth -
           theme.layout.pagePadding * 2 -
           1}px) {
@@ -29,7 +30,7 @@ addStyles('PageContent', ({ background, pad }) => ({
     margin: auto;
     ${!!pad &&
       css`
-        padding: 36px;
+        padding: ${theme.layout.contentPadding}px;
         @media (max-width: ${theme.bp.tablet - 1}px) {
           padding: 30px ${theme.layout.pagePadding}px;
         }

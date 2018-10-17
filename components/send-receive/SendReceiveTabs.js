@@ -26,7 +26,7 @@ type State = {
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: tabIndexMap[this.props.router.query.type] || 0
+    activeTab: tabIndexMap[this.props.router.query.tab] || 0
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {

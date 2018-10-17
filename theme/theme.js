@@ -82,7 +82,9 @@ const theme = {
   },
   layout: {
     pageWidth: 1016,
-    pagePadding: 18
+    pagePadding: 18,
+    pageMinHeight: 300,
+    contentPadding: 36
   },
   bp: {
     mobile: 480,
