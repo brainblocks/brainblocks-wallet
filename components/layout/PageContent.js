@@ -3,21 +3,15 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 
 type Props = {
-  /** Page title */
-  title?: string,
-  /** Whether to indent the title */
-  indentTitle: false,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
   /** Used by destyle */
-  pad?: false,
+  pad?: boolean,
   background?: boolean | string,
   children: React.Node
 }
 
 const PageContent = ({
-  title,
-  indentTitle = false,
   pad = false,
   background,
   styles,
