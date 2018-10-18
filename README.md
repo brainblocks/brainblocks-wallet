@@ -108,7 +108,7 @@ There are a few guidlines we should follow to keep our components consistent acr
   - constructor
   - lifecycle methods
   - utility methods
-  - event handlers
+  - event handlers (and name them `handleSomething` or `getHandleSomething` if currying)
   - render
 - For function components, destructure props in the parameters. For Class components, destructure `this.props` in the first line of the render function. Always include `...rest` and spread it to the root element of your component `<div className={styles.root} {...rest}> ... </div>`. It is good practice to destructure so that you can safely spread `rest` to the root element, and avoid writing `props.myParameter` throughout.
 
