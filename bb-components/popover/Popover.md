@@ -3,7 +3,7 @@ Example:
 ```js
 <div>
   <p>
-    <Popover classes="test-class" />
+    <Popover>This is a test popover</Popover>
   </p>
 </div>
 ```

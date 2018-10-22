@@ -32,7 +32,8 @@
     "react-tabs": "^2.3.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.0.0",

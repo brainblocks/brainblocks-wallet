@@ -1,16 +1,20 @@
 // @flow
 import * as React from 'react'
-import { destyle } from 'destyle'
 
+import Button from '../button/Button'
 import { Popover as MUIPopover } from '@material-ui/core'
+import { destyle } from 'destyle'
 import toRenderProps from 'recompose/toRenderProps'
+import uuid from 'uuid/v4'
 import withState from 'recompose/withState'
 
 const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null))
 
 type Props = {
-  /** Classes to pass into popoevr */
+  /** Classes to pass into popover */
   classes: string,
+  /** Popover contents */
+  children: React.Node,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -18,15 +22,16 @@ type Props = {
 /**
  * Popover.
  */
-export const Popover = ({ styles, classes, ...rest }: Props) => {
+export const Popover = ({ styles, children, classes, ...rest }: Props) => {
   return (
     <WithState>
       {({ anchorEl, updateAnchorEl }) => {
         const open = Boolean(anchorEl)
+        const popoverUuid = uuid()
         return (
           <React.Fragment>
             <Button
-              aria-owns={open ? 'render-props-popover' : null}
+              aria-owns={open ? popoverUuid : null}
               aria-haspopup="true"
               variant="contained"
               onClick={event => {
@@ -36,7 +41,7 @@ export const Popover = ({ styles, classes, ...rest }: Props) => {
               Open Popover
             </Button>
             <MUIPopover
-              id="render-props-popover"
+              id={popoverUuid}
               open={open}
               anchorEl={anchorEl}
               onClose={() => {
@@ -52,7 +57,7 @@ export const Popover = ({ styles, classes, ...rest }: Props) => {
               }}
               {...rest}
             >
-              The content of the Popover.
+              {children}
             </MUIPopover>
           </React.Fragment>
         )
