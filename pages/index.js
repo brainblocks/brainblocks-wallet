@@ -10,6 +10,8 @@ import DashboardHeader from '~/components/dashboard/DashboardHeader'
 import TransactionsList from '~/components/transactions/TransactionsList'
 import { api as userAPI } from '~/state/user'
 
+import TestComponent from '~/components/TestComponent'
+
 import mockState from '~/state/mockState'
 
 class Index extends Component {
@@ -45,6 +47,8 @@ class Index extends Component {
           </Typography>
           <TransactionsList account={selectedAccount} />
         </PageContent>
+        {/* Remove this */}
+        <TestComponent />
       </Layout>
     )
   }

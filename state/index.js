@@ -4,15 +4,10 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { reducer as userReducer } from './user'
 
 const combinedReducers = combineReducers({
-  user: userReducer
+  user: userReducer,
+  orm: undefined,
+  api: undefined
 })
-
-/*
-const store = createStore(
-  combinedReducers,
-  composeEnhancers(composeWithDevTools(applyMiddleware(thunkMiddleware)))
-)
-*/
 
 const initializeStore = () => {
   return createStore(
