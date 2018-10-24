@@ -8,7 +8,6 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import AccountsHeader from '~/components/accounts/AccountsHeader'
 import AccountsList from '~/components/accounts/AccountsList'
-import { api as userAPI } from '~/state/user'
 
 import mockState from '~/state/mockState'
 
@@ -48,15 +47,4 @@ const Index = props => {
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  user
-})
-
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(userAPI, dispatch)
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Index)
+export default Index

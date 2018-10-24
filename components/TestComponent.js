@@ -1,12 +1,14 @@
 import { Component } from 'react'
+import * as Auth from '~/state/actions/authActions'
+import { connect } from 'react-redux'
 
-export default class TestComponent extends Component {
+class TestComponent extends Component {
   constructor(...args) {
     super(...args)
 
     this.state = {
-      username: '',
-      password: ''
+      username: 'mochatest_login',
+      password: 'mochatestpassword'
     }
   }
 
@@ -21,19 +23,23 @@ export default class TestComponent extends Component {
   onSubmit(event) {
     event.preventDefault()
     event.stopPropagation()
-    console.log('submitted')
-    console.log(this.state.username)
-    console.log(this.state.password)
+
+    this.props.login(this.state.username, this.state.password)
   }
 
   render() {
     return (
       <form onSubmit={this.onSubmit.bind(this)}>
+        <div>
+          Auth Token:
+          {this.props.auth.authToken}
+        </div>
         <label>
           Username:
           <input
             type="text"
             name="username"
+            defaultValue={this.state.username}
             onChange={this.onChange.bind(this)}
           />
         </label>
@@ -41,8 +47,9 @@ export default class TestComponent extends Component {
         <label>
           Password:
           <input
-            ype="password"
+            type="password"
             name="password"
+            defaultValue={this.state.password}
             onChange={this.onChange.bind(this)}
           />
         </label>
@@ -52,3 +59,17 @@ export default class TestComponent extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+const mapDispatchToProps = dispatch => ({
+  login: (username, password, twoFactorAuthToken) =>
+    dispatch(Auth.login(username, password, twoFactorAuthToken))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TestComponent)

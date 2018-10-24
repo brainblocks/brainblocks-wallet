@@ -1,19 +1,24 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { reducer as userReducer } from './user'
+import createSagaMiddleware from 'redux-saga'
+
+import authSaga from './actions/authActions'
+import authReducer from '~/state/reducers/authReducer'
 
 const combinedReducers = combineReducers({
-  user: userReducer,
-  orm: undefined,
-  api: undefined
+  auth: authReducer
+  // ui: undefined,
+  // orm: undefined
 })
 
 const initializeStore = () => {
-  return createStore(
-    combinedReducers,
-    compose(composeWithDevTools(applyMiddleware(thunkMiddleware)))
-  )
+  const sagaMiddleware = createSagaMiddleware()
+
+  const store = createStore(combinedReducers, applyMiddleware(sagaMiddleware))
+
+  sagaMiddleware.run(authSaga)
+
+  return store
 }
 
 export { initializeStore, combinedReducers }
