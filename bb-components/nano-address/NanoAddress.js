@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
+import Button from '../button/Button'
 
 type Props = {
   /** Address to format */
@@ -31,9 +32,14 @@ export const NanoAddress = ({
   const end = address.substr(address.length - endChars)
   return (
     <span className={styles.root}>
-      <span className={styles.start}>{start}</span>
-      <span className={styles.ellipsis}>&hellip;</span>
-      <span className={styles.end}>{end}</span>
+      <span className={styles.address}>
+        <span className={styles.start}>{start}</span>
+        <span className={styles.ellipsis}>&hellip;</span>
+        <span className={styles.end}>{end}</span>
+      </span>
+      <Button type="secondary" style={{ fontSize: 14 }}>
+        Copy
+      </Button>
     </span>
   )
 }
