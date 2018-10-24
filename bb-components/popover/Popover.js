@@ -13,6 +13,8 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null))
 type Props = {
   /** Classes to pass into popover */
   classes: string,
+  /** Text on button for popover */
+  btnText: string,
   /** Popover contents */
   children: React.Node,
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -22,7 +24,13 @@ type Props = {
 /**
  * Popover.
  */
-export const Popover = ({ styles, children, classes, ...rest }: Props) => {
+export const Popover = ({
+  styles,
+  children,
+  classes,
+  btnText,
+  ...rest
+}: Props) => {
   return (
     <WithState>
       {({ anchorEl, updateAnchorEl }) => {
@@ -38,7 +46,7 @@ export const Popover = ({ styles, children, classes, ...rest }: Props) => {
                 updateAnchorEl(event.currentTarget)
               }}
             >
-              Open Popover
+              {btnText}
             </Button>
             <MUIPopover
               id={popoverUuid}
