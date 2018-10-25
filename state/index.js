@@ -6,19 +6,15 @@ import authSaga from './actions/authActions'
 import authReducer from '~/state/reducers/authReducer'
 
 const combinedReducers = combineReducers({
-  auth: authReducer
-  // ui: undefined,
-  // orm: undefined
+	auth: authReducer
+	// ui: undefined,
+	// orm: undefined
 })
 
-const initializeStore = () => {
-  const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
 
-  const store = createStore(combinedReducers, applyMiddleware(sagaMiddleware))
+const store = createStore(combinedReducers, applyMiddleware(sagaMiddleware))
 
-  sagaMiddleware.run(authSaga)
+sagaMiddleware.run(authSaga)
 
-  return store
-}
-
-export { initializeStore, combinedReducers }
+export default store
