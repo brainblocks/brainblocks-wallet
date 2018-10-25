@@ -41,7 +41,6 @@ export const Popover = ({
             <Button
               aria-owns={open ? popoverUuid : null}
               aria-haspopup="true"
-              variant="contained"
               onClick={event => {
                 updateAnchorEl(event.currentTarget)
               }}
