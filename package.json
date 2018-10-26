@@ -14,6 +14,7 @@
 	"author": "BrainBlocks",
 	"license": "ISC",
 	"dependencies": {
+		"@material-ui/core": "^3.3.0",
 		"axios": "^0.18.0",
 		"color": "^3.1.0",
 		"destyle": "^0.3.0",
@@ -34,7 +35,8 @@
 		"redux-logger": "^3.0.6",
 		"redux-orm": "^0.12.1",
 		"redux-orm-proptypes": "^0.1.0",
-		"redux-saga": "^0.16.2"
+		"redux-saga": "^0.16.2",
+		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
 		"@babel/preset-flow": "^7.0.0",
