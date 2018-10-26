@@ -9,7 +9,7 @@ import {
 } from '~/state/helpers'
 
 // Safely attempts to lookup and return the auth token from localStorage
-function tryLoadToken(): ?string {
+function tryLoadToken() {
 	try {
 		return window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
 	} catch (e) {
@@ -19,7 +19,7 @@ function tryLoadToken(): ?string {
 }
 
 // Safely attempts to store an auth token to localStorage
-function tryStoreToken(authToken: string): void {
+function tryStoreToken(authToken: string) {
 	try {
 		window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY] = authToken
 	} catch (e) {
@@ -28,7 +28,7 @@ function tryStoreToken(authToken: string): void {
 }
 
 // Safely attempts to delete the auth token from localStorage
-function tryDeleteToken(): void {
+function tryDeleteToken() {
 	try {
 		delete window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
 	} catch (e) {
@@ -51,20 +51,26 @@ function* initHandler(action: Object) {
 	yield put({ type: AUTH_INIT_START })
 
 	try {
-		let authToken = tryLoadToken()
+		const authToken = tryLoadToken()
 
 		if (authToken) {
-			let { data: userData } = yield call(makeApiRequest, {
+			let { data: sessionData } = yield call(makeApiRequest, {
 				method: 'get',
-				url: `/users`,
+				url: `/auth`,
 				headers: {
 					'x-auth-token': authToken
 				}
 			})
 
-			let { user } = userData
+			let { user, expires, token } = sessionData
 
-			yield put({ type: AUTH_INIT_SUCCESS, payload: { authToken, user } })
+			// Attempt to re-store the toekn from the response in case it's updated
+			tryStoreToken(token)
+
+			yield put({
+				type: AUTH_INIT_SUCCESS,
+				payload: { authToken: token, expires, user }
+			})
 		} else {
 			yield put({ type: AUTH_INIT_FAILURE })
 		}
@@ -103,30 +109,19 @@ function* loginHandler(action: Object) {
 		// First perform the login to receive an auth token
 		let { data: sessionData } = yield call(makeApiRequest, {
 			method: 'post',
-			url: '/users/login',
+			url: '/auth',
 			data: { username, password, twoFactorAuthResponse }
 		})
 
 		// Extract relavent information
-		let { expires, session: authToken } = sessionData
-
-		// Retrieve the current user
-		let { data: userData } = yield call(makeApiRequest, {
-			method: 'get',
-			url: `/users`,
-			headers: {
-				'x-auth-token': authToken
-			}
-		})
+		let { expires, token, user } = sessionData
 
 		// Keep the auth token in localStorage
-		tryStoreToken(authToken)
-
-		let { user } = userData
+		tryStoreToken(token)
 
 		yield put({
 			type: AUTH_LOGIN_SUCCESS,
-			payload: { authToken, expires, user }
+			payload: { authToken: token, expires, user }
 		})
 	} catch (error) {
 		yield call(dispatchError, AUTH_LOGIN_ERROR, error)
@@ -160,7 +155,7 @@ function* logoutHandler(action: Object) {
 		// Attempt to make the proper call to the backend as well
 		let { data } = yield call(makeAuthorizedApiRequest, {
 			method: 'delete',
-			url: '/users/session',
+			url: '/auth',
 			data: { token: authToken }
 		})
 
