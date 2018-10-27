@@ -1,10 +1,13 @@
-import store from '~/state'
+import { getClientSideStore } from '~/state'
 import orm from '~/state/models'
 import axios from 'axios'
 import produce from 'immer'
 import { BASE_API_URL } from '~/constants'
 
 export function getAuthToken() {
+	const store = getClientSideStore()
+	if (!store) return undefined
+
 	const state = store.getState()
 	if (!state) return undefined
 

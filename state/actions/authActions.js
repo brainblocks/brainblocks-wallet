@@ -3,15 +3,20 @@ import { takeLatest, takeEvery, put, call, all } from 'redux-saga/effects'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '~/constants'
 import { dispatchError } from '~/state/actions'
 import orm from '~/state/models'
+
 import {
 	getAuthToken,
 	makeApiRequest,
 	makeAuthorizedApiRequest
 } from '~/state/helpers'
 
+import { isServer } from '~/state'
+
 // Safely attempts to lookup and return the auth token from localStorage
 function tryLoadToken() {
 	try {
+		if (isServer) return undefined
+
 		return window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
 	} catch (e) {
 		console.warn('Error while reading authToken from localStorage', e)
@@ -22,6 +27,8 @@ function tryLoadToken() {
 // Safely attempts to store an auth token to localStorage
 function tryStoreToken(authToken: string) {
 	try {
+		if (isServer) return
+
 		window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY] = authToken
 	} catch (e) {
 		console.warn('Error while writting authToken to localStorage', e)
@@ -31,6 +38,8 @@ function tryStoreToken(authToken: string) {
 // Safely attempts to delete the auth token from localStorage
 function tryDeleteToken() {
 	try {
+		if (isServer) return
+
 		delete window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
 	} catch (e) {
 		console.warn('Error while deleting authToken from localStorage', e)

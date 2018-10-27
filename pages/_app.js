@@ -4,12 +4,11 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import '~/bb-components/styles'
 import '~/theme'
-
-import reduxStore from '~/state'
+import { withReduxStore } from '~/state'
 
 class MyApp extends App {
 	render() {
-		const { Component, pageProps } = this.props
+		const { Component, pageProps, reduxStore } = this.props
 		return (
 			<Container>
 				<Provider store={reduxStore}>
@@ -20,4 +19,4 @@ class MyApp extends App {
 	}
 }
 
-export default MyApp
+export default withReduxStore(MyApp)
