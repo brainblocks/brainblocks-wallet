@@ -9,11 +9,6 @@ import PageContent from '~/components/layout/PageContent'
 import DashboardHeader from '~/components/dashboard/DashboardHeader'
 import TransactionsList from '~/components/transactions/TransactionsList'
 
-import Authorize from '~/components/Authorize'
-import TestLoggedIn from '~/components/TestLoggedIn'
-import TestLoggedOut from '~/components/TestLoggedOut'
-import * as Auth from '~/state/actions/authActions'
-
 import mockState from '~/state/mockState'
 
 class Index extends Component {
@@ -49,12 +44,6 @@ class Index extends Component {
 					</Typography>
 					<TransactionsList account={selectedAccount} />
 				</PageContent>
-				{/* Remove this */}
-				<Authorize
-					loadingComponent={<div>Loading...</div>}
-					unauthorizedComponent={<TestLoggedOut />}
-					authorizedComponent={<TestLoggedIn />}
-				/>
 			</Layout>
 		)
 	}
