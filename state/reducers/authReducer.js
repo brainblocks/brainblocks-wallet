@@ -1,5 +1,5 @@
 // @flow
-import produce from 'immer'
+import orm from '~/state/models'
 import {
 	AUTH_LOGIN_START,
 	AUTH_LOGIN_COMPLETE,
@@ -12,55 +12,56 @@ import {
 	AUTH_LOGOUT_SUCCESS
 } from '~/state/actions/authActions'
 
-const initialState = {
-	isChecking: false,
-	didCheck: false,
-	isAuthorized: false,
-	authToken: undefined,
-	user: {
-		firstName: undefined,
-		lastName: undefined,
-		preferredCurrency: undefined,
-		username: undefined,
-		email: undefined
-	},
-	expires: undefined
+export default (state = orm.getEmptyState(), action) => {
+	const session = orm.session(state)
+	const { Auth, User } = session
+	const auth = Auth.withId('me') || Auth.create({ id: 'me' })
+
+	switch (action.type) {
+		case AUTH_INIT_START:
+		case AUTH_LOGIN_START:
+			auth.update({
+				isChecking: true,
+				user: undefined
+			})
+			break
+
+		case AUTH_INIT_SUCCESS:
+		case AUTH_LOGIN_SUCCESS:
+			const { user, authToken, expires } = action.payload
+
+			auth.update({
+				authToken,
+				expires,
+				user: User.create(user),
+				isChecking: false,
+				isAuthorized: true,
+				didCheck: true
+			})
+			break
+
+		case AUTH_INIT_COMPLETE:
+		case AUTH_LOGIN_COMPLETE:
+			auth.update({
+				isChecking: true,
+				didCheck: true
+			})
+			break
+
+		// Assume that logout will work for immediate response
+		case AUTH_LOGOUT_START:
+			auth.update({
+				isAuthorized: false
+			})
+			break
+
+		case AUTH_LOGOUT_SUCCESS:
+			auth.update({
+				authToken: undefined,
+				user: undefined
+			})
+			break
+	}
+
+	return session.state
 }
-
-export default (state = initialState, action) =>
-	produce(state, draft => {
-		switch (action.type) {
-			case AUTH_INIT_START:
-			case AUTH_LOGIN_START:
-				draft.isChecking = true
-				break
-
-			case AUTH_INIT_SUCCESS:
-			case AUTH_LOGIN_SUCCESS:
-				const { authToken, expires, user } = action.payload
-
-				Object.assign(draft, {
-					isAuthorized: true,
-					authToken,
-					expires
-				})
-
-				Object.assign(draft.user, user)
-				break
-
-			case AUTH_INIT_COMPLETE:
-			case AUTH_LOGIN_COMPLETE:
-				draft.isChecking = false
-				draft.didCheck = true
-				break
-
-			// Assume that logout will work for immediate response
-			case AUTH_LOGOUT_START:
-				draft.isAuthorized = false
-				break
-
-			case AUTH_LOGOUT_SUCCESS:
-				draft.authToken = undefined
-				break
-		}
-	})

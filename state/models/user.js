@@ -1,13 +1,20 @@
 // @flow
 import { attr, Model } from 'redux-orm'
 
-export const MODEL_NAME = 'user'
-
 export default class User extends Model {
-  static modelName = MODEL_NAME
+	static get modelName() {
+		return 'User'
+	}
 
-  static fields = {
-    id: attr(),
-    name: attr()
-  }
+	static get fields() {
+		return {
+			id: attr(),
+			firstName: attr(),
+			lastName: attr(),
+			username: attr(),
+			preferredCurrency: attr(),
+			email: attr(),
+			birthday: attr()
+		}
+	}
 }

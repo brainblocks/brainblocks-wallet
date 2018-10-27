@@ -2,6 +2,7 @@
 import { takeLatest, takeEvery, put, call, all } from 'redux-saga/effects'
 import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '~/constants'
 import { dispatchError } from '~/state/actions'
+import orm from '~/state/models'
 import {
 	getAuthToken,
 	makeApiRequest,

@@ -1,12 +1,20 @@
 import store from '~/state'
+import orm from '~/state/models'
 import axios from 'axios'
 import produce from 'immer'
 import { BASE_API_URL } from '~/constants'
 
 export function getAuthToken() {
-	const state = store.getState() || {}
-	const auth = state.auth || {}
-	return auth.authToken
+	const state = store.getState()
+	if (!state) return undefined
+
+	const session = orm.session(state)
+	const { Auth } = session
+
+	const currentAuth = Auth.withId('me')
+	if (!currentAuth) return undefined
+
+	return currentAuth.authToken
 }
 
 export function makeApiRequest(opts = {}) {

@@ -1,7 +1,8 @@
 // @flow
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import * as Auth from '~/state/actions/authActions'
+import { init as initAuth } from '~/state/actions/authActions'
+import { currentAuthSelector } from '~/state/selectors/authSelectors'
 
 class Authorize extends Component {
 	componentWillMount() {
@@ -9,11 +10,11 @@ class Authorize extends Component {
 	}
 
 	render() {
-		if (!this.props.didCheck) {
+		if (!this.props.auth || !this.props.auth.didCheck) {
 			return this.props.loadingComponent
 		}
 
-		if (!this.props.isAuthorized) {
+		if (!this.props.auth.isAuthorized) {
 			return this.props.unauthorizedComponent
 		}
 
@@ -22,13 +23,11 @@ class Authorize extends Component {
 }
 
 const mapStateToProps = state => ({
-	isChecking: state.auth.isChecking,
-	didCheck: state.auth.didCheck,
-	isAuthorized: state.auth.isAuthorized
+	auth: currentAuthSelector(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-	initAuth: () => dispatch(Auth.init())
+	initAuth: () => dispatch(initAuth())
 })
 
 export default connect(

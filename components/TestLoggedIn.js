@@ -1,17 +1,22 @@
 import { Component } from 'react'
 import * as Auth from '~/state/actions/authActions'
 import { connect } from 'react-redux'
+import { currentAuthSelector } from '~/state/selectors/authSelectors'
 
-const TestComponent = props => (
-	<div>
-		Logged In!
-		{props.auth.user.username}
-		<button onClick={props.logout}>Logout</button>
-	</div>
-)
+const TestComponent = props => {
+	return (
+		props.auth && (
+			<div>
+				Logged In!
+				{props.auth.user.username}
+				<button onClick={props.logout}>Logout</button>
+			</div>
+		)
+	)
+}
 
 const mapStateToProps = state => ({
-	auth: state.auth
+	auth: currentAuthSelector(state)
 })
 
 const mapDispatchToProps = dispatch => ({

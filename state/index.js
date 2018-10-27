@@ -3,20 +3,16 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
 import { createLogger } from 'redux-logger'
 
-import authSaga from './actions/authActions'
-import authReducer from '~/state/reducers/authReducer'
+import rootSaga from '~/state/actions'
+import rootReducer from '~/state/reducers'
 
 const sagaMiddleware = createSagaMiddleware()
 
 const store = createStore(
-	combineReducers({
-		auth: authReducer
-		// ui: undefined,
-		// orm: undefined
-	}),
+	rootReducer,
 	compose(composeWithDevTools(applyMiddleware(createLogger(), sagaMiddleware)))
 )
 
-sagaMiddleware.run(authSaga)
+sagaMiddleware.run(rootSaga)
 
 export default store

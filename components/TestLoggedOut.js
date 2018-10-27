@@ -30,10 +30,6 @@ class TestComponent extends Component {
 	render() {
 		return (
 			<form onSubmit={this.onSubmit.bind(this)}>
-				<div>
-					Auth Token:
-					{this.props.auth.authToken}
-				</div>
 				<label>
 					Username:
 					<input
@@ -60,9 +56,7 @@ class TestComponent extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	auth: state.auth
-})
+const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
 	login: (username, password, twoFactorAuthToken) =>
