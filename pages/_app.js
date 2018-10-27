@@ -7,7 +7,7 @@ import '~/theme'
 import { withReduxStore } from '~/state'
 
 import Authorize from '~/components/Authorize'
-import Loading from '~/pages/loading' // TODO: Make a higher level view to handle showing registration / login / forgot password
+import Loading from '~/pages/loading'
 import Login from '~/pages/login' // TODO: Make a higher level view to handle showing registration / login / forgot password
 
 class MyApp extends App {
