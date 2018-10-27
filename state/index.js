@@ -3,12 +3,15 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
 import { createLogger } from 'redux-logger'
 import { Component } from 'react'
+import getConfig from 'next/config'
 
 import rootSaga from '~/state/actions'
 import rootReducer from '~/state/reducers'
 
+const { publicRuntimeConfig } = getConfig()
+
 export const isServer = typeof window === 'undefined'
-export const isDevelopment = true // TODO: Add checking for production env
+export const isDevelopment = publicRuntimeConfig['NODE_ENV'] === 'development'
 
 // Internal cache of the store for client side applications
 let clientSideStore
