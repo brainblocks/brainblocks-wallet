@@ -3,11 +3,11 @@ import { addStyles } from 'destyle'
 import theme from '../theme'
 
 addStyles('BB-NanoAddress', {
-  root: css`
-    display: flex;
-    flex-wrap: wrap;
-  `,
-  address: css`
-    flex-grow: 1;
-  `
+	root: css`
+		display: flex;
+		flex-wrap: wrap;
+	`,
+	address: css`
+		flex-grow: 1;
+	`
 })

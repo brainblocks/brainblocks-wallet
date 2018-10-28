@@ -3,11 +3,11 @@ import { css } from 'emotion'
 import theme from '../theme'
 
 addStyles('BB-Menu', {
-  root: css``
+	root: css``
 })
 
 addStyles('BB-MenuDropdown', {
-  root: css`
-    display: flex;
-  `
+	root: css`
+		display: flex;
+	`
 })

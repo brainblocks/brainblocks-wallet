@@ -6,20 +6,20 @@ Example:
 const MenuItem = require('./MenuItem').default
 initialState = { anchorEl: null }
 ;<div>
-  <Button onClick={event => setState({ anchorEl: event.currentTarget })}>
-    Open Menu
-  </Button>
-  <p>
-    <Menu
-      open={Boolean(state.anchorEl)}
-      onClose={() => setState({ anchorEl: null })}
-      anchorEl={state.anchorEl}
-    >
-      <MenuItem>A</MenuItem>
-      <MenuItem>B</MenuItem>
-      <MenuItem>C</MenuItem>
-    </Menu>
-  </p>
+	<Button onClick={event => setState({ anchorEl: event.currentTarget })}>
+		Open Menu
+	</Button>
+	<p>
+		<Menu
+			open={Boolean(state.anchorEl)}
+			onClose={() => setState({ anchorEl: null })}
+			anchorEl={state.anchorEl}
+		>
+			<MenuItem>A</MenuItem>
+			<MenuItem>B</MenuItem>
+			<MenuItem>C</MenuItem>
+		</Menu>
+	</p>
 </div>
 ```
 
