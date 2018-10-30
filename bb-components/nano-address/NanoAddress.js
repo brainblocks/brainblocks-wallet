@@ -1,6 +1,7 @@
 import Button from '../button/Button'
 // @flow
 import { Component } from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { destyle } from 'destyle'
 
 type Props = {
@@ -25,7 +26,8 @@ export class NanoAddress extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isHovering: false
+      isHovering: false,
+      copied: false
     }
     this.onMouseEnter = this.onMouseEnter.bind(this)
     this.onMouseLeave = this.onMouseLeave.bind(this)
@@ -36,6 +38,24 @@ export class NanoAddress extends Component {
     endChars: 5,
     copyable: false,
     hoverable: false
+  }
+
+  copyToClipboard = () => {
+    this.textArea.select()
+    document.execCommand('copy')
+    this.setState({ copied: true })
+  }
+
+  onCopy = () => {
+    this.setState({
+      copied: true
+    })
+
+    setTimeout(() => {
+      this.setState({
+        copied: false
+      })
+    }, 2000)
   }
 
   onMouseEnter() {
@@ -75,9 +95,11 @@ export class NanoAddress extends Component {
           <span className={styles.end}>{end}</span>
         </span>
         {(copyable || (hoverable && this.state.isHovering)) && (
-          <Button type="secondary" style={{ fontSize: 14 }}>
-            Copy
-          </Button>
+          <CopyToClipboard text={address} onCopy={this.onCopy}>
+            <Button type="secondary" style={{ fontSize: 14 }}>
+              Copy
+            </Button>
+          </CopyToClipboard>
         )}
       </span>
     )

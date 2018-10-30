@@ -27,6 +27,7 @@
     "moment-with-locales-es6": "^1.0.1",
     "next": "^7.0.1",
     "react": "^16.5.2",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "react-tabs": "^2.3.0",
