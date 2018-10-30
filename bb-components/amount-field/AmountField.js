@@ -82,6 +82,7 @@ export class AmountField extends Component {
             </FormField>
           </span>
         </div>
+        <Button onClick={onSwitchCurrency}>Switch</Button>
       </div>
     )
   }
