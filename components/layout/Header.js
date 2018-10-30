@@ -7,6 +7,9 @@ import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import SecurityIcon from '~/static/svg/icons/shield.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
+import { connect } from 'react-redux'
+import * as Auth from '~/state/actions/authActions'
+import { authSelector } from '~/state/selectors/authSelectors'
 
 const menuItems = [
   {
@@ -36,7 +39,7 @@ const menuItems = [
   }
 ]
 
-const Header = ({ styles, children, router, ...rest }) => {
+const Header = ({ styles, children, router, auth, logout, ...rest }) => {
   return (
     <div className={styles.root} {...rest}>
       <div className={styles.pageWidth}>
@@ -72,7 +75,9 @@ const Header = ({ styles, children, router, ...rest }) => {
               src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=28"
               alt="User name"
             />
-            <span className={styles.userName}>User name</span>
+            <span className={styles.userName} onClick={logout}>
+              {auth && auth.user && auth.user.username}
+            </span>
             {/* @todo Dropdown menu component */}
           </div>
         </div>
@@ -81,4 +86,15 @@ const Header = ({ styles, children, router, ...rest }) => {
   )
 }
 
-export default withRouter(destyle(Header, 'Header'))
+const mapStateToProps = state => ({
+  auth: authSelector(state)
+})
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(Auth.logout())
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(destyle(Header, 'Header')))

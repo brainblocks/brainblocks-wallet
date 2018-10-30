@@ -32,6 +32,7 @@ export const Button = ({
   block = false,
   el = 'button',
   type = 'secondary',
+  destyleMerge,
   destyleNames,
   ...rest
 }: Props) => {

@@ -1,24 +1,94 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { reducer as userReducer } from './user'
+import createSagaMiddleware from 'redux-saga'
+import { createLogger } from 'redux-logger'
+import { Component } from 'react'
+import getConfig from 'next/config'
 
-const combinedReducers = combineReducers({
-  user: userReducer
-})
+import rootSaga from '~/state/actions'
+import rootReducer from '~/state/reducers'
 
-/*
-const store = createStore(
-  combinedReducers,
-  composeEnhancers(composeWithDevTools(applyMiddleware(thunkMiddleware)))
-)
-*/
+const { publicRuntimeConfig } = getConfig()
 
-const initializeStore = () => {
-  return createStore(
-    combinedReducers,
-    compose(composeWithDevTools(applyMiddleware(thunkMiddleware)))
-  )
+export const isServer = typeof window === 'undefined'
+export const isDevelopment = publicRuntimeConfig['NODE_ENV'] === 'development'
+
+// Internal cache of the store for client side applications
+let clientSideStore
+
+function initializeStore() {
+  const sagaMiddleware = createSagaMiddleware()
+  const middleware = []
+
+  if (isDevelopment && !isServer) {
+    middleware.push(createLogger())
+  }
+
+  middleware.push(sagaMiddleware)
+
+  let appliedMiddleware = applyMiddleware(...middleware)
+
+  if (isDevelopment) {
+    appliedMiddleware = compose(composeWithDevTools(appliedMiddleware))
+  }
+
+  const store = createStore(rootReducer, appliedMiddleware)
+
+  sagaMiddleware.run(rootSaga)
+
+  return store
 }
 
-export { initializeStore, combinedReducers }
+function getOrCreateStore(initialState) {
+  // Always make a new store if server, otherwise state is shared between requests
+  if (isServer) {
+    return initializeStore(initialState)
+  }
+
+  // Create store if one hasn't already been for this client
+  if (!clientSideStore) {
+    clientSideStore = initializeStore(initialState)
+  }
+  return clientSideStore
+}
+
+export function getClientSideStore() {
+  // Ensure if we're calling this from the server to not return a store
+  if (isServer) {
+    return undefined
+  }
+
+  return clientSideStore
+}
+
+export function withReduxStore(App) {
+  return class AppWithRedux extends Component {
+    static async getInitialProps(appContext) {
+      // Get or Create the store with `undefined` as initialState
+      // This allows you to set a custom default initialState
+      const reduxStore = getOrCreateStore()
+
+      // Provide the store to getInitialProps of pages
+      appContext.ctx.reduxStore = reduxStore
+
+      let appProps = {}
+      if (typeof App.getInitialProps === 'function') {
+        appProps = await App.getInitialProps(appContext)
+      }
+
+      return {
+        ...appProps,
+        initialReduxState: reduxStore.getState()
+      }
+    }
+
+    constructor(props) {
+      super(props)
+      this.reduxStore = getOrCreateStore(props.initialReduxState)
+    }
+
+    render() {
+      return <App {...this.props} reduxStore={this.reduxStore} />
+    }
+  }
+}

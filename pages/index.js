@@ -8,7 +8,6 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import DashboardHeader from '~/components/dashboard/DashboardHeader'
 import TransactionsList from '~/components/transactions/TransactionsList'
-import { api as userAPI } from '~/state/user'
 
 import mockState from '~/state/mockState'
 
@@ -50,15 +49,4 @@ class Index extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  user
-})
-
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(userAPI, dispatch)
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Index)
+export default Index

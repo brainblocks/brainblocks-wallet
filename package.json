@@ -4,7 +4,7 @@
   "description": "UI for the BrainBlocks Platform",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "NODE_ENV=development && next",
     "build": "next build",
     "start": "next start",
     "flow": "flow",
@@ -32,7 +32,10 @@
     "react-tabs": "^2.3.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
-    "redux-thunk": "^2.3.0",
+    "redux-logger": "^3.0.6",
+    "redux-orm": "^0.12.1",
+    "redux-orm-proptypes": "^0.1.0",
+    "redux-saga": "^0.16.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import Head from 'next/head'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({ styles, children, ...rest }) => {
+const Layout = ({ styles, children, includeHeader = true, ...rest }) => {
   return (
     <div className={styles.root}>
       <Head>
@@ -20,9 +20,11 @@ const Layout = ({ styles, children, ...rest }) => {
           key="viewport"
         />
       </Head>
-      <div className={styles.header}>
-        <Header />
-      </div>
+      {includeHeader && (
+        <div className={styles.header}>
+          <Header />
+        </div>
+      )}
       {children}
       <div className={styles.footer}>
         <Footer />
