@@ -4,14 +4,34 @@ import { connect } from 'react-redux'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
+import Router from 'next/router'
+import { authSelector } from '~/state/selectors/authSelectors'
 
-class TestComponent extends Component {
+class Login extends Component {
   constructor(...args) {
     super(...args)
 
     this.state = {
       username: 'mochatest_login',
       password: 'mochatestpassword'
+    }
+  }
+
+  componentWillMount() {
+    this.tryForceRedirect()
+  }
+
+  componentDidUpdate() {
+    this.tryForceRedirect()
+  }
+
+  get isAuthorized() {
+    return this.props.auth && this.props.auth.isAuthorized
+  }
+
+  tryForceRedirect() {
+    if (this.isAuthorized) {
+      Router.push('/')
     }
   }
 
@@ -31,6 +51,10 @@ class TestComponent extends Component {
   }
 
   render() {
+    if (this.isAuthorized) {
+      return null
+    }
+
     return (
       <Layout includeHeader={false}>
         <Head>
@@ -66,7 +90,9 @@ class TestComponent extends Component {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  auth: authSelector(state)
+})
 
 const mapDispatchToProps = dispatch => ({
   login: (username, password, twoFactorAuthToken) =>
@@ -76,4 +102,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TestComponent)
+)(Login)
