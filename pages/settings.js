@@ -7,18 +7,21 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import SettingsTabs from '~/components/settings/SettingsTabs'
+import Authorized from '~/components/auth/Authorized'
 
 const Settings = props => {
   return (
-    <Layout>
-      <Head>
-        <title>Settings</title>
-      </Head>
-      <PageHeader title="Settings" indentTitle />
-      <PageContent background>
-        <SettingsTabs router={props.router} />
-      </PageContent>
-    </Layout>
+    <Authorized>
+      <Layout>
+        <Head>
+          <title>Settings</title>
+        </Head>
+        <PageHeader title="Settings" indentTitle />
+        <PageContent background>
+          <SettingsTabs router={props.router} />
+        </PageContent>
+      </Layout>
+    </Authorized>
   )
 }
 

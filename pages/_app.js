@@ -6,9 +6,7 @@ import '~/bb-components/styles'
 import '~/theme'
 import { withReduxStore } from '~/state'
 
-import Authorize from '~/components/Authorize'
-import Loading from '~/pages/loading'
-import Login from '~/pages/login' // TODO: Make a higher level view to handle showing registration / login / forgot password
+import Authorize from '~/components/auth/Authorize'
 
 class MyApp extends App {
   render() {
@@ -16,11 +14,9 @@ class MyApp extends App {
     return (
       <Container>
         <Provider store={reduxStore}>
-          <Authorize
-            loadingComponent={<Loading />}
-            unauthorizedComponent={<Login />}
-            authorizedComponent={<Component {...pageProps} />}
-          />
+          <Authorize>
+            <Component {...pageProps} />
+          </Authorize>
         </Provider>
       </Container>
     )
