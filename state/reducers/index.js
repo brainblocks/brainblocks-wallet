@@ -1,14 +1,15 @@
 import orm from '~/state/models'
-import { createReducer } from 'redux-orm'
 import { combineReducers } from 'redux'
+import { createReducer } from 'redux-orm'
+import { reducer as formReducer } from 'redux-form'
 
 import authReducer from './authReducer'
 import { produce } from 'immer'
 export const ormReducer = createReducer(orm)
 
 const initialState = {
-  orm: orm.getEmptyState(),
   form: {},
+  orm: orm.getEmptyState(),
   errors: {
     login: undefined
   }
@@ -17,6 +18,7 @@ const initialState = {
 export default function rootReducer(state = initialState, action) {
   return produce(state, draft => {
     draft.orm = ormReducer(draft.orm, action)
+    draft.form = formReducer(draft.form, action)
     draft = authReducer(draft, action)
   })
 

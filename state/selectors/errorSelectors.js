@@ -1,4 +1,4 @@
 // @flow
-export function errorSelector(state, namespace) {
-  return state.errors[namespace]
+export function getError(namespace) {
+  return state => state.errors[namespace]
 }

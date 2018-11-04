@@ -2,7 +2,7 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { init as initAuth } from '~/state/actions/authActions'
-import { authSelector } from '~/state/selectors/authSelectors'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import Loading from '~/pages/loading'
 
 /***
@@ -24,7 +24,7 @@ class Authorize extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: getCurrentAuth(state)
 })
 
 const mapDispatchToProps = dispatch => ({

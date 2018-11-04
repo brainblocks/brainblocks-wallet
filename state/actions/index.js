@@ -15,7 +15,7 @@ export function* dispatchError(actionType, error) {
 
 function* anyErrorHandler(action) {
   if (isDevelopment) {
-    console.error(action.payload.error)
+    console.error(action.payload)
   }
 }
 
