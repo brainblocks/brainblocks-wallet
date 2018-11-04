@@ -49,6 +49,7 @@ function getOrCreateStore(initialState) {
   if (!clientSideStore) {
     clientSideStore = initializeStore(initialState)
   }
+
   return clientSideStore
 }
 

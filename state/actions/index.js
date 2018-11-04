@@ -1,21 +1,24 @@
 // @flow
 import { all, put, takeEvery } from 'redux-saga/effects'
 import authSaga from './authActions'
-import userSaga from './userActions'
+import { isDevelopment } from '..'
+import { deduceError } from '../errors'
 
 export const ANY_ERROR = 'ANY::ERROR'
 
 export function* dispatchError(actionType, error) {
-  yield put({ type: actionType, payload: { error } })
-  yield put({ type: ANY_ERROR, payload: { error } })
+  error = deduceError(error)
+  yield put({ type: actionType, payload: error })
+  yield put({ type: ANY_ERROR, payload: error })
 }
 
 function* anyErrorHandler(action) {
-  console.error(action.payload.error)
+  if (isDevelopment) {
+    console.error(action.payload)
+  }
 }
 
 export default function* rootSaga() {
-  yield authSaga()
-  yield userSaga()
   yield takeEvery(ANY_ERROR, anyErrorHandler)
+  yield authSaga()
 }
