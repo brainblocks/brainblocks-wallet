@@ -6,6 +6,7 @@ import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
 import Router from 'next/router'
 import { authSelector } from '~/state/selectors/authSelectors'
+import { errorSelector } from '~/state/selectors/errorSelectors'
 
 class Login extends Component {
   constructor(...args) {
@@ -13,7 +14,7 @@ class Login extends Component {
 
     this.state = {
       username: 'mochatest_login',
-      password: 'mochatestpassword'
+      password: 'mochatestpasswordz'
     }
   }
 
@@ -62,6 +63,7 @@ class Login extends Component {
         </Head>
         <PageContent>
           <form onSubmit={this.onSubmit.bind(this)}>
+            {this.props.error && <div>{this.props.error.message}</div>}
             <label>
               Username:
               <input
@@ -91,7 +93,8 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: authSelector(state),
+  error: errorSelector(state, 'login')
 })
 
 const mapDispatchToProps = dispatch => ({

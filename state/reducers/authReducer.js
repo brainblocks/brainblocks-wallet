@@ -1,9 +1,11 @@
 // @flow
 import orm from '~/state/models'
+import produce from 'immer'
 import {
   AUTH_LOGIN_START,
   AUTH_LOGIN_COMPLETE,
   AUTH_LOGIN_SUCCESS,
+  AUTH_LOGIN_ERROR,
   AUTH_INIT_START,
   AUTH_INIT_COMPLETE,
   AUTH_INIT_SUCCESS,
@@ -12,59 +14,62 @@ import {
   AUTH_LOGOUT_SUCCESS
 } from '~/state/actions/authActions'
 
-export default (state, action) => {
-  const session = orm.session(state.orm)
-  const { Auth, User } = session
-  const auth = Auth.withId('me') || Auth.create({ id: 'me' })
+export default (state, action) =>
+  produce(state, draft => {
+    const session = orm.session(draft.orm)
+    const { Auth, User } = session
+    const auth = Auth.withId('me') || Auth.create({ id: 'me' })
 
-  switch (action.type) {
-    case AUTH_INIT_START:
-    case AUTH_LOGIN_START:
-      auth.update({
-        isChecking: true,
-        user: undefined
-      })
-      break
+    switch (action.type) {
+      case AUTH_INIT_START:
+      case AUTH_LOGIN_START:
+        auth.update({
+          isChecking: true,
+          user: undefined
+        })
+        break
 
-    case AUTH_INIT_SUCCESS:
-    case AUTH_LOGIN_SUCCESS:
-      const { user, authToken, expires } = action.payload
+      case AUTH_INIT_SUCCESS:
+      case AUTH_LOGIN_SUCCESS:
+        const { user, authToken, expires } = action.payload
 
-      auth.update({
-        authToken,
-        expires,
-        user: User.create(user),
-        isChecking: false,
-        isAuthorized: true,
-        didCheck: true
-      })
-      break
+        auth.update({
+          authToken,
+          expires,
+          user: User.create(user),
+          isChecking: false,
+          isAuthorized: true,
+          didCheck: true
+        })
+        break
 
-    case AUTH_INIT_COMPLETE:
-    case AUTH_LOGIN_COMPLETE:
-      auth.update({
-        isChecking: true,
-        didCheck: true
-      })
-      break
+      case AUTH_INIT_COMPLETE:
+      case AUTH_LOGIN_COMPLETE:
+        auth.update({
+          isChecking: true,
+          didCheck: true
+        })
+        break
 
-    // Assume that logout will work for immediate response
-    case AUTH_LOGOUT_START:
-      auth.update({
-        isAuthorized: false
-      })
-      break
+      // Assume that logout will work for immediate response
+      case AUTH_LOGOUT_START:
+        auth.update({
+          isAuthorized: false
+        })
+        break
 
-    case AUTH_LOGOUT_SUCCESS:
-      auth.update({
-        authToken: undefined,
-        user: undefined
-      })
-      break
-  }
+      case AUTH_LOGOUT_SUCCESS:
+        auth.update({
+          authToken: undefined,
+          user: undefined
+        })
+        // Clear out the login error
+        draft.errors.login = undefined
+        break
 
-  return {
-    ...state,
-    orm: session.state
-  }
-}
+      case AUTH_LOGIN_ERROR:
+        draft.errors.login = action.payload
+    }
+
+    draft.orm = session.state
+  })
