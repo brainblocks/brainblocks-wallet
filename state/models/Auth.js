@@ -10,7 +10,7 @@ export default class Auth extends Model {
   static get fields() {
     return {
       id: attr(),
-      authToken: attr(),
+      token: attr(),
       expires: attr(),
       isAuthorized: attr(),
       didCheck: attr(),

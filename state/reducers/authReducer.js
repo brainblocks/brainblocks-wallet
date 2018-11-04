@@ -29,10 +29,10 @@ export default (draftState, action, ormSession) => {
 
     case AUTH_INIT_SUCCESS:
     case AUTH_LOGIN_SUCCESS:
-      const { user, authToken, expires } = action.payload
+      const { user, token, expires } = action.payload
 
       auth.update({
-        authToken,
+        token,
         expires,
         user: User.create(user),
         isChecking: false,
@@ -58,7 +58,7 @@ export default (draftState, action, ormSession) => {
 
     case AUTH_LOGOUT_SUCCESS:
       auth.update({
-        authToken: undefined,
+        token: undefined,
         user: undefined
       })
       // Clear out the login error

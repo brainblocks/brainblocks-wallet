@@ -13,30 +13,30 @@ import {
 import { isServer } from '~/state'
 
 // Safely attempts to lookup and return the auth token from localStorage
-function tryLoadToken() {
+export function tryLoadToken() {
   try {
     if (isServer) return undefined
 
     return window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
   } catch (e) {
-    console.warn('Error while reading authToken from localStorage', e)
+    console.warn('Error while reading token from localStorage', e)
     return undefined
   }
 }
 
 // Safely attempts to store an auth token to localStorage
-function tryStoreToken(authToken: string) {
+export function tryStoreToken(token: string) {
   try {
     if (isServer) return
 
-    window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY] = authToken
+    window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY] = token
   } catch (e) {
     console.warn('Error while writting authToken to localStorage', e)
   }
 }
 
 // Safely attempts to delete the auth token from localStorage
-function tryDeleteToken() {
+export function tryDeleteToken() {
   try {
     if (isServer) return
 
@@ -61,10 +61,10 @@ function* initHandler(action: Object) {
   yield put({ type: AUTH_INIT_START })
 
   try {
-    const authToken = tryLoadToken()
+    let authToken = tryLoadToken()
 
     if (authToken) {
-      let { data: sessionData } = yield call(makeApiRequest, {
+      let { data } = yield call(makeApiRequest, {
         method: 'get',
         url: `/auth`,
         headers: {
@@ -72,14 +72,14 @@ function* initHandler(action: Object) {
         }
       })
 
-      let { user, expires, token } = sessionData
+      let { user, expires, token } = data
 
       // Attempt to re-store the toekn from the response in case it's updated
       tryStoreToken(token)
 
       yield put({
         type: AUTH_INIT_SUCCESS,
-        payload: { authToken: token, expires, user }
+        payload: { token, expires, user }
       })
     } else {
       yield put({ type: AUTH_INIT_FAILURE })
@@ -117,21 +117,21 @@ function* loginHandler(action: Object) {
 
   try {
     // First perform the login to receive an auth token
-    let { data: sessionData } = yield call(makeApiRequest, {
+    let { data } = yield call(makeApiRequest, {
       method: 'post',
       url: '/auth',
       data: { username, password, twoFactorAuthResponse }
     })
 
     // Extract relavent information
-    let { expires, token, user } = sessionData
+    let { expires, token, user } = data
 
     // Keep the auth token in localStorage
     tryStoreToken(token)
 
     yield put({
       type: AUTH_LOGIN_SUCCESS,
-      payload: { authToken: token, expires, user }
+      payload: { token, expires, user }
     })
   } catch (error) {
     yield call(dispatchError, AUTH_LOGIN_ERROR, error)
@@ -146,10 +146,10 @@ export const AUTH_LOGOUT_SUCCESS = 'AUTH::LOGOUT_SUCCESS'
 export const AUTH_LOGOUT_ERROR = 'AUTH::LOGOUT_ERROR'
 export const AUTH_LOGOUT_COMPLETE = 'AUTH::LOGOUT_COMPLETE'
 
-export function logout(authToken: ?string = getAuthToken()) {
+export function logout(token: ?string = getAuthToken()) {
   return {
     type: AUTH_LOGOUT,
-    payload: { authToken }
+    payload: { token }
   }
 }
 
@@ -157,7 +157,7 @@ function* logoutHandler(action: Object) {
   yield put({ type: AUTH_LOGOUT_START })
 
   try {
-    let authToken = getAuthToken()
+    let token = getAuthToken()
 
     // Immediately remove the token from localstorage
     tryDeleteToken()
@@ -166,7 +166,7 @@ function* logoutHandler(action: Object) {
     const { data } = yield call(makeAuthorizedApiRequest, {
       method: 'delete',
       url: '/auth',
-      data: { token: authToken }
+      data: { token }
     })
 
     yield put({ type: AUTH_LOGOUT_SUCCESS, payload: data })

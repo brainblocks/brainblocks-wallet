@@ -8,12 +8,21 @@ import userReducer from './userReducer'
 import { produce } from 'immer'
 export const ormReducer = createReducer(orm)
 
+// TODO: Consider moving this in to it's own file since it'll most likely get very large
 const initialState = {
   form: {},
   orm: orm.getEmptyState(),
   errors: {
     login: undefined,
     register: undefined
+  },
+  ui: {
+    login: {
+      isLoggingIn: false
+    },
+    register: {
+      isRegistering: false
+    }
   }
 }
 

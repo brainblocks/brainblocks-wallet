@@ -1,22 +1,49 @@
 import { Component } from 'react'
-import * as UserActions from '~/state/actions/userActions'
 import { connect } from 'react-redux'
-import Head from 'next/head'
-import Layout from '~/components/layout/Layout'
-import PageContent from '~/components/layout/PageContent'
-import Router from 'next/router'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getError } from '~/state/selectors/errorSelectors'
 import { reduxForm, Field, getFormValues } from 'redux-form'
+import { validate as isEmail } from 'isemail'
+import * as UserActions from '~/state/actions/userActions'
+import Head from 'next/head'
+import Layout from '~/components/layout/Layout'
+import Link from 'next/link'
+import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
+import PageContent from '~/components/layout/PageContent'
+import Router from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
+import validatePassword from '~/utils/validatePassword'
+import { getUIState } from '~/state/selectors/uiSelectors'
 
 const RegisterForm = reduxForm({
   form: 'register',
-  validate: values => {
+  validate: ({ username, email, password, retype }) => {
     const errors = {}
+
+    if (!username) {
+      errors['username'] = 'Please enter a username'
+    }
+
+    if (!email) {
+      errors['email'] = 'Please enter an email'
+    } else if (!isEmail(email)) {
+      errors['email'] = 'Please enter a valid email'
+    }
+
+    const passwordValidation = validatePassword(password)
+    if (passwordValidation) {
+      errors['password'] = passwordValidation
+    }
+
+    if (!retype) {
+      errors['retype'] = 'Please retype your password'
+    } else if (password !== retype) {
+      errors['retype'] = "Passwords don't match"
+    }
+
     return errors
   }
-})(({ handleSubmit, onSubmit }) => (
+})(({ handleSubmit, onSubmit, isRegistering }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
     <Field
       name="username"
@@ -37,15 +64,13 @@ const RegisterForm = reduxForm({
       label="Retype Password"
       component={ValidatedInput}
     />
-    <button type="submit">Register</button>
+    <button type="submit" disabled={isRegistering}>
+      {isRegistering ? 'Registering...' : 'Register'}
+    </button>
   </form>
 ))
 
 class Login extends Component {
-  state = {
-    isRegistering: false
-  }
-
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -58,15 +83,6 @@ class Login extends Component {
     return this.props.auth && this.props.auth.isAuthorized
   }
 
-  set isRegistering(value) {
-    this.state.isRegistering = value // Set immediately to avoid double clicks
-    this.forceUpdate() // Also trigger the update
-  }
-
-  get isRegistering() {
-    return this.state.isRegistering
-  }
-
   tryForceRedirect() {
     if (this.isAuthorized) {
       Router.push('/')
@@ -75,21 +91,13 @@ class Login extends Component {
 
   onSubmit() {
     // Stop early if we're already registering
-    if (this.isRegistering) {
+    if (this.props.ui.isRegistering) {
       return
     }
 
-    this.setState({
-      isRegistering: true
-    })
-
     const { username, email, password } = this.props.formValues || {}
 
-    this.props.register({
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
-    })
+    this.props.register({ username, email, password })
   }
 
   render() {
@@ -105,7 +113,14 @@ class Login extends Component {
           <title>Register</title>
         </Head>
         <PageContent>
-          <RegisterForm onSubmit={this.onSubmit.bind(this)} />
+          {this.props.error && (
+            <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
+          )}
+          <RegisterForm
+            onSubmit={this.onSubmit.bind(this)}
+            isRegistering={this.props.isRegistering}
+          />
+          <Link href="/login">Login</Link>
         </PageContent>
       </Layout>
     )
@@ -115,6 +130,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
   error: getError('register')(state),
+  ui: getUIState('register')(state),
   formValues: getFormValues('register')(state)
 })
 
