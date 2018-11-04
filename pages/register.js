@@ -1,20 +1,49 @@
 import { Component } from 'react'
-import * as Auth from '~/state/actions/authActions'
-import * as User from '~/state/actions/userActions'
+import * as UserActions from '~/state/actions/userActions'
 import { connect } from 'react-redux'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
 import Router from 'next/router'
-import { authSelector } from '~/state/selectors/authSelectors'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
+import { getError } from '~/state/selectors/errorSelectors'
+import { reduxForm, Field, getFormValues } from 'redux-form'
+import ValidatedInput from '~/components/form/ValidatedInput'
+
+const RegisterForm = reduxForm({
+  form: 'register',
+  validate: values => {
+    const errors = {}
+    return errors
+  }
+})(({ handleSubmit, onSubmit }) => (
+  <form onSubmit={handleSubmit(onSubmit)}>
+    <Field
+      name="username"
+      type="text"
+      label="Username"
+      component={ValidatedInput}
+    />
+    <Field name="email" type="email" label="Email" component={ValidatedInput} />
+    <Field
+      name="password"
+      type="password"
+      label="Password"
+      component={ValidatedInput}
+    />
+    <Field
+      name="retype"
+      type="password"
+      label="Retype Password"
+      component={ValidatedInput}
+    />
+    <button type="submit">Register</button>
+  </form>
+))
 
 class Login extends Component {
   state = {
-    isRegistering: false,
-    username: '',
-    email: '',
-    password: '',
-    retype: ''
+    isRegistering: false
   }
 
   componentWillMount() {
@@ -44,18 +73,7 @@ class Login extends Component {
     }
   }
 
-  onChange(event) {
-    let elm = event.target
-    let name = elm.getAttribute('name')
-    this.setState({
-      [name]: elm.value
-    })
-  }
-
-  onSubmit(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
+  onSubmit() {
     // Stop early if we're already registering
     if (this.isRegistering) {
       return
@@ -65,7 +83,7 @@ class Login extends Component {
       isRegistering: true
     })
 
-    // TODO: Add validations
+    const { username, email, password } = this.props.formValues || {}
 
     this.props.register({
       username: this.state.username,
@@ -75,8 +93,6 @@ class Login extends Component {
   }
 
   render() {
-    console.log('Rendering...', this.state.isRegistering)
-
     // If the user is already authorized, we'll be redirecting so don't render anything
     // This avoid a flash on the screen
     if (this.isAuthorized) {
@@ -89,45 +105,7 @@ class Login extends Component {
           <title>Register</title>
         </Head>
         <PageContent>
-          <form onSubmit={this.onSubmit.bind(this)}>
-            <label>
-              Username:
-              <input
-                type="text"
-                name="username"
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <label>
-              Email:
-              <input
-                type="email"
-                name="email"
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <label>
-              Password:
-              <input
-                type="password"
-                name="password"
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <label>
-              Retype Password:
-              <input
-                type="password"
-                name="retype"
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <button type="submit">Register</button>
-          </form>
+          <RegisterForm onSubmit={this.onSubmit.bind(this)} />
         </PageContent>
       </Layout>
     )
@@ -135,11 +113,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: getCurrentAuth(state),
+  error: getError('register')(state),
+  formValues: getFormValues('register')(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  login: accountInfo => dispatch(User.create(accountInfo))
+  register: accountInfo => dispatch(UserActions.register(accountInfo))
 })
 
 export default connect(

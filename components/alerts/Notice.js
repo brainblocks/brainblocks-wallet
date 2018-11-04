@@ -4,8 +4,8 @@ export const SUCCESS_ALERT = 'success'
 export const WARNING_ERROR = 'warning'
 export const ERROR_ALERT = 'error'
 
-export default ({ children, type = NEUTRAL_ALERT }) => {
-  className = ['alert']
+export default ({ children, type = DEFAULT_ALERT }) => {
+  const className = ['alert']
 
   switch (type) {
     case SUCCESS_ALERT:

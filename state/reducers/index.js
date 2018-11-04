@@ -4,6 +4,7 @@ import { createReducer } from 'redux-orm'
 import { reducer as formReducer } from 'redux-form'
 
 import authReducer from './authReducer'
+import userReducer from './userReducer'
 import { produce } from 'immer'
 export const ormReducer = createReducer(orm)
 
@@ -11,16 +12,26 @@ const initialState = {
   form: {},
   orm: orm.getEmptyState(),
   errors: {
-    login: undefined
+    login: undefined,
+    register: undefined
   }
 }
 
 export default function rootReducer(state = initialState, action) {
   return produce(state, draft => {
+    // Run through the namespaced reducers
     draft.orm = ormReducer(draft.orm, action)
     draft.form = formReducer(draft.form, action)
-    draft = authReducer(draft, action)
-  })
 
-  return state
+    // Run through the global reducers with the draft and the orm session passed in for performance
+    const ormSession = orm.session(state.orm)
+
+    // these reducers are allowed to update the state without immutability
+    // because the root reducer does so for them, the should directly update
+    // the draft
+    authReducer(draft, action, ormSession)
+    userReducer(draft, action, ormSession)
+
+    draft.orm = ormSession.state
+  })
 }

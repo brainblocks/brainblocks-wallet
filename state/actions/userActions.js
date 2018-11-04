@@ -1,5 +1,6 @@
 import { put, takeLatest, call } from 'redux-saga/effects'
-import { makeRequest, dispatchError } from '~/state/helpers'
+import { makeApiRequest } from '~/state/helpers'
+import { dispatchError } from '~/state/actions'
 
 export const USER_REGISTER = 'USER::REGISTER'
 export const USER_REGISTER_START = 'USER::REGISTER_START'
@@ -15,7 +16,7 @@ function* registerHandler(action) {
   yield put({ type: USER_REGISTER_START })
 
   try {
-    const { data } = yield call(makeRequest, {
+    const { data } = yield call(makeApiRequest, {
       method: 'post',
       url: '/user',
       data: { ...action.payload }

@@ -15,7 +15,7 @@ const LoginForm = reduxForm({
   form: 'login',
   initialValues: {
     username: 'mochatest_login',
-    password: 'mochatestpasswordz'
+    password: 'mochatestpassword'
   },
   validate: ({ username, password }) => {
     const errors = {}
