@@ -163,7 +163,7 @@ function* logoutHandler(action: Object) {
     tryDeleteToken()
 
     // Attempt to make the proper call to the backend as well
-    let { data } = yield call(makeAuthorizedApiRequest, {
+    const { data } = yield call(makeAuthorizedApiRequest, {
       method: 'delete',
       url: '/auth',
       data: { token: authToken }

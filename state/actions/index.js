@@ -1,6 +1,7 @@
 // @flow
 import { all, put, takeEvery } from 'redux-saga/effects'
 import authSaga from './authActions'
+import userSaga from './userActions'
 
 export const ANY_ERROR = 'ANY::ERROR'
 
@@ -15,5 +16,6 @@ function* anyErrorHandler(action) {
 
 export default function* rootSaga() {
   yield authSaga()
+  yield userSaga()
   yield takeEvery(ANY_ERROR, anyErrorHandler)
 }
