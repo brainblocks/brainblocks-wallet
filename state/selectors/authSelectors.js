@@ -4,6 +4,6 @@ import orm from '~/state/models'
 
 export const authSelector = createSelector(
   orm,
-  state => state,
+  state => state.orm,
   ({ Auth }) => Auth.withId('me')
 )

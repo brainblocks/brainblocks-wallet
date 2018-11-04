@@ -12,8 +12,8 @@ import {
   AUTH_LOGOUT_SUCCESS
 } from '~/state/actions/authActions'
 
-export default (state = orm.getEmptyState(), action) => {
-  const session = orm.session(state)
+export default (state, action) => {
+  const session = orm.session(state.orm)
   const { Auth, User } = session
   const auth = Auth.withId('me') || Auth.create({ id: 'me' })
 
@@ -63,5 +63,8 @@ export default (state = orm.getEmptyState(), action) => {
       break
   }
 
-  return session.state
+  return {
+    ...state,
+    orm: session.state
+  }
 }
