@@ -70,7 +70,7 @@ const RegisterForm = reduxForm({
   </form>
 ))
 
-class Login extends Component {
+class Register extends Component {
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -141,4 +141,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Login)
+)(Register)
