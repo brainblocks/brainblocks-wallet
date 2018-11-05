@@ -118,7 +118,7 @@ class Register extends Component {
           )}
           <RegisterForm
             onSubmit={this.onSubmit.bind(this)}
-            isRegistering={this.props.isRegistering}
+            isRegistering={this.props.ui.isRegistering}
           />
           <Link href="/login">Login</Link>
         </PageContent>
