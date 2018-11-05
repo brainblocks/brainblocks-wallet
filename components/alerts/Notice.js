@@ -1,20 +1,20 @@
 // @flow
-export const DEFAULT_ALERT = 'default'
-export const SUCCESS_ALERT = 'success'
+export const DEFAULT_TYPE = 'default'
+export const SUCCESS_TYPE = 'success'
 export const WARNING_ERROR = 'warning'
-export const ERROR_ALERT = 'error'
+export const ERROR_TYPE = 'error'
 
-export default ({ children, type = NEUTRAL_ALERT }) => {
-  className = ['alert']
+export default ({ children, type = DEFAULT_TYPE }) => {
+  const className = ['alert']
 
   switch (type) {
-    case SUCCESS_ALERT:
+    case SUCCESS_TYPE:
       className.push('is-success')
       break
     case WARNING_ERROR:
       className.push('is-warning')
       break
-    case ERROR_ALERT:
+    case ERROR_TYPE:
       className.push('is-error')
       break
   }
