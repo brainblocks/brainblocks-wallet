@@ -11,7 +11,7 @@ export function getAuthToken() {
   const state = store.getState()
   if (!state) return undefined
 
-  const session = orm.session(state)
+  const session = orm.session(state.orm)
   const { Auth } = session
 
   const currentAuth = Auth.withId('me')

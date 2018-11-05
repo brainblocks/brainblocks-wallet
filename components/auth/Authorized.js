@@ -1,7 +1,7 @@
 // @flow
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { authSelector } from '~/state/selectors/authSelectors'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import Router from 'next/router'
 
 /***
@@ -44,7 +44,7 @@ class Authorized extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: getCurrentAuth(state)
 })
 
 export default connect(mapStateToProps)(Authorized)

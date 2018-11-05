@@ -9,7 +9,7 @@ import SecurityIcon from '~/static/svg/icons/shield.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
 import { connect } from 'react-redux'
 import * as Auth from '~/state/actions/authActions'
-import { authSelector } from '~/state/selectors/authSelectors'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
 
 const menuItems = [
   {
@@ -87,7 +87,7 @@ const Header = ({ styles, children, router, auth, logout, ...rest }) => {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: getCurrentAuth(state)
 })
 
 const mapDispatchToProps = dispatch => ({

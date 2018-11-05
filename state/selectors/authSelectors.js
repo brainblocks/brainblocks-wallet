@@ -2,8 +2,8 @@
 import { createSelector } from 'redux-orm'
 import orm from '~/state/models'
 
-export const authSelector = createSelector(
+export const getCurrentAuth = createSelector(
   orm,
-  state => state,
+  state => state.orm,
   ({ Auth }) => Auth.withId('me')
 )

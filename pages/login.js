@@ -5,18 +5,50 @@ import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
 import Router from 'next/router'
-import { authSelector } from '~/state/selectors/authSelectors'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
+import { getError } from '~/state/selectors/errorSelectors'
+import { reduxForm, Field, getFormValues } from 'redux-form'
+import ValidatedInput from '~/components/form/ValidatedInput'
+import Notice from '~/components/alerts/Notice'
+
+const LoginForm = reduxForm({
+  form: 'login',
+  initialValues: {
+    username: 'mochatest_login',
+    password: 'mochatestpasswordz'
+  },
+  validate: ({ username, password }) => {
+    const errors = {}
+
+    if (!username) {
+      errors['username'] = 'Please enter a username'
+    }
+
+    if (!password) {
+      errors['password'] = 'Please enter a password'
+    }
+
+    return errors
+  }
+})(({ handleSubmit, onSubmit }) => (
+  <form onSubmit={handleSubmit(onSubmit)}>
+    <Field
+      name="username"
+      type="text"
+      label="Username"
+      component={ValidatedInput}
+    />
+    <Field
+      name="password"
+      type="password"
+      label="Password"
+      component={ValidatedInput}
+    />
+    <button type="submit">Login</button>
+  </form>
+))
 
 class Login extends Component {
-  constructor(...args) {
-    super(...args)
-
-    this.state = {
-      username: 'mochatest_login',
-      password: 'mochatestpassword'
-    }
-  }
-
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -35,19 +67,10 @@ class Login extends Component {
     }
   }
 
-  onChange(event) {
-    let elm = event.target
-    let name = elm.getAttribute('name')
-    this.setState({
-      [name]: elm.value
-    })
-  }
-
   onSubmit(event) {
-    event.preventDefault()
-    event.stopPropagation()
+    const { username, password } = this.props.formValues || {}
 
-    this.props.login(this.state.username, this.state.password)
+    this.props.login(username, password)
   }
 
   render() {
@@ -61,29 +84,8 @@ class Login extends Component {
           <title>Login</title>
         </Head>
         <PageContent>
-          <form onSubmit={this.onSubmit.bind(this)}>
-            <label>
-              Username:
-              <input
-                type="text"
-                name="username"
-                defaultValue={this.state.username}
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <label>
-              Password:
-              <input
-                type="password"
-                name="password"
-                defaultValue={this.state.password}
-                onChange={this.onChange.bind(this)}
-              />
-            </label>
-            <br />
-            <button type="submit">Login</button>
-          </form>
+          {this.props.error && <Notice>{this.props.error.message}</Notice>}
+          <LoginForm onSubmit={this.onSubmit.bind(this)} />
         </PageContent>
       </Layout>
     )
@@ -91,7 +93,9 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: authSelector(state)
+  auth: getCurrentAuth(state),
+  error: getError('login')(state),
+  formValues: getFormValues('login')(state)
 })
 
 const mapDispatchToProps = dispatch => ({
