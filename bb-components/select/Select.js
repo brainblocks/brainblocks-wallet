@@ -44,7 +44,9 @@ export const Select = ({
         {...rest}
       >
         {options.map(opt => (
-          <MUIMenuItem key={opt.value} style={{textTransform: 'uppercase'}} value={opt.value}>{opt.title}</MUIMenuItem>
+          <MUIMenuItem key={opt.value} value={opt.value}>
+            <span className={styles.item}>{opt.title}</span>
+          </MUIMenuItem>
         ))}
       </MUISelect>
     </MUIFormControl>
