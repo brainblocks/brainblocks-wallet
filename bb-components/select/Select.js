@@ -39,6 +39,10 @@ export const Select = ({
             horizontal: 'left'
           }
         }}
+        classes={{
+          root: styles.root,
+          select: styles.select
+        }}
         value={value}
         onChange={onChange}
         {...rest}
