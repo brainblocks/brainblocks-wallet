@@ -12,4 +12,3 @@ initialState = { val1: 'one' }
   />
 </div>
 ```
-asdfasdfas
