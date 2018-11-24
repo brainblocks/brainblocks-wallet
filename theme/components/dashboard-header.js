@@ -1,6 +1,6 @@
-import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import { backgroundGradient } from '../globals/mixins'
+import { css } from 'emotion'
 import theme from '../theme'
 
 addStyles('DashboardHeader', props => {
