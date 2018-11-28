@@ -40,8 +40,7 @@ export const Select = ({
           }
         }}
         classes={{
-          root: styles.root,
-          select: styles.select
+          root: styles.root
         }}
         value={value}
         onChange={onChange}

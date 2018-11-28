@@ -4,6 +4,8 @@ import theme from '../theme'
 
 addStyles('BB-Select', {
   root: css`
+    background-color: transparent;
+    color: white;
     text-transform: uppercase;
   `,
   item: css`
