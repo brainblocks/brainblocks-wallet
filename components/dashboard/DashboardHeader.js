@@ -1,19 +1,22 @@
-// @flow
-import React from 'react'
-import Link from 'next/link'
-import { destyle } from 'destyle'
-import type { NormalizedState } from '~/types'
-import { formatNano, formatFiat, formatPercent } from '~/functions/format'
-import { convert } from '~/functions/convert'
-import KeyValue from '~/bb-components/key-value/KeyValue'
-import Button from '~/bb-components/button/Button'
-import FormField from '~/bb-components/form-field/FormField'
-import Select from '~/bb-components/select/Select'
+import { formatFiat, formatNano, formatPercent } from '~/functions/format'
+
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
-import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
+import Button from '~/bb-components/button/Button'
+import FormField from '~/bb-components/form-field/FormField'
+import HistoryChart from '~/bb-components/history-chart/HistoryChart'
+import KeyValue from '~/bb-components/key-value/KeyValue'
+import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
+import type { NormalizedState } from '~/types'
+// @flow
+import React from 'react'
+import Select from '~/bb-components/select/Select'
+import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
+import Typography from '~/bb-components/typography/Typography'
+import { convert } from '~/functions/convert'
+import { destyle } from 'destyle'
 import theme from '~/theme/theme'
 
 type Props = {
@@ -48,6 +51,14 @@ const DashboardHeader = ({
     account === 'all'
       ? allAccountsBalance(accounts)
       : accounts.byId[account].balance
+
+  const data = [
+    { day: '19 Sep', price: 4000 },
+    { day: '20 Sep', price: 3000 },
+    { day: '21 Sep', price: 2000 },
+    { day: '22 Sep', price: 1000 },
+    { day: '23 Sep', price: 6000 }
+  ]
 
   return (
     <div className={styles.root} {...rest}>
@@ -131,7 +142,25 @@ const DashboardHeader = ({
           </span>
         </Button>
       </Link>
-      <div className={styles.chart} />
+      <div className={styles.chart}>
+        <Typography
+          style={{ paddingLeft: '20px' }}
+          el="h3"
+          color="heavyOnDark"
+          spaceBelow={1}
+          spaceAbove={1}
+        >
+          History
+        </Typography>
+        <HistoryChart
+          data={data}
+          xAxisName="day"
+          yAxisName="price"
+          strokeColor="#fff"
+          width={330}
+          height={150}
+        />
+      </div>
     </div>
   )
 }

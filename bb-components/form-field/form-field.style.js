@@ -7,8 +7,8 @@ addStyles('BB-FormField', {
     display: flex;
     align-items: center;
     background: #fff;
-    padding: 0.25em 0.5em;
     border: 1px solid #ddd;
+    padding: 0.25em 0.5em;
   `,
   adornStart: css`
     margin-right: 0.66em;

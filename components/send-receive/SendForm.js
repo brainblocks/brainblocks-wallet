@@ -94,7 +94,7 @@ class SendForm extends Component<Props, State> {
             </FormItem>
           </GridItem>
           <GridItem>
-            <FormItem label="To" fieldId="send-to" extra="Extra!">
+            <FormItem label="To" fieldId="send-to" extra="Send as payment link">
               <FormField
                 valid={toFieldValid}
                 adornEnd={<Button type="util">Paste</Button>}

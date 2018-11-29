@@ -39,12 +39,17 @@ export const Select = ({
             horizontal: 'left'
           }
         }}
+        classes={{
+          root: styles.root
+        }}
         value={value}
         onChange={onChange}
         {...rest}
       >
         {options.map(opt => (
-          <MUIMenuItem value={opt.value}>{opt.title}</MUIMenuItem>
+          <MUIMenuItem key={opt.value} value={opt.value}>
+            <span className={styles.item}>{opt.title}</span>
+          </MUIMenuItem>
         ))}
       </MUISelect>
     </MUIFormControl>
