@@ -9,6 +9,7 @@ addStyles('BB-KeyValue', props => {
     key: css`
       ${props.theme === 'header' &&
         css`
+          white-space: nowrap;
           color: rgba(255, 255, 255, 0.35);
           text-transform: uppercase;
           font-size: 9px;
@@ -24,6 +25,7 @@ addStyles('BB-KeyValue', props => {
       margin-top: 6px;
       ${props.theme === 'header' &&
         css`
+          white-space: nowrap;
           color: #fff;
           font-size: 24px;
           font-weight: ${theme.type.baseFontWeight};
