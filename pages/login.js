@@ -80,7 +80,7 @@ class Login extends Component {
     }
 
     return (
-      <Layout includeHeader={false}>
+      <Layout headerVariant="bare">
         <Head>
           <title>Login</title>
         </Head>

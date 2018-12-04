@@ -39,49 +39,69 @@ const menuItems = [
   }
 ]
 
-const Header = ({ styles, children, router, auth, logout, ...rest }) => {
+const Header = ({
+  styles,
+  children,
+  router,
+  auth,
+  logout,
+  variant = 'full',
+  ...rest
+}) => {
   return (
     <div className={styles.root} {...rest}>
-      <div className={styles.pageWidth}>
-        <div className={styles.inner}>
-          <div className={styles.logo}>
-            <Link href="/">
-              <img
-                src="/static/svg/brainblocks-symbol.svg"
-                alt="BrainBlocks Logo"
-              />
-            </Link>
-          </div>
-          <nav className={styles.menu}>
-            <ul>
-              {menuItems.map((item, i) => (
-                <li
-                  className={router.pathname === item.href ? 'is-active' : ''}
-                  key={`menu-item-${i}`}
-                >
-                  <Link prefetch href={item.href}>
-                    <a>
-                      {item.icon}
-                      <span>{item.title}</span>
-                    </a>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className={styles.userMenu}>
+      {variant === 'bare' && (
+        <div className={styles.fullWidth}>
+          <div className={styles.logotype}>
             <img
-              className={styles.userAvatar}
-              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=28"
-              alt="User name"
+              src="/static/svg/brainblocks-logotype-white.svg"
+              alt="BrainBlocks Logo"
             />
-            <span className={styles.userName} onClick={logout}>
-              {auth && auth.user && auth.user.username}
-            </span>
-            {/* @todo Dropdown menu component */}
           </div>
         </div>
-      </div>
+      )}
+      {variant === 'full' && (
+        <div className={styles.pageWidth}>
+          <div className={styles.inner}>
+            <div className={styles.logo}>
+              <Link href="/">
+                <img
+                  src="/static/svg/brainblocks-symbol.svg"
+                  alt="BrainBlocks Logo"
+                />
+              </Link>
+            </div>
+            <nav className={styles.menu}>
+              <ul>
+                {menuItems.map((item, i) => (
+                  <li
+                    className={router.pathname === item.href ? 'is-active' : ''}
+                    key={`menu-item-${i}`}
+                  >
+                    <Link prefetch href={item.href}>
+                      <a>
+                        {item.icon}
+                        <span>{item.title}</span>
+                      </a>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <div className={styles.userMenu}>
+              <img
+                className={styles.userAvatar}
+                src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=28"
+                alt="User name"
+              />
+              <span className={styles.userName} onClick={logout}>
+                {auth && auth.user && auth.user.username}
+              </span>
+              {/* @todo Dropdown menu component */}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
