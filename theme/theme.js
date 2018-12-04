@@ -61,7 +61,9 @@ const theme = {
     headingLineHeight: 1.125,
     monoFontFamily: '"Source Code Pro", monospace',
     monoFontWeight: 500,
+    eyebrowLetterSpacing: 0.1,
     sizes: {
+      eyebrow: 12,
       p: 14,
       span: 14,
       h1: 18,

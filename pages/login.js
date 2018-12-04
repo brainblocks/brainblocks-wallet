@@ -6,6 +6,7 @@ import { reduxForm, Field, getFormValues } from 'redux-form'
 import * as Auth from '~/state/actions/authActions'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
+import AuthPageLayout from '~/components/layout/AuthPageLayout'
 import Link from 'next/link'
 import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
@@ -75,6 +76,8 @@ class Login extends Component {
   }
 
   render() {
+    const { styles } = this.props
+
     if (this.isAuthorized) {
       return null
     }
@@ -85,11 +88,16 @@ class Login extends Component {
           <title>Login</title>
         </Head>
         <PageContent>
-          {this.props.error && (
-            <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
-          )}
-          <LoginForm onSubmit={this.onSubmit.bind(this)} />
-          <Link href="/register">Register</Link>
+          <AuthPageLayout
+            eyebrow="Welcome"
+            title="Log in now or sign up for free"
+          >
+            {this.props.error && (
+              <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
+            )}
+            <LoginForm onSubmit={this.onSubmit.bind(this)} />
+            <Link href="/register">Register</Link>
+          </AuthPageLayout>
         </PageContent>
       </Layout>
     )
