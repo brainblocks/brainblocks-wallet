@@ -30,5 +30,10 @@ addStyles('BB-FormItem', {
     p {
       margin: 0;
     }
+  `,
+  error: css`
+    margin-top: 12px;
+    margin-left: 22px;
+    color: ${theme.color.status.error};
   `
 })

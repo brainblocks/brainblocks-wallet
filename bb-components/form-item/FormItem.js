@@ -27,6 +27,7 @@ export const FormItem = ({
   fieldId,
   label,
   description,
+  error,
   extra,
   children,
   ...rest
@@ -47,6 +48,11 @@ export const FormItem = ({
       {!!description && (
         <div className={styles.description}>
           {typeof description === 'string' ? <p>{description}</p> : description}
+        </div>
+      )}
+      {!!error && (
+        <div className={styles.error}>
+          {typeof error === 'string' ? <p>{error}</p> : error}
         </div>
       )}
     </div>

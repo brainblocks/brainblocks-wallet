@@ -14,6 +14,9 @@ import Router from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
 import validatePassword from '~/utils/validatePassword'
 import { getUIState } from '~/state/selectors/uiSelectors'
+import Grid from '~/bb-components/grid/Grid'
+import GridItem from '~/bb-components/grid/GridItem'
+import Button from '~/bb-components/button/Button'
 
 const RegisterForm = reduxForm({
   form: 'register',
@@ -45,28 +48,51 @@ const RegisterForm = reduxForm({
   }
 })(({ handleSubmit, onSubmit, isRegistering }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      name="username"
-      type="text"
-      label="Username"
-      component={ValidatedInput}
-    />
-    <Field name="email" type="email" label="Email" component={ValidatedInput} />
-    <Field
-      name="password"
-      type="password"
-      label="Password"
-      component={ValidatedInput}
-    />
-    <Field
-      name="retype"
-      type="password"
-      label="Retype Password"
-      component={ValidatedInput}
-    />
-    <button type="submit" disabled={isRegistering}>
-      {isRegistering ? 'Registering...' : 'Register'}
-    </button>
+    <Grid>
+      <GridItem>
+        <Field
+          name="username"
+          type="text"
+          label="Username"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="email"
+          type="email"
+          label="Email"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="password"
+          type="password"
+          label="Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="retype"
+          type="password"
+          label="Retype Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Button
+          block
+          variant="primary"
+          color="green"
+          type="submit"
+          disabled={isRegistering}
+        >
+          {isRegistering ? 'Registering...' : 'Register'}
+        </Button>
+      </GridItem>
+    </Grid>
   </form>
 ))
 

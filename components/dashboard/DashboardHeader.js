@@ -87,7 +87,7 @@ const DashboardHeader = ({
             />
           </div>
           <Button
-            type="icon"
+            variant="icon"
             destyleMerge={{ root: styles.moreButton }}
             size={26}
           >

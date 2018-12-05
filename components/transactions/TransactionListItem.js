@@ -97,7 +97,7 @@ class TransactionListItem extends React.Component<Props, State> {
           <span className={styles.timeAgo}>{formatTimeAgo(tx.timestamp)}</span>
         </td>
         <td className={styles.actionCol}>
-          <Button type="icon" size="24" style={{ marginRight: -6 }}>
+          <Button variant="icon" size="24" style={{ marginRight: -6 }}>
             <ChevronDownIcon />
           </Button>
         </td>

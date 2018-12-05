@@ -63,7 +63,7 @@ class ReceiveForm extends Component<Props, State> {
           </GridItem>
           <GridItem>
             <FormItem label="Address" fieldId="receive-address">
-              <FormField adornEnd={<Button type="util">Copy</Button>}>
+              <FormField adornEnd={<Button variant="util">Copy</Button>}>
                 <Input
                   readOnly
                   id="receive-address"

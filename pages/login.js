@@ -10,8 +10,11 @@ import AuthPageLayout from '~/components/layout/AuthPageLayout'
 import Link from 'next/link'
 import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
-import Router from 'next/router'
+import Router, { withRouter } from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
+import Grid from '~/bb-components/grid/Grid'
+import GridItem from '~/bb-components/grid/GridItem'
+import Button from '~/bb-components/button/Button'
 
 const LoginForm = reduxForm({
   form: 'login',
@@ -34,19 +37,29 @@ const LoginForm = reduxForm({
   }
 })(({ handleSubmit, onSubmit }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      name="username"
-      type="text"
-      label="Username"
-      component={ValidatedInput}
-    />
-    <Field
-      name="password"
-      type="password"
-      label="Password"
-      component={ValidatedInput}
-    />
-    <button type="submit">Login</button>
+    <Grid>
+      <GridItem>
+        <Field
+          name="username"
+          type="text"
+          label="Username"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="password"
+          type="password"
+          label="Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Button block variant="primary" color="green" type="submit">
+          Login
+        </Button>
+      </GridItem>
+    </Grid>
   </form>
 ))
 
@@ -76,7 +89,7 @@ class Login extends Component {
   }
 
   render() {
-    const { styles } = this.props
+    const { styles, router } = this.props
 
     if (this.isAuthorized) {
       return null
@@ -89,6 +102,7 @@ class Login extends Component {
         </Head>
         <PageContent>
           <AuthPageLayout
+            router={router}
             eyebrow="Welcome"
             title="Log in now or sign up for free"
           >
@@ -96,7 +110,6 @@ class Login extends Component {
               <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
             )}
             <LoginForm onSubmit={this.onSubmit.bind(this)} />
-            <Link href="/register">Register</Link>
           </AuthPageLayout>
         </PageContent>
       </Layout>
@@ -115,7 +128,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(Auth.login(username, password, twoFactorAuthToken))
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Login)
+)

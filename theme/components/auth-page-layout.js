@@ -97,7 +97,9 @@ addStyles('AuthPageLayout', ({ background, pad }) => ({
     z-index: 2;
     border-radius: ${theme.borderRadius.lg}px;
     background: ${theme.color.gray.lightest};
-    padding: 30px 5%;
-    min-height: 650px;
+    padding: 40px 10%;
+  `,
+  tabPanels: css`
+    margin-top: ${theme.spacing.paddingLg.desktop}px;
   `
 }))

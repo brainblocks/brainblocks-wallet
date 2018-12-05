@@ -33,14 +33,14 @@ addStyles('BB-Button', props => {
             padding-right: 0.5em;
           `
         : null};
-      ${props.type === 'primary'
+      ${props.variant === 'primary'
         ? css`
             padding: 1.2em 2em;
             text-transform: uppercase;
             font-size: 18px;
           `
         : null};
-      ${props.type === 'util'
+      ${props.variant === 'util'
         ? css`
             text-transform: uppercase;
             font-size: 14px;
@@ -54,7 +54,7 @@ addStyles('BB-Button', props => {
             }
           `
         : null};
-      ${props.type === 'icon'
+      ${props.variant === 'icon'
         ? css`
             padding: 0;
             width: ${props.size || 24}px;
