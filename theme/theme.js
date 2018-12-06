@@ -90,6 +90,7 @@ const theme = {
     mobile: 480,
     small: 640,
     tablet: 768,
+    medium: 900,
     desktop: 1020,
     large: 1280
   },

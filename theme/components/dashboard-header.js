@@ -18,24 +18,45 @@ addStyles('DashboardHeader', props => {
       width: 1px;
       background: rgba(255, 255, 255, 0.15);
     }
+    @media (max-width: ${theme.bp.mobile - 1}px) {
+      padding-left: 16px;
+      margin-left: 16px;
+    }
+  `
+  const infoRow = css`
+    padding-left: 18px;
+    display: flex;
+    @media (max-width: ${theme.bp.mobile - 1}px) {
+      padding-left: 0;
+    }
   `
   // styles
   return {
     root: css`
       display: flex;
       align-items: stretch;
+      @media (max-width: ${theme.bp.medium - 1}px) {
+        flex-wrap: wrap;
+        align-items: auto;
+      }
     `,
     // 3 major sections
     info: css`
       flex-basis: 33%;
       flex-grow: 1;
       margin-right: ${theme.spacing.paddingLg.desktop}px;
+      @media (max-width: ${theme.bp.small - 1}px) {
+        margin-right: 0;
+      }
     `,
     sendReceiveBtn: css`
       text-align: left;
       flex-basis: 154px;
       position: relative;
       background-size: 101% 101%;
+      @media (max-width: ${theme.bp.small - 1}px) {
+        display: none;
+      }
       svg {
         margin-bottom: 6px;
         width: 28px;
@@ -63,15 +84,20 @@ addStyles('DashboardHeader', props => {
       flex-grow: 1;
       border-radius: ${theme.borderRadius.md + 3}px;
       margin-left: ${theme.spacing.paddingLg.desktop}px;
+      @media (max-width: ${theme.bp.medium - 1}px) {
+        display: none;
+      }
     `,
     // Info section
     selector: css`
       margin-bottom: 32px;
       max-width: 250px;
+      @media (max-width: ${theme.bp.mobile - 1}px) {
+        max-width: 100%;
+      }
     `,
     infoRow1: css`
-      padding-left: 18px;
-      display: flex;
+      ${infoRow};
       margin-bottom: 14px;
       align-items: flex-end;
     `,
@@ -88,8 +114,7 @@ addStyles('DashboardHeader', props => {
       }
     `,
     infoRow2: css`
-      padding-left: 18px;
-      display: flex;
+      ${infoRow};
     `,
     value: css``,
     price: css`
