@@ -53,11 +53,11 @@ const DashboardHeader = ({
       : accounts.byId[account].balance
 
   const data = [
-    { date: '19 Sep', price: 4000 },
-    { date: '20 Sep', price: 3000 },
-    { date: '21 Sep', price: 2000 },
-    { date: '22 Sep', price: 1000 },
-    { date: '23 Sep', price: 6000 }
+    { date: '2018-07-19', balance: 100 },
+    { date: '2018-07-20', balance: 300 },
+    { date: '2018-07-21', balance: 1500 },
+    { date: '2018-07-22', balance: 600 },
+    { date: '2018-07-23', balance: 400 }
   ]
 
   return (
@@ -144,15 +144,15 @@ const DashboardHeader = ({
       </Link>
       <div className={styles.chart}>
         <Typography
-          style={{ paddingLeft: '20px' }}
+          style={{ paddingLeft: '30px' }}
           el="h3"
           color="heavyOnDark"
-          spaceBelow={1}
-          spaceAbove={1}
+          spaceBelow={1.5}
+          spaceAbove={1.5}
         >
           History
         </Typography>
-        <HistoryChart data={data} strokeColor="#fff" width={330} height={150} />
+        <HistoryChart data={data} xAxisName={'date'} yAxisName={'balance'} />
       </div>
     </div>
   )

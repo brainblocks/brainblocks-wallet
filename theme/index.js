@@ -13,6 +13,7 @@ import './components/bb-key-value'
 import './components/bb-tabs'
 
 // Components ===
+import './components/chart'
 
 // Layout
 import './components/layout'

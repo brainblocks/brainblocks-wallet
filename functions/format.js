@@ -2,6 +2,7 @@ import moment from 'moment'
 /*import 'moment/locale/en'
 import 'moment/locale/es'
 import 'moment/locale/zh-cn'*/
+import numbro from 'numbro'
 
 function formatNano(nanoVal, decimals = 3) {
   return new Intl.NumberFormat('en-US', {
@@ -37,8 +38,19 @@ function formatDate(timestamp) {
   return moment(timestamp).format('ll')
 }
 
+function formatDayMonth(timestamp) {
+  return moment(timestamp).format('D MMM')
+}
+
 function changeMomentLocale(locale) {
   moment.locale(locale)
+}
+
+function abbreviateNumber(number, options = {}) {
+  return numbro(number).format({
+    average: true,
+    ...options
+  })
 }
 
 export {
@@ -49,5 +61,7 @@ export {
   formatTimeAgo,
   formatTime,
   formatDate,
-  changeMomentLocale
+  formatDayMonth,
+  changeMomentLocale,
+  abbreviateNumber
 }
