@@ -48,10 +48,14 @@ export const HistoryChart = ({
   return (
     <LineChart width={width} height={height} data={data}>
       <Line type="monotone" dataKey="price" stroke={strokeColor} />
-      {xAxisName && <XAxis dataKey={xAxisName} stroke={strokeColor} />}
-      {yAxisName && (
-        <YAxis dataKey={yAxisName} stroke={strokeColor} interval={0} />
-      )}
+      <XAxis dataKey="date" stroke={strokeColor} />}
+      <YAxis
+        dataKey="price"
+        stroke={strokeColor}
+        axisLine={false}
+        tickLine={false}
+        interval={0}
+      />
       {cartesianStroke && <CartesianGrid strokeDasharray="3 3" />}
       <Tooltip />
     </LineChart>

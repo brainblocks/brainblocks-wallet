@@ -5,7 +5,7 @@ import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
 import Button from '~/bb-components/button/Button'
 import FormField from '~/bb-components/form-field/FormField'
-import HistoryChart from '~/bb-components/history-chart/HistoryChart'
+import HistoryChart from '~/components/dashboard/HistoryChart'
 import KeyValue from '~/bb-components/key-value/KeyValue'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
@@ -53,11 +53,11 @@ const DashboardHeader = ({
       : accounts.byId[account].balance
 
   const data = [
-    { day: '19 Sep', price: 4000 },
-    { day: '20 Sep', price: 3000 },
-    { day: '21 Sep', price: 2000 },
-    { day: '22 Sep', price: 1000 },
-    { day: '23 Sep', price: 6000 }
+    { date: '19 Sep', price: 4000 },
+    { date: '20 Sep', price: 3000 },
+    { date: '21 Sep', price: 2000 },
+    { date: '22 Sep', price: 1000 },
+    { date: '23 Sep', price: 6000 }
   ]
 
   return (
@@ -152,14 +152,7 @@ const DashboardHeader = ({
         >
           History
         </Typography>
-        <HistoryChart
-          data={data}
-          xAxisName="day"
-          yAxisName="price"
-          strokeColor="#fff"
-          width={330}
-          height={150}
-        />
+        <HistoryChart data={data} strokeColor="#fff" width={330} height={150} />
       </div>
     </div>
   )
