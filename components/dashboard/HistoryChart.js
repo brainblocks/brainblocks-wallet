@@ -110,7 +110,7 @@ const HistoryChart = ({ data, styles, xAxisName, yAxisName }: Props) => {
             axisLine={false}
             tickLine={false}
             tickFormatter={dateFormatter}
-            tickMargin={8}
+            tickMargin={6}
             {...tickStyles}
           />
           }
@@ -118,13 +118,13 @@ const HistoryChart = ({ data, styles, xAxisName, yAxisName }: Props) => {
             dataKey={yAxisName}
             stroke="#FFF"
             axisLine={false}
+            interval="preserveStartEnd"
             tickLine={false}
-            interval={0}
             tickFormatter={numberFormatter}
             {...tickStyles}
             width={40}
             tickMargin={6}
-            minTickGap={10}
+            minTickGap={6}
           />
         </AreaChart>
       </ResponsiveContainer>
