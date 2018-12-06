@@ -10,11 +10,10 @@ export default ({
   type,
   placeholder,
   meta: { touched, error, warning }
-}) =>
-  console.log(input) || (
-    <FormItem label={label} fieldId={name} error={touched && !!error && error}>
-      <FormField>
-        <Input id={name} type={type} {...input} placeholder={placeholder} />
-      </FormField>
-    </FormItem>
-  )
+}) => (
+  <FormItem label={label} fieldId={name} error={touched && !!error && error}>
+    <FormField>
+      <Input id={name} type={type} {...input} placeholder={placeholder} />
+    </FormField>
+  </FormItem>
+)
