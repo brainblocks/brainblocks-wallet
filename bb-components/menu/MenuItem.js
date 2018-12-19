@@ -12,8 +12,24 @@ type Props = {
 /**
  * MenuItem.
  */
-export const MenuItem = ({ styles, children, ...rest }: Props) => {
-  return <MUIMenuItem {...rest}>{children}</MUIMenuItem>
+export const MenuItem = ({
+  styles,
+  destyleMerge,
+  children,
+  ...rest
+}: Props) => {
+  return (
+    <MUIMenuItem
+      classes={{
+        root: styles.root,
+        gutters: styles.gutters,
+        selected: styles.selected
+      }}
+      {...rest}
+    >
+      {children}
+    </MUIMenuItem>
+  )
 }
 
 export default destyle(MenuItem, 'BB-MenuItem')

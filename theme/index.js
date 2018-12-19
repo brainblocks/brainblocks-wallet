@@ -35,6 +35,7 @@ import './components/accounts-list'
 import './components/account-list-item'
 import './components/account-title'
 import './components/accounts-header'
+import './components/account-selector'
 
 // Send / Receive
 import './components/send-receive-tabs'

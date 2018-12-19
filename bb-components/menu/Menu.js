@@ -15,7 +15,11 @@ type Props = {
  * Menu.
  */
 export const Menu = ({ styles, children, ...rest }: Props) => {
-  return <MUIMenu {...rest}>{children}</MUIMenu>
+  return (
+    <MUIMenu classes={{ paper: styles.root }} {...rest}>
+      {children}
+    </MUIMenu>
+  )
 }
 
 export default destyle(Menu, 'BB-Menu')
