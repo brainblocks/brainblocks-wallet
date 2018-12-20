@@ -42,9 +42,20 @@ class ReceiveForm extends Component<Props, State> {
     })
   }
 
+  handleUpdateAccount = acc => {
+    this.setState({ account: acc })
+  }
+
   render() {
     const { router, styles } = this.props
     const { account } = this.state
+    let nanoAddress = 'Oops, something is wrong'
+    if (mockState.accounts.byId.hasOwnProperty(account)) {
+      nanoAddress = mockState.accounts.byId[account].address
+    }
+    if (mockState.nanoAddresses.byId.hasOwnProperty(account)) {
+      nanoAddress = mockState.nanoAddresses.byId[account].address
+    }
     return (
       <div className={styles.root}>
         <Grid>
@@ -56,7 +67,9 @@ class ReceiveForm extends Component<Props, State> {
                   balances="all"
                   account={account}
                   accounts={mockState.accounts}
-                  onChange={this.getHandleUpdateValue('account')}
+                  addresses={mockState.nanoAddresses}
+                  onChange={this.handleUpdateAccount}
+                  vaultSelectable={false}
                 />
               </FormField>
             </FormItem>
@@ -64,11 +77,7 @@ class ReceiveForm extends Component<Props, State> {
           <GridItem>
             <FormItem label="Address" fieldId="receive-address">
               <FormField adornEnd={<Button type="util">Copy</Button>}>
-                <Input
-                  readOnly
-                  id="receive-address"
-                  value={mockState.accounts.byId[account].address}
-                />
+                <Input readOnly id="receive-address" value={nanoAddress} />
               </FormField>
             </FormItem>
           </GridItem>

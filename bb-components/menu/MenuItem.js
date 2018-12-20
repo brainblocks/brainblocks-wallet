@@ -2,6 +2,7 @@
 import * as React from 'react'
 
 import { MenuItem as MUIMenuItem } from '@material-ui/core'
+import { cx } from 'emotion'
 import { destyle } from 'destyle'
 
 type Props = {
@@ -21,9 +22,8 @@ export const MenuItem = ({
   return (
     <MUIMenuItem
       classes={{
-        root: styles.root,
-        gutters: styles.gutters,
-        selected: styles.selected
+        root: cx(styles.root),
+        selected: cx(styles.selected)
       }}
       {...rest}
     >

@@ -1,5 +1,7 @@
+// @flow
+import React from 'react'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
-
+import { getAccountById } from '~/functions/accounts'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
@@ -10,8 +12,6 @@ import KeyValue from '~/bb-components/key-value/KeyValue'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
 import type { NormalizedState } from '~/types'
-// @flow
-import React from 'react'
 import Select from '~/bb-components/select/Select'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import Typography from '~/bb-components/typography/Typography'
@@ -23,6 +23,7 @@ type Props = {
   nanoPrice: number,
   nano24hChange: number,
   accounts: NormalizedState,
+  addresses: NormalizedState,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -43,6 +44,7 @@ const DashboardHeader = ({
   nanoPrice,
   nano24hChange,
   accounts,
+  addresses,
   account = 'all',
   onSelectAccount,
   ...rest
@@ -50,7 +52,7 @@ const DashboardHeader = ({
   const balance =
     account === 'all'
       ? allAccountsBalance(accounts)
-      : accounts.byId[account].balance
+      : getAccountById(account).balance
 
   const data = [
     { date: '2018-07-19', balance: 100 },
@@ -69,7 +71,10 @@ const DashboardHeader = ({
             theme="outlined-on-dark"
             accounts={accounts}
             account={account}
+            addresses={addresses}
             onChange={onSelectAccount}
+            accountTitleProps={{ color: 'light' }}
+            dropdownWidth={345}
           />
         </div>
         <div className={styles.infoRow1}>

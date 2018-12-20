@@ -3,6 +3,7 @@ import * as React from 'react'
 
 import { Menu as MUIMenu } from '@material-ui/core'
 import { destyle } from 'destyle'
+import { cx } from 'emotion'
 
 type Props = {
   /** Menu contents */
@@ -16,7 +17,7 @@ type Props = {
  */
 export const Menu = ({ styles, children, ...rest }: Props) => {
   return (
-    <MUIMenu classes={{ paper: styles.root }} {...rest}>
+    <MUIMenu classes={{ paper: cx(styles.root) }} {...rest}>
       {children}
     </MUIMenu>
   )

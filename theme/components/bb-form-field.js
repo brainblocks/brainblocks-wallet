@@ -45,6 +45,9 @@ addStyles('BB-FormField', props => ({
           box-shadow: none;
           border-color: rgba(255, 255, 255, 0.4);
         }
+        .mdi-icon {
+          fill: rgba(255, 255, 255, 0.4);
+        }
       `};
     ${props.valid === false &&
       css`

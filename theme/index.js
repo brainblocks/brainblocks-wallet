@@ -11,6 +11,7 @@ import './components/bb-input'
 import './components/bb-select'
 import './components/bb-key-value'
 import './components/bb-tabs'
+import './components/bb-menu'
 
 // Components ===
 import './components/chart'

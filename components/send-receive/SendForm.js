@@ -92,8 +92,10 @@ class SendForm extends Component<Props, State> {
                   balances="all"
                   account={from}
                   accounts={mockState.accounts}
+                  addresses={mockState.nanoAddresses}
                   onChange={this.handleUpdateAccount}
                   nanoPrice={3.24}
+                  vaultSelectable={false}
                 />
               </FormField>
             </FormItem>
