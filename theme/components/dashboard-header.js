@@ -91,7 +91,7 @@ addStyles('DashboardHeader', props => {
     // Info section
     selector: css`
       margin-bottom: 32px;
-      max-width: 250px;
+      max-width: 260px;
       @media (max-width: ${theme.bp.mobile - 1}px) {
         max-width: 100%;
       }

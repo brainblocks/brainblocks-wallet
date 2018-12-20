@@ -6,8 +6,7 @@ addStyles('BB-Menu', {
   root: css``
 })
 
-addStyles('BB-MenuDropdown', {
-  root: css`
-    display: flex;
-  `
+addStyles('BB-MenuItem', {
+  root: css``,
+  selected: css``
 })

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import TransactionListItem from './TransactionListItem'
-
+import { getAccountById } from '~/functions/accounts'
 import mockState from '~/state/mockState'
 const { transactions, accounts } = mockState
 
@@ -26,7 +26,7 @@ class TransactionsList extends React.Component<Props> {
         <TransactionListItem
           key={txId}
           transaction={tx}
-          account={account === 'all' ? accounts.byId[tx.accountId] : null}
+          account={account === 'all' ? getAccountById(tx.accountId) : null}
         />
       )
     })

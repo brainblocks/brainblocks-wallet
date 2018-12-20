@@ -63,6 +63,10 @@ class SendForm extends Component<Props, State> {
     })
   }
 
+  handleUpdateAccount = acc => {
+    this.setState({ from: acc })
+  }
+
   handleSend = () => {
     console.log('Send', this.state)
   }
@@ -88,7 +92,10 @@ class SendForm extends Component<Props, State> {
                   balances="all"
                   account={from}
                   accounts={mockState.accounts}
-                  onChange={this.getHandleUpdateValue('from')}
+                  addresses={mockState.nanoAddresses}
+                  onChange={this.handleUpdateAccount}
+                  nanoPrice={3.24}
+                  vaultSelectable={false}
                 />
               </FormField>
             </FormItem>

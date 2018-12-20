@@ -11,6 +11,7 @@ import './components/bb-input'
 import './components/bb-select'
 import './components/bb-key-value'
 import './components/bb-tabs'
+import './components/bb-menu'
 
 // Components ===
 import './components/chart'
@@ -35,6 +36,7 @@ import './components/accounts-list'
 import './components/account-list-item'
 import './components/account-title'
 import './components/accounts-header'
+import './components/account-selector'
 
 // Send / Receive
 import './components/send-receive-tabs'
