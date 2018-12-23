@@ -51,7 +51,9 @@ const AccountTitle = ({
   if (account) {
     title = account === 'all' ? 'All Accounts' : account.name
     if (account.type === 'nanoAddress' && !account.name) {
-      title = <NanoAddress address={account.address} />
+      title = (
+        <NanoAddress address={account.address} startChars={8} endChars={5} />
+      )
     }
   }
   if (overrideTitle) {
@@ -62,7 +64,9 @@ const AccountTitle = ({
   if (sub) {
     if (account) {
       if (account.type === 'nanoAddress' && account.name) {
-        subtitle = <NanoAddress address={account.address} />
+        subtitle = (
+          <NanoAddress address={account.address} startChars={8} endChars={5} />
+        )
       } else {
         subtitle = '@todo-subtitle'
       }
