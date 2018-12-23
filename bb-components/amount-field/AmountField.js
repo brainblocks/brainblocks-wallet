@@ -1,15 +1,16 @@
-import Button from '../button/Button'
 // @flow
 import { Component } from 'react'
-import FormField from '../form-field/FormField'
 import Input from '../input/Input'
+import FormField from '../form-field/FormField'
+import Button from '../button/Button'
+import SwitchIcon from 'mdi-react/SwapVerticalIcon'
 import { destyle } from 'destyle'
 
 type Props = {
   value: number,
-  topCurrency: string,
-  bottomAmount: number,
-  bottomCurrency: string,
+  editing: number,
+  nanoFormatted: string,
+  fiatFormatted: string,
   onSwitchCurrency: func,
   onChange: func,
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -19,73 +20,56 @@ type Props = {
 /**
  * AmountField.
  */
-export class AmountField extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      topValue: props.value
-    }
-  }
-
-  static defaultProps = {
-    value: 0,
-    topCurrency: 'nano',
-    bottomCurrency: 'fiat'
-  }
-
-  topCurrencyChange = newAmount => {
-    const { onChange } = this.props
-    this.setState({
-      topValue: newAmount
-    })
-    onChange(newAmount)
-  }
-
-  renderCurrency = currency => {
-    const { styles } = this.props
-    return (
-      <span className={styles.currency} style={{ marginLeft: '0.66em' }}>
-        {currency}
-      </span>
-    )
-  }
-
-  render() {
-    const {
-      value,
-      topCurrency,
-      bottomAmount,
-      bottomCurrency,
-      onSwitchCurrency,
-      onChange,
-      styles,
-      ...rest
-    } = this.props
-
-    const { topValue } = this.state
-
-    return (
+export const AmountField = ({
+  value = 0,
+  editing,
+  nanoFormatted,
+  fiatFormatted,
+  onSwitchCurrency,
+  onChange,
+  styles,
+  ...rest
+}: Props) => {
+  return (
+    <FormField>
       <div className={styles.root}>
-        <div className={styles.container} style={{ display: 'flex' }}>
-          <FormField adornEnd={this.renderCurrency(topCurrency)}>
-            <Input
-              value={topValue}
-              onChange={e => this.topCurrencyChange(e.target.value)}
-              style={{ flexGrow: 1, padding: 0 }}
-            />
-          </FormField>
+        <div className={styles.content}>
+          <div className={styles.topRow}>
+            <span className={styles.topVal}>
+              <Input
+                destyleMerge={{ root: styles.input }}
+                value={value}
+                type="number"
+                onChange={onChange}
+              />
+            </span>
+            <span className={styles.topLabel}>
+              {editing === 'nano' ? 'NANO' : 'USD'}
+            </span>
+          </div>
+          <div className={styles.bottomRow}>
+            <span className={styles.bottomVal}>
+              {editing === 'nano' ? fiatFormatted : nanoFormatted}
+            </span>
+            <span className={styles.bottomLabel}>
+              {editing === 'nano' ? 'USD' : 'NANO'}
+            </span>
+          </div>
         </div>
-        <div>
-          <span className={styles.amount}>
-            <FormField adornEnd={this.renderCurrency(bottomCurrency)}>
-              <span style={{ width: '186px' }}>{bottomAmount}</span>
-            </FormField>
-          </span>
+        <div className={styles.switchButton}>
+          <Button
+            type="icon"
+            color="#AAA"
+            size={40}
+            iconSize={32}
+            onClick={onSwitchCurrency}
+          >
+            <SwitchIcon />
+          </Button>
         </div>
-        <Button onClick={onSwitchCurrency}>Switch</Button>
       </div>
-    )
-  }
+    </FormField>
+  )
 }
 
 export default destyle(AmountField, 'BB-AmountField')

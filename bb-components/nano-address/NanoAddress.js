@@ -2,6 +2,7 @@ import Button from '../button/Button'
 // @flow
 import { Component } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import CopyIcon from 'mdi-react/ContentCopyIcon'
 import { destyle } from 'destyle'
 
 type Props = {
@@ -38,12 +39,6 @@ export class NanoAddress extends Component {
     endChars: 5,
     copyable: false,
     hoverable: false
-  }
-
-  copyToClipboard = () => {
-    this.textArea.select()
-    document.execCommand('copy')
-    this.setState({ copied: true })
   }
 
   onCopy = () => {
@@ -96,9 +91,7 @@ export class NanoAddress extends Component {
         </span>
         {(copyable || (hoverable && this.state.isHovering)) && (
           <CopyToClipboard text={address} onCopy={this.onCopy}>
-            <Button type="secondary" style={{ fontSize: 14 }}>
-              Copy
-            </Button>
+            <CopyIcon className={styles.icon} size={22} />
           </CopyToClipboard>
         )}
       </span>

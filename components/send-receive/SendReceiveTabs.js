@@ -5,6 +5,7 @@ import TabsComponents from '~/bb-components/tabs/Tabs'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
+import TransferForm from './TransferForm'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -53,7 +54,9 @@ class SendReceiveTabs extends React.Component<Props, State> {
           <TabPanel>
             <ReceiveForm router={router} />
           </TabPanel>
-          <TabPanel>Transfer</TabPanel>
+          <TabPanel>
+            <TransferForm router={router} />
+          </TabPanel>
         </SwitchTabs>
       </div>
     )

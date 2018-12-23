@@ -2,6 +2,8 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 
+const pad = theme.forms.itemPadding.desktop
+
 addStyles('AccountSelector', (props, state) => {
   const accountTitle = css`
     flex-grow: 1;
@@ -29,7 +31,7 @@ addStyles('AccountSelector', (props, state) => {
     field: css`
       display: flex;
       align-items: center;
-      padding: 24px 18px 24px 26px;
+      padding: ${pad.t}px ${pad.r}px ${pad.b}px ${pad.l}px;
       box-shadow: none !important;
       outline: none !important;
       ${props.theme === 'outlined-on-dark' &&
@@ -83,7 +85,7 @@ addStyles('AccountSelector', (props, state) => {
     `,
     list: css``,
     listItem: css`
-      padding: 24px 26px 24px 26px;
+      padding: ${pad.t}px ${pad.l}px;
       display: flex;
       align-items: center;
       ${!props.twoLine && thinItem};
