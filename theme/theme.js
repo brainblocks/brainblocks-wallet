@@ -96,6 +96,16 @@ const theme = {
   },
   buttons: {
     borderRadius: 10
+  },
+  forms: {
+    itemPadding: {
+      desktop: {
+        t: 24,
+        r: 18,
+        b: 24,
+        l: 26
+      }
+    }
   }
 }
 

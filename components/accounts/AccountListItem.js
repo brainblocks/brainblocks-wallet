@@ -144,6 +144,7 @@ class AccountListItem extends React.Component<Props, State> {
                 <div className={styles.subRow} key={`address-${addr}`}>
                   <div className={styles.title}>
                     <NanoAddress
+                      copyable
                       destyleMerge={{ root: styles.nanoAddress }}
                       address={nanoAddresses.byId[addr].address}
                     />

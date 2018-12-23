@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import { destyle } from 'destyle'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
 import Grid from '~/bb-components/grid/Grid'
 import GridItem from '~/bb-components/grid/GridItem'
@@ -32,23 +33,33 @@ class ReceiveForm extends Component<Props, State> {
       account = props.router.query.account
     }
     this.state = {
-      account
+      account,
+      copied: false
     }
   }
 
-  getHandleUpdateValue = (stateKey: string) => e => {
-    this.setState({
-      [stateKey]: e.target.value
-    })
+  handleUpdateAccount = acc => {
+    this.setState({ account: acc, copied: false })
   }
 
-  handleUpdateAccount = acc => {
-    this.setState({ account: acc })
+  handleCopyAddress = () => {
+    this.setState(
+      {
+        copied: true
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({
+            copied: false
+          })
+        }, 3000)
+      }
+    )
   }
 
   render() {
     const { router, styles } = this.props
-    const { account } = this.state
+    const { account, copied } = this.state
     let nanoAddress = 'Oops, something is wrong'
     if (mockState.accounts.byId.hasOwnProperty(account)) {
       nanoAddress = mockState.accounts.byId[account].address
@@ -76,7 +87,16 @@ class ReceiveForm extends Component<Props, State> {
           </GridItem>
           <GridItem>
             <FormItem label="Address" fieldId="receive-address">
-              <FormField adornEnd={<Button type="util">Copy</Button>}>
+              <FormField
+                adornEnd={
+                  <CopyToClipboard
+                    text={nanoAddress}
+                    onCopy={this.handleCopyAddress}
+                  >
+                    <Button type="util">{copied ? 'Copied' : 'Copy'}</Button>
+                  </CopyToClipboard>
+                }
+              >
                 <Input readOnly id="receive-address" value={nanoAddress} />
               </FormField>
             </FormItem>

@@ -61,7 +61,7 @@ addStyles('BB-Button', props => {
             height: ${props.size || 24}px;
             border-radius: 100%;
             background: transparent;
-            color: ${theme.color.text.base};
+            color: ${props.color || theme.color.text.base};
             position: relative;
             &:hover:not(:disabled) {
               background: ${theme.color.gray.light};

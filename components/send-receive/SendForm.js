@@ -2,15 +2,19 @@
 import React, { Component } from 'react'
 import { destyle } from 'destyle'
 import { isValidNanoAddress } from '~/functions/validate'
+import { formatNano, formatFiat } from '~/functions/format'
+import { convert } from '~/functions/convert'
 import Grid from '~/bb-components/grid/Grid'
 import GridItem from '~/bb-components/grid/GridItem'
 import FormItem from '~/bb-components/form-item/FormItem'
 import FormField from '~/bb-components/form-field/FormField'
 import Input from '~/bb-components/input/Input'
 import Button from '~/bb-components/button/Button'
+import AmountField from '~/bb-components/amount-field/AmountField'
 import AccountSelector from '~/components/accounts/AccountSelector'
 
 import mockState from '~/state/mockState'
+const nanoPrice = 2.14
 
 type Props = {
   router: Object,
@@ -22,6 +26,7 @@ type State = {
   to: string,
   message: string,
   amountField: number,
+  amountFieldEditing: string,
   toFieldValid: boolean,
   btnDisabled: boolean
 }
@@ -34,6 +39,7 @@ class SendForm extends Component<Props, State> {
       to: props.router.query.to || '',
       message: '',
       amountField: props.router.query.amount || 0,
+      amountFieldEditing: 'nano',
       toFieldValid: true,
       btnDisabled: true
     }
@@ -67,6 +73,13 @@ class SendForm extends Component<Props, State> {
     this.setState({ from: acc })
   }
 
+  handleAmountFieldSwitchCurrency = val => {
+    this.setState({
+      amountFieldEditing:
+        this.state.amountFieldEditing === 'nano' ? 'fiat' : 'nano'
+    })
+  }
+
   handleSend = () => {
     console.log('Send', this.state)
   }
@@ -77,10 +90,21 @@ class SendForm extends Component<Props, State> {
       from,
       to,
       message,
-      amountField,
+      amountField = 0,
+      amountFieldEditing = 'nano',
       toFieldValid,
       btnDisabled
     } = this.state
+
+    const amountFieldNano =
+      amountFieldEditing === 'nano'
+        ? amountField
+        : convert(amountField, 'fiat', nanoPrice)
+    const amountFieldFiat =
+      amountFieldEditing === 'fiat'
+        ? amountField
+        : convert(amountField, 'nano', nanoPrice)
+
     return (
       <div className={styles.root}>
         <Grid>
@@ -118,14 +142,14 @@ class SendForm extends Component<Props, State> {
           </GridItem>
           <GridItem spanTablet={6}>
             <FormItem label="Amount" fieldId="send-amount">
-              <FormField>
-                <Input
-                  id="send-amount"
-                  type="number"
-                  value={amountField}
-                  onChange={this.getHandleUpdateValue('amountField')}
-                />
-              </FormField>
+              <AmountField
+                value={amountField}
+                editing={amountFieldEditing}
+                nanoFormatted={formatNano(amountFieldNano)}
+                fiatFormatted={formatFiat(amountFieldFiat)}
+                onSwitchCurrency={this.handleAmountFieldSwitchCurrency}
+                onChange={this.getHandleUpdateValue('amountField')}
+              />
             </FormItem>
           </GridItem>
           <GridItem spanTablet={6}>

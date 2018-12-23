@@ -17,7 +17,20 @@ type Props = {
  */
 export const Menu = ({ styles, children, ...rest }: Props) => {
   return (
-    <MUIMenu classes={{ paper: cx(styles.root) }} {...rest}>
+    <MUIMenu
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left'
+      }}
+      transitionDuration={50}
+      getContentAnchorEl={null}
+      classes={{ paper: cx(styles.root) }}
+      {...rest}
+    >
       {children}
     </MUIMenu>
   )
