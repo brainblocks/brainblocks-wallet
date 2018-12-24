@@ -16,6 +16,7 @@ import './components/bb-menu'
 import './components/bb-nano-address'
 
 // Components ===
+import './components/snackbar'
 import './components/chart'
 
 // Layout
