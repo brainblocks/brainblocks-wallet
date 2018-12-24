@@ -112,12 +112,13 @@ addStyles('Header', {
     flex-grow: 1;
   `,
   userSecurityTitle: css`
-    font-size: ${theme.type.baseFontSize - 1}px;
+    font-size: ${theme.type.baseFontSize}px;
     color: #808080;
     margin: 4px 0 0;
   `,
   userSecurityDescription: css`
-    font-size: ${theme.type.baseFontSize - 3}px;
+    font-size: ${theme.type.baseFontSize - 2}px;
+    font-weight: ${theme.type.baseFontWeight};
     color: #b4b4b4;
     margin: 4px 0 8px;
   `,

@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react'
+import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
@@ -19,7 +20,9 @@ type Props = {
 }
 
 type State = {
-  account: string
+  account: string,
+  amount: number,
+  copied: boolean
 }
 
 class ReceiveForm extends Component<Props, State> {
@@ -34,6 +37,7 @@ class ReceiveForm extends Component<Props, State> {
     }
     this.state = {
       account,
+      amount: '10000000000000000000000000000000',
       copied: false
     }
   }
@@ -59,7 +63,7 @@ class ReceiveForm extends Component<Props, State> {
 
   render() {
     const { router, styles } = this.props
-    const { account, copied } = this.state
+    const { account, amount, copied } = this.state
     let nanoAddress = 'Oops, something is wrong'
     if (mockState.accounts.byId.hasOwnProperty(account)) {
       nanoAddress = mockState.accounts.byId[account].address
@@ -102,7 +106,19 @@ class ReceiveForm extends Component<Props, State> {
             </FormItem>
           </GridItem>
           <GridItem>
-            QR Code (can be wrapped in FormField for the white background)
+            <FormItem label="Scan">
+              <FormField>
+                <div
+                  className="formItemPadding"
+                  style={{ textAlign: 'center' }}
+                >
+                  <QRCode
+                    value={`xrb:${nanoAddress}?amount=${amount}`}
+                    size={150}
+                  />
+                </div>
+              </FormField>
+            </FormItem>
           </GridItem>
         </Grid>
       </div>
