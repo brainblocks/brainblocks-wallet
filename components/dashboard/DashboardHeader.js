@@ -1,3 +1,4 @@
+/* @flow */
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 
 import AccountSelector from '~/components/accounts/AccountSelector'
@@ -10,7 +11,6 @@ import KeyValue from '~/bb-components/key-value/KeyValue'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
 import type { NormalizedState } from '~/types'
-// @flow
 import React from 'react'
 import Select from '~/bb-components/select/Select'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'

@@ -3,6 +3,8 @@ import { addStyles } from 'destyle'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 
+const pad = theme.forms.itemPadding.desktop
+
 addStyles('BB-FormItem', {
   root: css`
     align-items: baseline;
@@ -19,8 +21,9 @@ addStyles('BB-FormItem', {
   field: css`
     input,
     select,
-    textarea {
-      padding: 24px 18px 24px 26px;
+    textarea,
+    .formItemPadding {
+      padding: ${pad.t}px ${pad.r}px ${pad.b}px ${pad.l}px;
     }
   `,
   description: css`

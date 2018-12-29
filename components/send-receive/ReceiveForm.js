@@ -1,6 +1,8 @@
 // @flow
 import React, { Component } from 'react'
+import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
 import Grid from '~/bb-components/grid/Grid'
 import GridItem from '~/bb-components/grid/GridItem'
@@ -18,7 +20,9 @@ type Props = {
 }
 
 type State = {
-  account: string
+  account: string,
+  amount: number,
+  copied: boolean
 }
 
 class ReceiveForm extends Component<Props, State> {
@@ -32,19 +36,41 @@ class ReceiveForm extends Component<Props, State> {
       account = props.router.query.account
     }
     this.state = {
-      account
+      account,
+      amount: '10000000000000000000000000000000',
+      copied: false
     }
   }
 
-  getHandleUpdateValue = (stateKey: string) => e => {
-    this.setState({
-      [stateKey]: e.target.value
-    })
+  handleUpdateAccount = acc => {
+    this.setState({ account: acc, copied: false })
+  }
+
+  handleCopyAddress = () => {
+    this.setState(
+      {
+        copied: true
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({
+            copied: false
+          })
+        }, 3000)
+      }
+    )
   }
 
   render() {
     const { router, styles } = this.props
-    const { account } = this.state
+    const { account, amount, copied } = this.state
+    let nanoAddress = 'Oops, something is wrong'
+    if (mockState.accounts.byId.hasOwnProperty(account)) {
+      nanoAddress = mockState.accounts.byId[account].address
+    }
+    if (mockState.nanoAddresses.byId.hasOwnProperty(account)) {
+      nanoAddress = mockState.nanoAddresses.byId[account].address
+    }
     return (
       <div className={styles.root}>
         <Grid>
@@ -56,7 +82,9 @@ class ReceiveForm extends Component<Props, State> {
                   balances="all"
                   account={account}
                   accounts={mockState.accounts}
-                  onChange={this.getHandleUpdateValue('account')}
+                  addresses={mockState.nanoAddresses}
+                  onChange={this.handleUpdateAccount}
+                  vaultSelectable={false}
                 />
               </FormField>
             </FormItem>
@@ -73,7 +101,19 @@ class ReceiveForm extends Component<Props, State> {
             </FormItem>
           </GridItem>
           <GridItem>
-            QR Code (can be wrapped in FormField for the white background)
+            <FormItem label="Scan">
+              <FormField>
+                <div
+                  className="formItemPadding"
+                  style={{ textAlign: 'center' }}
+                >
+                  <QRCode
+                    value={`xrb:${nanoAddress}?amount=${amount}`}
+                    size={150}
+                  />
+                </div>
+              </FormField>
+            </FormItem>
           </GridItem>
         </Grid>
       </div>

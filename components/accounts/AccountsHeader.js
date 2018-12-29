@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
+import { withSnackbar } from 'notistack'
 import { formatNano, formatFiat, formatPercent } from '~/functions/format'
 import { convert } from '~/functions/convert'
 import KeyValue from '~/bb-components/key-value/KeyValue'
@@ -13,7 +14,9 @@ type Props = {
   nanoPrice: number,
   nano24hChange: number,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  /** Given by notistack */
+  enqueueSnackbar: func
 }
 
 const AccountsHeader = ({
@@ -21,6 +24,7 @@ const AccountsHeader = ({
   balance,
   nanoPrice,
   nano24hChange,
+  enqueueSnackbar,
   ...rest
 }: Props) => {
   return (
@@ -64,10 +68,20 @@ const AccountsHeader = ({
         />
       </div>
       <div className={styles.new}>
-        <Button block>Add Account</Button>
+        <Button
+          block
+          onClick={() =>
+            enqueueSnackbar(
+              'Wallet added lorem ipsum dolor sit amet consectetur adipsicing elit orem ipsum dolor sit amet consectetur adipsicing elit',
+              { variant: 'success' }
+            )
+          }
+        >
+          Add Account
+        </Button>
       </div>
     </div>
   )
 }
 
-export default destyle(AccountsHeader, 'AccountsHeader')
+export default withSnackbar(destyle(AccountsHeader, 'AccountsHeader'))
