@@ -99,28 +99,24 @@ export const AUTH_LOGIN_SUCCESS = 'AUTH::LOGIN_SUCCESS'
 export const AUTH_LOGIN_ERROR = 'AUTH::LOGIN_ERROR'
 export const AUTH_LOGIN_COMPLETE = 'AUTH::LOGIN_COMPLETE'
 
-export function login(
-  username: string,
-  password: string,
-  twoFactorAuthResponse: ?string
-) {
+export function login({ username, password, recaptcha }) {
   return {
     type: AUTH_LOGIN,
-    payload: { username, password, twoFactorAuthResponse }
+    payload: { username, password, recaptcha }
   }
 }
 
 function* loginHandler(action: Object) {
   yield put({ type: AUTH_LOGIN_START })
 
-  let { username, password, twoFactorAuthResponse } = action.payload
+  let { username, password, recaptcha } = action.payload
 
   try {
     // First perform the login to receive an auth token
     let { data } = yield call(makeApiRequest, {
       method: 'post',
       url: '/auth',
-      data: { username, password, twoFactorAuthResponse }
+      data: { username, password, recaptcha }
     })
 
     // Extract relavent information

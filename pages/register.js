@@ -14,6 +14,7 @@ import Router from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
 import validatePassword from '~/utils/validatePassword'
 import { getUIState } from '~/state/selectors/uiSelectors'
+import Recaptcha from '~/components/auth/Recaptcha'
 
 const RegisterForm = reduxForm({
   form: 'register',
@@ -71,6 +72,14 @@ const RegisterForm = reduxForm({
 ))
 
 class Register extends Component {
+  recaptcha
+  isRegistering
+
+  constructor() {
+    super()
+    this.isRegistering = false
+  }
+
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -89,15 +98,22 @@ class Register extends Component {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     // Stop early if we're already registering
-    if (this.props.ui.isRegistering) {
+    if (this.isRegistering) {
       return
     }
 
-    const { username, email, password } = this.props.formValues || {}
+    this.isRegistering = true
 
-    this.props.register({ username, email, password })
+    try {
+      const recaptcha = await this.recaptcha.execute()
+      const { username, email, password } = this.props.formValues || {}
+
+      this.props.register({ username, email, password, recaptcha })
+    } catch (error) {}
+
+    this.isRegistering = false
   }
 
   render() {
@@ -118,8 +134,9 @@ class Register extends Component {
           )}
           <RegisterForm
             onSubmit={this.onSubmit.bind(this)}
-            isRegistering={this.props.ui.isRegistering}
+            isRegistering={this.isRegistering}
           />
+          <Recaptcha ref={elm => (this.recaptcha = elm)} />
           <Link href="/login">Login</Link>
         </PageContent>
       </Layout>
@@ -130,7 +147,6 @@ class Register extends Component {
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
   error: getError('register')(state),
-  ui: getUIState('register')(state),
   formValues: getFormValues('register')(state)
 })
 

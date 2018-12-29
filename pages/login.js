@@ -11,9 +11,11 @@ import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
 import Router from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
+import Recaptcha from '~/components/auth/Recaptcha'
 
 const LoginForm = reduxForm({
   form: 'login',
+  shouldAsyncValidate: () => true,
   initialValues: {
     username: 'mochatest_login',
     password: 'mochatestpassword'
@@ -50,6 +52,14 @@ const LoginForm = reduxForm({
 ))
 
 class Login extends Component {
+  recaptcha
+  isLoggingIn
+
+  constructor() {
+    super()
+    this.isLoggingIn = false
+  }
+
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -68,10 +78,21 @@ class Login extends Component {
     }
   }
 
-  onSubmit(event) {
-    const { username, password } = this.props.formValues || {}
+  async onSubmit(event) {
+    if (this.isLoggingIn) {
+      return
+    }
 
-    this.props.login(username, password)
+    this.isLoggingIn = true
+
+    try {
+      const recaptcha = await this.recaptcha.execute()
+      const { username, password } = this.props.formValues || {}
+
+      this.props.login({ username, password, recaptcha })
+    } catch (error) {}
+
+    this.isLoggingIn = false
   }
 
   render() {
@@ -89,6 +110,7 @@ class Login extends Component {
             <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
           )}
           <LoginForm onSubmit={this.onSubmit.bind(this)} />
+          <Recaptcha ref={elm => (this.recaptcha = elm)} />
           <Link href="/register">Register</Link>
         </PageContent>
       </Layout>
