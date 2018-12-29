@@ -32,15 +32,6 @@ const LoginForm = reduxForm({
     }
 
     return errors
-  },
-  asyncBlurFields: ['recaptcha'],
-  asyncValidate: function(values) {
-    console.log(arguments)
-    return new Promise((resolve, reject) => {
-      console.log(values)
-      console.log('Right Here')
-      throw 'Could not recaptcha'
-    })
   }
 })(({ handleSubmit, onSubmit }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
@@ -56,16 +47,19 @@ const LoginForm = reduxForm({
       label="Password"
       component={ValidatedInput}
     />
-    <Field
-      name="recaptcha"
-      component={Recaptcha}
-      ref={ref => console.log(ref)}
-    />
     <button type="submit">Login</button>
   </form>
 ))
 
 class Login extends Component {
+  recaptcha
+  isLoggingIn
+
+  constructor() {
+    super()
+    this.isLoggingIn = false
+  }
+
   componentWillMount() {
     this.tryForceRedirect()
   }
@@ -85,9 +79,22 @@ class Login extends Component {
   }
 
   onSubmit(event) {
-    const { username, password } = this.props.formValues || {}
+    if (this.isLoggingIn) {
+      return
+    }
 
-    this.props.login(username, password)
+    this.isLoggingIn = true
+
+    this.recaptcha
+      .execute()
+      .then(recaptcha => {
+        const { username, password } = this.props.formValues || {}
+        this.props.login(username, password, recaptcha)
+      })
+      .catch(error => {})
+      .then(() => {
+        this.isLoggingIn = false
+      })
   }
 
   render() {
@@ -105,6 +112,7 @@ class Login extends Component {
             <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
           )}
           <LoginForm onSubmit={this.onSubmit.bind(this)} />
+          <Recaptcha ref={elm => (this.recaptcha = elm)} />
           <Link href="/register">Register</Link>
         </PageContent>
       </Layout>

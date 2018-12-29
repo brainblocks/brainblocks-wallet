@@ -16,6 +16,25 @@ let delayedRenders = []
 export default class Recaptcha extends Component {
   container: any
   recaptchaId: any
+  promiseResolver: Promise
+  promiseRejector: Promise
+
+  execute() {
+    if (this.recaptchaId === undefined) {
+      return
+    }
+
+    if (!!this.props.onStart && !this.props.onStart()) {
+      return
+    }
+
+    window.grecaptcha.execute(this.recaptchaId)
+
+    return new Promise((resolve, reject) => {
+      this.promiseResolver = resolve
+      this.promiseRejector = reject
+    })
+  }
 
   componentDidMount() {
     if (isServer) {
@@ -66,20 +85,10 @@ export default class Recaptcha extends Component {
     return this
   }
 
-  onResponse(response) {}
-
-  onClick(event) {
-    event.preventDefault()
-
-    if (this.recaptchaId === undefined) {
-      return
+  onResponse(response) {
+    if (this.promiseResolver) {
+      this.promiseResolver(response)
     }
-
-    if (!!this.props.onStart && !this.props.onStart()) {
-      return
-    }
-
-    window.grecaptcha.execute(this.recaptchaId)
   }
 
   render() {
