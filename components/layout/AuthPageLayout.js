@@ -2,7 +2,8 @@ import React from 'react'
 import { destyle } from 'destyle'
 import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
-import * as Auth from '~/state/actions/authActions'
+import * as AuthActions from '~/state/actions/authActions'
+import * as UserActions from '~/state/actions/userActions'
 import Router from 'next/router'
 import { getError } from '~/state/selectors/errorSelectors'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
@@ -16,6 +17,8 @@ import Button from '~/bb-components/button/Button'
 import Recaptcha from '~/components/auth/Recaptcha'
 import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import ValidatedInput from '~/components/form/ValidatedInput'
+import validatePassword from '~/utils/validatePassword'
+import { validate as isEmail } from 'isemail'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -86,14 +89,92 @@ const LoginForm = reduxForm({
   </form>
 ))
 
+const RegisterForm = reduxForm({
+  form: 'register',
+  validate: ({ username, email, password, retype }) => {
+    const errors = {}
+
+    if (!username) {
+      errors['username'] = 'Please enter a username'
+    }
+
+    if (!email) {
+      errors['email'] = 'Please enter an email'
+    } else if (!isEmail(email)) {
+      errors['email'] = 'Please enter a valid email'
+    }
+
+    const passwordValidation = validatePassword(password)
+    if (passwordValidation) {
+      errors['password'] = passwordValidation
+    }
+
+    if (!retype) {
+      errors['retype'] = 'Please retype your password'
+    } else if (password !== retype) {
+      errors['retype'] = "Passwords don't match"
+    }
+
+    return errors
+  }
+})(({ handleSubmit, onSubmit, isRegistering }) => (
+  <form onSubmit={handleSubmit(onSubmit)}>
+    <Grid>
+      <GridItem>
+        <Field
+          name="username"
+          type="text"
+          label="Username"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="email"
+          type="email"
+          label="Email"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="password"
+          type="password"
+          label="Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="retype"
+          type="password"
+          label="Retype Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Button
+          block
+          variant="primary"
+          color="green"
+          type="submit"
+          disabled={isRegistering}
+        >
+          {isRegistering ? 'Registering...' : 'Register'}
+        </Button>
+      </GridItem>
+    </Grid>
+  </form>
+))
+
 class AuthPageLayout extends React.Component<Props, State> {
   state
   recaptcha
-  isLoggingIn
+  isSubmitting
 
   constructor(props) {
     super()
-    this.isLoggingIn = false
+    this.isSubmitting = false
     this.state = {
       activeTab: tabIndexMap[props.router.query.tab] || 0
     }
@@ -118,26 +199,38 @@ class AuthPageLayout extends React.Component<Props, State> {
   }
 
   async onLogin(event) {
-    if (this.isLoggingIn) {
+    if (this.isSubmitting) {
       return
     }
 
-    this.isLoggingIn = true
+    this.isSubmitting = true
 
     try {
-      console.log('HERE')
-      console.log('HERE')
-      console.log('HERE')
-
       const recaptcha = await this.recaptcha.execute()
       const { username, password } = this.props.loginFormValues || {}
 
       this.props.login({ username, password, recaptcha })
-    } catch (error) {
-      console.error(error)
+    } catch (error) {}
+
+    this.isSubmitting = false
+  }
+
+  async onRegister(event) {
+    console.log('Triggered', this.isSubmitting)
+    if (this.isSubmitting) {
+      return
     }
 
-    this.isLoggingIn = false
+    this.isSubmitting = true
+
+    try {
+      const recaptcha = await this.recaptcha.execute()
+      const { username, email, password } = this.props.registerFormValues || {}
+
+      this.props.register({ username, email, password, recaptcha })
+    } catch (error) {}
+
+    this.isSubmitting = false
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -195,7 +288,14 @@ class AuthPageLayout extends React.Component<Props, State> {
                   )}
                   <LoginForm onSubmit={this.onLogin.bind(this)} />
                 </TabPanel>
-                <TabPanel>Register</TabPanel>
+                <TabPanel>
+                  {this.props.registerError && (
+                    <Notice type={ERROR_TYPE}>
+                      {this.props.registerError.message}
+                    </Notice>
+                  )}
+                  <RegisterForm onSubmit={this.onRegister.bind(this)} />
+                </TabPanel>
               </div>
             </SwitchTabs>
           </div>
@@ -208,12 +308,14 @@ class AuthPageLayout extends React.Component<Props, State> {
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
   loginError: getError('login')(state),
-  loginFormValues: getFormValues('login')(state)
+  loginFormValues: getFormValues('login')(state),
+  registerError: getError('register')(state),
+  registerFormValues: getFormValues('register')(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  login: (username, password, twoFactorAuthToken) =>
-    dispatch(Auth.login(username, password, twoFactorAuthToken))
+  login: data => dispatch(AuthActions.login(data)),
+  register: accountInfo => dispatch(UserActions.register(accountInfo))
 })
 
 export default connect(
