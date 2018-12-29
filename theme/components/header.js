@@ -55,7 +55,7 @@ addStyles('Header', {
       margin-right: 10px;
     }
   `,
-  userMenu: css`
+  user: css`
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -78,5 +78,94 @@ addStyles('Header', {
   userName: css`
     color: #fff;
     font-size: ${theme.type.baseFontSize - 1}px;
+  `,
+  userDropdown: css`
+    width: 225px;
+    margin-top: 10px;
+    margin-right: -10px;
+    border-radius: ${theme.borderRadius.sm}px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+  `,
+  userDropdownInner: css``,
+  userSecurity: css`
+    background: ${theme.color.gray.lightest};
+    padding: 12px;
+    display: flex;
+  `,
+  userSecurityIcon: css`
+    flex: 0 0 36px;
+    height: 36px;
+    border-radius: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    margin-right: 12px;
+    position: relative;
+    .bb-svg-icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 18px;
+      height: 18px;
+    }
+  `,
+  userSecurityContent: css`
+    flex-grow: 1;
+  `,
+  userSecurityTitle: css`
+    font-size: ${theme.type.baseFontSize}px;
+    color: #808080;
+    margin: 4px 0 0;
+  `,
+  userSecurityDescription: css`
+    font-size: ${theme.type.baseFontSize - 2}px;
+    font-weight: ${theme.type.baseFontWeight};
+    color: #b4b4b4;
+    margin: 4px 0 8px;
+  `,
+  userSecurityButtons: css`
+    display: flex;
+  `,
+  userSecurityLockBtn: css`
+    flex-grow: 1;
+    margin-right: 4px;
+    font-size: ${theme.type.baseFontSize - 2}px;
+  `,
+  userSecuritySettingsBtn: css`
+    flex: 0 0 auto;
+    .bb-svg-icon {
+      line-height: 0;
+      width: 14px;
+      height: 14px;
+    }
+  `,
+  userMenu: css`
+    padding: 12px;
+    padding-left: ${12 + 12 + 36}px;
+  `,
+  userMenuList: css`
+    ${resetList};
+    li {
+      padding: 4px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #808080;
+      &:hover {
+        color: #404040;
+      }
+      i {
+        flex: 0 0 26px;
+      }
+      .bb-svg-icon {
+        height: 15px;
+        width: 17px;
+      }
+      span {
+        flex-grow: 1;
+      }
+    }
+  `,
+  userMenuLogout: css`
+    color: ${theme.color.palette.red} !important;
   `
 })

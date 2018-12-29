@@ -1,12 +1,5 @@
 // @flow
 import * as React from 'react'
-
-import {
-  FormControl as MUIFormControl,
-  MenuItem as MUIMenuItem,
-  Select as MUISelect
-} from '@material-ui/core'
-
 import { destyle } from 'destyle'
 
 type Props = {
@@ -14,7 +7,7 @@ type Props = {
   onChange: (SyntheticEvent<>) => mixed,
   /** Component must always be controlled */
   value: string,
-  options: Array<{ value: mixed, title: string }>,
+  options: Array<{ value: mixed, title: string, disabled?: boolean }>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -30,29 +23,13 @@ export const Select = ({
   ...rest
 }: Props) => {
   return (
-    <MUIFormControl>
-      <MUISelect
-        MenuProps={{
-          getContentAnchorEl: null,
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'left'
-          }
-        }}
-        classes={{
-          root: styles.root
-        }}
-        value={value}
-        onChange={onChange}
-        {...rest}
-      >
-        {options.map(opt => (
-          <MUIMenuItem key={opt.value} value={opt.value}>
-            <span className={styles.item}>{opt.title}</span>
-          </MUIMenuItem>
-        ))}
-      </MUISelect>
-    </MUIFormControl>
+    <select value={value} className={styles.root} onChange={onChange} {...rest}>
+      {options.map((opt, i) => (
+        <option value={opt.value} disabled={opt.disabled} key={`opt-${i}`}>
+          {opt.title}
+        </option>
+      ))}
+    </select>
   )
 }
 

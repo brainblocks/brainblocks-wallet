@@ -78,7 +78,8 @@ export default {
         image:
           'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=44',
         note: '',
-        accountId: 'hij',
+        accountId:
+          'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
         status: 'confirmed',
         note: 'Thanks for the beers'
       },
@@ -123,7 +124,8 @@ export default {
         balance: 3.789,
         representative:
           'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
-        name: 'HODL'
+        name: 'HODL',
+        type: 'nanoAddress'
       },
       xrb_112345b3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7ji12345: {
         address:
@@ -131,7 +133,8 @@ export default {
         balance: 125.79,
         representative:
           'xrb_1brainb3zz81wmhxndsbrjb94hx3fhr1fyydmg6iresyk76f3k7y7jiazoji',
-        name: 'Holiday Savings'
+        name: '',
+        type: 'nanoAddress'
       }
     },
     allIds: [

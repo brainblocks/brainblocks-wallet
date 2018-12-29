@@ -17,9 +17,9 @@ class Index extends Component {
     selectedAccount: 'all'
   }
 
-  handleUpdateSelectedAccount = e => {
+  handleUpdateSelectedAccount = acc => {
     this.setState({
-      selectedAccount: e.target.value
+      selectedAccount: acc
     })
   }
 
@@ -34,6 +34,7 @@ class Index extends Component {
           <PageHeader>
             <DashboardHeader
               accounts={mockState.accounts}
+              addresses={mockState.nanoAddresses}
               account={selectedAccount}
               onSelectAccount={this.handleUpdateSelectedAccount}
               nanoPrice={3.24}

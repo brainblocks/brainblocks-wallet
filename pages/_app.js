@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import '~/bb-components/styles'
 import '~/theme'
 import { withReduxStore } from '~/state'
+import SnackbarProvider from '~/bb-components/snackbar/Snackbar'
 
 import Authorize from '~/components/auth/Authorize'
 
@@ -13,11 +14,13 @@ class MyApp extends App {
     const { Component, pageProps, reduxStore } = this.props
     return (
       <Container>
-        <Provider store={reduxStore}>
-          <Authorize>
-            <Component {...pageProps} />
-          </Authorize>
-        </Provider>
+        <SnackbarProvider>
+          <Provider store={reduxStore}>
+            <Authorize>
+              <Component {...pageProps} />
+            </Authorize>
+          </Provider>
+        </SnackbarProvider>
       </Container>
     )
   }

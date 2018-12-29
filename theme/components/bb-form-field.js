@@ -12,10 +12,10 @@ addStyles('BB-FormField', props => ({
     /* A border in case it ever appears on a white background */
     border: 1px solid ${theme.color.gray.lightest};
     padding: 0;
-    div,
-    input,
-    select,
-    textarea {
+    > div,
+    > input,
+    > select,
+    > textarea {
       flex-grow: 1;
     }
     &:focus-within {
@@ -45,6 +45,9 @@ addStyles('BB-FormField', props => ({
           box-shadow: none;
           border-color: rgba(255, 255, 255, 0.4);
         }
+        .mdi-icon {
+          fill: rgba(255, 255, 255, 0.4);
+        }
       `};
     ${props.valid === false &&
       css`
@@ -59,6 +62,7 @@ addStyles('BB-FormField', props => ({
   adornStart: css`
     flex-grow: 0 !important;
     margin: 0 0 0 1em;
+    line-height: 0;
     & + input,
     & + select {
       padding-left: 1em;
@@ -67,5 +71,6 @@ addStyles('BB-FormField', props => ({
   adornEnd: css`
     flex-grow: 0 !important;
     margin: 0 1em 0 0;
+    line-height: 0;
   `
 }))

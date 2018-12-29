@@ -11,7 +11,7 @@ addStyles('AccountTitle', props => ({
   icon: css`
     width: 21px;
     height: 21px;
-    margin-right: 10px;
+    margin-right: 12px;
     display: flex;
     align-items: flex-end;
     color: ${props.color === 'light' ? '#FFF' : '#000'};
