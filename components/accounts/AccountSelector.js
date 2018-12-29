@@ -223,12 +223,11 @@ class AccountSelector extends React.Component<Props> {
                     >
                       <div className={styles.itemAccountTitle}>
                         <span className={styles.itemTitle}>
-                          {(addresses && addresses.byId[addr].name) || (
+                          {addresses.byId[addr].name || (
                             <NanoAddress address={addr} />
                           )}
                         </span>
-                        {addresses &&
-                          addresses.byId[addr].name &&
+                        {addresses.byId[addr].name &&
                           twoLine && (
                             <span className={styles.itemSubTitle}>
                               <NanoAddress address={addr} />

@@ -1,20 +1,22 @@
-/* @flow */
+// @flow
+import React from 'react'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
-
+import { getAccountById } from '~/functions/accounts'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
 import Button from '~/bb-components/button/Button'
 import FormField from '~/bb-components/form-field/FormField'
-import HistoryChart from '~/bb-components/history-chart/HistoryChart'
+import HistoryChart from '~/components/dashboard/HistoryChart'
 import KeyValue from '~/bb-components/key-value/KeyValue'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
 import type { NormalizedState } from '~/types'
-import React from 'react'
 import Select from '~/bb-components/select/Select'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import Typography from '~/bb-components/typography/Typography'
+import Menu from '~/bb-components/menu/Menu'
+import MenuItem from '~/bb-components/menu/MenuItem'
 import { convert } from '~/functions/convert'
 import { destyle } from 'destyle'
 import theme from '~/theme/theme'
@@ -23,6 +25,7 @@ type Props = {
   nanoPrice: number,
   nano24hChange: number,
   accounts: NormalizedState,
+  addresses: NormalizedState,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -38,131 +41,164 @@ function allAccountsBalance(accounts) {
   )
 }
 
-const DashboardHeader = ({
-  styles,
-  nanoPrice,
-  nano24hChange,
-  accounts,
-  account = 'all',
-  onSelectAccount,
-  ...rest
-}: Props) => {
-  const balance =
-    account === 'all'
-      ? allAccountsBalance(accounts)
-      : accounts.byId[account].balance
+const data = [
+  { date: '2018-07-19', balance: 100 },
+  { date: '2018-07-20', balance: 300 },
+  { date: '2018-07-21', balance: 1500 },
+  { date: '2018-07-22', balance: 600 },
+  { date: '2018-07-23', balance: 400 }
+]
 
-  const data = [
-    { day: '19 Sep', price: 4000 },
-    { day: '20 Sep', price: 3000 },
-    { day: '21 Sep', price: 2000 },
-    { day: '22 Sep', price: 1000 },
-    { day: '23 Sep', price: 6000 }
-  ]
+class DashboardHeader extends React.Component {
+  state = {
+    moreOptionsOpen: false,
+    moreOptionsAnchorEl: null
+  }
 
-  return (
-    <div className={styles.root} {...rest}>
-      <div className={styles.info}>
-        <div className={styles.selector}>
-          <AccountSelector
-            all
-            theme="outlined-on-dark"
-            accounts={accounts}
-            account={account}
-            onChange={onSelectAccount}
-          />
-        </div>
-        <div className={styles.infoRow1}>
-          <div className={styles.balance}>
-            <KeyValue
-              theme="header"
-              size="lg"
-              label="Balance"
-              value={
-                <span>
-                  {formatNano(balance)}{' '}
-                  <span style={{ fontSize: 12, fontWeight: '700' }}>NANO</span>
-                </span>
-              }
+  handleMoreOptionsOpen = e => {
+    this.setState({
+      moreOptionsOpen: true,
+      moreOptionsAnchorEl: e.currentTarget
+    })
+  }
+
+  handleMoreOptionsClose = e => {
+    this.setState({ moreOptionsOpen: false, moreOptionsAnchorEl: null })
+  }
+
+  render() {
+    const {
+      styles,
+      nanoPrice,
+      nano24hChange,
+      accounts,
+      addresses,
+      account = 'all',
+      onSelectAccount,
+      ...rest
+    }: Props = this.props
+    const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
+    const balance =
+      account === 'all'
+        ? allAccountsBalance(accounts)
+        : getAccountById(account).balance
+
+    return (
+      <div className={styles.root} {...rest}>
+        <div className={styles.info}>
+          <div className={styles.selector}>
+            <AccountSelector
+              all
+              theme="outlined-on-dark"
+              accounts={accounts}
+              account={account}
+              addresses={addresses}
+              onChange={onSelectAccount}
+              accountTitleProps={{ color: 'light' }}
+              dropdownWidth={345}
             />
           </div>
+          <div className={styles.infoRow1}>
+            <div className={styles.balance}>
+              <KeyValue
+                theme="header"
+                size="lg"
+                label="Balance"
+                value={
+                  <span>
+                    {formatNano(balance)}{' '}
+                    <span style={{ fontSize: 12, fontWeight: '700' }}>
+                      NANO
+                    </span>
+                  </span>
+                }
+              />
+            </div>
+            <Button
+              variant="icon"
+              destyleMerge={{ root: styles.moreButton }}
+              size={26}
+              onClick={this.handleMoreOptionsOpen}
+            >
+              <MoreIcon />
+            </Button>
+            <Menu
+              id="account-more-options"
+              open={moreOptionsOpen}
+              anchorEl={moreOptionsAnchorEl}
+              onClose={this.handleMoreOptionsClose}
+            >
+              <MenuItem>Copy address</MenuItem>
+              <MenuItem>Send from this account</MenuItem>
+              <MenuItem>Receive to this account</MenuItem>
+              <MenuItem>Account settings</MenuItem>
+            </Menu>
+          </div>
+          <div className={styles.infoRow2}>
+            <div className={styles.value}>
+              <KeyValue
+                theme="header"
+                size="sm"
+                label="Value"
+                value={formatFiat(convert(balance, 'nano', nanoPrice))}
+              />
+            </div>
+            <div className={styles.price}>
+              <KeyValue
+                theme="header"
+                size="sm"
+                label="Nano Price"
+                value={formatFiat(nanoPrice)}
+              />
+            </div>
+            <div className={styles.change}>
+              <KeyValue
+                theme="header"
+                size="sm"
+                label="Last 24h"
+                value={
+                  <span>
+                    {nano24hChange > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}{' '}
+                    {formatPercent(nano24hChange, true)}
+                  </span>
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <Link
+          href={{
+            pathname: '/send-receive',
+            query: { tab: 'send', from: account === 'all' ? null : account }
+          }}
+        >
           <Button
-            variant="icon"
-            destyleMerge={{ root: styles.moreButton }}
-            size={26}
+            destyleMerge={{ root: styles.sendReceiveBtn }}
+            color={theme.color.palette.green}
           >
-            <MoreIcon />
+            <span className={styles.sendReceiveBtnInner}>
+              <SendReceiveIcon />
+              <span className="send-receive-button-text">
+                Send &amp; Receive
+              </span>
+            </span>
           </Button>
-        </div>
-        <div className={styles.infoRow2}>
-          <div className={styles.value}>
-            <KeyValue
-              theme="header"
-              size="sm"
-              label="Value"
-              value={formatFiat(convert(balance, 'nano', nanoPrice))}
-            />
-          </div>
-          <div className={styles.price}>
-            <KeyValue
-              theme="header"
-              size="sm"
-              label="Nano Price"
-              value={formatFiat(nanoPrice)}
-            />
-          </div>
-          <div className={styles.change}>
-            <KeyValue
-              theme="header"
-              size="sm"
-              label="Last 24h"
-              value={
-                <span>
-                  {nano24hChange > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}{' '}
-                  {formatPercent(nano24hChange, true)}
-                </span>
-              }
-            />
-          </div>
+        </Link>
+        <div className={styles.chart}>
+          <Typography
+            style={{ paddingLeft: '30px' }}
+            el="h3"
+            color="heavyOnDark"
+            spaceBelow={1.5}
+            spaceAbove={1.5}
+          >
+            History
+          </Typography>
+          <HistoryChart data={data} xAxisName={'date'} yAxisName={'balance'} />
         </div>
       </div>
-      <Link
-        href={{
-          pathname: '/send-receive',
-          query: { tab: 'send', from: account === 'all' ? null : account }
-        }}
-      >
-        <Button
-          destyleMerge={{ root: styles.sendReceiveBtn }}
-          color={theme.color.palette.green}
-        >
-          <span className={styles.sendReceiveBtnInner}>
-            <SendReceiveIcon />
-            <span className="send-receive-button-text">Send &amp; Receive</span>
-          </span>
-        </Button>
-      </Link>
-      <div className={styles.chart}>
-        <Typography
-          style={{ paddingLeft: '20px' }}
-          el="h3"
-          color="heavyOnDark"
-          spaceBelow={1}
-          spaceAbove={1}
-        >
-          History
-        </Typography>
-        <HistoryChart
-          data={data}
-          xAxisName="day"
-          yAxisName="price"
-          strokeColor="#fff"
-          width={330}
-          height={150}
-        />
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default destyle(DashboardHeader, 'DashboardHeader')

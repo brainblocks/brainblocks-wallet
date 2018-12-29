@@ -40,6 +40,17 @@ addStyles('BB-Button', props => {
             font-size: 18px;
           `
         : null};
+      ${props.variant === 'flat' &&
+        css`
+          padding: 0.6em 1em;
+          border-radius: ${theme.borderRadius.sm}px;
+          background: ${backgroundColor};
+          &:hover {
+            background: ${Color(backgroundColor)
+              .darken(0.2)
+              .toString()};
+          }
+        `};
       ${props.variant === 'util'
         ? css`
             text-transform: uppercase;
