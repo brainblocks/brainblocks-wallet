@@ -78,23 +78,21 @@ class Login extends Component {
     }
   }
 
-  onSubmit(event) {
+  async onSubmit(event) {
     if (this.isLoggingIn) {
       return
     }
 
     this.isLoggingIn = true
 
-    this.recaptcha
-      .execute()
-      .then(recaptcha => {
-        const { username, password } = this.props.formValues || {}
-        this.props.login(username, password, recaptcha)
-      })
-      .catch(error => {})
-      .then(() => {
-        this.isLoggingIn = false
-      })
+    try {
+      const recaptcha = await this.recaptcha.execute()
+      const { username, password } = this.props.formValues || {}
+
+      this.props.login({ username, password, recaptcha })
+    } catch (error) {}
+
+    this.isLoggingIn = false
   }
 
   render() {

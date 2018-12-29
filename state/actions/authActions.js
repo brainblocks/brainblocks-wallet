@@ -99,7 +99,7 @@ export const AUTH_LOGIN_SUCCESS = 'AUTH::LOGIN_SUCCESS'
 export const AUTH_LOGIN_ERROR = 'AUTH::LOGIN_ERROR'
 export const AUTH_LOGIN_COMPLETE = 'AUTH::LOGIN_COMPLETE'
 
-export function login(username: string, password: string, recaptcha: ?string) {
+export function login({ username, password, recaptcha }) {
   return {
     type: AUTH_LOGIN,
     payload: { username, password, recaptcha }
