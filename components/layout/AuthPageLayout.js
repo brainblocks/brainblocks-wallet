@@ -1,9 +1,17 @@
 import React from 'react'
 import { destyle } from 'destyle'
+import { connect } from 'react-redux'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
+import { getError } from '~/state/selectors/errorSelectors'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import TabsComponents from '~/bb-components/tabs/Tabs'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
+import { reduxForm, Field, getFormValues } from 'redux-form'
+import Grid from '~/bb-components/grid/Grid'
+import GridItem from '~/bb-components/grid/GridItem'
+import Button from '~/bb-components/button/Button'
+import Recaptcha from '~/components/auth/Recaptcha'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -25,6 +33,54 @@ type Props = {
 type State = {
   activeTab: number
 }
+
+const LoginForm = reduxForm({
+  form: 'login',
+  shouldAsyncValidate: () => true,
+  initialValues: {
+    username: 'mochatest_login',
+    password: 'mochatestpassword'
+  },
+  validate: ({ username, password }) => {
+    const errors = {}
+
+    if (!username) {
+      errors['username'] = 'Please enter a username'
+    }
+
+    if (!password) {
+      errors['password'] = 'Please enter a password'
+    }
+
+    return errors
+  }
+})(({ handleSubmit, onSubmit }) => (
+  <form onSubmit={handleSubmit(onSubmit)}>
+    <Grid>
+      <GridItem>
+        <Field
+          name="username"
+          type="text"
+          label="Username"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Field
+          name="password"
+          type="password"
+          label="Password"
+          component={ValidatedInput}
+        />
+      </GridItem>
+      <GridItem>
+        <Button block variant="primary" color="green" type="submit">
+          Login
+        </Button>
+      </GridItem>
+    </Grid>
+  </form>
+))
 
 class AuthPageLayout extends React.Component<Props, State> {
   state = {
@@ -77,7 +133,15 @@ class AuthPageLayout extends React.Component<Props, State> {
               </TabList>
 
               <div className={styles.tabPanels}>
-                <TabPanel>{children}</TabPanel>
+                <TabPanel>
+                  {this.props.error && (
+                    <Notice type={ERROR_TYPE}>
+                      {this.props.error.message}
+                    </Notice>
+                  )}
+                  <LoginForm onSubmit={this.onSubmit.bind(this)} />
+                  <Recaptcha ref={elm => (this.recaptcha = elm)} />
+                </TabPanel>
                 <TabPanel>Register</TabPanel>
               </div>
             </SwitchTabs>
@@ -88,4 +152,18 @@ class AuthPageLayout extends React.Component<Props, State> {
   }
 }
 
-export default destyle(AuthPageLayout, 'AuthPageLayout')
+const mapStateToProps = state => ({
+  auth: getCurrentAuth(state),
+  error: getError('login')(state),
+  formValues: getFormValues('login')(state)
+})
+
+const mapDispatchToProps = dispatch => ({
+  login: (username, password, twoFactorAuthToken) =>
+    dispatch(Auth.login(username, password, twoFactorAuthToken))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(destyle(AuthPageLayout, 'AuthPageLayout'))
