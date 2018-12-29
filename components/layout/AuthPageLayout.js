@@ -2,6 +2,8 @@ import React from 'react'
 import { destyle } from 'destyle'
 import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
+import * as Auth from '~/state/actions/authActions'
+import Router from 'next/router'
 import { getError } from '~/state/selectors/errorSelectors'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
@@ -12,6 +14,8 @@ import Grid from '~/bb-components/grid/Grid'
 import GridItem from '~/bb-components/grid/GridItem'
 import Button from '~/bb-components/button/Button'
 import Recaptcha from '~/components/auth/Recaptcha'
+import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
+import ValidatedInput from '~/components/form/ValidatedInput'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -83,8 +87,57 @@ const LoginForm = reduxForm({
 ))
 
 class AuthPageLayout extends React.Component<Props, State> {
-  state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0
+  state
+  recaptcha
+  isLoggingIn
+
+  constructor(props) {
+    super()
+    this.isLoggingIn = false
+    this.state = {
+      activeTab: tabIndexMap[props.router.query.tab] || 0
+    }
+  }
+
+  componentWillMount() {
+    this.tryForceRedirect()
+  }
+
+  componentDidUpdate() {
+    this.tryForceRedirect()
+  }
+
+  get isAuthorized() {
+    return this.props.auth && this.props.auth.isAuthorized
+  }
+
+  tryForceRedirect() {
+    if (this.isAuthorized) {
+      Router.push('/')
+    }
+  }
+
+  async onLogin(event) {
+    if (this.isLoggingIn) {
+      return
+    }
+
+    this.isLoggingIn = true
+
+    try {
+      console.log('HERE')
+      console.log('HERE')
+      console.log('HERE')
+
+      const recaptcha = await this.recaptcha.execute()
+      const { username, password } = this.props.loginFormValues || {}
+
+      this.props.login({ username, password, recaptcha })
+    } catch (error) {
+      console.error(error)
+    }
+
+    this.isLoggingIn = false
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -106,6 +159,7 @@ class AuthPageLayout extends React.Component<Props, State> {
 
     return (
       <div className={styles.root}>
+        <Recaptcha ref={elm => (this.recaptcha = elm)} />
         <div className={styles.content}>
           {!!eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
           {!!title && <h1 className={styles.title}>{title}</h1>}
@@ -134,13 +188,12 @@ class AuthPageLayout extends React.Component<Props, State> {
 
               <div className={styles.tabPanels}>
                 <TabPanel>
-                  {this.props.error && (
+                  {this.props.loginError && (
                     <Notice type={ERROR_TYPE}>
-                      {this.props.error.message}
+                      {this.props.loginError.message}
                     </Notice>
                   )}
-                  <LoginForm onSubmit={this.onSubmit.bind(this)} />
-                  <Recaptcha ref={elm => (this.recaptcha = elm)} />
+                  <LoginForm onSubmit={this.onLogin.bind(this)} />
                 </TabPanel>
                 <TabPanel>Register</TabPanel>
               </div>
@@ -154,8 +207,8 @@ class AuthPageLayout extends React.Component<Props, State> {
 
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
-  error: getError('login')(state),
-  formValues: getFormValues('login')(state)
+  loginError: getError('login')(state),
+  loginFormValues: getFormValues('login')(state)
 })
 
 const mapDispatchToProps = dispatch => ({

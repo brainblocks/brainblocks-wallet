@@ -1,62 +1,17 @@
 import { Component } from 'react'
-import * as Auth from '~/state/actions/authActions'
+import { connect } from 'react-redux'
+import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import AuthPageLayout from '~/components/layout/AuthPageLayout'
-import Link from 'next/link'
-import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
-import Router, { withRouter } from 'next/router'
-import ValidatedInput from '~/components/form/ValidatedInput'
+import { withRouter } from 'next/router'
 
 class Login extends Component {
-  recaptcha
-  isLoggingIn
-
-  constructor() {
-    super()
-    this.isLoggingIn = false
-  }
-
-  componentWillMount() {
-    this.tryForceRedirect()
-  }
-
-  componentDidUpdate() {
-    this.tryForceRedirect()
-  }
-
-  get isAuthorized() {
-    return this.props.auth && this.props.auth.isAuthorized
-  }
-
-  tryForceRedirect() {
-    if (this.isAuthorized) {
-      Router.push('/')
-    }
-  }
-
-  async onSubmit(event) {
-    if (this.isLoggingIn) {
-      return
-    }
-
-    this.isLoggingIn = true
-
-    try {
-      const recaptcha = await this.recaptcha.execute()
-      const { username, password } = this.props.formValues || {}
-
-      this.props.login({ username, password, recaptcha })
-    } catch (error) {}
-
-    this.isLoggingIn = false
-  }
-
   render() {
     const { styles, router } = this.props
 
-    if (this.isAuthorized) {
+    if (this.props.auth && this.props.auth.isAuthorized) {
       return null
     }
 
@@ -77,4 +32,8 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login)
+const mapStateToProps = state => ({
+  auth: getCurrentAuth(state)
+})
+
+export default withRouter(connect(mapStateToProps)(withRouter(Login)))
