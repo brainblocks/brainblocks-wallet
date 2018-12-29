@@ -12,21 +12,21 @@ const UserIcon = require('mdi-react/UserIcon')
     flexWrap: 'wrap'
   }}
 >
-  <Button type="secondary">Secondary Button</Button>
-  <Button el="a" href="http://google.com" target="_blank" type="primary">
+  <Button variant="secondary">Secondary Button</Button>
+  <Button el="a" href="http://google.com" target="_blank" variant="primary">
     Primary Button
   </Button>
   <Button style={{ fontSize: 20 }}>Custom Styles</Button>
   <div style={{ flexBasis: '100%', margin: '10px 0' }}>
-    <Button block type="primary">
+    <Button block variant="primary">
       Block Button
     </Button>
   </div>
   <Button color="green">Custom Color</Button>
-  <Button type="icon">
+  <Button variant="icon">
     <UserIcon />
   </Button>
-  <Button type="icon" size="44">
+  <Button variant="icon" size="44">
     <UserIcon />
   </Button>
 </div>

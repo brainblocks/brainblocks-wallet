@@ -7,7 +7,7 @@ type Props = {
   children?: React.Node,
   el?: 'button' | 'a',
   /** Only used for styling */
-  type?: 'primary' | 'secondary' | 'util' | 'icon',
+  variant?: 'primary' | 'secondary' | 'util' | 'icon',
   /** Size - used for `icon` type */
   size?: number,
   /** Icon size - some icons appear bigger than others, this lets you manually normalize */
@@ -31,7 +31,7 @@ export const Button = ({
   iconSize,
   block = false,
   el = 'button',
-  type = 'secondary',
+  variant = 'secondary',
   destyleMerge,
   destyleNames,
   ...rest

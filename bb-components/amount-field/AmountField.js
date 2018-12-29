@@ -58,7 +58,7 @@ export const AmountField = ({
         </div>
         <div className={styles.switchButton}>
           <Button
-            type="icon"
+            variant="icon"
             color="#AAA"
             size={40}
             iconSize={32}

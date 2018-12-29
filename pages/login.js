@@ -1,117 +1,31 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
-import { getError } from '~/state/selectors/errorSelectors'
-import { reduxForm, Field, getFormValues } from 'redux-form'
-import * as Auth from '~/state/actions/authActions'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
-import Link from 'next/link'
-import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
+import AuthPageLayout from '~/components/layout/AuthPageLayout'
 import PageContent from '~/components/layout/PageContent'
-import Router from 'next/router'
-import ValidatedInput from '~/components/form/ValidatedInput'
-import Recaptcha from '~/components/auth/Recaptcha'
-
-const LoginForm = reduxForm({
-  form: 'login',
-  shouldAsyncValidate: () => true,
-  initialValues: {
-    username: 'mochatest_login',
-    password: 'mochatestpassword'
-  },
-  validate: ({ username, password }) => {
-    const errors = {}
-
-    if (!username) {
-      errors['username'] = 'Please enter a username'
-    }
-
-    if (!password) {
-      errors['password'] = 'Please enter a password'
-    }
-
-    return errors
-  }
-})(({ handleSubmit, onSubmit }) => (
-  <form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      name="username"
-      type="text"
-      label="Username"
-      component={ValidatedInput}
-    />
-    <Field
-      name="password"
-      type="password"
-      label="Password"
-      component={ValidatedInput}
-    />
-    <button type="submit">Login</button>
-  </form>
-))
+import { withRouter } from 'next/router'
 
 class Login extends Component {
-  recaptcha
-  isLoggingIn
-
-  constructor() {
-    super()
-    this.isLoggingIn = false
-  }
-
-  componentWillMount() {
-    this.tryForceRedirect()
-  }
-
-  componentDidUpdate() {
-    this.tryForceRedirect()
-  }
-
-  get isAuthorized() {
-    return this.props.auth && this.props.auth.isAuthorized
-  }
-
-  tryForceRedirect() {
-    if (this.isAuthorized) {
-      Router.push('/')
-    }
-  }
-
-  async onSubmit(event) {
-    if (this.isLoggingIn) {
-      return
-    }
-
-    this.isLoggingIn = true
-
-    try {
-      const recaptcha = await this.recaptcha.execute()
-      const { username, password } = this.props.formValues || {}
-
-      this.props.login({ username, password, recaptcha })
-    } catch (error) {}
-
-    this.isLoggingIn = false
-  }
-
   render() {
-    if (this.isAuthorized) {
+    const { styles, router } = this.props
+
+    if (this.props.auth && this.props.auth.isAuthorized) {
       return null
     }
 
     return (
-      <Layout includeHeader={false}>
+      <Layout headerVariant="bare">
         <Head>
           <title>Login</title>
         </Head>
         <PageContent>
-          {this.props.error && (
-            <Notice type={ERROR_TYPE}>{this.props.error.message}</Notice>
-          )}
-          <LoginForm onSubmit={this.onSubmit.bind(this)} />
-          <Recaptcha ref={elm => (this.recaptcha = elm)} />
-          <Link href="/register">Register</Link>
+          <AuthPageLayout
+            router={router}
+            eyebrow="Welcome"
+            title="Log in now or sign up for free"
+          />
         </PageContent>
       </Layout>
     )
@@ -119,17 +33,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state),
-  error: getError('login')(state),
-  formValues: getFormValues('login')(state)
+  auth: getCurrentAuth(state)
 })
 
-const mapDispatchToProps = dispatch => ({
-  login: (username, password, twoFactorAuthToken) =>
-    dispatch(Auth.login(username, password, twoFactorAuthToken))
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login)
+export default withRouter(connect(mapStateToProps)(withRouter(Login)))

@@ -90,7 +90,7 @@ class AccountListItem extends React.Component<Props, State> {
             <div className={styles.action1}>
               {account.type === 'vault' && (
                 <Button
-                  type="icon"
+                  variant="icon"
                   size={36}
                   backgroundcolor={account.color}
                   destyleMerge={{ root: styles.iconButton }}
@@ -114,7 +114,7 @@ class AccountListItem extends React.Component<Props, State> {
                   }}
                 >
                   <Button
-                    type="icon"
+                    variant="icon"
                     size={36}
                     iconSize={24}
                     backgroundcolor={account.color}
@@ -127,7 +127,7 @@ class AccountListItem extends React.Component<Props, State> {
             </div>
             <div className={styles.action2}>
               <Button
-                type="icon"
+                variant="icon"
                 size={36}
                 backgroundcolor={account.color}
                 destyleMerge={{ root: styles.iconButton }}
@@ -168,7 +168,7 @@ class AccountListItem extends React.Component<Props, State> {
                   </div>
                   <div className={styles.action1}>
                     <Button
-                      type="icon"
+                      variant="icon"
                       size={36}
                       iconSize={24}
                       backgroundcolor={account.color}
@@ -179,7 +179,7 @@ class AccountListItem extends React.Component<Props, State> {
                   </div>
                   <div className={styles.action2}>
                     <Button
-                      type="icon"
+                      variant="icon"
                       size={36}
                       backgroundcolor={account.color}
                       destyleMerge={{ root: styles.iconButton }}

@@ -49,5 +49,22 @@ injectGlobal`
   .bb-svg-icon {
     fill: currentColor;
   }
+
+  @keyframes circle-bounce {
+    from {
+      transform: translate3d(0, -15%, 0) rotate(0.1deg);
+    }
+    to {
+      transform: translate3d(0, 15%, 0) rotate(0.1deg);
+    }
+  }
+  @keyframes hex-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(14deg);
+    }
+  }
 }
 `

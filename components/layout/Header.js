@@ -135,7 +135,7 @@ class Header extends React.Component {
                     </p>
                     <div className={styles.userSecurityButtons}>
                       <Button
-                        type="flat"
+                        variant="flat"
                         color="red"
                         block
                         destyleMerge={{ root: styles.userSecurityLockBtn }}
@@ -143,7 +143,7 @@ class Header extends React.Component {
                         Unlock
                       </Button>
                       <Button
-                        type="flat"
+                        variant="flat"
                         color="#c4c4c4"
                         destyleMerge={{ root: styles.userSecuritySettingsBtn }}
                       >

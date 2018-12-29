@@ -25,6 +25,7 @@ import './components/header'
 import './components/page-header'
 import './components/page-content'
 import './components/footer'
+import './components/auth-page-layout'
 
 // Dashboard
 import './components/dashboard-header'

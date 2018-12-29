@@ -17,6 +17,9 @@
         "svgo": {
           "plugins": [
             {
+              "convertStyleToAttrs": false
+            },
+            {
               "removeAttrs": { "attrs": "fill" }
             },
             {

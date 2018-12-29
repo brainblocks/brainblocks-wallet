@@ -8,6 +8,9 @@ addStyles('Header', {
     padding: 44px 0;
   `,
   pageWidth,
+  fullWidth: css`
+    padding: 0 4%;
+  `,
   inner: css`
     display: flex;
     align-items: center;
@@ -25,6 +28,10 @@ addStyles('Header', {
     @media (min-width: ${theme.bp.large}px) {
       margin-right: ${110 - 44}px;
     }
+  `,
+  logotype: css`
+    width: 216px;
+    height: 40px;
   `,
   menu: css`
     flex-grow: 1;

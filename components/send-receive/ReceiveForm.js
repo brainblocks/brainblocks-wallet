@@ -91,17 +91,12 @@ class ReceiveForm extends Component<Props, State> {
           </GridItem>
           <GridItem>
             <FormItem label="Address" fieldId="receive-address">
-              <FormField
-                adornEnd={
-                  <CopyToClipboard
-                    text={nanoAddress}
-                    onCopy={this.handleCopyAddress}
-                  >
-                    <Button type="util">{copied ? 'Copied' : 'Copy'}</Button>
-                  </CopyToClipboard>
-                }
-              >
-                <Input readOnly id="receive-address" value={nanoAddress} />
+              <FormField adornEnd={<Button variant="util">Copy</Button>}>
+                <Input
+                  readOnly
+                  id="receive-address"
+                  value={mockState.accounts.byId[account].address}
+                />
               </FormField>
             </FormItem>
           </GridItem>

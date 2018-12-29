@@ -115,7 +115,7 @@ class DashboardHeader extends React.Component {
               />
             </div>
             <Button
-              type="icon"
+              variant="icon"
               destyleMerge={{ root: styles.moreButton }}
               size={26}
               onClick={this.handleMoreOptionsOpen}

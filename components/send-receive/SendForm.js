@@ -128,7 +128,7 @@ class SendForm extends Component<Props, State> {
             <FormItem label="To" fieldId="send-to" extra="Send as payment link">
               <FormField
                 valid={toFieldValid}
-                adornEnd={<Button type="util">Paste</Button>}
+                adornEnd={<Button variant="util">Paste</Button>}
               >
                 <Input
                   id="send-to"
@@ -169,7 +169,7 @@ class SendForm extends Component<Props, State> {
           <GridItem>
             <Button
               block
-              type="primary"
+              variant="primary"
               color="green"
               onClick={this.handleSend}
               disabled={btnDisabled}
