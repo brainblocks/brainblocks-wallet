@@ -11,9 +11,11 @@ import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
 import Router from 'next/router'
 import ValidatedInput from '~/components/form/ValidatedInput'
+import Recaptcha from '~/components/auth/Recaptcha'
 
 const LoginForm = reduxForm({
   form: 'login',
+  shouldAsyncValidate: () => true,
   initialValues: {
     username: 'mochatest_login',
     password: 'mochatestpassword'
@@ -30,6 +32,15 @@ const LoginForm = reduxForm({
     }
 
     return errors
+  },
+  asyncBlurFields: ['recaptcha'],
+  asyncValidate: function(values) {
+    console.log(arguments)
+    return new Promise((resolve, reject) => {
+      console.log(values)
+      console.log('Right Here')
+      throw 'Could not recaptcha'
+    })
   }
 })(({ handleSubmit, onSubmit }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
@@ -44,6 +55,11 @@ const LoginForm = reduxForm({
       type="password"
       label="Password"
       component={ValidatedInput}
+    />
+    <Field
+      name="recaptcha"
+      component={Recaptcha}
+      ref={ref => console.log(ref)}
     />
     <button type="submit">Login</button>
   </form>

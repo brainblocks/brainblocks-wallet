@@ -9,9 +9,10 @@ import rootSaga from '~/state/actions'
 import rootReducer from '~/state/reducers'
 
 const { publicRuntimeConfig } = getConfig()
+const { NODE_ENV, DEBUG } = publicRuntimeConfig
 
 export const isServer = typeof window === 'undefined'
-export const isDevelopment = publicRuntimeConfig['NODE_ENV'] === 'development'
+export const isDevelopment = NODE_ENV === 'development'
 
 // Internal cache of the store for client side applications
 let clientSideStore
@@ -20,8 +21,8 @@ function initializeStore() {
   const sagaMiddleware = createSagaMiddleware()
   const middleware = []
 
-  if (isDevelopment && !isServer) {
-    middleware.push(createLogger())
+  if (DEBUG && isDevelopment && !isServer) {
+    // middleware.push(createLogger())
   }
 
   middleware.push(sagaMiddleware)
