@@ -9,8 +9,11 @@ export const USER_REGISTER_SUCCESS = 'USER::REGISTER_SUCCESS'
 export const USER_REGISTER_ERROR = 'USER::REGISTER_ERROR'
 export const USER_REGISTER_COMPLETE = 'USER::REGISTER_COMPLETE'
 
-export function register({ username, email, password }) {
-  return { type: USER_REGISTER, payload: { username, email, password } }
+export function register({ username, email, password, recaptcha }) {
+  return {
+    type: USER_REGISTER,
+    payload: { username, email, password, recaptcha }
+  }
 }
 
 function* registerHandler(action) {
