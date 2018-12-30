@@ -39,7 +39,7 @@ const theme = {
     status: {
       error: '#E44545',
       errorLight: '#FFD2D2',
-      warning: '#EBB756',
+      warning: '#daa440',
       warningLight: '#FBE6BE',
       info: '#4090CA',
       infoLight: '#C9E5F9',

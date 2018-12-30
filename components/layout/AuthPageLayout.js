@@ -15,10 +15,10 @@ import Grid from '~/bb-components/grid/Grid'
 import GridItem from '~/bb-components/grid/GridItem'
 import Button from '~/bb-components/button/Button'
 import Recaptcha from '~/components/auth/Recaptcha'
-import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import ValidatedInput from '~/components/form/ValidatedInput'
 import validatePassword from '~/utils/validatePassword'
 import { validate as isEmail } from 'isemail'
+import Alert from '~/bb-components/alert/Alert'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -282,17 +282,17 @@ class AuthPageLayout extends React.Component<Props, State> {
               <div className={styles.tabPanels}>
                 <TabPanel>
                   {this.props.loginError && (
-                    <Notice type={ERROR_TYPE}>
+                    <Alert variant="error" style={{ marginBottom: 22 }}>
                       {this.props.loginError.message}
-                    </Notice>
+                    </Alert>
                   )}
                   <LoginForm onSubmit={this.onLogin.bind(this)} />
                 </TabPanel>
                 <TabPanel>
                   {this.props.registerError && (
-                    <Notice type={ERROR_TYPE}>
+                    <Alert variant="error" style={{ marginBottom: 22 }}>
                       {this.props.registerError.message}
-                    </Notice>
+                    </Alert>
                   )}
                   <RegisterForm onSubmit={this.onRegister.bind(this)} />
                 </TabPanel>
