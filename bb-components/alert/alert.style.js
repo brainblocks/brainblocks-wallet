@@ -1,6 +1,5 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
-import theme from '../theme'
 
 addStyles('BB-Alert', props => ({
   root: css`
@@ -30,5 +29,12 @@ addStyles('BB-Alert', props => ({
   message: css`
     flex-grow: 1;
     color: #fff;
+    :last-child {
+      margin-bottom: 0;
+    }
+    a {
+      color: #fff;
+      text-decoration: underline;
+    }
   `
 }))
