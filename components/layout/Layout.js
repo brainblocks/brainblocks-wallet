@@ -5,7 +5,13 @@ import Head from 'next/head'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = ({ styles, children, headerVariant = 'full', ...rest }) => {
+const Layout = ({
+  styles,
+  children,
+  headerVariant = 'full',
+  footerVariant = 'full',
+  ...rest
+}) => {
   return (
     <div className={styles.root}>
       <Head>
@@ -26,9 +32,11 @@ const Layout = ({ styles, children, headerVariant = 'full', ...rest }) => {
         </div>
       )}
       {children}
-      <div className={styles.footer}>
-        <Footer />
-      </div>
+      {footerVariant !== 'none' && (
+        <div className={styles.footer}>
+          <Footer variant={footerVariant} />
+        </div>
+      )}
     </div>
   )
 }
