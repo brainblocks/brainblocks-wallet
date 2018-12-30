@@ -13,6 +13,7 @@ import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import { getFormValues } from 'redux-form'
 import LoginForm from '~/components/forms/LoginForm'
 import RegisterForm from '~/components/forms/RegisterForm'
+import Alert from '~/bb-components/alert/Alert'
 
 const { Tab, TabList, TabPanel } = TabsComponents
 
@@ -131,17 +132,17 @@ class AuthPageLayout extends React.Component<Props, State> {
               <div className={styles.tabPanels}>
                 <TabPanel>
                   {this.props.loginError && (
-                    <Notice type={ERROR_TYPE}>
+                    <Alert variant="error" style={{ marginBottom: 22 }}>
                       {this.props.loginError.message}
-                    </Notice>
+                    </Alert>
                   )}
                   <LoginForm onSubmit={this.onLogin.bind(this)} />
                 </TabPanel>
                 <TabPanel>
                   {this.props.registerError && (
-                    <Notice type={ERROR_TYPE}>
+                    <Alert variant="error" style={{ marginBottom: 22 }}>
                       {this.props.registerError.message}
-                    </Notice>
+                    </Alert>
                   )}
                   <RegisterForm onSubmit={this.onRegister.bind(this)} />
                 </TabPanel>
