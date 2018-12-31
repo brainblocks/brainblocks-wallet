@@ -5,12 +5,13 @@ import { destyle } from 'destyle'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getError } from '~/state/selectors/errorSelectors'
 import { getFormValues } from 'redux-form'
+import { Tab, TabList, TabPanel } from '~/bb-components/tabs/Tabs'
 import * as AuthActions from '~/state/actions/authActions'
 import * as UserActions from '~/state/actions/userActions'
+import Alert from '~/bb-components/alert/Alert'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import LoginForm from '~/components/forms/LoginForm'
-import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
 import PageContent from '~/components/layout/PageContent'
 import Recaptcha from '~/components/auth/Recaptcha'
 import RegisterForm from '~/components/forms/RegisterForm'
@@ -18,7 +19,6 @@ import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import Router, { withRouter } from 'next/router'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
-import { Tab, TabList, TabPanel } from '~/bb-components/tabs/Tabs'
 
 const tabIndexMap = {
   login: 0,
@@ -153,17 +153,17 @@ class Login extends Component {
                   <div className={styles.tabPanels}>
                     <TabPanel>
                       {this.props.loginError && (
-                        <Notice type={ERROR_TYPE}>
+                        <Alert variant="error" style={{ marginBottom: 22 }}>
                           {this.props.loginError.message}
-                        </Notice>
+                        </Alert>
                       )}
                       <LoginForm onSubmit={this.onLogin.bind(this)} />
                     </TabPanel>
                     <TabPanel>
                       {this.props.registerError && (
-                        <Notice type={ERROR_TYPE}>
+                        <Alert variant="error" style={{ marginBottom: 22 }}>
                           {this.props.registerError.message}
-                        </Notice>
+                        </Alert>
                       )}
                       <RegisterForm onSubmit={this.onRegister.bind(this)} />
                     </TabPanel>

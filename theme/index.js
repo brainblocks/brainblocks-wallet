@@ -1,6 +1,8 @@
 import './globals/globals'
 
 // BB components ===
+import './components/bb-alert'
+import './components/bb-snackbar'
 import './components/bb-example'
 import './components/bb-amount-field'
 import './components/bb-typography'
@@ -16,7 +18,6 @@ import './components/bb-menu'
 import './components/bb-nano-address'
 
 // Components ===
-import './components/snackbar'
 import './components/chart'
 
 // Layout

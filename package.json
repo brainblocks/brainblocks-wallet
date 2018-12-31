@@ -4,7 +4,7 @@
   "description": "UI for the BrainBlocks Platform",
   "main": "index.js",
   "scripts": {
-    "dev": "npm install && NODE_ENV=development && next",
+    "dev": "NODE_ENV=development && next",
     "build": "next build",
     "start": "next start",
     "flow": "flow",

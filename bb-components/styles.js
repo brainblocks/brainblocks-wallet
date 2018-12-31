@@ -5,6 +5,7 @@ import './destyleConfig'
 
 import './example-component/example-component.style'
 
+import './alert/alert.style'
 import './snackbar/snackbar.style'
 import './amount-field/amount-field.style'
 import './typography/typography.style'

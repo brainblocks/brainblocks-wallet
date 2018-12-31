@@ -15,7 +15,7 @@ addStyles('BB-Snackbar', props => {
     height: 40px;
     margin-right: 15px;
     border-radius: 100%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.7);
     position: relative;
     .bb-svg-icon {
       position: absolute;

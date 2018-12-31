@@ -150,7 +150,7 @@ class TransferForm extends Component<Props, State> {
           <GridItem>
             <Button
               block
-              type="primary"
+              variant="primary"
               color="green"
               onClick={this.handleSend}
               disabled={btnDisabled}
