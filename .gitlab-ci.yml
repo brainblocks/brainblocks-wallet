@@ -3,8 +3,8 @@ stages:
     - test
 
 cache:
-  paths:
-    - node_modules/
+    paths:
+        - node_modules/
     
 build:
     stage: build
