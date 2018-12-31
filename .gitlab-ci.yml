@@ -1,0 +1,18 @@
+stages:
+    - build
+    - test
+
+build:
+    stage: build
+    scripts:
+        - npm install
+        - npm run build
+    artifacts:
+        paths:
+            - node_modules/
+            - .next/
+
+test:
+    stage: test
+    scripts:
+        - npm run test
