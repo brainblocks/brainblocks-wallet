@@ -5,9 +5,27 @@ import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import AuthPageLayout from '~/components/layout/AuthPageLayout'
 import PageContent from '~/components/layout/PageContent'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 
 class Login extends Component {
+  componentWillMount() {
+    this.tryForceRedirect()
+  }
+
+  componentDidUpdate() {
+    this.tryForceRedirect()
+  }
+
+  get isAuthorized() {
+    return this.props.auth && this.props.auth.isAuthorized
+  }
+
+  tryForceRedirect() {
+    if (this.isAuthorized) {
+      Router.push('/')
+    }
+  }
+
   render() {
     const { styles, router } = this.props
 
@@ -16,7 +34,7 @@ class Login extends Component {
     }
 
     return (
-      <Layout headerVariant="bare">
+      <Layout headerVariant="bare" footerVariant="bare">
         <Head>
           <title>Login</title>
         </Head>

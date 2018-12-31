@@ -1,23 +1,18 @@
 import React from 'react'
 import { destyle } from 'destyle'
 import { connect } from 'react-redux'
-import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import * as AuthActions from '~/state/actions/authActions'
 import * as UserActions from '~/state/actions/userActions'
-import Router from 'next/router'
 import { getError } from '~/state/selectors/errorSelectors'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import TabsComponents from '~/bb-components/tabs/Tabs'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
-import { reduxForm, Field, getFormValues } from 'redux-form'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import Button from '~/bb-components/button/Button'
 import Recaptcha from '~/components/auth/Recaptcha'
-import ValidatedInput from '~/components/form/ValidatedInput'
-import validatePassword from '~/utils/validatePassword'
-import { validate as isEmail } from 'isemail'
+import Notice, { ERROR_TYPE } from '~/components/alerts/Notice'
+import { getFormValues } from 'redux-form'
+import LoginForm from '~/components/forms/LoginForm'
+import RegisterForm from '~/components/forms/RegisterForm'
 import Alert from '~/bb-components/alert/Alert'
 
 const { Tab, TabList, TabPanel } = TabsComponents
@@ -41,132 +36,6 @@ type State = {
   activeTab: number
 }
 
-const LoginForm = reduxForm({
-  form: 'login',
-  shouldAsyncValidate: () => true,
-  initialValues: {
-    username: 'mochatest_login',
-    password: 'mochatestpassword'
-  },
-  validate: ({ username, password }) => {
-    const errors = {}
-
-    if (!username) {
-      errors['username'] = 'Please enter a username'
-    }
-
-    if (!password) {
-      errors['password'] = 'Please enter a password'
-    }
-
-    return errors
-  }
-})(({ handleSubmit, onSubmit }) => (
-  <form onSubmit={handleSubmit(onSubmit)}>
-    <Grid>
-      <GridItem>
-        <Field
-          name="username"
-          type="text"
-          label="Username"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Field
-          name="password"
-          type="password"
-          label="Password"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Button block variant="primary" color="green" type="submit">
-          Login
-        </Button>
-      </GridItem>
-    </Grid>
-  </form>
-))
-
-const RegisterForm = reduxForm({
-  form: 'register',
-  validate: ({ username, email, password, retype }) => {
-    const errors = {}
-
-    if (!username) {
-      errors['username'] = 'Please enter a username'
-    }
-
-    if (!email) {
-      errors['email'] = 'Please enter an email'
-    } else if (!isEmail(email)) {
-      errors['email'] = 'Please enter a valid email'
-    }
-
-    const passwordValidation = validatePassword(password)
-    if (passwordValidation) {
-      errors['password'] = passwordValidation
-    }
-
-    if (!retype) {
-      errors['retype'] = 'Please retype your password'
-    } else if (password !== retype) {
-      errors['retype'] = "Passwords don't match"
-    }
-
-    return errors
-  }
-})(({ handleSubmit, onSubmit, isRegistering }) => (
-  <form onSubmit={handleSubmit(onSubmit)}>
-    <Grid>
-      <GridItem>
-        <Field
-          name="username"
-          type="text"
-          label="Username"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Field
-          name="email"
-          type="email"
-          label="Email"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Field
-          name="password"
-          type="password"
-          label="Password"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Field
-          name="retype"
-          type="password"
-          label="Retype Password"
-          component={ValidatedInput}
-        />
-      </GridItem>
-      <GridItem>
-        <Button
-          block
-          variant="primary"
-          color="green"
-          type="submit"
-          disabled={isRegistering}
-        >
-          {isRegistering ? 'Registering...' : 'Register'}
-        </Button>
-      </GridItem>
-    </Grid>
-  </form>
-))
-
 class AuthPageLayout extends React.Component<Props, State> {
   state
   recaptcha
@@ -177,24 +46,6 @@ class AuthPageLayout extends React.Component<Props, State> {
     this.isSubmitting = false
     this.state = {
       activeTab: tabIndexMap[props.router.query.tab] || 0
-    }
-  }
-
-  componentWillMount() {
-    this.tryForceRedirect()
-  }
-
-  componentDidUpdate() {
-    this.tryForceRedirect()
-  }
-
-  get isAuthorized() {
-    return this.props.auth && this.props.auth.isAuthorized
-  }
-
-  tryForceRedirect() {
-    if (this.isAuthorized) {
-      Router.push('/')
     }
   }
 
@@ -216,7 +67,6 @@ class AuthPageLayout extends React.Component<Props, State> {
   }
 
   async onRegister(event) {
-    console.log('Triggered', this.isSubmitting)
     if (this.isSubmitting) {
       return
     }
@@ -306,7 +156,6 @@ class AuthPageLayout extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state),
   loginError: getError('login')(state),
   loginFormValues: getFormValues('login')(state),
   registerError: getError('register')(state),
