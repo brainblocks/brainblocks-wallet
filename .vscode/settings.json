@@ -1,5 +1,5 @@
 {
-  "standard.enable": false,
   "javascript.validate.enable": false,
-  "editor.formatOnSave": false
+  "editor.formatOnSave": true,
+  "flow.pathToFlow": "${workspaceRoot}/node_modules/.bin/flow"
 }

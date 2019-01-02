@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter } from 'next/router'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
@@ -7,14 +6,14 @@ import PageContent from '~/components/layout/PageContent'
 import Authorized from '~/components/auth/Authorized'
 import NewAccountStart from '~/components/accounts/NewAccountStart'
 
-const SendReceive = props => {
+const NewAccount = props => {
   return (
     <Authorized>
       <Layout>
         <Head>
           <title>New Account</title>
         </Head>
-        <PageHeader title="New Account" indentTitle />
+        <PageHeader title="Create a New Account" indentTitle />
         <PageContent pad background>
           <NewAccountStart />
         </PageContent>
@@ -23,4 +22,4 @@ const SendReceive = props => {
   )
 }
 
-export default withRouter(SendReceive)
+export default NewAccount

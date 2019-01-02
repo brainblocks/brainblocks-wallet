@@ -17,7 +17,7 @@ type Props = {
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
   /** Given by notistack */
-  enqueueSnackbar: func
+  enqueueSnackbar: () => void
 }
 
 const AccountsHeader = ({

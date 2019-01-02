@@ -43,6 +43,8 @@ import './components/account-title'
 import './components/accounts-header'
 import './components/account-selector'
 import './components/new-account-start'
+import './components/new-vault'
+import './components/new-account-settings'
 
 // Send / Receive
 import './components/send-receive-tabs'

@@ -1,6 +1,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('NewAccountStart', props => {
   const option = css`
@@ -52,8 +53,7 @@ addStyles('NewAccountStart', props => {
   `
   return {
     root: css`
-      margin: 20px auto;
-      max-width: 800px;
+      ${formPageWidth};
     `,
     optionsContainer: css`
       display: flex;
