@@ -40,7 +40,7 @@ class TransferForm extends Component<Props, State> {
       amountField: props.router.query.amount || 0,
       amountFieldEditing: 'nano',
       toFieldValid: true,
-      btnDisabled: true
+      btnDisabled: false
     }
   }
 

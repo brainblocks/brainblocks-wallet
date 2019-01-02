@@ -42,6 +42,7 @@ import './components/account-list-item'
 import './components/account-title'
 import './components/accounts-header'
 import './components/account-selector'
+import './components/new-account-start'
 
 // Send / Receive
 import './components/send-receive-tabs'

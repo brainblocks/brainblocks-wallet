@@ -4,6 +4,7 @@ import { destyle } from 'destyle'
 import { withSnackbar } from 'notistack'
 import { formatNano, formatFiat, formatPercent } from '~/functions/format'
 import { convert } from '~/functions/convert'
+import Link from 'next/link'
 import KeyValue from '~/bb-components/key-value/KeyValue'
 import Button from '~/bb-components/button/Button'
 import ArrowUpIcon from '~/static/svg/icons/arrow-up.svg'
@@ -68,17 +69,11 @@ const AccountsHeader = ({
         />
       </div>
       <div className={styles.new}>
-        <Button
-          block
-          onClick={() =>
-            enqueueSnackbar(
-              'Wallet added lorem ipsum dolor sit amet consectetur adipsicing elit orem ipsum dolor sit amet consectetur adipsicing elit',
-              { variant: 'success' }
-            )
-          }
-        >
-          Add Account
-        </Button>
+        <Link prefetch href="/new-account">
+          <Button block el="a">
+            Add Account
+          </Button>
+        </Link>
       </div>
     </div>
   )
