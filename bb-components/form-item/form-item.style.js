@@ -17,6 +17,6 @@ addStyles('BB-FormItem', {
     flex: 0 0 100%;
   `,
   description: css`
-    flex: 0 0 100%;
+    flex: 0 1 100%;
   `
 })
