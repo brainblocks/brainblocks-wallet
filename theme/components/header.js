@@ -62,6 +62,10 @@ addStyles('Header', {
       margin-right: 10px;
     }
   `,
+  spinner: css`
+    margin-right: 16px;
+    line-height: 0;
+  `,
   user: css`
     display: flex;
     align-items: center;
