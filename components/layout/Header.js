@@ -13,6 +13,7 @@ import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import Popover from '~/bb-components/popover/Popover'
 import Button from '~/bb-components/button/Button'
+import Spinner from '~/bb-components/spinner/Spinner'
 import { connect } from 'react-redux'
 import * as Auth from '~/state/actions/authActions'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
@@ -119,6 +120,9 @@ class Header extends React.Component {
                   ))}
                 </ul>
               </nav>
+              <div className={styles.spinner}>
+                <Spinner size={24} color="#FFF" />
+              </div>
               <div
                 className={styles.user}
                 onClick={this.handleOpenUserDropdown}
