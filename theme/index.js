@@ -2,6 +2,7 @@ import './globals/globals'
 
 // BB components ===
 import './components/bb-alert'
+import './components/bb-color-choice'
 import './components/bb-snackbar'
 import './components/bb-example'
 import './components/bb-amount-field'
