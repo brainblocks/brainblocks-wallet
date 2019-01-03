@@ -9,7 +9,7 @@
     "start": "next start",
     "flow": "flow",
     "styleguidist": "npx styleguidist server",
-    "test": ""
+    "test": "echo 'Not Implemented'"
   },
   "author": "BrainBlocks",
   "license": "ISC",

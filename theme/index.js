@@ -26,7 +26,7 @@ import './components/header'
 import './components/page-header'
 import './components/page-content'
 import './components/footer'
-import './components/auth-page-layout'
+import './components/login'
 
 // Dashboard
 import './components/dashboard-header'
@@ -42,6 +42,9 @@ import './components/account-list-item'
 import './components/account-title'
 import './components/accounts-header'
 import './components/account-selector'
+import './components/new-account-start'
+import './components/new-vault'
+import './components/new-account-settings'
 
 // Send / Receive
 import './components/send-receive-tabs'
