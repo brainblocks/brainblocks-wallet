@@ -77,8 +77,6 @@ class Header extends React.Component {
     } = this.props
     const { userDropdownOpen, userDropdownAnchorEl } = this.state
 
-    // variant = varient || 'full';
-
     return (
       <div className={styles.root} {...rest}>
         {variant === 'bare' && (
