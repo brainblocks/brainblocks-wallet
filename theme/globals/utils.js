@@ -9,6 +9,11 @@ export const pageWidth = css`
   padding: 0 ${theme.layout.pagePadding}px;
 `
 
+export const formPageWidth = css`
+  margin: 20px auto;
+  max-width: 800px;
+`
+
 export const resetList = css`
   margin: 0;
   padding: 0;

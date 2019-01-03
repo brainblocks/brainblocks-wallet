@@ -35,6 +35,15 @@ injectGlobal`
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
+  button {
+    color: ${theme.color.text.base};
+    font-family: ${theme.type.baseFontFamily};
+    line-height: ${theme.type.baseLineHeight};
+    font-weight: ${theme.type.baseFontWeight};
+    font-size: ${theme.type.baseFontSize}px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   a {
     color: ${theme.color.links.link};
     transition: color .3s ease;
@@ -64,6 +73,16 @@ injectGlobal`
     }
     to {
       transform: rotate(14deg);
+    }
+  }
+  @keyframes radiate {
+    from {
+      transform: translate3d(-50%, -50%, 0) scale(0.4);
+      opacity: 0.8;
+    }
+    to {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 0;
     }
   }
 }
