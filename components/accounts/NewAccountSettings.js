@@ -7,6 +7,7 @@ import FormItem from '~/bb-components/form-item/FormItem'
 import FormField from '~/bb-components/form-field/FormField'
 import Input from '~/bb-components/input/Input'
 import Button from '~/bb-components/button/Button'
+import ColorChoice from '~/bb-components/color-choice/ColorChoice'
 
 type Props = {
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -31,10 +32,14 @@ const NewAccountSettings = ({ styles, ...rest }: Props) => {
           <FormItem
             label="Account Color"
             fieldId="color"
-            description="The colour helps you quickly identify this account."
+            description="The color helps you quickly identify this account."
           >
             <FormField>
-              <Input id="color" />
+              <ColorChoice
+                value="pink"
+                options={['gold', 'purple', 'pink', 'aqua', 'orange', 'jade']}
+                onChange={() => {}}
+              />
             </FormField>
           </FormItem>
         </GridItem>

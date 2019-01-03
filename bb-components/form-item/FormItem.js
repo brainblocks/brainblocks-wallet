@@ -14,7 +14,8 @@ type Props = {
   /** Children - usually a `FormField`, but can be anything */
   children: React.Node,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  error: string | React.Node
 }
 
 /**
