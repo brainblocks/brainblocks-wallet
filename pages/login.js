@@ -1,11 +1,11 @@
 /* @flow */
+import React from 'react'
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getError } from '~/state/selectors/errorSelectors'
 import { getFormValues } from 'redux-form'
-import { Tab, TabList, TabPanel } from '~/bb-components/tabs/Tabs'
 import * as AuthActions from '~/state/actions/authActions'
 import * as UserActions from '~/state/actions/userActions'
 import Alert from '~/bb-components/alert/Alert'
@@ -19,6 +19,9 @@ import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import Router, { withRouter } from 'next/router'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
+import TabComponents from '~/bb-components/tabs/Tabs'
+
+const { Tab, TabList, TabPanel } = TabComponents
 
 const tabIndexMap = {
   login: 0,
@@ -142,7 +145,7 @@ class Login extends Component {
               </div>
               <div className={styles.formContainerInner}>
                 <SwitchTabs
-                  selectedIndex={activeTab}
+                  selectedIndex={this.state.activeTab}
                   onSelect={this.handleSwitchTabs}
                 >
                   <TabList>

@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
-addStyles('AuthPageLayout', ({ background, pad }) => ({
+addStyles('Login', ({ background, pad }) => ({
   // Layout
   root: css`
     display: flex;
