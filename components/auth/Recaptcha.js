@@ -28,11 +28,11 @@ export default class Recaptcha extends Component {
       return
     }
 
-    window.grecaptcha.execute(this.recaptchaId)
-
     return new Promise((resolve, reject) => {
       this.promiseResolver = resolve
       this.promiseRejector = reject
+
+      window.grecaptcha.execute(this.recaptchaId)
     })
   }
 
@@ -88,6 +88,7 @@ export default class Recaptcha extends Component {
   onResponse(response) {
     if (this.promiseResolver) {
       this.promiseResolver(response)
+      this.reset()
     }
   }
 

@@ -81,11 +81,16 @@ class Login extends Component {
     this.isSubmitting = true
 
     try {
+      console.log('HERE?')
       const recaptcha = await this.recaptcha.execute()
       const { username, password } = this.props.loginFormValues || {}
 
+      console.log(username, password, recaptcha)
+
       this.props.login({ username, password, recaptcha })
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
 
     this.isSubmitting = false
   }

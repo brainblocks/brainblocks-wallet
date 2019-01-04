@@ -15,14 +15,6 @@ const initialState = {
   errors: {
     login: undefined,
     register: undefined
-  },
-  ui: {
-    login: {
-      isLoggingIn: false
-    },
-    register: {
-      isRegistering: false
-    }
   }
 }
 

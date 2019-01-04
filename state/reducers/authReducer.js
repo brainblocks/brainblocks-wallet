@@ -44,7 +44,7 @@ export default (draftState, action, ormSession) => {
     case AUTH_INIT_COMPLETE:
     case AUTH_LOGIN_COMPLETE:
       auth.update({
-        isChecking: true,
+        isChecking: false,
         didCheck: true
       })
       break
