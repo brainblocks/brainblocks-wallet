@@ -16,6 +16,9 @@ const UserIcon = require('mdi-react/UserIcon')
   <Button el="a" href="http://google.com" target="_blank" variant="primary">
     Primary Button
   </Button>
+  <Button variant="primary" loading={true}>
+    Loading state
+  </Button>
   <Button style={{ fontSize: 20 }}>Custom Styles</Button>
   <div style={{ flexBasis: '100%', margin: '10px 0' }}>
     <Button block variant="primary">
