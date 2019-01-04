@@ -18,7 +18,8 @@ const color = {
     pink: '#E84493',
     aqua: '#00CEC9',
     orange: '#E17055',
-    red: '#CA4040'
+    red: '#CA4040',
+    jade: '#00B894'
   }
 }
 
