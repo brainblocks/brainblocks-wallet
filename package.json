@@ -33,6 +33,7 @@
     "numbro": "^2.1.1",
     "qrcode.react": "^0.9.0",
     "react": "^16.5.2",
+    "react-breakpoints": "^3.0.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
