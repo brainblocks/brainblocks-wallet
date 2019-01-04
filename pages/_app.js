@@ -4,8 +4,10 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import '~/bb-components/styles'
 import '~/theme'
+import theme from '~/theme/theme'
 import { withReduxStore } from '~/state'
 import SnackbarProvider from '~/bb-components/snackbar/Snackbar'
+import ReactBreakpoints from 'react-breakpoints'
 
 import Authorize from '~/components/auth/Authorize'
 
@@ -15,11 +17,17 @@ class MyApp extends App {
     return (
       <Container>
         <SnackbarProvider>
-          <Provider store={reduxStore}>
-            <Authorize>
-              <Component {...pageProps} />
-            </Authorize>
-          </Provider>
+          <ReactBreakpoints
+            breakpoints={theme.bp}
+            debounceResize={true}
+            debounceDelay={200}
+          >
+            <Provider store={reduxStore}>
+              <Authorize>
+                <Component {...pageProps} />
+              </Authorize>
+            </Provider>
+          </ReactBreakpoints>
         </SnackbarProvider>
       </Container>
     )
