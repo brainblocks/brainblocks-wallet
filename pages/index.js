@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Media } from 'react-breakpoints'
 import Head from 'next/head'
 import Typography from '~/bb-components/typography/Typography'
 import Layout from '~/components/layout/Layout'
@@ -42,9 +43,15 @@ class Index extends Component {
             />
           </PageHeader>
           <PageContent pad background="white">
-            <Typography el="h2" spaceBelow={1}>
-              Transactions
-            </Typography>
+            <Media>
+              {({ breakpoints, currentBreakpoint }) =>
+                breakpoints[currentBreakpoint] >= breakpoints.tablet && (
+                  <Typography el="h2" spaceBelow={1}>
+                    Transactions
+                  </Typography>
+                )
+              }
+            </Media>
             <TransactionsList account={selectedAccount} />
           </PageContent>
         </Layout>

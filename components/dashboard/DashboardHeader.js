@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { Media } from 'react-breakpoints'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 import { getAccountById } from '~/functions/accounts'
 import AccountSelector from '~/components/accounts/AccountSelector'
@@ -34,6 +35,11 @@ type Props = {
   styles: Object
 }
 
+type State = {
+  moreOptionsOpen: boolean,
+  moreOptionsAnchorEl?: {} | null
+}
+
 function allAccountsBalance(accounts) {
   return accounts.allIds.reduce(
     (acc, curr) => acc + accounts.byId[curr].balance,
@@ -49,7 +55,7 @@ const data = [
   { date: '2018-07-23', balance: 400 }
 ]
 
-class DashboardHeader extends React.Component {
+class DashboardHeader extends React.Component<Props, State> {
   state = {
     moreOptionsOpen: false,
     moreOptionsAnchorEl: null
@@ -184,18 +190,28 @@ class DashboardHeader extends React.Component {
             </span>
           </Button>
         </Link>
-        <div className={styles.chart}>
-          <Typography
-            style={{ paddingLeft: '30px' }}
-            el="h3"
-            color="heavyOnDark"
-            spaceBelow={1.5}
-            spaceAbove={1.5}
-          >
-            History
-          </Typography>
-          <HistoryChart data={data} xAxisName={'date'} yAxisName={'balance'} />
-        </div>
+        <Media>
+          {({ breakpoints, currentBreakpoint }) =>
+            breakpoints[currentBreakpoint] >= breakpoints.tablet && (
+              <div className={styles.chart}>
+                <Typography
+                  style={{ paddingLeft: '30px' }}
+                  el="h3"
+                  color="heavyOnDark"
+                  spaceBelow={1.5}
+                  spaceAbove={1.5}
+                >
+                  History
+                </Typography>
+                <HistoryChart
+                  data={data}
+                  xAxisName={'date'}
+                  yAxisName={'balance'}
+                />
+              </div>
+            )
+          }
+        </Media>
       </div>
     )
   }
