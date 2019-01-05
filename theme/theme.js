@@ -79,7 +79,7 @@ const theme = {
   spacing: {
     rhythmUnit: 12,
     paddingSm: { mobile: 10, tablet: 10, desktop: 12 },
-    paddingMd: { mobile: 16, tablet: 22, desktop: 28 },
+    paddingMd: { mobile: 16, tablet: 20, desktop: 28 },
     paddingLg: { mobile: 22, tablet: 28, desktop: 36 },
     headerIndent: 18
   },
