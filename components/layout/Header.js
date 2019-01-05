@@ -227,32 +227,34 @@ class Header extends React.Component {
             </div>
           )}
         </div>
-        <Media>
-          {({ breakpoints, currentBreakpoint }) =>
-            breakpoints[currentBreakpoint] < breakpoints.tablet && (
-              <nav className={styles.bottomTabs}>
-                <ul>
-                  {menuItems.filter(item => item.mobile).map((item, i) => (
-                    <li
-                      className={cx({
-                        'is-active': router.pathname === item.href,
-                        'hide-mobile': !item.mobile
-                      })}
-                      key={`menu-item-${i}`}
-                    >
-                      <Link prefetch href={item.href}>
-                        <a>
-                          {item.icon}
-                          <span>{item.title}</span>
-                        </a>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )
-          }
-        </Media>
+        {variant === 'full' && (
+          <Media>
+            {({ breakpoints, currentBreakpoint }) =>
+              breakpoints[currentBreakpoint] < breakpoints.tablet && (
+                <nav className={styles.bottomTabs}>
+                  <ul>
+                    {menuItems.filter(item => item.mobile).map((item, i) => (
+                      <li
+                        className={cx({
+                          'is-active': router.pathname === item.href,
+                          'hide-mobile': !item.mobile
+                        })}
+                        key={`menu-item-${i}`}
+                      >
+                        <Link prefetch href={item.href}>
+                          <a>
+                            {item.icon}
+                            <span>{item.title}</span>
+                          </a>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )
+            }
+          </Media>
+        )}
       </>
     )
   }

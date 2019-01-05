@@ -4,7 +4,9 @@ import theme from '~/theme/theme'
 import { pageWidth } from '~/theme/globals/utils'
 
 addStyles('PageContent', ({ background, pad }) => ({
-  root: css``,
+  root: css`
+    position: relative;
+  `,
   pageWidth,
   inner: css`
     margin: auto;

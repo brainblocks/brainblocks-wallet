@@ -54,9 +54,6 @@ addStyles('DashboardHeader', props => {
       flex-basis: 154px;
       position: relative;
       background-size: 101% 101%;
-      @media (max-width: ${theme.bp.small - 1}px) {
-        display: none;
-      }
       svg {
         margin-bottom: 6px;
         width: 28px;
@@ -70,13 +67,35 @@ addStyles('DashboardHeader', props => {
       &:hover:not(:disabled) {
         background-size: 150% 200%;
       }
+      @media (max-width: ${theme.bp.small - 1}px) {
+        margin: 28px -18px -50px;
+        padding-bottom: 36px;
+        padding-top: 20px;
+        flex: 1 0 100%;
+        border-radius: ${theme.borderRadius.lg}px ${theme.borderRadius.lg}px 0 0;
+        svg {
+          margin-bottom: 0;
+          width: 20px;
+          height: 20px;
+        }
+        .send-receive-button-text {
+          flex: 0 0 auto;
+          margin-left: 12px;
+        }
+      }
     `,
     sendReceiveBtnInner: css`
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 28px;
+      @media (min-width: ${theme.bp.small}px) {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 28px;
+      }
+      @media (max-width: ${theme.bp.small - 1}px) {
+        display: flex;
+        justify-content: center;
+      }
     `,
     chart: css`
       ${backgroundGradient(theme.color.palette.blue)};

@@ -18,6 +18,9 @@ addStyles('TransactionListItem', props => {
       ${td};
       text-align: left;
       width: 25%;
+      @media (max-width: ${theme.bp.medium - 1}px) {
+        display: none;
+      }
     `,
     contactCol: css`
       ${td};
@@ -28,6 +31,9 @@ addStyles('TransactionListItem', props => {
       ${td};
       text-align: left;
       width: ${!!props.account ? '24%' : '35%'};
+      @media (max-width: ${theme.bp.small - 1}px) {
+        display: none;
+      }
     `,
     note: css`
       font-size: 12px;
