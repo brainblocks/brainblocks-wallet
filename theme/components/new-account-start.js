@@ -15,6 +15,12 @@ addStyles('NewAccountStart', props => {
     &:hover {
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
     }
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      flex-basis: 100%;
+      margin-bottom: 20px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
   `
   const iconOverlay = css`
     position: absolute;
@@ -58,6 +64,9 @@ addStyles('NewAccountStart', props => {
     optionsContainer: css`
       display: flex;
       justify-content: space-between;
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        flex-wrap: wrap;
+      }
     `,
     walletOption: css`
       ${option};
