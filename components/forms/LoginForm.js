@@ -27,7 +27,7 @@ export default reduxForm({
 
     return errors
   }
-})(({ handleSubmit, onSubmit }) => (
+})(({ handleSubmit, onSubmit, submitting }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
     <Grid>
       <GridItem>
@@ -47,7 +47,13 @@ export default reduxForm({
         />
       </GridItem>
       <GridItem>
-        <Button block variant="primary" color="green" type="submit">
+        <Button
+          block
+          variant="primary"
+          color="green"
+          type="submit"
+          loading={submitting}
+        >
           Login
         </Button>
       </GridItem>

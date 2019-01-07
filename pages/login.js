@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react'
 import { Component } from 'react'
+import { Media } from 'react-breakpoints'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
@@ -45,12 +46,11 @@ type State = {
 class Login extends Component {
   state
   recaptcha
-  isSubmitting
 
   constructor(props) {
     super()
-    this.isSubmitting = false
     this.state = {
+      isSubmitting: false,
       activeTab: tabIndexMap[props.router.query.tab] || 0
     }
   }
@@ -74,11 +74,11 @@ class Login extends Component {
   }
 
   async onLogin(event) {
-    if (this.isSubmitting) {
+    if (this.state.isSubmitting) {
       return
     }
 
-    this.isSubmitting = true
+    this.setState({ isSubmitting: true })
 
     try {
       const recaptcha = await this.recaptcha.execute()
@@ -87,15 +87,15 @@ class Login extends Component {
       this.props.login({ username, password, recaptcha })
     } catch (error) {}
 
-    this.isSubmitting = false
+    this.setState({ isSubmitting: false })
   }
 
   async onRegister(event) {
-    if (this.isSubmitting) {
+    if (this.state.isSubmitting) {
       return
     }
 
-    this.isSubmitting = true
+    this.setState({ isSubmitting: true })
 
     try {
       const recaptcha = await this.recaptcha.execute()
@@ -104,7 +104,7 @@ class Login extends Component {
       this.props.register({ username, email, password, recaptcha })
     } catch (error) {}
 
-    this.isSubmitting = false
+    this.setState({ isSubmitting: false })
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -133,16 +133,22 @@ class Login extends Component {
               <h1 className={styles.title}>Log in now or sign up for free</h1>
             </div>
             <div className={styles.formContainer}>
-              <div className={styles.visuals}>
-                <span className={styles.hex1}>
-                  <RoundedHexagon />
-                </span>
-                <span className={styles.hex2}>
-                  <RoundedHexagonPurple />
-                </span>
-                <div className={styles.circle1} />
-                <div className={styles.circle2} />
-              </div>
+              <Media>
+                {({ breakpoints, currentBreakpoint }) =>
+                  breakpoints[currentBreakpoint] >= breakpoints.medium && (
+                    <div className={styles.visuals}>
+                      <span className={styles.hex1}>
+                        <RoundedHexagon />
+                      </span>
+                      <span className={styles.hex2}>
+                        <RoundedHexagonPurple />
+                      </span>
+                      <div className={styles.circle1} />
+                      <div className={styles.circle2} />
+                    </div>
+                  )
+                }
+              </Media>
               <div className={styles.formContainerInner}>
                 <SwitchTabs
                   selectedIndex={this.state.activeTab}
@@ -160,7 +166,10 @@ class Login extends Component {
                           {this.props.loginError.message}
                         </Alert>
                       )}
-                      <LoginForm onSubmit={this.onLogin.bind(this)} />
+                      <LoginForm
+                        onSubmit={this.onLogin.bind(this)}
+                        submitting={this.state.isSubmitting}
+                      />
                     </TabPanel>
                     <TabPanel>
                       {this.props.registerError && (
@@ -168,7 +177,10 @@ class Login extends Component {
                           {this.props.registerError.message}
                         </Alert>
                       )}
-                      <RegisterForm onSubmit={this.onRegister.bind(this)} />
+                      <RegisterForm
+                        onSubmit={this.onRegister.bind(this)}
+                        submitting={this.state.isSubmitting}
+                      />
                     </TabPanel>
                   </div>
                 </SwitchTabs>

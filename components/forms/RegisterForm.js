@@ -35,7 +35,7 @@ export default reduxForm({
 
     return errors
   }
-})(({ handleSubmit, onSubmit, isRegistering }) => (
+})(({ handleSubmit, onSubmit, isRegistering, submitting }) => (
   <form onSubmit={handleSubmit(onSubmit)}>
     <Grid>
       <GridItem>
@@ -77,6 +77,7 @@ export default reduxForm({
           color="green"
           type="submit"
           disabled={isRegistering}
+          loading={submitting}
         >
           {isRegistering ? 'Registering...' : 'Register'}
         </Button>
