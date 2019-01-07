@@ -91,7 +91,7 @@ class AccountListItem extends React.Component<Props, State> {
               {account.type === 'vault' && (
                 <Button
                   variant="icon"
-                  size={36}
+                  size={34}
                   backgroundcolor={account.color}
                   destyleMerge={{ root: styles.iconButton }}
                   onClick={this.handleToggleExpand}
@@ -115,8 +115,8 @@ class AccountListItem extends React.Component<Props, State> {
                 >
                   <Button
                     variant="icon"
-                    size={36}
-                    iconSize={24}
+                    size={34}
+                    iconSize={22}
                     backgroundcolor={account.color}
                     destyleMerge={{ root: styles.iconButton }}
                   >

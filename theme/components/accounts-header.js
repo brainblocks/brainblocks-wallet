@@ -24,14 +24,23 @@ addStyles('AccountsHeader', props => {
     `,
     total: css`
       flex-grow: 0.8;
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        display: none;
+      }
     `,
     value: css`
       ${hasLeftBorder};
       flex-grow: 0.8;
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        display: none;
+      }
     `,
     price: css`
       ${hasLeftBorder};
       flex-grow: 0.8;
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        display: none;
+      }
     `,
     change: css`
       ${hasLeftBorder};
@@ -42,6 +51,9 @@ addStyles('AccountsHeader', props => {
       svg {
         width: 14px;
         height: 14px;
+      }
+      @media (max-width: ${theme.bp.medium - 1}px) {
+        display: none;
       }
     `,
     new: css`

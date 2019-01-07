@@ -2,6 +2,7 @@ import './globals/globals'
 
 // BB components ===
 import './components/bb-alert'
+import './components/bb-color-choice'
 import './components/bb-snackbar'
 import './components/bb-example'
 import './components/bb-amount-field'
@@ -16,6 +17,7 @@ import './components/bb-key-value'
 import './components/bb-tabs'
 import './components/bb-menu'
 import './components/bb-nano-address'
+import './components/bb-spinner'
 
 // Components ===
 import './components/chart'

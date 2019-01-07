@@ -26,8 +26,10 @@ type State = {
   to: string,
   message: string,
   amountField: number,
+  amountFieldEditing: string,
   toFieldValid: boolean,
-  btnDisabled: boolean
+  btnDisabled: boolean,
+  sending: boolean
 }
 
 class TransferForm extends Component<Props, State> {
@@ -40,7 +42,8 @@ class TransferForm extends Component<Props, State> {
       amountField: props.router.query.amount || 0,
       amountFieldEditing: 'nano',
       toFieldValid: true,
-      btnDisabled: false
+      btnDisabled: false,
+      sending: false
     }
   }
 
@@ -62,7 +65,14 @@ class TransferForm extends Component<Props, State> {
   }
 
   handleSend = () => {
-    console.log('Send', this.state)
+    this.setState(
+      {
+        sending: true
+      },
+      () => {
+        setTimeout(() => this.setState({ sending: false }), 3000)
+      }
+    )
   }
 
   render() {
@@ -74,7 +84,8 @@ class TransferForm extends Component<Props, State> {
       amountField = 0,
       amountFieldEditing = 'nano',
       toFieldValid,
-      btnDisabled
+      btnDisabled,
+      sending
     } = this.state
 
     const amountFieldNano =
@@ -154,6 +165,7 @@ class TransferForm extends Component<Props, State> {
               color="green"
               onClick={this.handleSend}
               disabled={btnDisabled}
+              loading={sending}
             >
               Send
             </Button>

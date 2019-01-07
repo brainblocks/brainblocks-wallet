@@ -1,6 +1,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
+import { ellipsis } from '../globals/utils'
 
 const pad = theme.forms.itemPadding.desktop
 
@@ -16,6 +17,7 @@ addStyles('AccountSelector', (props, state) => {
     font-weight: bold;
     color: ${theme.color.text.headings};
     font-size: ${theme.type.baseFontSize}px;
+    ${ellipsis};
   `
   const secondaryBalance = css`
     display: block;
@@ -101,6 +103,7 @@ addStyles('AccountSelector', (props, state) => {
       padding-left: 58px;
       display: flex;
       align-items: center;
+      background: ${theme.color.gray.lightest};
     `,
     selectedItem: css`
       span {

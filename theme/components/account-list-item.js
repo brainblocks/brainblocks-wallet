@@ -19,9 +19,18 @@ addStyles('AccountListItem', props => {
     padding: ${theme.spacing.paddingMd.desktop}px;
     display: flex;
     align-items: center;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      padding: ${theme.spacing.paddingMd.tablet}px;
+    }
+    @media (max-width: ${theme.bp.small - 1}px) {
+      padding: ${theme.spacing.paddingMd.mobile}px;
+    }
   `
   const leftPadding = css`
     padding-left: ${theme.spacing.paddingMd.desktop}px;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      padding-left: ${theme.spacing.paddingMd.tablet}px;
+    }
   `
   const action = css`
     flex-basis: 7%;
@@ -40,6 +49,10 @@ addStyles('AccountListItem', props => {
     visible: css``,
     row1: css`
       ${row};
+      position: relative;
+      @media (max-width: ${theme.bp.mobile - 1}px) {
+        padding-right: ${theme.spacing.paddingMd.mobile + 50}px;
+      }
     `,
     title: css`
       flex-basis: 44%;
@@ -49,16 +62,26 @@ addStyles('AccountListItem', props => {
       ${leftPadding};
       flex-basis: 21%;
       flex-grow: 0.8;
+      margin-top: 5px;
     `,
     info2: css`
       ${leftPadding};
       flex-basis: 21%;
       flex-grow: 0.8;
+      margin-top: 5px;
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        display: none;
+      }
     `,
     action1: css`
       ${leftPadding};
       ${action};
       flex-grow: 1;
+      @media (max-width: ${theme.bp.small - 1}px) {
+        position: absolute;
+        right: ${theme.spacing.paddingMd.mobile}px;
+        top: calc(50% - 30px);
+      }
     `,
     action2: css`
       ${leftPadding};
@@ -66,6 +89,11 @@ addStyles('AccountListItem', props => {
       flex-basis: auto;
       flex-grow: 0;
       justify-self: flex-end;
+      @media (max-width: ${theme.bp.small - 1}px) {
+        position: absolute;
+        right: ${theme.spacing.paddingMd.mobile}px;
+        bottom: calc(50% - 38px);
+      }
     `,
     dropdown: css`
       background: ${Color(backgroundColor)

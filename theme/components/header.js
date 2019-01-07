@@ -1,4 +1,4 @@
-import { css } from 'emotion'
+import { css, injectGlobal } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 import { pageWidth, resetList } from '~/theme/globals/utils'
@@ -6,6 +6,12 @@ import { pageWidth, resetList } from '~/theme/globals/utils'
 addStyles('Header', {
   root: css`
     padding: 44px 0;
+    @media (max-width: ${theme.bp.desktop - 1}px) {
+      padding: 33px 0;
+    }
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      padding: 22px 0;
+    }
   `,
   pageWidth,
   fullWidth: css`
@@ -21,12 +27,18 @@ addStyles('Header', {
   logo: css`
     margin-right: 44px;
     img {
-      width: 44px;
-      height: 38px;
-      cursor: default;
+      width: 36px;
+      height: auto;
+      cursor: pointer;
     }
     @media (min-width: ${theme.bp.large}px) {
       margin-right: ${110 - 44}px;
+      img {
+        width: 44px;
+      }
+    }
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      flex-grow: 1;
     }
   `,
   logotype: css`
@@ -46,6 +58,11 @@ addStyles('Header', {
           color: #fff;
         }
       }
+      @media (max-width: ${theme.bp.desktop - 1}px) {
+        &.hide-mobile {
+          display: none;
+        }
+      }
     }
     a {
       color: rgba(255, 255, 255, 0.5);
@@ -62,6 +79,10 @@ addStyles('Header', {
       margin-right: 10px;
     }
   `,
+  spinner: css`
+    margin-right: 16px;
+    line-height: 0;
+  `,
   user: css`
     display: flex;
     align-items: center;
@@ -77,14 +98,26 @@ addStyles('Header', {
       right: 0;
       transform: translateY(-1px);
     }
+    @media (max-width: ${theme.bp.large - 1}px) {
+      padding-right: 0;
+      &:after {
+        display: none;
+      }
+    }
   `,
   userAvatar: css`
     border-radius: 100%;
     margin-right: 1em;
+    @media (max-width: ${theme.bp.large - 1}px) {
+      margin-right: 0;
+    }
   `,
   userName: css`
     color: #fff;
     font-size: ${theme.type.baseFontSize - 1}px;
+    @media (max-width: ${theme.bp.large - 1}px) {
+      display: none;
+    }
   `,
   userDropdown: css`
     width: 225px;
@@ -174,5 +207,55 @@ addStyles('Header', {
   `,
   userMenuLogout: css`
     color: ${theme.color.palette.red} !important;
+  `,
+  bottomTabs: css`
+    position: fixed;
+    z-index: 1000;
+    transform: translate3d(0, 0, 0);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid ${theme.color.borders.sep};
+    ul {
+      ${resetList};
+      display: flex;
+      align-items: stretch;
+    }
+    li {
+      flex: 1 1 auto;
+      &.is-active {
+        a {
+          color: ${theme.color.text.base};
+        }
+      }
+    }
+    a {
+      color: ${theme.color.text.light};
+      font-size: ${theme.type.baseFontSize - 1}px;
+      text-align: center;
+      display: block;
+      align-items: center;
+      padding: 12px;
+      &:hover {
+        color: ${theme.color.text.base};
+      }
+    }
+    svg {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+    }
+    span {
+      display: none;
+    }
   `
 })
+
+injectGlobal`
+  @media (max-width: ${theme.bp.tablet - 1}px) {
+    body {
+      padding-bottom: 56px;
+    }
+  }
+`

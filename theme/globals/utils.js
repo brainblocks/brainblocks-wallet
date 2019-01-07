@@ -27,3 +27,8 @@ export const cf = css`
     clear: both;
   }
 `
+export const ellipsis = css`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
