@@ -22,7 +22,7 @@ function initializeStore() {
   const middleware = []
 
   if (DEBUG && isDevelopment && !isServer) {
-    // middleware.push(createLogger())
+    middleware.push(createLogger())
   }
 
   middleware.push(sagaMiddleware)
