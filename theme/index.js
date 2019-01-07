@@ -28,7 +28,7 @@ import './components/header'
 import './components/page-header'
 import './components/page-content'
 import './components/footer'
-import './components/auth-page-layout'
+import './components/login'
 
 // Dashboard
 import './components/dashboard-header'

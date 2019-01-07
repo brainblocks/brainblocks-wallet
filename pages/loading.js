@@ -3,7 +3,7 @@ import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
 
 const LoadingPage = props => (
-  <Layout includeHeader={false}>
+  <Layout headerVariant="none" footerVariant="none">
     <Head>
       <title>Loading</title>
     </Head>
