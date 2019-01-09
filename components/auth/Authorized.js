@@ -2,7 +2,15 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
-import Router from 'next/router'
+import { withRouter } from 'next/router'
+
+type State = {}
+
+type Props = {
+  auth: Object,
+  verifyEmail: boolean,
+  onAuthorize?: Function
+}
 
 /***
  * Component to wrap screens that require authorization to access.
@@ -13,7 +21,7 @@ import Router from 'next/router'
  * TODO:
  * - Consider saving the previous route to go back to once authorization is successful
  */
-class Authorized extends Component {
+class Authorized extends Component<State, Props> {
   constructor(...args) {
     super(...args)
 
@@ -28,14 +36,27 @@ class Authorized extends Component {
     return this.props.auth && this.props.auth.isAuthorized
   }
 
+  get hasVerifiedEmail() {
+    return (
+      this.props.verifyEmail === false ||
+      (this.props.auth &&
+        this.props.auth.user &&
+        this.props.auth.user.hasVerifiedEmail)
+    )
+  }
+
   tryForceRedirect() {
+    const auth = this.props.auth
+
     if (!this.isAuthorized) {
-      Router.push('/login')
+      this.props.router.push('/login')
+    } else if (!this.hasVerifiedEmail) {
+      this.props.router.push('/email-verification')
     }
   }
 
   render() {
-    if (!this.props.auth.isAuthorized) {
+    if (!this.isAuthorized || !this.hasVerifiedEmail) {
       return null
     }
 
@@ -47,4 +68,4 @@ const mapStateToProps = state => ({
   auth: getCurrentAuth(state)
 })
 
-export default connect(mapStateToProps)(Authorized)
+export default withRouter(connect(mapStateToProps)(Authorized))
