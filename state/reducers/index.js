@@ -12,17 +12,8 @@ export const ormReducer = createReducer(orm)
 const initialState = {
   form: {},
   orm: orm.getEmptyState(),
-  errors: {
-    login: undefined,
-    register: undefined
-  },
   ui: {
-    login: {
-      isLoggingIn: false
-    },
-    register: {
-      isRegistering: false
-    }
+    isLoading: false
   }
 }
 

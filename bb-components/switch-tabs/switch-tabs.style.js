@@ -3,8 +3,6 @@ import { addStyles } from 'destyle'
 import theme from '../theme'
 
 addStyles('BB-SwitchTabs', ({ activeTabLeft, activeTabWidth }) => {
-  console.log(activeTabLeft, activeTabWidth)
-
   return {
     tabs: css`
       text-align: center;

@@ -6,8 +6,6 @@ import { destyle } from 'destyle'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getError } from '~/state/selectors/errorSelectors'
 import { getFormValues } from 'redux-form'
-import * as AuthActions from '~/state/actions/authActions'
-import * as UserActions from '~/state/actions/userActions'
 import Alert from '~/bb-components/alert/Alert'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
@@ -20,6 +18,17 @@ import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import Router, { withRouter } from 'next/router'
 import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
 import TabComponents from '~/bb-components/tabs/Tabs'
+
+// State Actions
+import * as AuthActions from '~/state/actions/authActions'
+import * as UserActions from '~/state/actions/userActions'
+
+// API
+import * as AuthAPI from '~/state/api/auth'
+import * as UserAPI from '~/state/api/user'
+
+// Error handling
+import { deduceError } from '~/state/errors'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -39,10 +48,12 @@ type Props = {
 }
 
 type State = {
-  activeTab: number
+  activeTab: number,
+  loginError?: Object,
+  registrationError?: Object
 }
 
-class Login extends Component {
+class Login extends Component<Props, State> {
   state
   recaptcha
   isSubmitting
@@ -51,7 +62,9 @@ class Login extends Component {
     super()
     this.isSubmitting = false
     this.state = {
-      activeTab: tabIndexMap[props.router.query.tab] || 0
+      activeTab: tabIndexMap[props.router.query.tab] || 0,
+      loginError: undefined,
+      registrationError: undefined
     }
   }
 
@@ -84,8 +97,14 @@ class Login extends Component {
       const recaptcha = await this.recaptcha.execute()
       const { username, password } = this.props.loginFormValues || {}
 
-      this.props.login({ username, password, recaptcha })
-    } catch (error) {}
+      const authData = await AuthAPI.login(username, password, recaptcha)
+
+      this.props.updateAuth(authData)
+
+      this.props.router.push('/')
+    } catch (error) {
+      this.setState({ loginError: deduceError(error) })
+    }
 
     this.isSubmitting = false
   }
@@ -101,8 +120,19 @@ class Login extends Component {
       const recaptcha = await this.recaptcha.execute()
       const { username, email, password } = this.props.registerFormValues || {}
 
-      this.props.register({ username, email, password, recaptcha })
-    } catch (error) {}
+      const authData = await UserAPI.register({
+        username,
+        email,
+        password,
+        recaptcha
+      })
+
+      this.props.updateAuth(authData)
+
+      this.props.router.push('/')
+    } catch (error) {
+      this.setState({ registrationError: deduceError(error) })
+    }
 
     this.isSubmitting = false
   }
@@ -155,17 +185,17 @@ class Login extends Component {
 
                   <div className={styles.tabPanels}>
                     <TabPanel>
-                      {this.props.loginError && (
+                      {this.state.loginError && (
                         <Alert variant="error" style={{ marginBottom: 22 }}>
-                          {this.props.loginError.message}
+                          {this.state.loginError.message}
                         </Alert>
                       )}
                       <LoginForm onSubmit={this.onLogin.bind(this)} />
                     </TabPanel>
                     <TabPanel>
-                      {this.props.registerError && (
+                      {this.state.registrationError && (
                         <Alert variant="error" style={{ marginBottom: 22 }}>
-                          {this.props.registerError.message}
+                          {this.state.registrationError.message}
                         </Alert>
                       )}
                       <RegisterForm onSubmit={this.onRegister.bind(this)} />
@@ -183,15 +213,12 @@ class Login extends Component {
 
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
-  loginError: getError('login')(state),
   loginFormValues: getFormValues('login')(state),
-  registerError: getError('register')(state),
   registerFormValues: getFormValues('register')(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  login: data => dispatch(AuthActions.login(data)),
-  register: accountInfo => dispatch(UserActions.register(accountInfo))
+  updateAuth: payload => dispatch(AuthActions.update(payload))
 })
 
 export default withRouter(

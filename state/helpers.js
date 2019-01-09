@@ -17,7 +17,7 @@ export function getAuthToken() {
   const currentAuth = Auth.withId('me')
   if (!currentAuth) return undefined
 
-  return currentAuth.authToken
+  return currentAuth.token
 }
 
 export function makeApiRequest(opts = {}) {

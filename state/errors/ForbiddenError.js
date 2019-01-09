@@ -1,7 +1,7 @@
 // @flow
 import BaseError from './BaseError'
 
-export default class UnauthorizedError extends BaseError {
+export default class ForbiddenError extends BaseError {
   constructor(error = {}) {
     super(error)
 
@@ -11,6 +11,6 @@ export default class UnauthorizedError extends BaseError {
       message = error.response.data.error
     }
 
-    this.message = message || 'Unauthorized'
+    this.message = message || 'Forbidden'
   }
 }
