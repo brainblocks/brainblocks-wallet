@@ -2,7 +2,7 @@
 import orm from '~/state/models'
 import produce from 'immer'
 import {
-  AUTH_IS_CHECKING,
+  AUTH_SET_IS_CHECKING,
   AUTH_DID_CHECK,
   AUTH_UPDATE,
   AUTH_LOGOUT
@@ -13,7 +13,7 @@ export default (draftState, action, ormSession) => {
   const auth = Auth.withId('me') || Auth.create({ id: 'me' })
 
   switch (action.type) {
-    case AUTH_IS_CHECKING:
+    case AUTH_SET_IS_CHECKING:
       auth.update({
         isChecking: action.payload
       })

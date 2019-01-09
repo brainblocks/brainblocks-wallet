@@ -27,7 +27,7 @@ class Authorize extends Component {
   }
 
   async init() {
-    this.props.isCheckingAuth(true)
+    this.props.setIsCheckingAuth(true)
 
     try {
       const authData = await AuthAPI.init()
@@ -37,7 +37,7 @@ class Authorize extends Component {
     }
 
     this.props.didCheckAuth()
-    this.props.isCheckingAuth(false)
+    this.props.setIsCheckingAuth(false)
   }
 
   render() {
@@ -58,7 +58,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  isCheckingAuth: payload => dispatch(AuthActions.isChecking(payload)),
+  setIsCheckingAuth: payload => dispatch(AuthActions.setIsChecking(payload)),
   didCheckAuth: payload => dispatch(AuthActions.didCheck()),
   updateAuth: payload => dispatch(AuthActions.update(payload))
 })

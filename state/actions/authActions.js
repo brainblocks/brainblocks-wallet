@@ -1,12 +1,12 @@
 // @flow
-export const AUTH_IS_CHECKING = 'AUTH::IS_CHECKING'
+export const AUTH_SET_IS_CHECKING = 'AUTH::IS_CHECKING'
 export const AUTH_DID_CHECK = 'AUTH::DID_CHECK'
 export const AUTH_UPDATE = 'AUTH::UPDATE'
 export const AUTH_LOGOUT = 'AUTH::LOGOUT'
 
-export function isChecking(isChecking = true): Object {
+export function setIsChecking(isChecking = true): Object {
   return {
-    type: AUTH_IS_CHECKING,
+    type: AUTH_SET_IS_CHECKING,
     payload: isChecking
   }
 }
