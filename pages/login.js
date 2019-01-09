@@ -80,6 +80,11 @@ class Login extends Component<Props, State> {
     return this.props.auth && this.props.auth.isAuthorized
   }
 
+  set isSubmitting(value) {
+    this.state.isSubmitting = value
+    this.forceUpdate()
+  }
+
   tryForceRedirect() {
     if (this.isAuthorized) {
       Router.push('/')
@@ -91,7 +96,8 @@ class Login extends Component<Props, State> {
       return
     }
 
-    this.setState({ isSubmitting: true })
+    // synchronous to avoid double-submitting
+    this.isSubmitting = true
 
     try {
       const recaptcha = await this.recaptcha.execute()
@@ -114,7 +120,8 @@ class Login extends Component<Props, State> {
       return
     }
 
-    this.setState({ isSubmitting: true })
+    // synchronous to avoid double-submitting
+    this.isSubmitting = true
 
     try {
       const recaptcha = await this.recaptcha.execute()
