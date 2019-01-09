@@ -2,16 +2,10 @@
 import orm from '~/state/models'
 import produce from 'immer'
 import {
-  AUTH_LOGIN_START,
-  AUTH_LOGIN_COMPLETE,
-  AUTH_LOGIN_SUCCESS,
-  AUTH_LOGIN_ERROR,
-  AUTH_INIT_START,
-  AUTH_INIT_COMPLETE,
-  AUTH_INIT_SUCCESS,
-  AUTH_INIT_FAILURE,
-  AUTH_LOGOUT_START,
-  AUTH_LOGOUT_SUCCESS
+  AUTH_IS_CHECKING,
+  AUTH_DID_CHECK,
+  AUTH_UPDATE,
+  AUTH_LOGOUT
 } from '~/state/actions/authActions'
 
 export default (draftState, action, ormSession) => {
@@ -19,16 +13,17 @@ export default (draftState, action, ormSession) => {
   const auth = Auth.withId('me') || Auth.create({ id: 'me' })
 
   switch (action.type) {
-    case AUTH_INIT_START:
-    case AUTH_LOGIN_START:
+    case AUTH_IS_CHECKING:
       auth.update({
-        isChecking: true,
-        user: undefined
+        isChecking: action.payload
       })
       break
 
-    case AUTH_INIT_SUCCESS:
-    case AUTH_LOGIN_SUCCESS:
+    case AUTH_DID_CHECK:
+      auth.update({ didCheck: true })
+      break
+
+    case AUTH_UPDATE:
       const { user, token, expires } = action.payload
 
       auth.update({
@@ -39,33 +34,16 @@ export default (draftState, action, ormSession) => {
         isAuthorized: true,
         didCheck: true
       })
-      break
 
-    case AUTH_INIT_COMPLETE:
-    case AUTH_LOGIN_COMPLETE:
-      auth.update({
-        isChecking: false,
-        didCheck: true
-      })
       break
 
     // Assume that logout will work for immediate response
-    case AUTH_LOGOUT_START:
+    case AUTH_LOGOUT:
       auth.update({
-        isAuthorized: false
-      })
-      break
-
-    case AUTH_LOGOUT_SUCCESS:
-      auth.update({
+        isAuthorized: false,
         token: undefined,
         user: undefined
       })
-      // Clear out the login error
-      draftState.errors.login = undefined
       break
-
-    case AUTH_LOGIN_ERROR:
-      draftState.errors.login = action.payload
   }
 }

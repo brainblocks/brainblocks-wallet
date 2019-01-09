@@ -14,7 +14,8 @@ export default class User extends Model {
       username: attr(),
       preferredCurrency: attr(),
       email: attr(),
-      birthday: attr()
+      birthday: attr(),
+      hasVerifiedEmail: attr()
     }
   }
 }

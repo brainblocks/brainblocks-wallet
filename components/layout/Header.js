@@ -17,8 +17,15 @@ import Popover from '~/bb-components/popover/Popover'
 import Button from '~/bb-components/button/Button'
 import Spinner from '~/bb-components/spinner/Spinner'
 import { connect } from 'react-redux'
-import * as Auth from '~/state/actions/authActions'
+
+// Import selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
+
+// Import actions
+import * as AuthActions from '~/state/actions/authActions'
+
+// Import API Calls
+import * as AuthAPI from '~/state/api/auth'
 
 const menuItems = [
   {
@@ -73,13 +80,17 @@ class Header extends React.Component {
     })
   }
 
+  logout = async () => {
+    await AuthAPI.logout()
+    this.props.logout()
+  }
+
   render() {
     const {
       styles,
       children,
       router,
       auth,
-      logout,
       variant = 'full',
       ...rest
     } = this.props
@@ -213,7 +224,10 @@ class Header extends React.Component {
                           </i>
                           <span>Contacts</span>
                         </li>
-                        <li className={styles.userMenuLogout} onClick={logout}>
+                        <li
+                          className={styles.userMenuLogout}
+                          onClick={this.logout}
+                        >
                           <i>
                             <LogoutIcon />
                           </i>
@@ -265,7 +279,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(Auth.logout())
+  logout: () => dispatch(AuthActions.logout())
 })
 
 export default connect(

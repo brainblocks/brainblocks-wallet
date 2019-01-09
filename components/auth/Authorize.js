@@ -1,21 +1,51 @@
 // @flow
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import { init as initAuth } from '~/state/actions/authActions'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import Loading from '~/pages/loading'
+
+// Error handling
+import { deduceError } from '~/state/errors'
+
+// Import API
+import * as AuthAPI from '~/state/api/auth'
+
+// Import actions
+import * as AuthActions from '~/state/actions/authActions'
 
 /***
  * Component that wraps the entire application prior to loading to ensure we check and verify
  * the user's current auth session if one is present. Will render the loading page during the check
  */
 class Authorize extends Component {
+  state = {
+    error: undefined
+  }
+
   componentWillMount() {
-    this.props.initAuth()
+    this.init()
+  }
+
+  async init() {
+    this.props.isCheckingAuth(true)
+
+    try {
+      const authData = await AuthAPI.init()
+      this.props.updateAuth(authData)
+    } catch (error) {
+      this.setState({ error: deduceError(error) })
+    }
+
+    this.props.didCheckAuth()
+    this.props.isCheckingAuth(false)
   }
 
   render() {
-    if (!this.props.auth || !this.props.auth.didCheck) {
+    if (
+      !this.props.auth ||
+      !this.props.auth.didCheck ||
+      this.props.auth.isChecking
+    ) {
       return <Loading />
     }
 
@@ -28,7 +58,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  initAuth: () => dispatch(initAuth())
+  isCheckingAuth: payload => dispatch(AuthActions.isChecking(payload)),
+  didCheckAuth: payload => dispatch(AuthActions.didCheck()),
+  updateAuth: payload => dispatch(AuthActions.update(payload))
 })
 
 export default connect(

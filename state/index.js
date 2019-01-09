@@ -5,7 +5,6 @@ import { createLogger } from 'redux-logger'
 import { Component } from 'react'
 import getConfig from 'next/config'
 
-import rootSaga from '~/state/actions'
 import rootReducer from '~/state/reducers'
 
 const { publicRuntimeConfig } = getConfig()
@@ -18,14 +17,11 @@ export const isDevelopment = NODE_ENV === 'development'
 let clientSideStore
 
 function initializeStore() {
-  const sagaMiddleware = createSagaMiddleware()
   const middleware = []
 
   if (DEBUG && isDevelopment && !isServer) {
-    middleware.push(createLogger())
+    middleware.push(createLogger({ collapsed: true }))
   }
-
-  middleware.push(sagaMiddleware)
 
   let appliedMiddleware = applyMiddleware(...middleware)
 
@@ -34,8 +30,6 @@ function initializeStore() {
   }
 
   const store = createStore(rootReducer, appliedMiddleware)
-
-  sagaMiddleware.run(rootSaga)
 
   return store
 }
