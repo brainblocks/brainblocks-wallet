@@ -8,14 +8,29 @@ addStyles('Login', ({ background, pad }) => ({
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      flex-wrap: wrap;
+    }
   `,
   content: css`
     width: 33%;
+    position: relative;
+    z-index: 2;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      width: 45%;
+    }
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      width: 100%;
+    }
   `,
   formContainer: css`
     position: relative;
     justify-self: flex-end;
     width: 52%;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      width: calc(100% + ${theme.layout.pagePadding * 2}px);
+      margin: 20px -${theme.layout.pagePadding}px 0;
+    }
   `,
   // Content
   eyebrow: css`
@@ -39,11 +54,18 @@ addStyles('Login', ({ background, pad }) => ({
       height: 2px;
       background: rgba(255, 255, 255, 0.3);
     }
+    @media (max-width: ${theme.bp.mobile - 1}px) {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+    }
   `,
   title: css`
     color: #fff;
     font-size: 42px;
     line-height: 1.4;
+    @media (max-width: ${theme.bp.mobile - 1}px) {
+      font-size: 32px;
+    }
   `,
   // Visuals
   visuals: css`
@@ -98,6 +120,9 @@ addStyles('Login', ({ background, pad }) => ({
     border-radius: ${theme.borderRadius.lg}px;
     background: ${theme.color.gray.lightest};
     padding: 40px 10%;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      padding: 24px;
+    }
   `,
   tabPanels: css`
     margin-top: ${theme.spacing.paddingLg.desktop}px;

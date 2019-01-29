@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react'
 import { Component } from 'react'
+import { Media } from 'react-breakpoints'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
@@ -56,12 +57,11 @@ type State = {
 class Login extends Component<Props, State> {
   state
   recaptcha
-  isSubmitting
 
   constructor(props) {
     super()
-    this.isSubmitting = false
     this.state = {
+      isSubmitting: false,
       activeTab: tabIndexMap[props.router.query.tab] || 0,
       loginError: undefined,
       registrationError: undefined
@@ -80,6 +80,11 @@ class Login extends Component<Props, State> {
     return this.props.auth && this.props.auth.isAuthorized
   }
 
+  set isSubmitting(value) {
+    this.state.isSubmitting = value
+    this.forceUpdate()
+  }
+
   tryForceRedirect() {
     if (this.isAuthorized) {
       Router.push('/')
@@ -87,10 +92,11 @@ class Login extends Component<Props, State> {
   }
 
   async onLogin(event) {
-    if (this.isSubmitting) {
+    if (this.state.isSubmitting) {
       return
     }
 
+    // synchronous to avoid double-submitting
     this.isSubmitting = true
 
     try {
@@ -106,14 +112,15 @@ class Login extends Component<Props, State> {
       this.setState({ loginError: deduceError(error) })
     }
 
-    this.isSubmitting = false
+    this.setState({ isSubmitting: false })
   }
 
   async onRegister(event) {
-    if (this.isSubmitting) {
+    if (this.state.isSubmitting) {
       return
     }
 
+    // synchronous to avoid double-submitting
     this.isSubmitting = true
 
     try {
@@ -134,7 +141,7 @@ class Login extends Component<Props, State> {
       this.setState({ registrationError: deduceError(error) })
     }
 
-    this.isSubmitting = false
+    this.setState({ isSubmitting: false })
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -163,16 +170,22 @@ class Login extends Component<Props, State> {
               <h1 className={styles.title}>Log in now or sign up for free</h1>
             </div>
             <div className={styles.formContainer}>
-              <div className={styles.visuals}>
-                <span className={styles.hex1}>
-                  <RoundedHexagon />
-                </span>
-                <span className={styles.hex2}>
-                  <RoundedHexagonPurple />
-                </span>
-                <div className={styles.circle1} />
-                <div className={styles.circle2} />
-              </div>
+              <Media>
+                {({ breakpoints, currentBreakpoint }) =>
+                  breakpoints[currentBreakpoint] >= breakpoints.medium && (
+                    <div className={styles.visuals}>
+                      <span className={styles.hex1}>
+                        <RoundedHexagon />
+                      </span>
+                      <span className={styles.hex2}>
+                        <RoundedHexagonPurple />
+                      </span>
+                      <div className={styles.circle1} />
+                      <div className={styles.circle2} />
+                    </div>
+                  )
+                }
+              </Media>
               <div className={styles.formContainerInner}>
                 <SwitchTabs
                   selectedIndex={this.state.activeTab}
@@ -190,7 +203,10 @@ class Login extends Component<Props, State> {
                           {this.state.loginError.message}
                         </Alert>
                       )}
-                      <LoginForm onSubmit={this.onLogin.bind(this)} />
+                      <LoginForm
+                        onSubmit={this.onLogin.bind(this)}
+                        submitting={this.state.isSubmitting}
+                      />
                     </TabPanel>
                     <TabPanel>
                       {this.state.registrationError && (
@@ -198,7 +214,10 @@ class Login extends Component<Props, State> {
                           {this.state.registrationError.message}
                         </Alert>
                       )}
-                      <RegisterForm onSubmit={this.onRegister.bind(this)} />
+                      <RegisterForm
+                        onSubmit={this.onRegister.bind(this)}
+                        submitting={this.state.isSubmitting}
+                      />
                     </TabPanel>
                   </div>
                 </SwitchTabs>
