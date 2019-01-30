@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react'
+import { withBreakpoints } from 'react-breakpoints'
 import { destyle } from 'destyle'
-import { TabComponents } from 'brainblocks-components'
+import { CollapseTabs } from 'brainblocks-components'
+import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import ShieldIcon from '~/static/svg/icons/security.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
-
-const { Tabs, Tab, TabList, TabPanel } = TabComponents
 
 const tabIndexMap = {
   general: 0,
@@ -15,101 +15,147 @@ const tabIndexMap = {
   security: 2,
   accounts: 3
 }
+const collapseBreakpoint = 'small'
 
 type Props = {
+  breakpoints: {
+    mobile?: number,
+    small?: number,
+    tablet?: number,
+    medium?: number,
+    desktop?: number,
+    large?: number
+  },
+  currentBreakpoint: string,
   router: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
 
 type State = {
-  activeTab: number
+  activeTab: number,
+  viewingTab: boolean
 }
 
 class SettingsTabs extends React.Component<Props, State> {
-  state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0
+  constructor(props) {
+    super()
+    this.state = {
+      activeTab: 0, //tabIndexMap[this.props.router.query.tab] || 0,
+      viewingTab: false
+    }
+  }
+
+  getCollapsed = () => {
+    const { breakpoints, currentBreakpoint } = this.props
+    return breakpoints[currentBreakpoint] < breakpoints[collapseBreakpoint]
+  }
+
+  handleBack = () => {
+    this.setState({
+      viewingTab: false
+    })
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
     this.setState({
-      activeTab: index
+      activeTab: index,
+      viewingTab: this.getCollapsed()
     })
   }
 
   render() {
-    const { styles, router, ...rest } = this.props
-    const { activeTab } = this.state
+    const {
+      styles,
+      router,
+      breakpoints,
+      currentBreakpoint,
+      ...rest
+    } = this.props
+    const { activeTab, viewingTab } = this.state
+    const collapsed = this.getCollapsed()
     return (
       <div className={styles.root}>
-        <Tabs
-          variant="side"
-          selectedIndex={activeTab}
+        <CollapseTabs
+          collapsed={collapsed}
           onSelect={this.handleSwitchTabs}
-        >
-          <div className={styles.tabs}>
-            <div className={styles.sidebar}>
-              <TabList>
-                <Tab>
-                  <div className={styles.tab}>
-                    <span className={styles.tabIcon}>
-                      <SettingsIcon />
-                    </span>
-                    <span className={styles.tabName}>General</span>
-                  </div>
-                </Tab>
-                <Tab>
-                  <div className={styles.tab}>
-                    <span className={styles.tabIcon}>
-                      <UserIcon />
-                    </span>
-                    <span className={styles.tabName}>Profile</span>
-                  </div>
-                </Tab>
-                <Tab>
-                  <div className={styles.tab}>
-                    <span className={styles.tabIcon}>
-                      <ShieldIcon />
-                    </span>
-                    <span className={styles.tabName}>Security</span>
-                  </div>
-                </Tab>
-                <Tab>
-                  <div className={styles.tab}>
-                    <span className={styles.tabIcon}>
-                      <AccountsIcon />
-                    </span>
-                    <span className={styles.tabName}>Accounts</span>
-                  </div>
-                </Tab>
-              </TabList>
+          onBack={this.handleBack}
+          activeTab={activeTab}
+          viewingTab={viewingTab}
+          backButtonContent={
+            <div className={styles.back}>
+              <span className={styles.backIcon}>
+                <BackIcon />
+              </span>
+              <span className={styles.backText}>Back</span>
             </div>
-            <div className={styles.content}>
-              <TabPanel>
+          }
+          tabsProps={{ variant: 'side' }}
+          tabs={[
+            {
+              title: (
+                <div className={styles.tab}>
+                  <span className={styles.tabIcon}>
+                    <SettingsIcon />
+                  </span>
+                  <span className={styles.tabName}>General</span>
+                </div>
+              ),
+              content: (
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>General</h3>
                   <div className={styles.tabPanelContent}>
                     General settings here. Default account, etc.
                   </div>
                 </div>
-              </TabPanel>
-              <TabPanel>
+              )
+            },
+            {
+              title: (
+                <div className={styles.tab}>
+                  <span className={styles.tabIcon}>
+                    <UserIcon />
+                  </span>
+                  <span className={styles.tabName}>Profile</span>
+                </div>
+              ),
+              content: (
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Profile</h3>
                   <div className={styles.tabPanelContent}>
                     Profile settings here.
                   </div>
                 </div>
-              </TabPanel>
-              <TabPanel>
+              )
+            },
+            {
+              title: (
+                <div className={styles.tab}>
+                  <span className={styles.tabIcon}>
+                    <ShieldIcon />
+                  </span>
+                  <span className={styles.tabName}>Security</span>
+                </div>
+              ),
+              content: (
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Security</h3>
                   <div className={styles.tabPanelContent}>
                     Security settings here.
                   </div>
                 </div>
-              </TabPanel>
-              <TabPanel>
+              )
+            },
+            {
+              title: (
+                <div className={styles.tab}>
+                  <span className={styles.tabIcon}>
+                    <AccountsIcon />
+                  </span>
+                  <span className={styles.tabName}>Accounts</span>
+                </div>
+              ),
+              content: (
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Accounts</h3>
                   <div className={styles.tabPanelContent}>
@@ -117,13 +163,13 @@ class SettingsTabs extends React.Component<Props, State> {
                     top here to choose which account to change the settings for.
                   </div>
                 </div>
-              </TabPanel>
-            </div>
-          </div>
-        </Tabs>
+              )
+            }
+          ]}
+        />
       </div>
     )
   }
 }
 
-export default destyle(SettingsTabs, 'SettingsTabs')
+export default withBreakpoints(destyle(SettingsTabs, 'SettingsTabs'))

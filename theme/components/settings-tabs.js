@@ -1,6 +1,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import Color from 'color'
 import { pageWidth } from '~/theme/globals/utils'
 
 addStyles('SettingsTabs', props => ({
@@ -13,16 +14,22 @@ addStyles('SettingsTabs', props => ({
     grid-template-columns: 212px 1fr;
     grid-gap: 0;
   `,
-  sidebar: css`
-    grid-area: sidebar;
-    background: #fff;
-    padding: ${theme.layout.contentPadding - 8}px
-      ${theme.layout.contentPadding}px;
+  back: css`
+    display: flex;
+    align-items: center;
   `,
-  content: css`
-    grid-area: content;
-    background: ${theme.color.gray.lightest};
-    padding: ${theme.layout.contentPadding}px;
+  backIcon: css`
+    margin-right: 12px;
+    line-height: 0;
+    color: ${theme.color.palette.blue};
+    .bb-svg-icon {
+      width: 16px;
+      height: 16px;
+    }
+  `,
+  backText: css`
+    color: black;
+    flex-grow: 1;
   `,
   tab: css`
     display: flex;

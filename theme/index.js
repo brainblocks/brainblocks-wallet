@@ -6,6 +6,7 @@ import './globals/globals'
 // BB components ===
 import './bb-components/alert'
 import './bb-components/color-choice'
+import './bb-components/collapse-tabs'
 import './bb-components/snackbar'
 import './bb-components/example'
 import './bb-components/amount-field'
