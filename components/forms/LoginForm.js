@@ -1,8 +1,7 @@
 /* @flow */
+import React from 'react'
 import { reduxForm, Field } from 'redux-form'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import Button from '~/bb-components/button/Button'
+import { Grid, GridItem, Button } from 'brainblocks-components'
 import ValidatedInput from '~/components/form/ValidatedInput'
 import validatePassword from '~/utils/validatePassword'
 import { validate as isEmail } from 'isemail'
