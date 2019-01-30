@@ -1,13 +1,15 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import FormItem from '~/bb-components/form-item/FormItem'
-import FormField from '~/bb-components/form-field/FormField'
-import Input from '~/bb-components/input/Input'
-import Button from '~/bb-components/button/Button'
-import ColorChoice from '~/bb-components/color-choice/ColorChoice'
+import {
+  Grid,
+  GridItem,
+  FormItem,
+  FormField,
+  Input,
+  Button,
+  ColorChoice
+} from 'brainblocks-components'
 
 type Props = {
   /** Given by destyle. Do not pass this to the component as a prop. */

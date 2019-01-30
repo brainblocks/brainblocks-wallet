@@ -1,13 +1,12 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import TabsComponents from '~/bb-components/tabs/Tabs'
-import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
+import { TabComponents, SwitchTabs } from 'brainblocks-components'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
 import TransferForm from './TransferForm'
 
-const { Tab, TabList, TabPanel } = TabsComponents
+const { Tab, TabList, TabPanel } = TabComponents
 
 const tabIndexMap = {
   send: 0,

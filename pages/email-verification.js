@@ -7,7 +7,8 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import Authorized from '~/components/auth/Authorized'
-import Alert from '~/bb-components/alert/Alert'
+import { Alert } from 'brainblocks-components'
+//import Alert from '~/bb-components/alert/Alert'
 
 // Import Selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'

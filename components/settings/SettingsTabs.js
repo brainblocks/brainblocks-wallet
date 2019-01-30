@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import TabsComponents from '~/bb-components/tabs/Tabs'
+import { TabComponents } from 'brainblocks-components'
 import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import ShieldIcon from '~/static/svg/icons/security.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
 
-const { Tabs, Tab, TabList, TabPanel } = TabsComponents
+const { Tabs, Tab, TabList, TabPanel } = TabComponents
 
 const tabIndexMap = {
   general: 0,

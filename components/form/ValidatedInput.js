@@ -1,7 +1,5 @@
 // @flow
-import FormItem from '~/bb-components/form-item/FormItem'
-import FormField from '~/bb-components/form-field/FormField'
-import Input from '~/bb-components/input/Input'
+import { FormItem, FormField, Input } from 'brainblocks-components'
 
 export default ({
   input,

@@ -6,18 +6,20 @@ import { getAccountById } from '~/functions/accounts'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
-import Button from '~/bb-components/button/Button'
-import FormField from '~/bb-components/form-field/FormField'
+import {
+  Button,
+  FormField,
+  KeyValue,
+  Select,
+  Typography,
+  Menu,
+  MenuItem
+} from 'brainblocks-components'
 import HistoryChart from '~/components/dashboard/HistoryChart'
-import KeyValue from '~/bb-components/key-value/KeyValue'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
 import type { NormalizedState } from '~/types'
-import Select from '~/bb-components/select/Select'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
-import Typography from '~/bb-components/typography/Typography'
-import Menu from '~/bb-components/menu/Menu'
-import MenuItem from '~/bb-components/menu/MenuItem'
 import { convert } from '~/functions/convert'
 import { destyle } from 'destyle'
 import theme from '~/theme/theme'

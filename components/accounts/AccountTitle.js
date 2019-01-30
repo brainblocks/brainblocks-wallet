@@ -2,7 +2,7 @@
 import React from 'react'
 import { destyle } from 'destyle'
 import { getAccountById } from '~/functions/accounts'
-import NanoAddress from '~/bb-components/nano-address/NanoAddress'
+import { NanoAddress } from 'brainblocks-components'
 import WalletIcon from '~/static/svg/icons/wallet.svg'
 import WalletsIcon from '~/static/svg/icons/wallets.svg'
 import HotWalletIcon from '~/static/svg/icons/wallet-hot.svg'

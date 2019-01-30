@@ -13,9 +13,7 @@ import CogIcon from '~/static/svg/icons/cog.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
-import Popover from '~/bb-components/popover/Popover'
-import Button from '~/bb-components/button/Button'
-import Spinner from '~/bb-components/spinner/Spinner'
+import { Popover, Button, Spinner } from 'brainblocks-components'
 import { connect } from 'react-redux'
 
 // Import selectors

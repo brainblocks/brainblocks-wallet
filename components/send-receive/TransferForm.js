@@ -4,13 +4,15 @@ import { destyle } from 'destyle'
 import { isValidNanoAddress } from '~/functions/validate'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import FormItem from '~/bb-components/form-item/FormItem'
-import FormField from '~/bb-components/form-field/FormField'
-import AmountField from '~/bb-components/amount-field/AmountField'
-import Input from '~/bb-components/input/Input'
-import Button from '~/bb-components/button/Button'
+import {
+  Grid,
+  GridItem,
+  FormItem,
+  FormField,
+  AmountField,
+  Input,
+  Button
+} from 'brainblocks-components'
 import AccountSelector from '~/components/accounts/AccountSelector'
 
 import mockState from '~/state/mockState'

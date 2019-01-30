@@ -4,12 +4,14 @@ import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import FormItem from '~/bb-components/form-item/FormItem'
-import FormField from '~/bb-components/form-field/FormField'
-import Input from '~/bb-components/input/Input'
-import Button from '~/bb-components/button/Button'
+import {
+  Grid,
+  GridItem,
+  FormItem,
+  FormField,
+  Input,
+  Button
+} from 'brainblocks-components'
 import AccountSelector from '~/components/accounts/AccountSelector'
 
 import mockState from '~/state/mockState'

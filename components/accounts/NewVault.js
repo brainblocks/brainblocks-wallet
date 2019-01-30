@@ -2,17 +2,19 @@
 import React from 'react'
 import { destyle } from 'destyle'
 import Link from 'next/link'
-import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
-import TabsComponents from '~/bb-components/tabs/Tabs'
-import Alert from '~/bb-components/alert/Alert'
-import Grid from '~/bb-components/grid/Grid'
-import GridItem from '~/bb-components/grid/GridItem'
-import FormItem from '~/bb-components/form-item/FormItem'
-import FormField from '~/bb-components/form-field/FormField'
-import Input from '~/bb-components/input/Input'
-import Button from '~/bb-components/button/Button'
+import {
+  SwitchTabs,
+  TabComponents,
+  Alert,
+  Grid,
+  GridItem,
+  FormItem,
+  FormField,
+  Input,
+  Button
+} from 'brainblocks-components'
 
-const { Tab, TabList, TabPanel } = TabsComponents
+const { Tab, TabList, TabPanel } = TabComponents
 
 type Props = {
   /** Given by destyle. Do not pass this to the component as a prop. */
