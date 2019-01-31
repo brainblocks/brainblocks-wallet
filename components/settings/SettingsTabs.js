@@ -8,6 +8,10 @@ import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import ShieldIcon from '~/static/svg/icons/security.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
+import GeneralSettings from './GeneralSettings'
+import ProfileSettings from './ProfileSettings'
+import SecuritySettings from './SecuritySettings'
+import AccountSettings from './AccountSettings'
 
 const tabIndexMap = {
   general: 0,
@@ -41,7 +45,7 @@ class SettingsTabs extends React.Component<Props, State> {
   constructor(props) {
     super()
     this.state = {
-      activeTab: 0, //tabIndexMap[this.props.router.query.tab] || 0,
+      activeTab: tabIndexMap[props.router.query.tab] || 0,
       viewingTab: false
     }
   }
@@ -103,9 +107,9 @@ class SettingsTabs extends React.Component<Props, State> {
               ),
               content: (
                 <div className={styles.tabPanel}>
-                  <h3 className={styles.tabPanelTitle}>General</h3>
+                  <h3 className={styles.tabPanelTitle}>General Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    General settings here. Default account, etc.
+                    <GeneralSettings defaultAccount={'abcd'} />
                   </div>
                 </div>
               )
@@ -121,9 +125,12 @@ class SettingsTabs extends React.Component<Props, State> {
               ),
               content: (
                 <div className={styles.tabPanel}>
-                  <h3 className={styles.tabPanelTitle}>Profile</h3>
+                  <h3 className={styles.tabPanelTitle}>Profile Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    Profile settings here.
+                    <ProfileSettings
+                      userName={'Angus Russell'}
+                      userEmail={'angus@brainblocks.io'}
+                    />
                   </div>
                 </div>
               )
@@ -139,9 +146,9 @@ class SettingsTabs extends React.Component<Props, State> {
               ),
               content: (
                 <div className={styles.tabPanel}>
-                  <h3 className={styles.tabPanelTitle}>Security</h3>
+                  <h3 className={styles.tabPanelTitle}>Security Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    Security settings here.
+                    <SecuritySettings />
                   </div>
                 </div>
               )
@@ -157,10 +164,9 @@ class SettingsTabs extends React.Component<Props, State> {
               ),
               content: (
                 <div className={styles.tabPanel}>
-                  <h3 className={styles.tabPanelTitle}>Accounts</h3>
+                  <h3 className={styles.tabPanelTitle}>Account Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    Accounts settings here. We need an account selector at the
-                    top here to choose which account to change the settings for.
+                    <AccountSettings account={'abcd'} />
                   </div>
                 </div>
               )
