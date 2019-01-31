@@ -57,7 +57,7 @@ addStyles('SettingsTabs', props => ({
     text-transform: uppercase;
     font-weight: bold;
     margin-top: 2px;
-    margin-bottom: ${theme.spacing.rhythmUnit * 2}px;
+    margin-bottom: ${theme.spacing.rhythmUnit * 3}px;
     letter-spacing: 0.12em;
   `,
   tabPanelContent: css``

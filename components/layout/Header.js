@@ -44,12 +44,16 @@ const menuItems = [
     icon: <SendReceiveIcon />,
     mobile: true
   },
+  /* This has some problems - like if I'm already on the settings page, clicking it does nothing (regardless of which tab I'm on)
   {
-    href: '/security',
+    href: {
+      pathname: '/settings',
+      query: { tab: 'security' }
+    },
     title: 'Security',
     icon: <SecurityIcon />,
     mobile: false
-  },
+  },*/
   {
     href: '/settings',
     title: 'Settings',
