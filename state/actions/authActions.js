@@ -1,31 +1,35 @@
 // @flow
-export const AUTH_SET_IS_CHECKING = 'AUTH::IS_CHECKING'
-export const AUTH_DID_CHECK = 'AUTH::DID_CHECK'
-export const AUTH_UPDATE = 'AUTH::UPDATE'
-export const AUTH_LOGOUT = 'AUTH::LOGOUT'
+const actions = {
+  SET_IS_CHECKING: 'AUTH::IS_CHECKING',
+  DID_CHECK: 'AUTH::DID_CHECK',
+  UPDATE: 'AUTH::UPDATE',
+  LOGOUT: 'AUTH::LOGOUT',
+  STORE_USER_PASSWORD: 'AUTH::STORE_PASSWORD',
+  DELETE_USER_PASSWORD: 'AUTH::DELETE_PASSWORD'
+}
 
-export function setIsChecking(isChecking = true): Object {
-  return {
-    type: AUTH_SET_IS_CHECKING,
+const creators = {
+  setIsChecking: (isChecking = true) => ({
+    type: actions.SET_IS_CHECKING,
     payload: isChecking
-  }
-}
-
-export function didCheck(): Object {
-  return {
-    type: AUTH_DID_CHECK
-  }
-}
-
-export function update(payload = {}): Objcet {
-  return {
-    type: AUTH_UPDATE,
+  }),
+  didCheck: () => ({
+    type: actions.DID_CHECK
+  }),
+  update: (payload = {}) => ({
+    type: actions.UPDATE,
     payload
-  }
+  }),
+  logout: () => ({
+    type: actions.LOGOUT
+  }),
+  storePassword: password => ({
+    type: actions.STORE_USER_PASSWORD,
+    password
+  }),
+  deletePassword: () => ({
+    type: actions.DELETE_USER_PASSWORD
+  })
 }
 
-export function logout() {
-  return {
-    type: AUTH_LOGOUT
-  }
-}
+export { actions, creators }

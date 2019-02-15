@@ -24,7 +24,6 @@ type Props = {
 class Authorized extends Component<State, Props> {
   constructor(...args) {
     super(...args)
-
     this.tryForceRedirect()
   }
 

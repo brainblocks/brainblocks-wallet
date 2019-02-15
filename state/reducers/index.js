@@ -1,27 +1,34 @@
 import orm from '~/state/models'
-import { combineReducers } from 'redux'
 import { createReducer } from 'redux-orm'
+import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 
-import authReducer from './authReducer'
-import userReducer from './userReducer'
-import { produce } from 'immer'
-export const ormReducer = createReducer(orm)
-
 // TODO: Consider moving this in to it's own file since it'll most likely get very large
-const initialState = {
+const emptyORMState = orm.getEmptyState()
+export const initialState = {
   form: {},
-  orm: orm.getEmptyState(),
-  ui: {
+  orm: emptyORMState
+  /*ui: {
     isLoading: false
-  }
+  }*/
 }
 
+const ormReducer = createReducer(orm)
+const combinedReducers = combineReducers({
+  form: formReducer,
+  orm: ormReducer
+  //ui: uiReducer
+})
+
+export default combinedReducers
+
+/*
 export default function rootReducer(state = initialState, action) {
   return produce(state, draft => {
     // Run through the namespaced reducers
     draft.orm = ormReducer(draft.orm, action)
     draft.form = formReducer(draft.form, action)
+    draft.vaults = vaultsReducer(draft.vaults, action)
 
     // Run through the global reducers with the draft and the orm session passed in for performance
     const ormSession = orm.session(state.orm)
@@ -35,3 +42,4 @@ export default function rootReducer(state = initialState, action) {
     draft.orm = ormSession.state
   })
 }
+*/

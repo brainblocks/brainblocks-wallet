@@ -20,7 +20,7 @@ import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 
 // Import actions
-import * as AuthActions from '~/state/actions/authActions'
+import { creators as authActions } from '~/state/actions/authActions'
 
 // Import API Calls
 import * as AuthAPI from '~/state/api/auth'
@@ -281,7 +281,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(AuthActions.logout())
+  logout: () => dispatch(authActions.logout())
 })
 
 export default connect(

@@ -11,7 +11,7 @@ import { deduceError } from '~/state/errors'
 import * as AuthAPI from '~/state/api/auth'
 
 // Import actions
-import * as AuthActions from '~/state/actions/authActions'
+import { creators as authActions } from '~/state/actions/authActions'
 
 /***
  * Component that wraps the entire application prior to loading to ensure we check and verify
@@ -27,8 +27,9 @@ class Authorize extends Component {
   }
 
   async init() {
+    // Leaving this here for now (rather than a thunk)
+    // to keep the error local to the component
     this.props.setIsCheckingAuth(true)
-
     try {
       const authData = await AuthAPI.init()
       this.props.updateAuth(authData)
@@ -58,9 +59,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setIsCheckingAuth: payload => dispatch(AuthActions.setIsChecking(payload)),
-  didCheckAuth: payload => dispatch(AuthActions.didCheck()),
-  updateAuth: payload => dispatch(AuthActions.update(payload))
+  setIsCheckingAuth: payload => dispatch(authActions.setIsChecking(payload)),
+  didCheckAuth: () => dispatch(authActions.didCheck()),
+  updateAuth: payload => dispatch(authActions.update(payload))
 })
 
 export default connect(
