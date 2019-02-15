@@ -6,6 +6,7 @@ addStyles('BB-Input', props => ({
   root: css`
     border: none;
     background: transparent;
+    font-family: ${theme.type.baseFontFamily};
     font-size: 15px;
     font-weight: 700;
     padding: 1.5em;

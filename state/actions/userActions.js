@@ -1,9 +1,11 @@
 // @flow
-export const UPDATE_AUTHORIZED_USER = 'USER::UPDATE_AUTHORIZED_USER'
+const actions = { UPDATE_AUTHORIZED_USER: 'USER::UPDATE_AUTHORIZED_USER' }
 
-export function updateAuthorizedUser(payload = {}) {
-  return {
-    type: UPDATE_AUTHORIZED_USER,
+const creators = {
+  updateAuthorizedUser: (payload = {}) => ({
+    type: actions.UPDATE_AUTHORIZED_USER,
     payload
-  }
+  })
 }
+
+export { actions, creators }

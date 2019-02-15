@@ -8,7 +8,6 @@ import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getError } from '~/state/selectors/errorSelectors'
 import { getFormValues } from 'redux-form'
 import { Alert, SwitchTabs, TabComponents } from 'brainblocks-components'
-//import Alert from '~/bb-components/alert/Alert'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import LoginForm from '~/components/forms/LoginForm'
@@ -18,12 +17,10 @@ import RegisterForm from '~/components/forms/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import Router, { withRouter } from 'next/router'
-//import SwitchTabs from '~/bb-components/switch-tabs/SwitchTabs'
-//import TabComponents from '~/bb-components/tabs/Tabs'
 
 // State Actions
-import * as AuthActions from '~/state/actions/authActions'
-import * as UserActions from '~/state/actions/userActions'
+import { creators as authActions } from '~/state/actions/authActions'
+import { getOrCreateWallet } from '~/state/thunks/walletThunks'
 
 // API
 import * as AuthAPI from '~/state/api/auth'
@@ -107,6 +104,7 @@ class Login extends Component<Props, State> {
       const authData = await AuthAPI.login(username, password, recaptcha)
 
       this.props.updateAuth(authData)
+      this.props.getOrCreateWallet(password)
 
       this.props.router.push('/')
     } catch (error) {
@@ -136,6 +134,7 @@ class Login extends Component<Props, State> {
       })
 
       this.props.updateAuth(authData)
+      this.props.getOrCreateWallet(password)
 
       this.props.router.push('/')
     } catch (error) {
@@ -238,7 +237,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateAuth: payload => dispatch(AuthActions.update(payload))
+  updateAuth: payload => dispatch(authActions.update(payload)),
+  getOrCreateWallet: password => dispatch(getOrCreateWallet(password))
 })
 
 export default withRouter(
