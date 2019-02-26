@@ -25,11 +25,11 @@ const AccountsList = ({
   type = 'all',
   ...rest
 }: Props) => {
-  const filtered = accounts.items.filter(
+  const filtered = accounts.allIds.filter(
     accId =>
       type === 'all' ||
-      accounts.itemsById[accId].type === type ||
-      type.includes(accounts.itemsById[accId].type)
+      accounts.byId[accId].type === type ||
+      type.includes(accounts.byId[accId].type)
   )
   return (
     <div className={styles.root}>
@@ -37,7 +37,7 @@ const AccountsList = ({
         <div className={styles.item} key={`account-${accId}`}>
           <AccountListItem
             nanoPrice={nanoPrice}
-            account={accounts.itemsById[accId]}
+            account={accounts.byId[accId]}
           />
         </div>
       ))}

@@ -1,5 +1,4 @@
 import { getClientSideStore } from '~/state'
-import orm from '~/state/models'
 import axios from 'axios'
 import produce from 'immer'
 import { BASE_API_URL } from '~/constants'
@@ -11,10 +10,7 @@ export function getAuthToken() {
   const state = store.getState()
   if (!state) return undefined
 
-  const session = orm.session(state.orm)
-  const { Auth } = session
-
-  const currentAuth = Auth.withId('me')
+  const currentAuth = state.auth
   if (!currentAuth) return undefined
 
   return currentAuth.token

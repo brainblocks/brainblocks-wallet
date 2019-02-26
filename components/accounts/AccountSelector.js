@@ -107,7 +107,7 @@ class AccountSelector extends React.Component<Props> {
     }: Props = this.props
     const { open, anchorEl } = this.state
 
-    if (!accounts.hasOwnProperty('items') || accounts.items.length === 0)
+    if (!accounts.hasOwnProperty('allIds') || accounts.allIds.length === 0)
       return <span>No accounts</span>
 
     return (
@@ -122,9 +122,7 @@ class AccountSelector extends React.Component<Props> {
             >
               <div className={styles.accountTitle}>
                 <AccountTitle
-                  account={
-                    account === 'all' ? 'all' : accounts.itemsById[account]
-                  }
+                  account={account === 'all' ? 'all' : accounts.byId[account]}
                   sub={twoLine}
                   {...accountTitleProps}
                 />
@@ -133,14 +131,14 @@ class AccountSelector extends React.Component<Props> {
                 account !== 'all' && (
                   <div className={styles.fieldBalances}>
                     <span className={styles.fieldMainBalance}>
-                      {formatNano(accounts.itemsById[account].balance)} NANO
+                      {formatNano(accounts.byId[account].balance)} NANO
                     </span>
                     {twoLine &&
                       nanoPrice >= 0 && (
                         <span className={styles.fieldSecondaryBalance}>
                           {formatFiat(
                             convert(
-                              accounts.itemsById[account].balance,
+                              accounts.byId[account].balance,
                               'nano',
                               nanoPrice
                             )
@@ -181,7 +179,7 @@ class AccountSelector extends React.Component<Props> {
               />
             </MenuItem>
           )}
-          {accounts.items.map((acc, i) => (
+          {accounts.allIds.map((acc, i) => (
             <MenuItem
               key={`account-selector-${i}`}
               onClick={() => this.handleSelect(acc)}
@@ -193,7 +191,7 @@ class AccountSelector extends React.Component<Props> {
             >
               <div className={styles.itemAccountTitle}>
                 <AccountTitle
-                  account={accounts.itemsById[acc]}
+                  account={accounts.byId[acc]}
                   sub={twoLine}
                   color={account === acc ? 'light' : null}
                 />
@@ -201,14 +199,14 @@ class AccountSelector extends React.Component<Props> {
               {balances === 'all' && (
                 <div className={styles.itemBalances}>
                   <span className={styles.itemMainBalance}>
-                    {formatNano(accounts.itemsById[account].balance)} NANO
+                    {formatNano(accounts.byId[account].balance)} NANO
                   </span>
                   {twoLine &&
                     nanoPrice >= 0 && (
                       <span className={styles.itemSecondaryBalance}>
                         {formatFiat(
                           convert(
-                            accounts.itemsById[account].balance,
+                            accounts.byId[account].balance,
                             'nano',
                             nanoPrice
                           )

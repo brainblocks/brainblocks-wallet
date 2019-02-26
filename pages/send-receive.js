@@ -8,6 +8,7 @@ import PageContent from '~/components/layout/PageContent'
 import SendReceiveTabs from '~/components/send-receive/SendReceiveTabs'
 import Authorized from '~/components/auth/Authorized'
 import Wallet from '~/components/wallet/Wallet'
+import { getAccounts } from '~/state/selectors/accountSelectors'
 
 const SendReceive = props => {
   return (
@@ -28,5 +29,5 @@ const SendReceive = props => {
 }
 
 export default connect(state => ({
-  accounts: state.orm.Account
+  accounts: getAccounts(state)
 }))(withRouter(SendReceive))

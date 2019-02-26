@@ -2,7 +2,6 @@ import { wallet, createWallet } from '~/state/wallet'
 import { creators } from '~/state/actions/walletActions'
 import { creators as accountCreators } from '~/state/actions/accountActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
-import { getWallet } from '~/state/selectors/walletSelectors'
 import * as walletAPI from '~/state/api/wallet'
 
 /*

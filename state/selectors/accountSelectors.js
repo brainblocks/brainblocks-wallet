@@ -1,7 +1,7 @@
 // @flow
-import { createSelector } from 'redux-orm'
-import orm from '~/state/models'
+import { createSelector } from 'reselect'
 
+/*
 export const getAccounts = createSelector(
   orm,
   session => session.orm,
@@ -22,3 +22,19 @@ export const getTotalBalance = createSelector(
     return balance
   }
 )
+*/
+
+const accountsSelector = state => state.accounts
+
+export const getAccounts = createSelector(
+  accountsSelector,
+  accounts => accounts
+)
+
+export const getTotalBalance = createSelector(getAccounts, accounts => {
+  let balance = 0
+  accounts.allIds.map(
+    accId => (balance += parseFloat(accounts.byId[accId].balance))
+  )
+  return balance
+})
