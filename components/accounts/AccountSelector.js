@@ -5,7 +5,6 @@ import { cx } from 'emotion'
 import type { NormalizedState } from '~/types'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
-import { getAccountById, getAccountType } from '~/functions/accounts'
 import { FormField, Menu, MenuItem, NanoAddress } from 'brainblocks-components'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
@@ -107,14 +106,9 @@ class AccountSelector extends React.Component<Props> {
       ...rest
     }: Props = this.props
     const { open, anchorEl } = this.state
-    const options = accounts.allIds.map(accId => ({
-      value: accId,
-      title: accounts.byId[accId].name
-    }))
-    if (all) {
-      options.unshift({ value: 'all', title: 'All Accounts' })
-    }
-    const accountType = getAccountType(account)
+
+    if (!accounts.hasOwnProperty('items') || accounts.items.length === 0)
+      return <span>No accounts</span>
 
     return (
       <div className={styles.root}>
@@ -128,7 +122,9 @@ class AccountSelector extends React.Component<Props> {
             >
               <div className={styles.accountTitle}>
                 <AccountTitle
-                  account={account === 'all' ? 'all' : getAccountById(account)}
+                  account={
+                    account === 'all' ? 'all' : accounts.itemsById[account]
+                  }
                   sub={twoLine}
                   {...accountTitleProps}
                 />
@@ -137,14 +133,14 @@ class AccountSelector extends React.Component<Props> {
                 account !== 'all' && (
                   <div className={styles.fieldBalances}>
                     <span className={styles.fieldMainBalance}>
-                      {formatNano(getAccountById(account).balance)} NANO
+                      {formatNano(accounts.itemsById[account].balance)} NANO
                     </span>
                     {twoLine &&
                       nanoPrice >= 0 && (
                         <span className={styles.fieldSecondaryBalance}>
                           {formatFiat(
                             convert(
-                              getAccountById(account).balance,
+                              accounts.itemsById[account].balance,
                               'nano',
                               nanoPrice
                             )
@@ -185,98 +181,44 @@ class AccountSelector extends React.Component<Props> {
               />
             </MenuItem>
           )}
-          {accounts.allIds.map((acc, i) => {
-            if (accounts.byId[acc].type === 'vault') {
-              const vaultAndChildren = [
-                <MenuItem
-                  disabled={!vaultSelectable}
-                  key={`account-selector-${i}`}
-                  onClick={() => this.handleSelect(acc)}
-                  destyleMerge={{
-                    root: styles.listItemWithSubs,
-                    selected: styles.selectedItem
-                  }}
-                  selected={account === acc}
-                >
-                  <div className={styles.itemAccountTitle}>
-                    <AccountTitle
-                      account={accounts.byId[acc]}
-                      color={account === acc ? 'light' : null}
-                    />
-                  </div>
-                </MenuItem>
-              ]
-              {
-                accounts.byId[acc].addresses.map((addr, j) => {
-                  vaultAndChildren.push(
-                    <MenuItem
-                      key={`account-selector-${i}-${j}`}
-                      onClick={() => this.handleSelect(addr)}
-                      destyleMerge={{
-                        root: styles.listSubItem,
-                        selected: styles.selectedItem
-                      }}
-                      selected={account === addr}
-                    >
-                      <div className={styles.itemAccountTitle}>
-                        <span className={styles.itemTitle}>
-                          {addresses.byId[addr].name || (
-                            <NanoAddress address={addr} />
-                          )}
-                        </span>
-                        {addresses.byId[addr].name &&
-                          twoLine && (
-                            <span className={styles.itemSubTitle}>
-                              <NanoAddress address={addr} />
-                            </span>
-                          )}
-                      </div>
-                    </MenuItem>
-                  )
-                })
-              }
-              return vaultAndChildren
-            } else {
-              return (
-                <MenuItem
-                  key={`account-selector-${i}`}
-                  onClick={() => this.handleSelect(acc)}
-                  destyleMerge={{
-                    root: styles.listItem,
-                    selected: styles.selectedItem
-                  }}
-                  selected={account === acc}
-                >
-                  <div className={styles.itemAccountTitle}>
-                    <AccountTitle
-                      account={accounts.byId[acc]}
-                      sub={twoLine}
-                      color={account === acc ? 'light' : null}
-                    />
-                  </div>
-                  {balances === 'all' && (
-                    <div className={styles.itemBalances}>
-                      <span className={styles.itemMainBalance}>
-                        {formatNano(getAccountById(acc).balance)} NANO
-                      </span>
-                      {twoLine &&
-                        nanoPrice >= 0 && (
-                          <span className={styles.itemSecondaryBalance}>
-                            {formatFiat(
-                              convert(
-                                getAccountById(acc).balance,
-                                'nano',
-                                nanoPrice
-                              )
-                            )}
-                          </span>
+          {accounts.items.map((acc, i) => (
+            <MenuItem
+              key={`account-selector-${i}`}
+              onClick={() => this.handleSelect(acc)}
+              destyleMerge={{
+                root: styles.listItem,
+                selected: styles.selectedItem
+              }}
+              selected={account === acc}
+            >
+              <div className={styles.itemAccountTitle}>
+                <AccountTitle
+                  account={accounts.itemsById[acc]}
+                  sub={twoLine}
+                  color={account === acc ? 'light' : null}
+                />
+              </div>
+              {balances === 'all' && (
+                <div className={styles.itemBalances}>
+                  <span className={styles.itemMainBalance}>
+                    {formatNano(accounts.itemsById[account].balance)} NANO
+                  </span>
+                  {twoLine &&
+                    nanoPrice >= 0 && (
+                      <span className={styles.itemSecondaryBalance}>
+                        {formatFiat(
+                          convert(
+                            accounts.itemsById[account].balance,
+                            'nano',
+                            nanoPrice
+                          )
                         )}
-                    </div>
-                  )}
-                </MenuItem>
-              )
-            }
-          })}
+                      </span>
+                    )}
+                </div>
+              )}
+            </MenuItem>
+          ))}
         </Menu>
       </div>
     )

@@ -12,7 +12,7 @@ type Props = {
   /** Nano price */
   nanoPrice: number,
   /** Filter by type. Keyword 'all' for no filtering. */
-  type?: string,
+  type?: string | Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -25,17 +25,19 @@ const AccountsList = ({
   type = 'all',
   ...rest
 }: Props) => {
-  const filtered = accounts.allIds.filter(
-    accId => type === 'all' || accounts.byId[accId].type === type
+  const filtered = accounts.items.filter(
+    accId =>
+      type === 'all' ||
+      accounts.itemsById[accId].type === type ||
+      type.includes(accounts.itemsById[accId].type)
   )
   return (
     <div className={styles.root}>
       {filtered.map((accId, i) => (
         <div className={styles.item} key={`account-${accId}`}>
           <AccountListItem
-            nanoAddresses={nanoAddresses}
             nanoPrice={nanoPrice}
-            account={accounts.byId[accId]}
+            account={accounts.itemsById[accId]}
           />
         </div>
       ))}

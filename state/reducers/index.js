@@ -2,22 +2,21 @@ import orm from '~/state/models'
 import { createReducer } from 'redux-orm'
 import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
+import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 
 // TODO: Consider moving this in to it's own file since it'll most likely get very large
 const emptyORMState = orm.getEmptyState()
 export const initialState = {
   form: {},
-  orm: emptyORMState
-  /*ui: {
-    isLoading: false
-  }*/
+  orm: emptyORMState,
+  ui: uiInitialState
 }
 
 const ormReducer = createReducer(orm)
 const combinedReducers = combineReducers({
   form: formReducer,
-  orm: ormReducer
-  //ui: uiReducer
+  orm: ormReducer,
+  ui: uiReducer
 })
 
 export default combinedReducers

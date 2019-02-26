@@ -1,10 +1,19 @@
 import { wallet } from '~/state/wallet'
 
 export const getWallet = user => {
-  return false
+  return new Promise(resolve =>
+    setTimeout(() => {
+      resolve(false)
+    }, 500)
+  )
 }
 
 export const updateWallet = () => {
-  const hex = wallet.pack()
+  return new Promise(resolve =>
+    setTimeout(() => {
+      resolve()
+    }, 500)
+  )
+  //const hex = wallet.pack()
   // push it up!
 }

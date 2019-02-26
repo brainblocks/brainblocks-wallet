@@ -20,6 +20,7 @@ const nanoPrice = 2.14
 
 type Props = {
   router: Object,
+  accounts: Object,
   styles: Object
 }
 
@@ -38,7 +39,7 @@ class SendForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      from: props.router.query.from || mockState.accounts.allIds[0],
+      from: props.router.query.from || props.accounts.items[0],
       to: props.router.query.to || '',
       message: '',
       amountField: props.router.query.amount || 0,
@@ -85,6 +86,7 @@ class SendForm extends Component<Props, State> {
   }
 
   handleSend = () => {
+    console.log(this.state)
     this.setState(
       {
         sending: true
@@ -96,7 +98,7 @@ class SendForm extends Component<Props, State> {
   }
 
   render() {
-    const { styles, router } = this.props
+    const { styles, accounts, router } = this.props
     const {
       from,
       to,
@@ -127,7 +129,7 @@ class SendForm extends Component<Props, State> {
                   twoLine
                   balances="all"
                   account={from}
-                  accounts={mockState.accounts}
+                  accounts={accounts}
                   addresses={mockState.nanoAddresses}
                   onChange={this.handleUpdateAccount}
                   nanoPrice={3.24}

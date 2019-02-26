@@ -4,7 +4,7 @@ import { destyle } from 'destyle'
 import { connect } from 'react-redux'
 import Link from 'next/link'
 import { Wallet } from 'rai-wallet'
-import { addVault } from '~/state/thunks/walletThunks'
+import { addAccount } from '~/state/thunks/walletThunks'
 import {
   SwitchTabs,
   TabComponents,
@@ -56,7 +56,7 @@ class NewVault extends React.Component<Props, State> {
   }
 
   handleNextButton = e => {
-    this.props.addVault()
+    this.props.addAccount()
   }
 
   handleImport = e => {
@@ -218,7 +218,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  addVault
+  addAccount
 }
 
 export default connect(
