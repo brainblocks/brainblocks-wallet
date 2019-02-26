@@ -13,6 +13,7 @@ type Props = {
   balance: number,
   nanoPrice: number,
   nano24hChange: number,
+  onAddAccount: () => mixed,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
   /** Given by notistack */
@@ -68,7 +69,7 @@ const AccountsHeader = ({
         />
       </div>
       <div className={styles.new}>
-        <Link prefetch href="/new-account">
+        <Link prefetch href="/new-account/settings">
           <Button block el="a">
             Add Account
           </Button>

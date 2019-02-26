@@ -17,6 +17,7 @@ import RegisterForm from '~/components/forms/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import Router, { withRouter } from 'next/router'
+import { setPassword } from '~/state/password'
 
 // State Actions
 import { creators as authActions } from '~/state/actions/authActions'
@@ -104,7 +105,7 @@ class Login extends Component<Props, State> {
       const authData = await AuthAPI.login(username, password, recaptcha)
 
       this.props.updateAuth(authData)
-      this.props.getOrCreateWallet(password)
+      setPassword(password)
 
       this.props.router.push('/')
     } catch (error) {
@@ -134,7 +135,7 @@ class Login extends Component<Props, State> {
       })
 
       this.props.updateAuth(authData)
-      this.props.getOrCreateWallet(password)
+      setPassword(password)
 
       this.props.router.push('/')
     } catch (error) {

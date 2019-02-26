@@ -11,7 +11,7 @@ export default class Wallet extends Model {
     return {
       seed: attr(),
       lastIndex: attr(),
-      vaults: many('Vault')
+      accounts: many('Account')
     }
   }
 

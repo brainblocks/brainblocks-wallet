@@ -16,6 +16,7 @@ const tabIndexMap = {
 
 type Props = {
   router: Object,
+  vaults: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -36,7 +37,7 @@ class SendReceiveTabs extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, router, ...rest } = this.props
+    const { styles, accounts, router, ...rest } = this.props
     const { activeTab } = this.state
     return (
       <div className={styles.root}>
@@ -48,13 +49,13 @@ class SendReceiveTabs extends React.Component<Props, State> {
           </TabList>
 
           <TabPanel>
-            <SendForm router={router} />
+            <SendForm accounts={accounts} router={router} />
           </TabPanel>
           <TabPanel>
-            <ReceiveForm router={router} />
+            <ReceiveForm accounts={accounts} router={router} />
           </TabPanel>
           <TabPanel>
-            <TransferForm router={router} />
+            <TransferForm accounts={accounts} router={router} />
           </TabPanel>
         </SwitchTabs>
       </div>

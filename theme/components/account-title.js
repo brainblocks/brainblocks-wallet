@@ -36,9 +36,16 @@ addStyles('AccountTitle', props => {
         css`
           color: #fff;
         `};
+      ${(props.hasOwnProperty('account') &&
+        !props.account.hasOwnProperty('label')) ||
+        (props.account.label.length === 0 &&
+          css`
+            letter-spacing: 0.025em;
+            font-size: ${theme.type.baseFontSize}px;
+            text-transform: none;
+          `)};
     `,
     subTitle: css`
-      ${ellipsis};
       flex-basis: 100%;
       margin: 4px 0 0;
       color: ${theme.color.text.light};

@@ -17,7 +17,8 @@ type Props = {
   /** Override subtitle */
   overrideSubTitle?: string,
   /** Override icon */
-  icon?: string,
+  overrideIcon?: string,
+  addressCopyable?: boolean,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -29,6 +30,7 @@ const AccountTitle = ({
   overrideTitle,
   overrideSubTitle,
   overrideIcon,
+  addressCopyable = true,
   ...rest
 }: Props) => {
   // Icon
@@ -47,13 +49,22 @@ const AccountTitle = ({
       break
   }
   // Title
-  let title = '???'
+  let title = account.label
   if (account) {
-    title = account === 'all' ? 'All Accounts' : account.name
-    if (account.type === 'nanoAddress' && !account.name) {
-      title = (
-        <NanoAddress address={account.address} startChars={8} endChars={5} />
-      )
+    if (account === 'all') title = 'All Accounts'
+    if (
+      (!title && account.hasOwnProperty('account')) ||
+      account.hasOwnProperty('address')
+    ) {
+      title = '[Untitled]'
+      /*title = (
+        <NanoAddress
+          hoverable
+          address={account.account || account.address}
+          startChars={8}
+          endChars={5}
+        />
+      )*/
     }
   }
   if (overrideTitle) {
@@ -62,14 +73,15 @@ const AccountTitle = ({
   // Subtitle
   let subtitle = ''
   if (sub) {
-    if (account) {
-      if (account.type === 'nanoAddress' && account.name) {
-        subtitle = (
-          <NanoAddress address={account.address} startChars={8} endChars={5} />
-        )
-      } else {
-        subtitle = '@todo-subtitle'
-      }
+    if (account && account.hasOwnProperty('account')) {
+      subtitle = (
+        <NanoAddress
+          hoverable={addressCopyable}
+          address={account.account}
+          startChars={9}
+          endChars={5}
+        />
+      )
     }
     if (overrideSubTitle) {
       subtitle = overrideSubTitle

@@ -48,6 +48,7 @@
     "redux-orm": "^0.12.1",
     "redux-orm-proptypes": "^0.1.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

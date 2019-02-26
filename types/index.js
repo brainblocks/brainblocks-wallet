@@ -2,4 +2,4 @@
 
 export type ClassName = string | Array<string | Object> | Object
 
-export type NormalizedState = { byId: Object, allIds: string[] }
+export type NormalizedState = { items: Object, itemsById: string[] }

@@ -4,6 +4,8 @@ import { withRouter } from 'next/router'
 import { destyle } from 'destyle'
 import { Media } from 'react-breakpoints'
 import { cx } from 'emotion'
+import { connect } from 'react-redux'
+import { getIsWorking } from '~/state/selectors/uiSelectors'
 import DashboardIcon from '~/static/svg/icons/dashboard.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
@@ -14,7 +16,6 @@ import UserIcon from '~/static/svg/icons/user.svg'
 import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import { Popover, Button, Spinner } from 'brainblocks-components'
-import { connect } from 'react-redux'
 
 // Import selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
@@ -93,6 +94,7 @@ class Header extends React.Component {
       children,
       router,
       auth,
+      isWorking,
       variant = 'full',
       ...rest
     } = this.props
@@ -148,9 +150,11 @@ class Header extends React.Component {
                     )
                   }
                 </Media>
-                <div className={styles.spinner}>
-                  <Spinner size={24} color="#FFF" />
-                </div>
+                {isWorking && (
+                  <div className={styles.spinner}>
+                    <Spinner size={24} color="#FFF" />
+                  </div>
+                )}
                 <div
                   className={styles.user}
                   onClick={this.handleOpenUserDropdown}
@@ -277,7 +281,8 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state)
+  auth: getCurrentAuth(state),
+  isWorking: getIsWorking(state)
 })
 
 const mapDispatchToProps = dispatch => ({

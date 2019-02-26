@@ -98,7 +98,7 @@ class DashboardHeader extends React.Component<Props, State> {
             <AccountSelector
               all
               theme="outlined-on-dark"
-              accounts={accounts}
+              accounts={{ items: [], itemsById: {} }}
               account={account}
               addresses={addresses}
               onChange={onSelectAccount}
