@@ -3,6 +3,7 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { withRouter } from 'next/router'
+import { getCurrentUser } from '~/state/selectors/userSelectors'
 
 type State = {}
 
@@ -40,7 +41,7 @@ class Authorized extends Component<State, Props> {
       this.props.verifyEmail === false ||
       (this.props.auth &&
         this.props.auth.user &&
-        this.props.auth.user.hasVerifiedEmail)
+        this.props.user.hasVerifiedEmail)
     )
   }
 
@@ -64,7 +65,8 @@ class Authorized extends Component<State, Props> {
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state)
+  auth: getCurrentAuth(state),
+  user: getCurrentUser(state)
 })
 
 export default withRouter(connect(mapStateToProps)(Authorized))

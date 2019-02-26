@@ -39,7 +39,7 @@ class SendForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      from: props.router.query.from || props.accounts.items[0],
+      from: props.router.query.from || props.accounts.allIds[0],
       to: props.router.query.to || '',
       message: '',
       amountField: props.router.query.amount || 0,

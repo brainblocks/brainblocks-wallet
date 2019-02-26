@@ -13,27 +13,29 @@ import {
   Button
 } from 'brainblocks-components'
 import AccountSelector from '~/components/accounts/AccountSelector'
+import type { NormalizedState } from '~/types'
 
 import mockState from '~/state/mockState'
 
 type Props = {
   router: Object,
+  accounts: NormalizedState,
   styles: Object
 }
 
 type State = {
   account: string,
-  amount: number,
+  amount: string,
   copied: boolean
 }
 
 class ReceiveForm extends Component<Props, State> {
   constructor(props) {
     super(props)
-    let account = mockState.accounts.allIds[0]
+    let account = this.props.accounts.allIds[0]
     if (
       props.router.query.account &&
-      mockState.accounts.allIds.includes(props.router.query.account)
+      this.props.accounts.allIds.includes(props.router.query.account)
     ) {
       account = props.router.query.account
     }
@@ -64,15 +66,8 @@ class ReceiveForm extends Component<Props, State> {
   }
 
   render() {
-    const { router, styles } = this.props
+    const { router, accounts, styles } = this.props
     const { account, amount, copied } = this.state
-    let nanoAddress = 'Oops, something is wrong'
-    if (mockState.accounts.byId.hasOwnProperty(account)) {
-      nanoAddress = mockState.accounts.byId[account].address
-    }
-    if (mockState.nanoAddresses.byId.hasOwnProperty(account)) {
-      nanoAddress = mockState.nanoAddresses.byId[account].address
-    }
     return (
       <div className={styles.root}>
         <Grid>
@@ -83,8 +78,7 @@ class ReceiveForm extends Component<Props, State> {
                   twoLine
                   balances="all"
                   account={account}
-                  accounts={mockState.accounts}
-                  addresses={mockState.nanoAddresses}
+                  accounts={accounts}
                   onChange={this.handleUpdateAccount}
                   vaultSelectable={false}
                 />
@@ -97,7 +91,7 @@ class ReceiveForm extends Component<Props, State> {
                 <Input
                   readOnly
                   id="receive-address"
-                  value={mockState.accounts.byId[account].address}
+                  value={accounts.byId[account].account}
                 />
               </FormField>
             </FormItem>
@@ -110,7 +104,9 @@ class ReceiveForm extends Component<Props, State> {
                   style={{ textAlign: 'center' }}
                 >
                   <QRCode
-                    value={`xrb:${nanoAddress}?amount=${amount}`}
+                    value={`xrb:${
+                      accounts.byId[account].account
+                    }?amount=${amount}`}
                     size={150}
                   />
                 </div>

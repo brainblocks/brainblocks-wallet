@@ -1,11 +1,6 @@
 // @flow
-import { createSelector } from 'redux-orm'
-import orm from '~/state/models'
-import { getCurrentAuth } from '~/state/selectors/authSelectors'
+import { createSelector } from 'reselect'
 
-export const getCurrentUser = createSelector(
-  orm,
-  session => session.orm,
-  getCurrentAuth,
-  (orm, currentAuth) => orm.User.withId(currentAuth._fields.user)
-)
+const userSelector = state => state.user
+
+export const getCurrentUser = createSelector(userSelector, user => user)

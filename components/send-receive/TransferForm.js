@@ -14,12 +14,14 @@ import {
   Button
 } from 'brainblocks-components'
 import AccountSelector from '~/components/accounts/AccountSelector'
+import type { NormalizedState } from '~/types'
 
 import mockState from '~/state/mockState'
 const nanoPrice = 2.14
 
 type Props = {
   router: Object,
+  accounts: NormalizedState,
   styles: Object
 }
 
@@ -38,8 +40,8 @@ class TransferForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      from: props.router.query.from || mockState.accounts.allIds[0],
-      to: props.router.query.to || mockState.accounts.allIds[0],
+      from: props.router.query.from || this.props.accounts.allIds[0],
+      to: props.router.query.to || this.props.accounts.allIds[0],
       message: '',
       amountField: props.router.query.amount || 0,
       amountFieldEditing: 'nano',
@@ -78,7 +80,7 @@ class TransferForm extends Component<Props, State> {
   }
 
   render() {
-    const { styles, router } = this.props
+    const { styles, accounts, router } = this.props
     const {
       from,
       to,
@@ -109,8 +111,7 @@ class TransferForm extends Component<Props, State> {
                   twoLine
                   balances="all"
                   account={from}
-                  accounts={mockState.accounts}
-                  addresses={mockState.nanoAddresses}
+                  accounts={accounts}
                   onChange={acc => this.handleUpdateAccount(acc, 'from')}
                   nanoPrice={3.24}
                   vaultSelectable={false}
@@ -125,8 +126,7 @@ class TransferForm extends Component<Props, State> {
                   twoLine
                   balances="all"
                   account={to}
-                  accounts={mockState.accounts}
-                  addresses={mockState.nanoAddresses}
+                  accounts={accounts}
                   onChange={acc => this.handleUpdateAccount(acc, 'to')}
                   nanoPrice={3.24}
                   vaultSelectable={false}

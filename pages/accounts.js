@@ -1,12 +1,14 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { addAccount } from '~/state/thunks/walletThunks'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
 import { Typography } from 'brainblocks-components'
 import { WALLET_KEY_TYPES } from '~/constants/wallet'
-import { getTotalBalance } from '~/state/selectors/accountSelectors'
+import {
+  getTotalBalance,
+  getAccounts
+} from '~/state/selectors/accountSelectors'
 //import Typography from '~/bb-components/typography/Typography'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
@@ -60,6 +62,6 @@ const Accounts = props => {
 }
 
 export default connect(state => ({
-  accounts: state.orm.Account,
+  accounts: getAccounts(state),
   totalBalance: getTotalBalance(state)
 }))(Accounts)

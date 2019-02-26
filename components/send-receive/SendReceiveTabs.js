@@ -5,6 +5,7 @@ import { TabComponents, SwitchTabs } from 'brainblocks-components'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
 import TransferForm from './TransferForm'
+import type { NormalizedState } from '~/types'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -17,6 +18,7 @@ const tabIndexMap = {
 type Props = {
   router: Object,
   vaults: Object,
+  accounts: NormalizedState,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }

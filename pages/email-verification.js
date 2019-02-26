@@ -14,7 +14,7 @@ import { Alert } from 'brainblocks-components'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 
 // Import Actions
-import * as UserActions from '~/state/actions/userActions'
+import { creators as userActions } from '~/state/actions/userActions'
 import * as UserAPI from '~/state/api/user'
 
 // Error handling
@@ -128,7 +128,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateAuthorizedUser: payload =>
-    dispatch(UserActions.updateAuthorizedUser(payload))
+    dispatch(userActions.updateAuthorizedUser(payload))
 })
 
 export default connect(

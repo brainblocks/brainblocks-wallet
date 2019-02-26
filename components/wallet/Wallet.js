@@ -33,11 +33,15 @@ class Wallet extends React.Component<Props, State> {
   }
 
   get hasWallet() {
-    return wallet && this.props.accounts.length
+    //console.log('Checking', this.props.accounts)
+    return wallet && this.props.accounts.allIds.length
   }
 
   provideWallet = async () => {
-    const userId = this.props.auth.ref.user
+    const userId = this.props.auth.user
+
+    // return early if no auth/user
+    if (!this.props.auth.isAuthorized) return
 
     // return early if wallet already decrypted
     if (this.hasWallet) return
@@ -93,6 +97,8 @@ class Wallet extends React.Component<Props, State> {
 
     // let ui know we're done
     this.props.removeActiveProcess('create-wallet')
+
+    this.forceUpdate()
   }
 
   render() {
