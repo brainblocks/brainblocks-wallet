@@ -12,15 +12,17 @@ import {
   FormField,
   Input,
   Button,
-  ColorChoice
+  ColorChoice,
+  withSnackbar
 } from 'brainblocks-components'
-import { withSnackbar } from 'notistack'
 
 type Props = {
   addAccount: Object => Promise<Object>,
   router: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  /** Given by notistack */
+  enqueueSnackbar: () => void
 }
 
 type State = {
@@ -29,17 +31,17 @@ type State = {
 }
 
 class NewAccountSettings extends React.Component<Props, State> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      label: '',
-      color: 'gold'
-    }
+  state = {
+    label: '',
+    color: 'gold'
   }
 
   createAccountWithSettings = () => {
     const { label, color } = this.state
     this.props.addAccount({ label, color }).then(account => {
+      this.props.enqueueSnackbar(`Added account - ${label}`, {
+        variant: 'success'
+      })
       this.props.router.push('/accounts')
     })
   }

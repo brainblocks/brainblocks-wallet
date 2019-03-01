@@ -15,6 +15,7 @@ import {
   Menu,
   MenuItem
 } from 'brainblocks-components'
+import AccountMenu from '~/components/accounts/AccountMenu'
 import HistoryChart from '~/components/dashboard/HistoryChart'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
@@ -122,25 +123,25 @@ class DashboardHeader extends React.Component<Props, State> {
                 }
               />
             </div>
-            <Button
-              variant="icon"
-              destyleMerge={{ root: styles.moreButton }}
-              size={26}
-              onClick={this.handleMoreOptionsOpen}
-            >
-              <MoreIcon />
-            </Button>
-            <Menu
-              id="account-more-options"
-              open={moreOptionsOpen}
-              anchorEl={moreOptionsAnchorEl}
-              onClose={this.handleMoreOptionsClose}
-            >
-              <MenuItem>Copy address</MenuItem>
-              <MenuItem>Send from this account</MenuItem>
-              <MenuItem>Receive to this account</MenuItem>
-              <MenuItem>Account settings</MenuItem>
-            </Menu>
+            {account !== 'all' && (
+              <Button
+                variant="icon"
+                destyleMerge={{ root: styles.moreButton }}
+                size={26}
+                onClick={this.handleMoreOptionsOpen}
+              >
+                <MoreIcon />
+                <AccountMenu
+                  id="account-more-options"
+                  account={account}
+                  open={moreOptionsOpen}
+                  anchorEl={moreOptionsAnchorEl}
+                  onClose={this.handleMoreOptionsClose}
+                  anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+                  transformOrigin={{ horizontal: 'left', vertical: 'top' }}
+                />
+              </Button>
+            )}
           </div>
           <div className={styles.infoRow2}>
             <div className={styles.value}>

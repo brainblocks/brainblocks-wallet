@@ -1,8 +1,11 @@
 // @flow
 import * as React from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
 import { withBreakpoints } from 'react-breakpoints'
 import { destyle } from 'destyle'
-import { CollapseTabs } from 'brainblocks-components'
+import { CollapseTabs, withSnackbar } from 'brainblocks-components'
 import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
@@ -12,6 +15,11 @@ import GeneralSettings from './GeneralSettings'
 import ProfileSettings from './ProfileSettings'
 import SecuritySettings from './SecuritySettings'
 import AccountSettings from './AccountSettings'
+import { getCurrentUser } from '~/state/selectors/userSelectors'
+import { getAccounts } from '~/state/selectors/accountSelectors'
+import type { NormalizedState } from '~/types'
+import { updateUser } from '~/state/thunks/userThunks'
+import { getKeyByValue } from '~/functions/util'
 
 const tabIndexMap = {
   general: 0,
@@ -30,6 +38,8 @@ type Props = {
     desktop?: number,
     large?: number
   },
+  user: Object,
+  accounts: NormalizedState,
   currentBreakpoint: string,
   router: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -62,10 +72,33 @@ class SettingsTabs extends React.Component<Props, State> {
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
-    this.setState({
-      activeTab: index,
-      viewingTab: this.getCollapsed()
-    })
+    this.setState(
+      {
+        activeTab: index,
+        viewingTab: this.getCollapsed()
+      },
+      () => {
+        this.props.router.push({
+          pathname: '/settings',
+          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+        })
+      }
+    )
+  }
+
+  handleUpdateUser = (
+    user,
+    successMsg = 'User settings updated',
+    errorMsg = "Could'nt update user settings"
+  ) => {
+    this.props
+      .updateUser(user)
+      .then(updatedUser =>
+        this.props.enqueueSnackbar(successMsg, {
+          variant: 'success'
+        })
+      )
+      .catch(e => this.props.enqueueSnackbar(errorMsg, { variant: 'error' }))
   }
 
   render() {
@@ -74,6 +107,8 @@ class SettingsTabs extends React.Component<Props, State> {
       router,
       breakpoints,
       currentBreakpoint,
+      user,
+      accounts,
       ...rest
     } = this.props
     const { activeTab, viewingTab } = this.state
@@ -109,7 +144,12 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>General Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <GeneralSettings defaultAccount={'abcd'} />
+                    <GeneralSettings
+                      user={user}
+                      accounts={accounts}
+                      defaultAccount={user.defaultAccount || accounts.allIds[0]}
+                      onUpdateUser={this.handleUpdateUser}
+                    />
                   </div>
                 </div>
               )
@@ -128,6 +168,7 @@ class SettingsTabs extends React.Component<Props, State> {
                   <h3 className={styles.tabPanelTitle}>Profile Settings</h3>
                   <div className={styles.tabPanelContent}>
                     <ProfileSettings
+                      user={user}
                       userName={'Angus Russell'}
                       userEmail={'angus@brainblocks.io'}
                     />
@@ -148,7 +189,7 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Security Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <SecuritySettings />
+                    <SecuritySettings user={user} />
                   </div>
                 </div>
               )
@@ -157,7 +198,7 @@ class SettingsTabs extends React.Component<Props, State> {
               title: (
                 <div className={styles.tab}>
                   <span className={styles.tabIcon}>
-                    <AccountsIcon />
+                    <AccountsIcon user={user} />
                   </span>
                   <span className={styles.tabName}>Accounts</span>
                 </div>
@@ -166,7 +207,7 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Account Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <AccountSettings account={'abcd'} />
+                    <AccountSettings router={router} />
                   </div>
                 </div>
               )
@@ -178,4 +219,21 @@ class SettingsTabs extends React.Component<Props, State> {
   }
 }
 
-export default withBreakpoints(destyle(SettingsTabs, 'SettingsTabs'))
+const mapStateToProps = state => ({
+  user: getCurrentUser(state),
+  accounts: getAccounts(state)
+})
+
+const mapDispatchToProps = {
+  updateUser
+}
+
+export default compose(
+  withBreakpoints,
+  withSnackbar,
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(destyle(SettingsTabs, 'SettingsTabs'))

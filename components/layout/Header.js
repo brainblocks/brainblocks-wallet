@@ -16,6 +16,7 @@ import UserIcon from '~/static/svg/icons/user.svg'
 import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import { Popover, Button, Spinner } from 'brainblocks-components'
+import { getCurrentUser } from '~/state/selectors/userSelectors'
 
 // Import selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
@@ -94,8 +95,10 @@ class Header extends React.Component {
       children,
       router,
       auth,
+      user,
       isWorking,
       variant = 'full',
+      logout,
       ...rest
     } = this.props
     const { userDropdownOpen, userDropdownAnchorEl } = this.state
@@ -165,7 +168,7 @@ class Header extends React.Component {
                     alt="User name"
                   />
                   <span className={styles.userName}>
-                    {auth && auth.user && auth.user.username}
+                    {user && user.username}
                   </span>
                 </div>
                 <Popover
@@ -204,32 +207,37 @@ class Header extends React.Component {
                           >
                             Unlock
                           </Button>
-                          <Button
-                            variant="flat"
-                            color="#c4c4c4"
-                            destyleMerge={{
-                              root: styles.userSecuritySettingsBtn
-                            }}
-                          >
-                            <CogIcon />
-                          </Button>
+                          <Link href="/settings?tab=security">
+                            <Button
+                              variant="flat"
+                              color="#c4c4c4"
+                              destyleMerge={{
+                                root: styles.userSecuritySettingsBtn
+                              }}
+                              el="a"
+                            >
+                              <CogIcon />
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </div>
                     <div className={styles.userMenu}>
                       <ul className={styles.userMenuList}>
-                        <li>
-                          <i>
-                            <UserIcon />
-                          </i>
-                          <span>Profile</span>
-                        </li>
-                        <li>
+                        <Link href="/settings?tab=profile">
+                          <li>
+                            <i>
+                              <UserIcon />
+                            </i>
+                            <span>Profile</span>
+                          </li>
+                        </Link>
+                        {/*<li>
                           <i>
                             <ContactsIcon />
                           </i>
                           <span>Contacts</span>
-                        </li>
+                        </li>*/}
                         <li
                           className={styles.userMenuLogout}
                           onClick={this.logout}
@@ -253,22 +261,24 @@ class Header extends React.Component {
               breakpoints[currentBreakpoint] < breakpoints.tablet && (
                 <nav className={styles.bottomTabs}>
                   <ul>
-                    {menuItems.filter(item => item.mobile).map((item, i) => (
-                      <li
-                        className={cx({
-                          'is-active': router.pathname === item.href,
-                          'hide-mobile': !item.mobile
-                        })}
-                        key={`menu-item-${i}`}
-                      >
-                        <Link prefetch href={item.href}>
-                          <a>
-                            {item.icon}
-                            <span>{item.title}</span>
-                          </a>
-                        </Link>
-                      </li>
-                    ))}
+                    {menuItems
+                      .filter(item => item.mobile)
+                      .map((item, i) => (
+                        <li
+                          className={cx({
+                            'is-active': router.pathname === item.href,
+                            'hide-mobile': !item.mobile
+                          })}
+                          key={`menu-item-${i}`}
+                        >
+                          <Link prefetch href={item.href}>
+                            <a>
+                              {item.icon}
+                              <span>{item.title}</span>
+                            </a>
+                          </Link>
+                        </li>
+                      ))}
                   </ul>
                 </nav>
               )
@@ -282,6 +292,7 @@ class Header extends React.Component {
 
 const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
+  user: getCurrentUser(state),
   isWorking: getIsWorking(state)
 })
 
