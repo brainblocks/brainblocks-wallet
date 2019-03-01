@@ -22,14 +22,19 @@ const accountsReducer = (state, action) => {
     return accountsInitialState
   }
 
+  const id = action.hasOwnProperty('payload') ? action.payload.account : null
+
   return produce(state, draft => {
     switch (action.type) {
       case actions.CREATE_ACCOUNT:
-        const id = action.payload.account
         draft.allIds.push(id)
         draft.byId[id] = { ...accountTemplate, ...action.payload }
         break
       case actions.UPDATE_ACCOUNT:
+        draft.byId[id] = {
+          ...draft.byId[id],
+          ...action.payload
+        }
         break
       case actions.DELETE_ACCOUNT:
         break

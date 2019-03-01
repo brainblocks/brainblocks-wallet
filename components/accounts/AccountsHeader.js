@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import { withSnackbar } from 'notistack'
 import { formatNano, formatFiat, formatPercent } from '~/functions/format'
 import { convert } from '~/functions/convert'
 import Link from 'next/link'
@@ -15,9 +14,7 @@ type Props = {
   nano24hChange: number,
   onAddAccount: () => mixed,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object,
-  /** Given by notistack */
-  enqueueSnackbar: () => void
+  styles: Object
 }
 
 const AccountsHeader = ({
@@ -79,4 +76,4 @@ const AccountsHeader = ({
   )
 }
 
-export default withSnackbar(destyle(AccountsHeader, 'AccountsHeader'))
+export default destyle(AccountsHeader, 'AccountsHeader')

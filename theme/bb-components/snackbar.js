@@ -4,11 +4,17 @@ import theme from '~/theme/theme'
 
 addStyles('BB-Snackbar', props => {
   const alert = css`
-    border-radius: 10px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-    font-family: ${theme.type.baseFontFamily};
-    font-size: ${theme.type.baseFontSize - 1}px;
-    font-weight: ${theme.type.baseFontWeight};
+    /* Until I can figure out how to get this CSS
+    to be appended _after_ the MUI styles the !important's
+    will have to stay */
+    border-radius: 10px !important;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1) !important;
+    font-family: ${theme.type.baseFontFamily} !important;
+    font-size: ${theme.type.baseFontSize - 1}px !important;
+    font-weight: ${theme.type.baseFontWeight} !important;
+    > div {
+      flex-grow: 1;
+    }
   `
   const icon = css`
     flex: 0 0 40px;

@@ -127,26 +127,24 @@ class AccountSelector extends React.Component<Props> {
                   {...accountTitleProps}
                 />
               </div>
-              {balances === 'all' &&
-                account !== 'all' && (
-                  <div className={styles.fieldBalances}>
-                    <span className={styles.fieldMainBalance}>
-                      {formatNano(accounts.byId[account].balance)} NANO
-                    </span>
-                    {twoLine &&
-                      nanoPrice >= 0 && (
-                        <span className={styles.fieldSecondaryBalance}>
-                          {formatFiat(
-                            convert(
-                              accounts.byId[account].balance,
-                              'nano',
-                              nanoPrice
-                            )
-                          )}
-                        </span>
+              {balances === 'all' && account !== 'all' && (
+                <div className={styles.fieldBalances}>
+                  <span className={styles.fieldMainBalance}>
+                    {formatNano(accounts.byId[account].balance)} NANO
+                  </span>
+                  {twoLine && nanoPrice >= 0 && (
+                    <span className={styles.fieldSecondaryBalance}>
+                      {formatFiat(
+                        convert(
+                          accounts.byId[account].balance,
+                          'nano',
+                          nanoPrice
+                        )
                       )}
-                  </div>
-                )}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </FormField>
         </div>
@@ -199,20 +197,15 @@ class AccountSelector extends React.Component<Props> {
               {balances === 'all' && (
                 <div className={styles.itemBalances}>
                   <span className={styles.itemMainBalance}>
-                    {formatNano(accounts.byId[account].balance)} NANO
+                    {formatNano(accounts.byId[acc].balance)} NANO
                   </span>
-                  {twoLine &&
-                    nanoPrice >= 0 && (
-                      <span className={styles.itemSecondaryBalance}>
-                        {formatFiat(
-                          convert(
-                            accounts.byId[account].balance,
-                            'nano',
-                            nanoPrice
-                          )
-                        )}
-                      </span>
-                    )}
+                  {twoLine && nanoPrice >= 0 && (
+                    <span className={styles.itemSecondaryBalance}>
+                      {formatFiat(
+                        convert(accounts.byId[acc].balance, 'nano', nanoPrice)
+                      )}
+                    </span>
+                  )}
                 </div>
               )}
             </MenuItem>

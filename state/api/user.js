@@ -32,3 +32,9 @@ export async function resendVerificationEmail() {
 
   return data
 }
+
+export async function updateUser() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), 1500)
+  })
+}

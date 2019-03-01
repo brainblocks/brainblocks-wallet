@@ -6,6 +6,7 @@ import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
 import TransferForm from './TransferForm'
 import type { NormalizedState } from '~/types'
+import { getKeyByValue } from '~/functions/util'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -33,9 +34,17 @@ class SendReceiveTabs extends React.Component<Props, State> {
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
-    this.setState({
-      activeTab: index
-    })
+    this.setState(
+      {
+        activeTab: index
+      },
+      () => {
+        this.props.router.push({
+          pathname: '/send-receive',
+          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+        })
+      }
+    )
   }
 
   render() {

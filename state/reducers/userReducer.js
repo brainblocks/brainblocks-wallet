@@ -11,7 +11,8 @@ export const userInitialState = {
   email: null,
   birthday: null,
   hasVerifiedEmail: false,
-  wallet: null
+  wallet: null,
+  defaultAccount: null
 }
 
 const userReducer = (state, action) => {
@@ -22,7 +23,10 @@ const userReducer = (state, action) => {
   return produce(state, draft => {
     switch (action.type) {
       case actions.UPDATE_AUTHORIZED_USER:
-        console.log(action.payload)
+        draft = { ...draft, ...action.payload }
+        break
+
+      case actions.UPDATE:
         draft = { ...draft, ...action.payload }
         break
 
