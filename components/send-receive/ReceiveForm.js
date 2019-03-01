@@ -20,6 +20,7 @@ import mockState from '~/state/mockState'
 type Props = {
   router: Object,
   accounts: NormalizedState,
+  defaultAccount: string,
   styles: Object
 }
 
@@ -32,7 +33,7 @@ type State = {
 class ReceiveForm extends Component<Props, State> {
   constructor(props) {
     super(props)
-    let account = this.props.accounts.allIds[0]
+    let account = props.defaultAccount || props.accounts.allIds[0]
     if (
       props.router.query.account &&
       this.props.accounts.allIds.includes(props.router.query.account)

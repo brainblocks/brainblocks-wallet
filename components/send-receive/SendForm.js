@@ -16,11 +16,13 @@ import {
 import AccountSelector from '~/components/accounts/AccountSelector'
 
 import mockState from '~/state/mockState'
-const nanoPrice = 2.14
 
 type Props = {
   router: Object,
   accounts: Object,
+  defaultAccount: string,
+  nanoPrice: number,
+  preferredCurrency: string,
   styles: Object
 }
 
@@ -39,7 +41,10 @@ class SendForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      from: props.router.query.from || props.accounts.allIds[0],
+      from:
+        props.router.query.from ||
+        props.defaultAccount ||
+        props.accounts.allIds[0],
       to: props.router.query.to || '',
       message: '',
       amountField: props.router.query.amount || 0,
@@ -98,7 +103,13 @@ class SendForm extends Component<Props, State> {
   }
 
   render() {
-    const { styles, accounts, router } = this.props
+    const {
+      styles,
+      accounts,
+      nanoPrice,
+      preferredCurrency,
+      router
+    } = this.props
     const {
       from,
       to,
@@ -132,7 +143,7 @@ class SendForm extends Component<Props, State> {
                   accounts={accounts}
                   addresses={mockState.nanoAddresses}
                   onChange={this.handleUpdateAccount}
-                  nanoPrice={3.24}
+                  nanoPrice={nanoPrice}
                   vaultSelectable={false}
                 />
               </FormField>
@@ -158,6 +169,7 @@ class SendForm extends Component<Props, State> {
             <FormItem label="Amount" fieldId="send-amount">
               <AmountField
                 value={amountField}
+                fiatCode={preferredCurrency}
                 editing={amountFieldEditing}
                 nanoFormatted={formatNano(amountFieldNano)}
                 fiatFormatted={formatFiat(amountFieldFiat)}
