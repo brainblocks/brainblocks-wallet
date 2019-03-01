@@ -16,13 +16,13 @@ import {
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'
 
-import mockState from '~/state/mockState'
-const nanoPrice = 2.14
-
 type Props = {
   router: Object,
   accounts: NormalizedState,
-  styles: Object
+  styles: Object,
+  nanoPrice: number,
+  preferredCurrency: string,
+  defaultAccount: string
 }
 
 type State = {
@@ -31,22 +31,37 @@ type State = {
   message: string,
   amountField: number,
   amountFieldEditing: string,
-  toFieldValid: boolean,
-  btnDisabled: boolean,
   sending: boolean
 }
 
 class TransferForm extends Component<Props, State> {
   constructor(props) {
     super(props)
+    let from = props.accounts.allIds[0]
+    if (
+      props.router.query.from &&
+      props.accounts.allIds.includes(props.router.query.from)
+    ) {
+      from = props.router.query.from
+    } else if (props.accounts.allIds.includes(props.defaultAccount)) {
+      from = props.defaultAccount
+    }
+    let to = props.accounts.allIds[1]
+    if (
+      props.router.query.to &&
+      props.accounts.allIds.includes(props.router.query.to)
+    ) {
+      to = props.router.query.to
+    }
+    if (from === to) {
+      to = props.accounts.allIds.find(id => id !== from)
+    }
     this.state = {
-      from: props.router.query.from || this.props.accounts.allIds[0],
-      to: props.router.query.to || this.props.accounts.allIds[0],
+      from,
+      to,
       message: '',
       amountField: props.router.query.amount || 0,
       amountFieldEditing: 'nano',
-      toFieldValid: true,
-      btnDisabled: false,
       sending: false
     }
   }
@@ -80,15 +95,19 @@ class TransferForm extends Component<Props, State> {
   }
 
   render() {
-    const { styles, accounts, router } = this.props
+    const {
+      styles,
+      accounts,
+      nanoPrice,
+      preferredCurrency,
+      router
+    } = this.props
     const {
       from,
       to,
       message,
       amountField = 0,
       amountFieldEditing = 'nano',
-      toFieldValid,
-      btnDisabled,
       sending
     } = this.state
 
@@ -100,6 +119,9 @@ class TransferForm extends Component<Props, State> {
       amountFieldEditing === 'fiat'
         ? amountField
         : convert(amountField, 'nano', nanoPrice)
+
+    const accountsValid = from !== to
+    const fieldsValid = accountsValid && amountField > 0
 
     return (
       <div className={styles.root}>
@@ -113,22 +135,26 @@ class TransferForm extends Component<Props, State> {
                   account={from}
                   accounts={accounts}
                   onChange={acc => this.handleUpdateAccount(acc, 'from')}
-                  nanoPrice={3.24}
+                  nanoPrice={nanoPrice}
                   vaultSelectable={false}
                 />
               </FormField>
             </FormItem>
           </GridItem>
           <GridItem>
-            <FormItem label="To" fieldId="send-to">
-              <FormField valid={toFieldValid}>
+            <FormItem
+              label="To"
+              fieldId="send-to"
+              error={accountsValid ? null : 'Accounts must be different'}
+            >
+              <FormField valid={accountsValid}>
                 <AccountSelector
                   twoLine
                   balances="all"
                   account={to}
                   accounts={accounts}
                   onChange={acc => this.handleUpdateAccount(acc, 'to')}
-                  nanoPrice={3.24}
+                  nanoPrice={nanoPrice}
                   vaultSelectable={false}
                 />
               </FormField>
@@ -138,6 +164,7 @@ class TransferForm extends Component<Props, State> {
             <FormItem label="Amount" fieldId="send-amount">
               <AmountField
                 value={amountField}
+                fiatCode={preferredCurrency}
                 editing={amountFieldEditing}
                 nanoFormatted={formatNano(amountFieldNano)}
                 fiatFormatted={formatFiat(amountFieldFiat)}
@@ -166,7 +193,7 @@ class TransferForm extends Component<Props, State> {
               variant="primary"
               color="green"
               onClick={this.handleSend}
-              disabled={btnDisabled}
+              disabled={!fieldsValid}
               loading={sending}
             >
               Send

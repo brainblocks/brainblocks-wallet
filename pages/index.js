@@ -12,6 +12,7 @@ import DashboardHeader from '~/components/dashboard/DashboardHeader'
 import TransactionsList from '~/components/transactions/TransactionsList'
 import Authorized from '~/components/auth/Authorized'
 import Wallet from '~/components/wallet/Wallet'
+import NanoPrice from '~/components/price/NanoPrice'
 
 import mockState from '~/state/mockState'
 
@@ -31,33 +32,35 @@ class Index extends Component {
     return (
       <Authorized>
         <Wallet>
-          <Layout>
-            <Head>
-              <title>Dashboard</title>
-            </Head>
-            <PageHeader>
-              <DashboardHeader
-                accounts={mockState.accounts}
-                addresses={mockState.nanoAddresses}
-                account={selectedAccount}
-                onSelectAccount={this.handleUpdateSelectedAccount}
-                nanoPrice={3.24}
-                nano24hChange={-2.31}
-              />
-            </PageHeader>
-            <PageContent pad background="white">
-              <Media>
-                {({ breakpoints, currentBreakpoint }) =>
-                  breakpoints[currentBreakpoint] >= breakpoints.tablet && (
-                    <Typography el="h2" spaceBelow={1}>
-                      Transactions
-                    </Typography>
-                  )
-                }
-              </Media>
-              <TransactionsList account={selectedAccount} />
-            </PageContent>
-          </Layout>
+          <NanoPrice>
+            <Layout>
+              <Head>
+                <title>Dashboard</title>
+              </Head>
+              <PageHeader>
+                <DashboardHeader
+                  accounts={mockState.accounts}
+                  addresses={mockState.nanoAddresses}
+                  account={selectedAccount}
+                  onSelectAccount={this.handleUpdateSelectedAccount}
+                  nanoPrice={3.24}
+                  nano24hChange={-2.31}
+                />
+              </PageHeader>
+              <PageContent pad background="white">
+                <Media>
+                  {({ breakpoints, currentBreakpoint }) =>
+                    breakpoints[currentBreakpoint] >= breakpoints.tablet && (
+                      <Typography el="h2" spaceBelow={1}>
+                        Transactions
+                      </Typography>
+                    )
+                  }
+                </Media>
+                <TransactionsList account={selectedAccount} />
+              </PageContent>
+            </Layout>
+          </NanoPrice>
         </Wallet>
       </Authorized>
     )

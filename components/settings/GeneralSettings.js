@@ -64,8 +64,8 @@ const GeneralSettings = ({
               id="base-currency"
               value={user.preferredCurrency}
               options={[
-                { value: 'usd', title: 'USD' },
-                { value: 'aud', title: 'AUD' }
+                { value: 'USD', title: 'USD' },
+                { value: 'AUD', title: 'AUD' }
               ]}
               onChange={e => {
                 onUpdateUser({ preferredCurrency: e.target.value })

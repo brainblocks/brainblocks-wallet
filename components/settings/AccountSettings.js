@@ -16,7 +16,7 @@ import {
 } from 'brainblocks-components'
 import type { NormalizedState } from '~/types'
 import { getAccounts } from '~/state/selectors/accountSelectors'
-import { getCurrentUser } from '~/state/selectors/userSelectors'
+import { getDefaultAccount } from '~/state/selectors/userSelectors'
 import { updateAccount } from '~/state/thunks/accountsThunks'
 import { isValidNanoAddress } from '~/functions/validate'
 
@@ -150,7 +150,7 @@ class AccountSettings extends React.Component {
 
 const mapStateToProps = state => ({
   accounts: getAccounts(state),
-  defaultAccount: getCurrentUser(state).defaultAccount
+  defaultAccount: getDefaultAccount(state)
 })
 
 const mapDispatchToProps = {

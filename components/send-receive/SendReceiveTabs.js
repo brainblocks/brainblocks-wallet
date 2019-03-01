@@ -20,6 +20,9 @@ type Props = {
   router: Object,
   vaults: Object,
   accounts: NormalizedState,
+  defaultAccount: string,
+  nanoPrice: number,
+  preferredCurrency: string,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -48,7 +51,15 @@ class SendReceiveTabs extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, accounts, router, ...rest } = this.props
+    const {
+      styles,
+      accounts,
+      defaultAccount,
+      nanoPrice,
+      preferredCurrency,
+      router,
+      ...rest
+    } = this.props
     const { activeTab } = this.state
     return (
       <div className={styles.root}>
@@ -56,18 +67,36 @@ class SendReceiveTabs extends React.Component<Props, State> {
           <TabList>
             <Tab>Send</Tab>
             <Tab>Receive</Tab>
-            <Tab>Transfer</Tab>
+            {accounts.allIds.length > 1 && <Tab>Transfer</Tab>}
           </TabList>
 
           <TabPanel>
-            <SendForm accounts={accounts} router={router} />
+            <SendForm
+              nanoPrice={nanoPrice}
+              defaultAccount={defaultAccount}
+              preferredCurrency={preferredCurrency}
+              accounts={accounts}
+              router={router}
+            />
           </TabPanel>
           <TabPanel>
-            <ReceiveForm accounts={accounts} router={router} />
+            <ReceiveForm
+              accounts={accounts}
+              defaultAccount={defaultAccount}
+              router={router}
+            />
           </TabPanel>
-          <TabPanel>
-            <TransferForm accounts={accounts} router={router} />
-          </TabPanel>
+          {accounts.allIds.length > 1 && (
+            <TabPanel>
+              <TransferForm
+                nanoPrice={nanoPrice}
+                preferredCurrency={preferredCurrency}
+                accounts={accounts}
+                defaultAccount={defaultAccount}
+                router={router}
+              />
+            </TabPanel>
+          )}
         </SwitchTabs>
       </div>
     )
