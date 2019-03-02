@@ -19,6 +19,7 @@ import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getDefaultAccount } from '~/state/selectors/userSelectors'
 import { updateAccount } from '~/state/thunks/accountsThunks'
 import { isValidNanoAddress } from '~/functions/validate'
+import { wallet } from '~/state/wallet'
 
 type Props = {
   router: Object,
@@ -40,7 +41,11 @@ class AccountSettings extends React.Component {
       routerAccount || props.defaultAccount || props.accounts.allIds[0]
     this.state = {
       account,
-      label: props.accounts.byId[account].label
+      label: props.accounts.byId[account].label,
+      rep:
+        props.accounts.byId[account].representative ||
+        wallet.getRepresentative(account) ||
+        ''
     }
   }
 
@@ -54,6 +59,12 @@ class AccountSettings extends React.Component {
   handleDirtyLabel = e => {
     this.setState({
       label: e.target.value
+    })
+  }
+
+  handleDirtyRep = e => {
+    this.setState({
+      rep: e.target.value
     })
   }
 
@@ -73,11 +84,19 @@ class AccountSettings extends React.Component {
       .catch(e => this.props.enqueueSnackbar(errorMsg, { variant: 'error' }))
   }
 
+  handleUpdateRep = () => {
+    // Do update rep in wallet
+    this.handleUpdateAccount({ representative: this.state.rep })
+  }
+
   render() {
     const { styles, accounts, ...rest }: Props = this.props
-    const { account, label } = this.state
+    const { account, rep, label } = this.state
     const accountObj = accounts.byId[account]
     const isLabelDirty = label !== accounts.byId[account].label
+    const isRepDirty =
+      rep !== accounts.byId[account].representative ||
+      wallet.getRepresentative(account)
     return (
       <div className={styles.root}>
         <Grid>
@@ -138,6 +157,48 @@ class AccountSettings extends React.Component {
                   onChange={e =>
                     this.handleUpdateAccount({ color: e.target.value })
                   }
+                />
+              </FormField>
+            </FormItem>
+          </GridItem>
+          <GridItem>
+            <FormItem
+              label="Representative"
+              fieldId="account-name"
+              error={
+                rep !== '' &&
+                !isValidNanoAddress(rep) &&
+                'Please enter a valid Nano address'
+              }
+              extra={
+                <a
+                  href="https://mynano.ninja/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Choose a rep
+                </a>
+              }
+              description="Your representative confirms Nano transactions on your behalf"
+            >
+              <FormField
+                valid={rep === '' || isValidNanoAddress(rep)}
+                adornEnd={
+                  isRepDirty && isValidNanoAddress(rep) ? (
+                    <Button
+                      variant="util"
+                      color="teal"
+                      onClick={this.handleUpdateRep}
+                    >
+                      Save
+                    </Button>
+                  ) : null
+                }
+              >
+                <Input
+                  id="account-rep"
+                  value={rep}
+                  onChange={this.handleDirtyRep}
                 />
               </FormField>
             </FormItem>
