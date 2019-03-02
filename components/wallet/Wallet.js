@@ -57,7 +57,7 @@ class Wallet extends React.Component<Props, State> {
 
     // else if we have access to the password
     else if (password || true) {
-      createWallet()
+      createWallet('1234') // @todo use login password
 
       // get wallet from API
       let encryptedWallet

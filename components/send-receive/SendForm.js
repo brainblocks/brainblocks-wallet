@@ -150,11 +150,8 @@ class SendForm extends Component<Props, State> {
             </FormItem>
           </GridItem>
           <GridItem>
-            <FormItem label="To" fieldId="send-to" extra="Send as payment link">
-              <FormField
-                valid={toFieldValid}
-                adornEnd={<Button variant="util">Paste</Button>}
-              >
+            <FormItem label="To" fieldId="send-to">
+              <FormField valid={toFieldValid}>
                 <Input
                   id="send-to"
                   placeholder="NANO address or contact..."

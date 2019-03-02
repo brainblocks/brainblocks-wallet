@@ -10,7 +10,8 @@ import {
   FormItem,
   FormField,
   Input,
-  Button
+  Button,
+  withSnackbar
 } from 'brainblocks-components'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'
@@ -18,6 +19,7 @@ import type { NormalizedState } from '~/types'
 import mockState from '~/state/mockState'
 
 type Props = {
+  enqueueSnackbar: func,
   router: Object,
   accounts: NormalizedState,
   defaultAccount: string,
@@ -52,18 +54,9 @@ class ReceiveForm extends Component<Props, State> {
   }
 
   handleCopyAddress = () => {
-    this.setState(
-      {
-        copied: true
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({
-            copied: false
-          })
-        }, 3000)
-      }
-    )
+    this.props.enqueueSnackbar('Address copied to clipboard', {
+      variant: 'info'
+    })
   }
 
   render() {
@@ -88,7 +81,16 @@ class ReceiveForm extends Component<Props, State> {
           </GridItem>
           <GridItem>
             <FormItem label="Address" fieldId="receive-address">
-              <FormField adornEnd={<Button variant="util">Copy</Button>}>
+              <FormField
+                adornEnd={
+                  <CopyToClipboard
+                    text={accounts.byId[account].account}
+                    onCopy={this.handleCopyAddress}
+                  >
+                    <Button variant="util">Copy</Button>
+                  </CopyToClipboard>
+                }
+              >
                 <Input
                   readOnly
                   id="receive-address"
@@ -120,4 +122,4 @@ class ReceiveForm extends Component<Props, State> {
   }
 }
 
-export default destyle(ReceiveForm, 'ReceiveForm')
+export default withSnackbar(destyle(ReceiveForm, 'ReceiveForm'))
