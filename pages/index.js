@@ -1,10 +1,9 @@
+/* @flow */
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Media } from 'react-breakpoints'
 import Head from 'next/head'
 import { Typography } from 'brainblocks-components'
-//import Typography from '~/bb-components/typography/Typography'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
@@ -15,8 +14,17 @@ import Wallet from '~/components/wallet/Wallet'
 import NanoPrice from '~/components/price/NanoPrice'
 
 import mockState from '~/state/mockState'
+import { getPreferredCurrency } from '~/state/selectors/userSelectors'
 
-class Index extends Component {
+type Props = {
+  preferredCurrency: string
+}
+
+type State = {
+  selectedAccount: string
+}
+
+class Index extends Component<Props, State> {
   state = {
     selectedAccount: 'all'
   }
@@ -28,6 +36,7 @@ class Index extends Component {
   }
 
   render() {
+    const { preferredCurrency } = this.props
     const { selectedAccount } = this.state
     return (
       <Authorized>
@@ -41,6 +50,7 @@ class Index extends Component {
                 <DashboardHeader
                   accounts={mockState.accounts}
                   addresses={mockState.nanoAddresses}
+                  preferredCurrency={preferredCurrency}
                   account={selectedAccount}
                   onSelectAccount={this.handleUpdateSelectedAccount}
                   nanoPrice={3.24}
@@ -67,4 +77,6 @@ class Index extends Component {
   }
 }
 
-export default Index
+export default connect(state => ({
+  preferredCurrency: getPreferredCurrency(state)
+}))(Index)

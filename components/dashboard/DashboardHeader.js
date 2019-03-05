@@ -30,6 +30,7 @@ type Props = {
   nano24hChange: number,
   accounts: NormalizedState,
   addresses: NormalizedState,
+  preferredCurrency: string,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -84,6 +85,7 @@ class DashboardHeader extends React.Component<Props, State> {
       addresses,
       account = 'all',
       onSelectAccount,
+      preferredCurrency,
       ...rest
     }: Props = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
@@ -149,7 +151,10 @@ class DashboardHeader extends React.Component<Props, State> {
                 theme="header"
                 size="sm"
                 label="Value"
-                value={formatFiat(convert(balance, 'nano', nanoPrice))}
+                value={formatFiat(
+                  convert(balance, 'nano', nanoPrice),
+                  preferredCurrency
+                )}
               />
             </div>
             <div className={styles.price}>
@@ -157,7 +162,7 @@ class DashboardHeader extends React.Component<Props, State> {
                 theme="header"
                 size="sm"
                 label="Nano Price"
-                value={formatFiat(nanoPrice)}
+                value={formatFiat(nanoPrice, preferredCurrency)}
               />
             </div>
             <div className={styles.change}>

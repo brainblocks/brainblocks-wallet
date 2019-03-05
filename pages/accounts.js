@@ -18,6 +18,7 @@ import Authorized from '~/components/auth/Authorized'
 import Wallet from '~/components/wallet/Wallet'
 import NanoPrice from '~/components/price/NanoPrice'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
+import { getPreferredCurrency } from '~/state/selectors/userSelectors'
 
 const Accounts = props => {
   return (
@@ -33,6 +34,7 @@ const Accounts = props => {
                 balance={props.totalBalance}
                 nanoPrice={props.nanoPrice}
                 nano24hChange={-2.31}
+                preferredCurrency={props.preferredCurrency}
               />
             </PageHeader>
             <PageContent>
@@ -52,6 +54,7 @@ const Accounts = props => {
                 type={WALLET_KEY_TYPES}
                 nanoPrice={3.24}
                 accounts={props.accounts}
+                preferredCurrency={props.preferredCurrency}
               />
             </PageContent>
           </Layout>
@@ -64,5 +67,6 @@ const Accounts = props => {
 export default connect(state => ({
   accounts: getAccounts(state),
   totalBalance: getTotalBalance(state),
-  nanoPrice: getNanoPriceInPreferredCurrency(state)
+  nanoPrice: getNanoPriceInPreferredCurrency(state),
+  preferredCurrency: getPreferredCurrency(state)
 }))(Accounts)

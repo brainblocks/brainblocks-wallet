@@ -9,6 +9,7 @@ import {
   GridItem,
   Button,
   Typography,
+  Checkbox,
   withSnackbar
 } from 'brainblocks-components'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -166,7 +167,7 @@ class SecuritySettings extends React.Component {
               If activated, every time you log in from a new IP address, we will
               send you a verification email to confirm it's you.
             </Typography>
-            <Button>Enable IP Authorization</Button>
+            <Checkbox checked={true} label="Enable IP Authorization" />
           </GridItem>
           <GridItem>
             <hr className={styles.divider} />
