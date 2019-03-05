@@ -12,14 +12,14 @@ import {
   Button
 } from 'brainblocks-components'
 import type { NormalizedState } from '~/types'
-
-import mockState from '~/state/mockState'
+import { SUPPORTED_CURRENCIES } from '~/constants/currencies'
 
 type Props = {
   defaultAccount: string,
   user: Object,
   accounts: NormalizedState,
   onUpdateUser: func,
+  supportedCurrencies: Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -30,6 +30,7 @@ const GeneralSettings = ({
   styles,
   user,
   onUpdateUser,
+  supportedCurrencies,
   ...rest
 }: Props) => (
   <div className={styles.root}>
@@ -63,10 +64,10 @@ const GeneralSettings = ({
             <Select
               id="base-currency"
               value={user.preferredCurrency}
-              options={[
-                { value: 'USD', title: 'USD' },
-                { value: 'AUD', title: 'AUD' }
-              ]}
+              options={supportedCurrencies.map(curr => ({
+                value: curr,
+                title: curr
+              }))}
               onChange={e => {
                 onUpdateUser({ preferredCurrency: e.target.value })
               }}

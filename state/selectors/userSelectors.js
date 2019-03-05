@@ -1,5 +1,6 @@
 // @flow
 import { createSelector } from 'reselect'
+import { getAccounts } from '~/state/selectors/accountSelectors'
 
 const userSelector = state => state.user
 
@@ -15,5 +16,11 @@ export const getPreferredCurrency = createSelector(
 
 export const getDefaultAccount = createSelector(
   getCurrentUser,
-  user => user.defaultAccount
+  getAccounts,
+  (user, accounts) => {
+    if (accounts.allIds.includes(user.defaultAccount)) {
+      return user.defaultAccount
+    }
+    return null
+  }
 )

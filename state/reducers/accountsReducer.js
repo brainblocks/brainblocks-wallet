@@ -22,7 +22,10 @@ const accountsReducer = (state, action) => {
     return accountsInitialState
   }
 
-  const id = action.hasOwnProperty('payload') ? action.payload.account : null
+  const id =
+    action.type.indexOf('ACCOUNTS::') === 0 && action.hasOwnProperty('payload')
+      ? action.payload.account
+      : null
 
   return produce(state, draft => {
     switch (action.type) {

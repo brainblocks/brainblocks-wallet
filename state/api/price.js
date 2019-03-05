@@ -1,10 +1,14 @@
-export const getNanoPrices = () => {
-  return new Promise(resolve =>
-    setTimeout(() => {
-      resolve({
-        usd: 0.89,
-        aud: 1.18
-      })
-    }, 500)
-  )
+import axios from 'axios'
+import { PRICE_API_URL } from '~/constants'
+
+export const getNanoPrices = async () => {
+  let res
+  try {
+    res = await axios.get(PRICE_API_URL)
+  } catch (e) {
+    throw e
+  }
+  const prices = {}
+  res.data.price.map(item => (prices[item.id] = item.price))
+  return prices
 }

@@ -7,5 +7,17 @@ addStyles('SettingsForm', props => ({
   divider: css`
     border: none;
     border-top: 1px solid ${theme.color.borders.sep};
+  `,
+  avatarChooser: css`
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    img {
+      border-radius: 100%;
+    }
+    a {
+      margin-left: 18px;
+      flex-grow: 1;
+    }
   `
 }))

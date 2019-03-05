@@ -61,7 +61,7 @@ class SecuritySettings extends React.Component {
             seed: initialSeed,
             seedInputType: 'password'
           })
-        }, 10 * 1000)
+        }, 30 * 1000)
       }
     )
   }

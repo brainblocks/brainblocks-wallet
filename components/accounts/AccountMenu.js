@@ -62,12 +62,13 @@ class AccountMenu extends React.Component<Props> {
 
   handleViewInExplorer = () => {
     this.props.onClose()
-    window.open(
+    const explorerWindow = window.open(
       `https://nanocrawler.cc/explorer/account/${
         this.props.account.account
       }/history`,
       '_blank'
     )
+    explorerWindow.opener = null
   }
 
   render() {
@@ -78,6 +79,9 @@ class AccountMenu extends React.Component<Props> {
       open,
       onClose,
       anchorEl,
+      enqueueSnackbar,
+      onPresentSnackbar,
+      destyleMerge,
       ...rest
     }: Props = this.props
     return (
