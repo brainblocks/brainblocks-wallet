@@ -164,8 +164,10 @@ class Header extends React.Component {
                 >
                   <img
                     className={styles.userAvatar}
-                    src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=28"
-                    alt="User name"
+                    src={`https://robohash.org/${
+                      user.email
+                    }?gravatar=yes&set=set3&bgset=bg2&size=28x28`}
+                    alt={user.username}
                   />
                   <span className={styles.userName}>
                     {user && user.username}

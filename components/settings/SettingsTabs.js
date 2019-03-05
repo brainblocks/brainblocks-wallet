@@ -15,11 +15,15 @@ import GeneralSettings from './GeneralSettings'
 import ProfileSettings from './ProfileSettings'
 import SecuritySettings from './SecuritySettings'
 import AccountSettings from './AccountSettings'
-import { getCurrentUser } from '~/state/selectors/userSelectors'
+import {
+  getCurrentUser,
+  getDefaultAccount
+} from '~/state/selectors/userSelectors'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import type { NormalizedState } from '~/types'
 import { updateUser } from '~/state/thunks/userThunks'
 import { getKeyByValue } from '~/functions/util'
+import { getSupportedCurrencies } from '~/state/selectors/priceSelectors'
 
 const tabIndexMap = {
   general: 0,
@@ -42,6 +46,7 @@ type Props = {
   accounts: NormalizedState,
   currentBreakpoint: string,
   router: Object,
+  supportedCurrencies: Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
@@ -89,7 +94,7 @@ class SettingsTabs extends React.Component<Props, State> {
   handleUpdateUser = (
     user,
     successMsg = 'User settings updated',
-    errorMsg = "Could'nt update user settings"
+    errorMsg = "Couldn't update user settings"
   ) => {
     this.props
       .updateUser(user)
@@ -108,7 +113,9 @@ class SettingsTabs extends React.Component<Props, State> {
       breakpoints,
       currentBreakpoint,
       user,
+      defaultAccount,
       accounts,
+      supportedCurrencies,
       ...rest
     } = this.props
     const { activeTab, viewingTab } = this.state
@@ -147,7 +154,8 @@ class SettingsTabs extends React.Component<Props, State> {
                     <GeneralSettings
                       user={user}
                       accounts={accounts}
-                      defaultAccount={user.defaultAccount || accounts.allIds[0]}
+                      supportedCurrencies={supportedCurrencies}
+                      defaultAccount={defaultAccount || accounts.allIds[0]}
                       onUpdateUser={this.handleUpdateUser}
                     />
                   </div>
@@ -167,11 +175,7 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Profile Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <ProfileSettings
-                      user={user}
-                      userName={'Angus Russell'}
-                      userEmail={'angus@brainblocks.io'}
-                    />
+                    <ProfileSettings user={user} />
                   </div>
                 </div>
               )
@@ -221,7 +225,9 @@ class SettingsTabs extends React.Component<Props, State> {
 
 const mapStateToProps = state => ({
   user: getCurrentUser(state),
-  accounts: getAccounts(state)
+  accounts: getAccounts(state),
+  defaultAccount: getDefaultAccount(state),
+  supportedCurrencies: getSupportedCurrencies(state)
 })
 
 const mapDispatchToProps = {

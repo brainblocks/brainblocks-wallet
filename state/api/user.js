@@ -33,8 +33,12 @@ export async function resendVerificationEmail() {
   return data
 }
 
-export async function updateUser() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(), 1500)
+export async function updateUser(user) {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'patch',
+    url: '/users',
+    data: user
   })
+
+  return data
 }

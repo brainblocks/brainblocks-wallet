@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import { creators as priceCreators } from '~/state/actions/priceActions'
 import * as priceAPI from '~/state/api/price'
-import { rejects } from 'assert'
 
 type State = {}
 
@@ -23,31 +22,36 @@ class NanoPrice extends React.Component<Props, State> {
 
   componentDidMount() {
     this.priceInterval = setInterval(this.getPrice, 30 * 1000)
-    this.getPrice()
+    this.getPrice(false)
   }
 
   componentWillUnmount() {
     clearInterval(this.priceInterval)
   }
 
-  getPrice = async () => {
-    const time = Date.now()
+  getPrice = async (focusCheck = true) => {
+    if (
+      !focusCheck ||
+      (typeof document !== 'undefined' && document.hasFocus())
+    ) {
+      const time = Date.now()
 
-    // let ui know we're working
-    this.props.addActiveProcess(`check-price-${time}`)
+      // let ui know we're working
+      this.props.addActiveProcess(`check-price-${time}`)
 
-    let prices
-    try {
-      prices = await priceAPI.getNanoPrices()
-    } catch (e) {
-      reject('Error getting price', e)
+      let prices
+      try {
+        prices = await priceAPI.getNanoPrices()
+      } catch (e) {
+        console.error('Error getting price', e)
+      }
+
+      // update in redux
+      this.props.updateNanoPrices(prices)
+
+      // let ui know we're done
+      this.props.removeActiveProcess(`check-price-${time}`)
     }
-
-    // update in redux
-    this.props.updateNanoPrices(prices)
-
-    // let ui know we're done
-    this.props.removeActiveProcess(`check-price-${time}`)
   }
 
   render() {

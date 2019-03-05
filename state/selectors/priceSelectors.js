@@ -8,9 +8,13 @@ export const getNanoPriceInPreferredCurrency = createSelector(
   getPrices,
   getPreferredCurrency,
   (prices, preferredCurrency) => {
-    preferredCurrency = preferredCurrency.toLowerCase()
     return prices.nano.hasOwnProperty(preferredCurrency)
       ? prices.nano[preferredCurrency]
       : 0
   }
+)
+
+export const getSupportedCurrencies = createSelector(
+  getPrices,
+  prices => Object.keys(prices.nano).sort()
 )
