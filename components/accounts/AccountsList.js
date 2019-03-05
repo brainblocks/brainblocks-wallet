@@ -9,6 +9,7 @@ type Props = {
   accounts: NormalizedState,
   /** Addresses */
   nanoAddresses: NormalizedState,
+  preferredCurrency: string,
   /** Nano price */
   nanoPrice: number,
   /** Filter by type. Keyword 'all' for no filtering. */
@@ -21,6 +22,7 @@ const AccountsList = ({
   styles,
   accounts,
   nanoAddresses,
+  preferredCurrency,
   nanoPrice,
   type = 'all',
   ...rest
@@ -38,6 +40,7 @@ const AccountsList = ({
           <AccountListItem
             nanoPrice={nanoPrice}
             account={accounts.byId[accId]}
+            preferredCurrency={preferredCurrency}
           />
         </div>
       ))}

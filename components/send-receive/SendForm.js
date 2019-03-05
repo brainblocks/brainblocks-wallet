@@ -169,7 +169,7 @@ class SendForm extends Component<Props, State> {
                 fiatCode={preferredCurrency}
                 editing={amountFieldEditing}
                 nanoFormatted={formatNano(amountFieldNano)}
-                fiatFormatted={formatFiat(amountFieldFiat)}
+                fiatFormatted={formatFiat(amountFieldFiat, preferredCurrency)}
                 onSwitchCurrency={this.handleAmountFieldSwitchCurrency}
                 onChange={this.getHandleUpdateValue('amountField')}
               />

@@ -17,6 +17,7 @@ import MoreIcon from '~/static/svg/icons/more.svg'
 type Props = {
   /** Accounts */
   account: Object,
+  preferredCurrency: string,
   /** Nano price */
   nanoPrice: number,
   /** Given by destyle. Do not pass this to the component as a prop. */
@@ -46,7 +47,13 @@ class AccountListItem extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, account, router, nanoPrice, ...rest }: Props = this.props
+    const {
+      styles,
+      preferredCurrency,
+      account,
+      nanoPrice,
+      ...rest
+    }: Props = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl }: State = this.state
     return (
       <div className={styles.root}>
@@ -84,7 +91,10 @@ class AccountListItem extends React.Component<Props, State> {
             <div className={styles.info2}>
               <KeyValue
                 label="Value"
-                value={formatFiat(convert(account.balance, 'nano', nanoPrice))}
+                value={formatFiat(
+                  convert(account.balance, 'nano', nanoPrice),
+                  preferredCurrency
+                )}
                 destyleMerge={{
                   key: styles.keyValueKey,
                   value: styles.keyValueValue

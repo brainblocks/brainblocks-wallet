@@ -12,6 +12,7 @@ type Props = {
   balance: number,
   nanoPrice: number,
   nano24hChange: number,
+  preferredCurrency: string,
   onAddAccount: () => mixed,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
@@ -22,6 +23,7 @@ const AccountsHeader = ({
   balance,
   nanoPrice,
   nano24hChange,
+  preferredCurrency,
   enqueueSnackbar,
   ...rest
 }: Props) => {
@@ -43,14 +45,17 @@ const AccountsHeader = ({
         <KeyValue
           theme="header"
           label="Value"
-          value={formatFiat(convert(balance, 'nano', nanoPrice))}
+          value={formatFiat(
+            convert(balance, 'nano', nanoPrice),
+            preferredCurrency
+          )}
         />
       </div>
       <div className={styles.price}>
         <KeyValue
           theme="header"
           label="Nano Price"
-          value={formatFiat(nanoPrice)}
+          value={formatFiat(nanoPrice, preferredCurrency)}
         />
       </div>
       <div className={styles.change}>
