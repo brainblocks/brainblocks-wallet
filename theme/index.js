@@ -60,3 +60,6 @@ import './components/send-form'
 // Settings
 import './components/settings-tabs'
 import './components/settings-form'
+
+// Error
+import './components/error'

@@ -12,9 +12,15 @@ function formatNano(nanoVal, decimals = 3) {
 }
 
 function formatFiat(fiatVal, currency = 'USD') {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(
-    fiatVal
-  )
+  try {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency
+    }).format(fiatVal)
+  } catch (e) {
+    const number = new Intl.NumberFormat('en-US').format(fiatVal)
+    return `${number} ${currency.toUpperCase()}`
+  }
 }
 
 function formatPercent(value, abs = false) {
