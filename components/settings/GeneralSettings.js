@@ -18,7 +18,7 @@ type Props = {
   defaultAccount: string,
   user: Object,
   accounts: NormalizedState,
-  onUpdateUser: func,
+  onUpdateUser: () => mixed,
   supportedCurrencies: Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
@@ -66,7 +66,7 @@ const GeneralSettings = ({
               value={user.preferredCurrency}
               options={supportedCurrencies.map(curr => ({
                 value: curr,
-                title: curr
+                title: curr.toUpperCase()
               }))}
               onChange={e => {
                 onUpdateUser({ preferredCurrency: e.target.value })

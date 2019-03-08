@@ -160,4 +160,4 @@ export const SUPPORTED_CURRENCIES = [
   'zar',
   'zmw',
   'zwl'
-].map(curr => curr.toUpperCase())
+]
