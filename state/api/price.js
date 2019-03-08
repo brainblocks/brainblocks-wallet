@@ -9,6 +9,6 @@ export const getNanoPrices = async () => {
     throw e
   }
   const prices = {}
-  res.data.price.map(item => (prices[item.id] = item.price))
+  res.data.rates.map(item => (prices[item.id] = item.price))
   return prices
 }
