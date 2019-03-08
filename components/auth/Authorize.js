@@ -18,11 +18,14 @@ import { creators as authActions } from '~/state/actions/authActions'
  * the user's current auth session if one is present. Will render the loading page during the check
  */
 class Authorize extends Component {
-  state = {
-    error: undefined
+  constructor(props) {
+    super(props)
+    this.state = {
+      error: undefined
+    }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.init()
   }
 

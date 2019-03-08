@@ -164,7 +164,7 @@ class TransferForm extends Component<Props, State> {
             <FormItem label="Amount" fieldId="send-amount">
               <AmountField
                 value={amountField}
-                fiatCode={preferredCurrency}
+                fiatCode={preferredCurrency.toUpperCase()}
                 editing={amountFieldEditing}
                 nanoFormatted={formatNano(amountFieldNano)}
                 fiatFormatted={formatFiat(amountFieldFiat)}

@@ -8,7 +8,6 @@ export const getNanoPriceInPreferredCurrency = createSelector(
   getPrices,
   getPreferredCurrency,
   (prices, preferredCurrency) => {
-    console.log(prices, preferredCurrency)
     return prices.nano.hasOwnProperty(preferredCurrency)
       ? prices.nano[preferredCurrency]
       : 0
