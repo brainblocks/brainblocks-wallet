@@ -16,7 +16,7 @@ export const isDevelopment = NODE_ENV === 'development'
 // Internal cache of the store for client side applications
 let clientSideStore
 
-function initializeStore() {
+function initializeStore(initialState) {
   const middleware = []
 
   // Redux thunk
@@ -32,7 +32,7 @@ function initializeStore() {
     appliedMiddleware = compose(composeWithDevTools(appliedMiddleware))
   }
 
-  const store = createStore(rootReducer, appliedMiddleware)
+  const store = createStore(rootReducer, initialState, appliedMiddleware)
 
   return store
 }

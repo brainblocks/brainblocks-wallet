@@ -23,6 +23,7 @@ import { wallet } from '~/state/wallet'
 
 type Props = {
   router: Object,
+  accounts: NormalizedState,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }

@@ -2,22 +2,18 @@
 import React, { Component } from 'react'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
+import Link from 'next/link'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
-import Authorized from '~/components/auth/Authorized'
+import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
+import { bootstrapInitialProps } from '~/state/bootstrap'
 import { Alert } from 'brainblocks-components'
-//import Alert from '~/bb-components/alert/Alert'
-
-// Import Selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
-
-// Import Actions
+import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { creators as userActions } from '~/state/actions/userActions'
 import * as UserAPI from '~/state/api/user'
-
-// Error handling
 import { deduceError } from '~/state/errors'
 
 type State = {
@@ -36,6 +32,10 @@ class EmailVerificationPage extends Component<State, Props> {
     isVerified: false,
     didCheck: false,
     error: undefined
+  }
+
+  static getInitialProps = async ctx => {
+    return await bootstrapInitialProps(ctx)
   }
 
   componentDidMount() {
@@ -60,7 +60,7 @@ class EmailVerificationPage extends Component<State, Props> {
 
       try {
         const userData = await UserAPI.verifyEmail(this.hash, this.verification)
-        this.props.updateAuthorizedUser(userData)
+        this.props.updateUser(userData)
         this.setState({ isVerified: userData.hasVerifiedEmail })
       } catch (error) {
         this.setState({ error: deduceError(error) })
@@ -70,18 +70,15 @@ class EmailVerificationPage extends Component<State, Props> {
     this.setState({ isLoading: false })
   }
 
-  resendVerificationEmail = async () => {
+  resendVerificationEmail = async e => {
+    e.preventDefault()
     const userData = await UserAPI.resendVerificationEmail()
-    this.props.updateAuthorizedUser(userData)
-  }
-
-  gotoHome = () => {
-    this.props.router.push('/')
+    this.props.updateUser(userData)
   }
 
   render() {
     return (
-      <Authorized verifyEmail={false}>
+      <ClientBootstrap verifyEmail={false} getWallet={false} getPrice={false}>
         <Layout>
           <Head>
             <title>Email Verification</title>
@@ -96,15 +93,15 @@ class EmailVerificationPage extends Component<State, Props> {
                   <a onClick={this.resendVerificationEmail} href="#">
                     here
                   </a>{' '}
-                  to resend verification email
+                  to resend verification email.
                 </Alert>
               ) : this.state.isVerified ? (
                 <Alert variant="success">
-                  Email Verfied! Click{' '}
-                  <a onClick={this.gotoHome} href="#">
-                    here
-                  </a>{' '}
-                  to continue
+                  Email Verfied! Click
+                  <Link href="/">
+                    <a>here</a>
+                  </Link>
+                  to continue.
                 </Alert>
               ) : (
                 <Alert variant="error">
@@ -112,23 +109,23 @@ class EmailVerificationPage extends Component<State, Props> {
                   <a onClick={this.resendVerificationEmail} href="#">
                     here
                   </a>{' '}
-                  to resend verification email
+                  to resend verification email.
                 </Alert>
               ))}
           </PageContent>
         </Layout>
-      </Authorized>
+      </ClientBootstrap>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state)
+  auth: getCurrentAuth(state),
+  user: getCurrentUser(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateAuthorizedUser: payload =>
-    dispatch(userActions.updateAuthorizedUser(payload))
+  updateUser: payload => dispatch(userActions.updateUser(payload))
 })
 
 export default connect(

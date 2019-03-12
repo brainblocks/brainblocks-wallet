@@ -6,9 +6,8 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import SendReceiveTabs from '~/components/send-receive/SendReceiveTabs'
-import Authorized from '~/components/auth/Authorized'
-import Wallet from '~/components/wallet/Wallet'
-import NanoPrice from '~/components/price/NanoPrice'
+import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
+import { bootstrapInitialProps } from '~/state/bootstrap'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
 import {
@@ -18,28 +17,28 @@ import {
 
 const SendReceive = props => {
   return (
-    <Authorized>
-      <Wallet>
-        <NanoPrice>
-          <Layout>
-            <Head>
-              <title>Send &amp; Receive</title>
-            </Head>
-            <PageHeader title="Send &amp; Receive" indentTitle />
-            <PageContent pad background>
-              <SendReceiveTabs
-                accounts={props.accounts}
-                nanoPrice={props.nanoPrice}
-                preferredCurrency={props.preferredCurrency}
-                router={props.router}
-                defaultAccount={props.defaultAccount}
-              />
-            </PageContent>
-          </Layout>
-        </NanoPrice>
-      </Wallet>
-    </Authorized>
+    <ClientBootstrap>
+      <Layout>
+        <Head>
+          <title>Send &amp; Receive</title>
+        </Head>
+        <PageHeader title="Send &amp; Receive" indentTitle />
+        <PageContent pad background>
+          <SendReceiveTabs
+            accounts={props.accounts}
+            nanoPrice={props.nanoPrice}
+            preferredCurrency={props.preferredCurrency}
+            router={props.router}
+            defaultAccount={props.defaultAccount}
+          />
+        </PageContent>
+      </Layout>
+    </ClientBootstrap>
   )
+}
+
+SendReceive.getInitialProps = async ctx => {
+  return await bootstrapInitialProps(ctx)
 }
 
 export default connect(state => ({

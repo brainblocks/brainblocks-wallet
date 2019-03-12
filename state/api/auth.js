@@ -1,9 +1,10 @@
+import nextCookie from 'next-cookies'
+import cookie from 'js-cookie'
 import {
   makeApiRequest,
   makeAuthorizedApiRequest,
   getAuthToken
 } from '~/state/helpers'
-import { LOCAL_STORAGE_AUTH_TOKEN_KEY } from '~/constants'
 import { isServer } from '~/state'
 
 // Safely attempts to lookup and return the auth token from localStorage
@@ -11,9 +12,9 @@ export function tryLoadToken() {
   try {
     if (isServer) return undefined
 
-    return window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
+    return cookie.get('token')
   } catch (e) {
-    console.warn('Error while reading token from localStorage', e)
+    console.warn('Error while reading token from cookie', e)
     return undefined
   }
 }
@@ -23,9 +24,9 @@ export function tryStoreToken(token: string) {
   try {
     if (isServer) return
 
-    window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY] = token
+    cookie.set('token', token, { expires: 7 })
   } catch (e) {
-    console.warn('Error while writting authToken to localStorage', e)
+    console.warn('Error while writing authToken to cookie', e)
   }
 }
 
@@ -34,14 +35,15 @@ export function tryDeleteToken() {
   try {
     if (isServer) return
 
-    delete window.localStorage[LOCAL_STORAGE_AUTH_TOKEN_KEY]
+    cookie.remove('token')
   } catch (e) {
-    console.warn('Error while deleting authToken from localStorage', e)
+    console.warn('Error while deleting authToken from cookie', e)
   }
 }
 
-export async function init() {
-  let authToken = tryLoadToken()
+// Isomorphic function to get auth data
+export async function init(token) {
+  let authToken = token || tryLoadToken()
 
   const { data } = await makeApiRequest({
     method: 'get',
@@ -65,24 +67,25 @@ export async function login(username, password, recaptcha) {
     data: { username, password, recaptcha }
   })
 
-  // Keep the auth token in localStorage
+  // Keep the auth token in a cookie
   tryStoreToken(data.token)
 
   return data
 }
 
 export async function logout() {
-  let token = getAuthToken()
-
-  // Immediately remove the token from localstorage
-  tryDeleteToken()
+  // Immediately remove the token from the cookie
+  cookie.remove('token')
 
   // Attempt to make the proper call to the backend as well
-  const { data } = await makeAuthorizedApiRequest({
-    method: 'delete',
-    url: '/auth',
-    data: { token }
-  })
+  let token = tryLoadToken() || getAuthToken()
+  if (token) {
+    const { data } = await makeAuthorizedApiRequest({
+      method: 'delete',
+      url: '/auth',
+      data: { token }
+    })
 
-  return data
+    return data
+  }
 }

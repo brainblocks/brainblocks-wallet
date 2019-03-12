@@ -14,31 +14,28 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import AccountsHeader from '~/components/accounts/AccountsHeader'
 import AccountsList from '~/components/accounts/AccountsList'
-import Authorized from '~/components/auth/Authorized'
-import Wallet from '~/components/wallet/Wallet'
-import NanoPrice from '~/components/price/NanoPrice'
+import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
+import { bootstrapInitialProps } from '~/state/bootstrap'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
 import { getPreferredCurrency } from '~/state/selectors/userSelectors'
 
 const Accounts = props => {
   return (
-    <Authorized>
-      <Wallet>
-        <NanoPrice>
-          <Layout>
-            <Head>
-              <title>Accounts</title>
-            </Head>
-            <PageHeader title="Accounts">
-              <AccountsHeader
-                balance={props.totalBalance}
-                nanoPrice={props.nanoPrice}
-                nano24hChange={-2.31}
-                preferredCurrency={props.preferredCurrency}
-              />
-            </PageHeader>
-            <PageContent>
-              {/*<Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={1}>
+    <ClientBootstrap>
+      <Layout>
+        <Head>
+          <title>Accounts</title>
+        </Head>
+        <PageHeader title="Accounts">
+          <AccountsHeader
+            balance={props.totalBalance}
+            nanoPrice={props.nanoPrice}
+            nano24hChange={-2.31}
+            preferredCurrency={props.preferredCurrency}
+          />
+        </PageHeader>
+        <PageContent>
+          {/*<Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={1}>
             BrainBlocks Wallets
           </Typography>
           <AccountsList
@@ -49,19 +46,21 @@ const Accounts = props => {
           <Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={3}>
             Vaults
           </Typography>*/}
-              <div style={{ marginTop: 10 }} />
-              <AccountsList
-                type={WALLET_KEY_TYPES}
-                nanoPrice={3.24}
-                accounts={props.accounts}
-                preferredCurrency={props.preferredCurrency}
-              />
-            </PageContent>
-          </Layout>
-        </NanoPrice>
-      </Wallet>
-    </Authorized>
+          <div style={{ marginTop: 10 }} />
+          <AccountsList
+            type={WALLET_KEY_TYPES}
+            nanoPrice={3.24}
+            accounts={props.accounts}
+            preferredCurrency={props.preferredCurrency}
+          />
+        </PageContent>
+      </Layout>
+    </ClientBootstrap>
   )
+}
+
+Accounts.getInitialProps = async ctx => {
+  return await bootstrapInitialProps(ctx)
 }
 
 export default connect(state => ({
