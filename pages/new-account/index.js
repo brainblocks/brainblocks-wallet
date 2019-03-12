@@ -3,26 +3,28 @@ import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
-import Authorized from '~/components/auth/Authorized'
 import NewAccountStart from '~/components/accounts/NewAccountStart'
-import Wallet from '~/components/wallet/Wallet'
+import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
+import { bootstrapInitialProps } from '~/state/bootstrap'
 
 const NewAccount = props => {
   return (
-    <Authorized>
-      <Wallet>
-        <Layout>
-          <Head>
-            <title>New Account</title>
-          </Head>
-          <PageHeader title="Create a New Account" indentTitle />
-          <PageContent pad background>
-            <NewAccountStart />
-          </PageContent>
-        </Layout>
-      </Wallet>
-    </Authorized>
+    <ClientBootstrap getPrice={false}>
+      <Layout>
+        <Head>
+          <title>New Account</title>
+        </Head>
+        <PageHeader title="Create a New Account" indentTitle />
+        <PageContent pad background>
+          <NewAccountStart />
+        </PageContent>
+      </Layout>
+    </ClientBootstrap>
   )
+}
+
+NewAccount.getInitialProps = async ctx => {
+  return await bootstrapInitialProps(ctx)
 }
 
 export default NewAccount

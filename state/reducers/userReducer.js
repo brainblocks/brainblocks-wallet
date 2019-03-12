@@ -22,10 +22,6 @@ const userReducer = (state, action) => {
 
   return produce(state, draft => {
     switch (action.type) {
-      case actions.UPDATE_AUTHORIZED_USER:
-        draft = { ...draft, ...action.payload }
-        break
-
       case actions.UPDATE:
         draft = { ...draft, ...action.payload }
         break
