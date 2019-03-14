@@ -12,7 +12,9 @@ import { updatePrice } from '~/state/thunks/priceThunks'
 import Loading from '~/pages/loading'
 import Error from '~/pages/_error'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
+import { getTransactions } from '~/state/selectors/transactionSelectors'
 import { getOrCreateWallet } from '~/state/thunks/walletThunks'
+import { importChains } from '~/state/thunks/transactionsThunks'
 
 type Props = {
   getPrice?: boolean,
@@ -30,6 +32,7 @@ type Props = {
  */
 class Bootstrap extends React.Component {
   isGettingWallet = false
+  isGettingChains = false
   priceInterval = null
   state = {
     error: null
@@ -63,6 +66,7 @@ class Bootstrap extends React.Component {
     if (!didRedirect) {
       this.getPrice()
       this.getWallet()
+      this.getTransactions()
     }
   }
 
@@ -70,6 +74,7 @@ class Bootstrap extends React.Component {
     const didRedirect = this.maybeRedirect()
     if (!didRedirect) {
       this.getWallet()
+      this.getTransactions()
     }
   }
 
@@ -122,7 +127,6 @@ class Bootstrap extends React.Component {
       this.props.isAuthorized &&
       this.hasVerifiedEmail
     ) {
-      console.log('getting wallet')
       this.isGettingWallet = true
       this.props
         .getOrCreateWallet(this.props.auth.user)
@@ -132,6 +136,17 @@ class Bootstrap extends React.Component {
           this.isGettingWallet = false
           this.setState({ error: 'Error in getOrCreateWallet' })
         })
+    }
+  }
+
+  getTransactions = () => {
+    if (
+      this.props.accounts.allIds.length &&
+      !this.props.transactions.allIds.length &&
+      !this.isGettingChains
+    ) {
+      this.isGettingChains = true
+      this.props.importChains().then(() => (this.isGettingChains = false))
     }
   }
 
@@ -157,12 +172,14 @@ const mapStateToProps = state => ({
   auth: getCurrentAuth(state),
   user: getCurrentUser(state),
   isAuthorized: getIsAuthorized(state),
-  accounts: getAccounts(state)
+  accounts: getAccounts(state),
+  transactions: getTransactions(state)
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updatePrice: focusCheck => dispatch(updatePrice(focusCheck)),
-  getOrCreateWallet: userId => dispatch(getOrCreateWallet(userId))
+  getOrCreateWallet: userId => dispatch(getOrCreateWallet(userId)),
+  importChains: () => dispatch(importChains())
 })
 
 const ConnectedBootstrap = connect(

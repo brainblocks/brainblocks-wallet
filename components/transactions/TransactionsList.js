@@ -4,14 +4,14 @@ import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import TransactionListItem from './TransactionListItem'
 import { getAccountById } from '~/functions/accounts'
-import mockState from '~/state/mockState'
-const { transactions, accounts } = mockState
 
 type Props = {
   accounts: NormalizedState,
   transactions: NormalizedState,
+  showTransactions: Array<string>,
   styles: Object,
-  account: string
+  account: string,
+  pagination: React.Node
 }
 
 class TransactionsList extends React.Component<Props> {
@@ -19,27 +19,33 @@ class TransactionsList extends React.Component<Props> {
    * Render the transactions as table rows
    */
   renderTransactions = txKeys => {
-    const { styles, account } = this.props
+    const { transactions, account, accounts } = this.props
     return txKeys.map((txId, i) => {
       const tx = transactions.byId[txId]
       return (
         <TransactionListItem
           key={txId}
           transaction={tx}
-          account={account === 'all' ? getAccountById(tx.accountId) : null}
+          account={account === 'all' ? accounts.byId[tx.accountId] : null}
         />
       )
     })
   }
 
   render() {
-    const { styles, account = 'all', ...rest } = this.props
-    const txIds = transactions.allIds.filter(
+    const {
+      styles,
+      transactions,
+      showTransactions,
+      account = 'all',
+      pagination,
+      ...rest
+    } = this.props
+    const txIds = showTransactions.filter(
       txId => account === 'all' || transactions.byId[txId].accountId === account
     )
-
     return (
-      <div className={styles.root} {...rest}>
+      <div className={styles.root}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -55,6 +61,7 @@ class TransactionsList extends React.Component<Props> {
           </thead>
           <tbody>{this.renderTransactions(txIds)}</tbody>
         </table>
+        <div className={styles.pagination}>{pagination}</div>
       </div>
     )
   }

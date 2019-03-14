@@ -2,7 +2,7 @@
 
 export type ClassName = string | Array<string | Object> | Object
 
-export type NormalizedState = { allIds: Object, byId: string[] }
+export type NormalizedState = { allIds: Array<string>, byId: Object }
 
 export type NextJSContext = {
   pathName?: string,
@@ -17,4 +17,17 @@ export type NextJSContext = {
 export type ReduxStore = {
   dispatch: Function => mixed,
   getState: () => Object
+}
+
+export type NanoTransactionRedux = {
+  currency: 'nano',
+  id: string,
+  accountId: string,
+  timestamp: number,
+  amountNano: number,
+  type: 'open' | 'receive' | 'send' | 'change',
+  isState: boolean,
+  linkAddress: string, // link_as_account
+  status: 'local' | 'pending' | 'confirmed',
+  note?: string
 }

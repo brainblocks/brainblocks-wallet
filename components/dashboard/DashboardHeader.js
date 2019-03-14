@@ -29,8 +29,8 @@ type Props = {
   nanoPrice: number,
   nano24hChange: number,
   accounts: NormalizedState,
-  addresses: NormalizedState,
   preferredCurrency: string,
+  totalBalance: number,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -82,7 +82,7 @@ class DashboardHeader extends React.Component<Props, State> {
       nanoPrice,
       nano24hChange,
       accounts,
-      addresses,
+      totalBalance,
       account = 'all',
       onSelectAccount,
       preferredCurrency,
@@ -90,9 +90,7 @@ class DashboardHeader extends React.Component<Props, State> {
     }: Props = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const balance =
-      account === 'all'
-        ? allAccountsBalance(accounts)
-        : getAccountById(account).balance
+      account === 'all' ? totalBalance : accounts.byId[account].balance
 
     return (
       <div className={styles.root} {...rest}>
@@ -101,9 +99,8 @@ class DashboardHeader extends React.Component<Props, State> {
             <AccountSelector
               all
               theme="outlined-on-dark"
-              accounts={{ items: [], itemsById: {} }}
+              accounts={accounts}
               account={account}
-              addresses={addresses}
               onChange={onSelectAccount}
               accountTitleProps={{ color: 'light' }}
               dropdownWidth={345}

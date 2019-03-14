@@ -1,8 +1,18 @@
 import { createSelector } from 'reselect'
 
-const getActiveProcesses = state => state.ui.activeProcesses
+const getUI = state => state.ui
 
 export const getIsWorking = createSelector(
-  [getActiveProcesses],
-  activeProcesses => activeProcesses.length > 0
+  [getUI],
+  ui => ui.activeProcesses.length > 0
+)
+
+export const getTransactionPagingIndexes = createSelector(
+  [getUI],
+  ui => ({ startIndex: ui.txStartIndex, endIndex: ui.txEndIndex })
+)
+
+export const getDashboardAccount = createSelector(
+  getUI,
+  ui => ui.dashboardAccount
 )

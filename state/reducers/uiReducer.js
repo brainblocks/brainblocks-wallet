@@ -1,7 +1,12 @@
+/* @flow */
 import { actions } from '~/state/actions/uiActions'
+import { TRANSACTIONS_PER_PAGE } from '~/constants'
 
 export const uiInitialState = {
-  activeProcesses: []
+  activeProcesses: [],
+  txStartIndex: 0,
+  txEndIndex: TRANSACTIONS_PER_PAGE,
+  dashboardAccount: 'all'
 }
 
 const uiReducer = (state, action) => {
@@ -21,6 +26,23 @@ const uiReducer = (state, action) => {
         activeProcesses: state.activeProcesses.filter(
           item => item !== action.processId
         )
+      }
+    case actions.TRANSACTIONS_PAGING_RESET:
+      return {
+        ...state,
+        txStartIndex: 0,
+        txEndIndex: TRANSACTIONS_PER_PAGE
+      }
+    case actions.TRANSACTIONS_PAGING_SET:
+      return {
+        ...state,
+        txStartIndex: action.startIndex,
+        txEndIndex: action.endIndex
+      }
+    case actions.UPDATE_DASHBOARD_ACCOUNT:
+      return {
+        ...state,
+        dashboardAccount: action.payload
       }
     default:
       return state
