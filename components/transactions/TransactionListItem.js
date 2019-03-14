@@ -22,6 +22,18 @@ class TransactionListItem extends React.Component<Props, State> {
     isExpanded: false
   }
 
+  shouldComponentUpdate(nextProps) {
+    const current = this.props.transaction
+    const next = nextProps.transaction
+    if (this.props.account !== nextProps.account) return true
+    Object.keys(next).forEach(txProp => {
+      if (next.txProp !== current.txProp) {
+        return true
+      }
+    })
+    return false
+  }
+
   /**
    * Get the contact info based on the transaction
    */
@@ -32,8 +44,9 @@ class TransactionListItem extends React.Component<Props, State> {
     }
     switch (tx.type) {
       case 'receive':
-        if (tx.fromType === 'address') {
-          contactInfo.subTitle = <NanoAddress address={tx.fromAddress} />
+      case 'open':
+        if (tx.linkAddress) {
+          contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
         } else if (tx.fromType === 'account') {
           /** @todo get info by account Id */
           contactInfo.title = 'Rahim Sterling'
@@ -41,8 +54,8 @@ class TransactionListItem extends React.Component<Props, State> {
         }
         break
       case 'send':
-        if (tx.toType === 'address') {
-          contactInfo.subTitle = <NanoAddress address={tx.toAddress} />
+        if (tx.linkAddress) {
+          contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
         } else if (tx.toType === 'contact') {
           /** @todo get info by account Id */
           contactInfo.title = 'Rahim Sterling'

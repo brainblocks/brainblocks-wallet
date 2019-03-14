@@ -35,7 +35,8 @@ const styles = addStyles('TransactionImage', props => {
         css`
           background: ${theme.color.status.errorLight};
         `}
-      ${props.transaction.type === 'receive' &&
+      ${(props.transaction.type === 'receive' ||
+        props.transaction.type === 'open') &&
         css`
           background: ${theme.color.status.successLight};
         `}

@@ -9,37 +9,77 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import DashboardHeader from '~/components/dashboard/DashboardHeader'
 import TransactionsList from '~/components/transactions/TransactionsList'
-import mockState from '~/state/mockState'
 import { getPreferredCurrency } from '~/state/selectors/userSelectors'
+import {
+  getTransactions,
+  getTransactionsForDashboardAccount,
+  getVisibleTransactionsForDashboardAccount
+} from '~/state/selectors/transactionSelectors'
+import { creators as uiActions } from '~/state/actions/uiActions'
+import {
+  getTransactionPagingIndexes,
+  getDashboardAccount
+} from '~/state/selectors/uiSelectors'
+import {
+  getAccounts,
+  getTotalBalance
+} from '~/state/selectors/accountSelectors'
+import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
+import type { NormalizedState } from '~/types'
+import { TRANSACTIONS_PER_PAGE } from '~/constants'
 
 type Props = {
-  preferredCurrency: string
+  preferredCurrency: string,
+  transactions: NormalizedState,
+  visibleTransactionIds: Array<string>,
+  currentAccountTransactions: Array<string>,
+  txPagingIndexes: Object,
+  txPagingSet: (number, number) => void,
+  txPagingReset: () => void,
+  accounts: NormalizedState,
+  nanoPrice: number,
+  totalBalance: number,
+  updateDashboardAccount: string => void,
+  dashboardAccount: string
 }
 
-type State = {
-  selectedAccount: string
-}
-
-class Index extends Component<Props, State> {
-  state = {
-    selectedAccount: 'all'
-  }
-
+class Index extends Component<Props> {
   static getInitialProps = async ctx => {
     return await bootstrapInitialProps(ctx)
   }
 
-  handleUpdateSelectedAccount = acc => {
-    this.setState({
-      selectedAccount: acc
-    })
+  componentWillUnmount() {
+    this.props.txPagingReset()
+  }
+
+  handleShowMoreTransactions = e => {
+    e.preventDefault()
+    this.props.txPagingSet(
+      0,
+      this.props.txPagingIndexes.endIndex + TRANSACTIONS_PER_PAGE
+    )
+  }
+
+  handleUpdateAccount = acc => {
+    this.props.updateDashboardAccount(acc)
+    this.props.txPagingReset()
   }
 
   render() {
-    const { preferredCurrency } = this.props
-    const { selectedAccount } = this.state
+    const {
+      preferredCurrency,
+      transactions,
+      visibleTransactionIds,
+      currentAccountTransactions,
+      txPagingIndexes,
+      accounts,
+      totalBalance,
+      dashboardAccount,
+      updateDashboardAccount,
+      nanoPrice
+    } = this.props
     return (
       <ClientBootstrap>
         <Layout>
@@ -48,13 +88,13 @@ class Index extends Component<Props, State> {
           </Head>
           <PageHeader>
             <DashboardHeader
-              accounts={mockState.accounts}
-              addresses={mockState.nanoAddresses}
+              accounts={accounts}
               preferredCurrency={preferredCurrency}
-              account={selectedAccount}
-              onSelectAccount={this.handleUpdateSelectedAccount}
-              nanoPrice={3.24}
+              account={dashboardAccount}
+              onSelectAccount={this.handleUpdateAccount}
+              nanoPrice={nanoPrice}
               nano24hChange={-2.31}
+              totalBalance={totalBalance}
             />
           </PageHeader>
           <PageContent pad background="white">
@@ -67,7 +107,20 @@ class Index extends Component<Props, State> {
                 )
               }
             </Media>
-            <TransactionsList account={selectedAccount} />
+            <TransactionsList
+              transactions={transactions}
+              showTransactions={visibleTransactionIds}
+              accounts={accounts}
+              account={dashboardAccount}
+              pagination={
+                currentAccountTransactions.length >
+                  visibleTransactionIds.length && (
+                  <a href="#" onClick={this.handleShowMoreTransactions}>
+                    Show more
+                  </a>
+                )
+              }
+            />
           </PageContent>
         </Layout>
       </ClientBootstrap>
@@ -75,6 +128,21 @@ class Index extends Component<Props, State> {
   }
 }
 
-export default connect(state => ({
-  preferredCurrency: getPreferredCurrency(state)
-}))(Index)
+export default connect(
+  state => ({
+    transactions: getTransactions(state),
+    visibleTransactionIds: getVisibleTransactionsForDashboardAccount(state),
+    currentAccountTransactions: getTransactionsForDashboardAccount(state),
+    txPagingIndexes: getTransactionPagingIndexes(state),
+    accounts: getAccounts(state),
+    totalBalance: getTotalBalance(state),
+    preferredCurrency: getPreferredCurrency(state),
+    nanoPrice: getNanoPriceInPreferredCurrency(state),
+    dashboardAccount: getDashboardAccount(state)
+  }),
+  {
+    txPagingSet: uiActions.txPagingSet,
+    txPagingReset: uiActions.txPagingReset,
+    updateDashboardAccount: uiActions.updateDashboardAccount
+  }
+)(Index)

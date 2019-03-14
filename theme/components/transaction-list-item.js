@@ -46,6 +46,7 @@ addStyles('TransactionListItem', props => {
     valueCol: css`
       ${td};
       text-align: right;
+      min-width: 130px;
     `,
     amountNano: css`
       text-transform: uppercase;

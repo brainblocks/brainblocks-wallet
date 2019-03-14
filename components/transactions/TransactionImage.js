@@ -16,7 +16,7 @@ const TransactionImage = ({ styles, transaction, ...rest }) => {
             <SendIcon />
           </span>
         )}
-        {transaction.type === 'receive' && (
+        {(transaction.type === 'receive' || transaction.type === 'open') && (
           <span className={styles.receiveIcon}>
             <ReceiveIcon />
           </span>

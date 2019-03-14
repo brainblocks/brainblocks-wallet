@@ -20,7 +20,7 @@ addStyles('TransactionsList', props => {
   `
   return {
     root: css`
-      padding: 0 0 30px;
+      padding: 0 0 12px;
     `,
     table: css`
       width: 100%;
@@ -68,6 +68,10 @@ addStyles('TransactionsList', props => {
     `,
     valueCol: css`
       ${valueCol};
+    `,
+    pagination: css`
+      text-align: center;
+      margin: 14px 0 0;
     `
   }
 })
