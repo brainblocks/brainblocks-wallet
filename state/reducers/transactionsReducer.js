@@ -1,5 +1,6 @@
 /* @flow */
 import { actions } from '~/state/actions/transactionActions'
+import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
 import type { NanoTransactionRedux } from '~/types'
 
@@ -25,7 +26,7 @@ const transactionsReducer: (state: Object, action: Object) => Object = (
   state,
   action
 ) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return transactionsInitialState
   }
 

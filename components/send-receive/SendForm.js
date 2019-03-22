@@ -180,9 +180,11 @@ class SendForm extends Component<Props, State> {
               <FormField>
                 <Input
                   multiline
+                  style={{ height: 100 }}
                   rows={2}
                   id="send-message"
-                  placeholder="Add a note here"
+                  readOnly
+                  placeholder="This feature is coming soon"
                   onChange={this.getHandleUpdateValue('message')}
                   value={message}
                 />

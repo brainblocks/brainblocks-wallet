@@ -5,7 +5,8 @@ import { formatTimeAgo, formatNano } from '~/functions/format'
 import { Button, NanoAddress, KeyValue } from 'brainblocks-components'
 import TransactionImage from './TransactionImage'
 import AccountTitle from '~/components/accounts/AccountTitle'
-import ChevronDownIcon from '~/static/svg/icons/chevron-down.svg'
+import TransactionMenu from './TransactionMenu'
+import MoreIcon from '~/static/svg/icons/more.svg'
 
 type Props = {
   styles: Object,
@@ -14,24 +15,27 @@ type Props = {
 }
 
 type State = {
-  isExpanded: boolean
+  isExpanded: boolean,
+  moreOptionsOpen: boolean,
+  moreOptionsAnchorEl: mixed
 }
 
 class TransactionListItem extends React.Component<Props, State> {
   state = {
-    isExpanded: false
+    isExpanded: false,
+    moreOptionsOpen: false,
+    moreOptionsAnchorEl: null
   }
 
-  shouldComponentUpdate(nextProps) {
-    const current = this.props.transaction
-    const next = nextProps.transaction
-    if (this.props.account !== nextProps.account) return true
-    Object.keys(next).forEach(txProp => {
-      if (next.txProp !== current.txProp) {
-        return true
-      }
+  handleMoreOptionsOpen = e => {
+    this.setState({
+      moreOptionsOpen: true,
+      moreOptionsAnchorEl: e.currentTarget
     })
-    return false
+  }
+
+  handleMoreOptionsClose = e => {
+    this.setState({ moreOptionsOpen: false, moreOptionsAnchorEl: null })
   }
 
   /**
@@ -71,6 +75,7 @@ class TransactionListItem extends React.Component<Props, State> {
    */
   render() {
     const { styles, transaction, account } = this.props
+    const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const tx = transaction
     const contactInfo = this.getContactInfo(tx)
 
@@ -108,9 +113,26 @@ class TransactionListItem extends React.Component<Props, State> {
           <span className={styles.timeAgo}>{formatTimeAgo(tx.timestamp)}</span>
         </td>
         <td className={styles.actionCol}>
-          <Button variant="icon" size="24" style={{ marginRight: -6 }}>
-            <ChevronDownIcon />
+          <Button
+            variant="icon"
+            size="24"
+            style={{ marginRight: -6 }}
+            onClick={this.handleMoreOptionsOpen}
+          >
+            <MoreIcon />
           </Button>
+          <TransactionMenu
+            transaction={tx}
+            id="transaction-more-options"
+            open={moreOptionsOpen}
+            anchorEl={moreOptionsAnchorEl}
+            onClose={this.handleMoreOptionsClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          />
         </td>
       </tr>
     )

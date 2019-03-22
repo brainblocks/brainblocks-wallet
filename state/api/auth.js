@@ -73,14 +73,17 @@ export async function login(username, password, recaptcha) {
   return data
 }
 
-export async function logout() {
+export async function logout(token) {
   // Immediately remove the token from the cookie
   cookie.remove('token')
 
   // Attempt to make the proper call to the backend as well
-  let token = tryLoadToken() || getAuthToken()
+  if (!token) {
+    token = tryLoadToken() || getAuthToken()
+  }
   if (token) {
     const { data } = await makeAuthorizedApiRequest({
+      token,
       method: 'delete',
       url: '/auth',
       data: { token }

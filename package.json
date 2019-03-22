@@ -16,6 +16,7 @@
   "dependencies": {
     "@material-ui/core": "^3.3.0",
     "axios": "^0.18.0",
+    "big-integer": "^1.6.42",
     "brainblocks-components": "git+https://gitlab+deploy-token-1:inPbzBjEPLPpaBwhd_Pw@git.brainblocks.io/brainblocks/brainblocks-react-components",
     "color": "^3.1.0",
     "destyle": "^0.3.0",

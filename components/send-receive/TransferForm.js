@@ -178,9 +178,11 @@ class TransferForm extends Component<Props, State> {
               <FormField>
                 <Input
                   multiline
+                  style={{ height: 100 }}
+                  readOnly
                   rows={2}
                   id="send-message"
-                  placeholder="Add a note here"
+                  placeholder="This feature is coming soon"
                   onChange={this.getHandleUpdateValue('message')}
                   value={message}
                 />

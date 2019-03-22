@@ -6,8 +6,6 @@
       "emotion",
       {
         "sourceMap": false,
-        "autoLabel": true,
-        "labelFormat": "[filename]--[local]",
         "cssPropOptimization": true
       }
     ],
@@ -31,5 +29,19 @@
         }
       }
     ]
-  ]
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        [
+          "emotion",
+          {
+            "autoLabel": true,
+            "labelFormat": "[filename]--[local]",
+            "sourceMap": true
+          }
+        ]
+      ]
+    }
+  }
 }

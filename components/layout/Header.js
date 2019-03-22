@@ -17,12 +17,10 @@ import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import { Popover, Button, Spinner } from 'brainblocks-components'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
+import { logout } from '~/state/thunks/authThunks'
 
 // Import selectors
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
-
-// Import actions
-import { creators as authActions } from '~/state/actions/authActions'
 
 // Import API Calls
 import * as AuthAPI from '~/state/api/auth'
@@ -85,7 +83,6 @@ class Header extends React.Component {
   }
 
   logout = async () => {
-    await AuthAPI.logout()
     this.props.logout()
   }
 
@@ -298,9 +295,9 @@ const mapStateToProps = state => ({
   isWorking: getIsWorking(state)
 })
 
-const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(authActions.logout())
-})
+const mapDispatchToProps = {
+  logout
+}
 
 export default connect(
   mapStateToProps,
