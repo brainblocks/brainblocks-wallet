@@ -1,4 +1,5 @@
 import { actions } from '~/state/actions/accountActions'
+import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
 
 const accountTemplate = {
@@ -18,7 +19,7 @@ export const accountsInitialState = {
 }
 
 const accountsReducer = (state, action) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return accountsInitialState
   }
 

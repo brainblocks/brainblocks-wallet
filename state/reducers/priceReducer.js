@@ -1,11 +1,12 @@
 import { actions } from '~/state/actions/priceActions'
+import { actions as authActions } from '~/state/actions/authActions'
 
 export const priceInitialState = {
   nano: {}
 }
 
 const priceReducer = (state, action) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return priceInitialState
   }
 

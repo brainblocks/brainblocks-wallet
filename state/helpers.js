@@ -25,7 +25,8 @@ export function makeApiRequest(opts = {}) {
 }
 
 export function makeAuthorizedApiRequest(opts = {}, shouldThrow = true) {
-  const authToken = getAuthToken()
+  const authToken = opts.token || getAuthToken()
+  delete opts.token
 
   if (shouldThrow && !authToken) {
     // TODO: We should consider making this an auth specific error

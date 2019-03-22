@@ -8,6 +8,7 @@
  */
 
 import { Wallet, Block, RaiFunctions } from 'rai-wallet'
+import bigInt from 'big-integer'
 import type { NanoTransactionRedux } from '~/types'
 import nanoTransactionTemplate from '~/state/reducers/transactionsReducer'
 
@@ -16,6 +17,10 @@ export let wallet: Object | null = null
 export const createWallet = (password: string) => {
   wallet = new Wallet(password)
   wallet.lightWallet(true)
+}
+
+export const destroyWallet = () => {
+  wallet = null
 }
 
 /**
@@ -43,6 +48,7 @@ export const populateChains = (accounts: Object) => {
       if (getBlockIntent(blk) !== 'change') {
         const tx = blockToReduxTx(blk)
         tx.timestamp = parseInt(blocks[i].height, 10)
+        tx.balanceNano = rawToNano(blocks[i].balance)
         txs[tx.id] = tx
       }
     }
@@ -97,13 +103,18 @@ const getBlockLinkAsAddress: Object => string = block => {
 }
 
 /**
+ * Raw to Nano
+ */
+const rawToNano: string => number = raw =>
+  bigInt(raw)
+    .over('1000000000000000000000000')
+    .toJSNumber() / 1000000
+
+/**
  * Get Nano amount as Native JS Number from block
  */
 const getBlockAmountNano: Object => number = block =>
-  block
-    .getAmount()
-    .over('1000000000000000000000000')
-    .toJSNumber() / 1000000
+  rawToNano(block.getAmount())
 
 /**
  * Convert a block from the wallet into a redux transaction format

@@ -1,5 +1,6 @@
 /* @flow */
 import { actions } from '~/state/actions/uiActions'
+import { actions as authActions } from '~/state/actions/authActions'
 import { TRANSACTIONS_PER_PAGE } from '~/constants'
 
 export const uiInitialState = {
@@ -10,7 +11,7 @@ export const uiInitialState = {
 }
 
 const uiReducer = (state, action) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return uiInitialState
   }
 

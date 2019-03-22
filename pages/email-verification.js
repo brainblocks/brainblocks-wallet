@@ -97,10 +97,10 @@ class EmailVerificationPage extends Component<State, Props> {
                 </Alert>
               ) : this.state.isVerified ? (
                 <Alert variant="success">
-                  Email Verfied! Click
+                  Email Verfied! Click{' '}
                   <Link href="/">
                     <a>here</a>
-                  </Link>
+                  </Link>{' '}
                   to continue.
                 </Alert>
               ) : (

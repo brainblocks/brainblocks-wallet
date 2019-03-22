@@ -21,6 +21,7 @@ export type ReduxStore = {
 
 export type NanoTransactionRedux = {
   currency: 'nano',
+  balanceNano?: number,
   id: string,
   accountId: string,
   timestamp: number,

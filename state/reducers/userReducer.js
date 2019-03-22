@@ -16,7 +16,7 @@ export const userInitialState = {
 }
 
 const userReducer = (state, action) => {
-  if (typeof state === 'undefined') {
+  if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return userInitialState
   }
 

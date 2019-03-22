@@ -1,5 +1,6 @@
 import { actions } from '~/state/actions/authActions'
 import { actions as userActions } from '~/state/actions/userActions'
+import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
 
 export const authInitialState = {
@@ -41,9 +42,7 @@ const authReducer = (state, action) => {
 
       // Assume that logout will work for immediate response
       case actions.LOGOUT:
-        draft.isAuthorized = false
-        draft.token = undefined
-        draft.user = undefined
+        draft = authInitialState
         break
 
       case actions.STORE_USER_PASSWORD:
@@ -55,7 +54,6 @@ const authReducer = (state, action) => {
         break
 
       case userActions.UPDATE_AUTHORIZED_USER:
-        console.log('Payload: ', action.payload)
         draft.user = payload.id
         break
     }
