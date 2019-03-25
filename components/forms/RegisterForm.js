@@ -41,6 +41,7 @@ export default reduxForm({
           name="username"
           type="text"
           label="Username"
+          placeholder="Username"
           component={ValidatedInput}
         />
       </GridItem>
@@ -49,6 +50,7 @@ export default reduxForm({
           name="email"
           type="email"
           label="Email"
+          placeholder="Email"
           component={ValidatedInput}
         />
       </GridItem>
@@ -57,6 +59,7 @@ export default reduxForm({
           name="password"
           type="password"
           label="Password"
+          placeholder="Password"
           component={ValidatedInput}
         />
       </GridItem>
@@ -65,6 +68,7 @@ export default reduxForm({
           name="retype"
           type="password"
           label="Retype Password"
+          placeholder="Password"
           component={ValidatedInput}
         />
       </GridItem>

@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import { Alert } from 'brainblocks-components'
 import { destyle } from 'destyle'
 
 type Props = {
@@ -22,6 +23,7 @@ const PageHeader = ({
   return (
     <div className={styles.root} {...rest}>
       <div className={styles.pageWidth}>
+        <Alert style={{ marginBottom: 20 }}>Pre-Launch Beta Testing</Alert>
         <div className={styles.inner}>
           {!!title && <h1 className={styles.title}>{title}</h1>}
           {!!children && <div className={styles.content}>{children}</div>}

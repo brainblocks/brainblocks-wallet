@@ -10,8 +10,8 @@ export default reduxForm({
   form: 'login',
   shouldAsyncValidate: () => true,
   initialValues: {
-    username: 'mochatest_login',
-    password: 'mochatestpassword'
+    username: '',
+    password: ''
   },
   validate: ({ username, password }) => {
     const errors = {}
@@ -34,6 +34,7 @@ export default reduxForm({
           name="username"
           type="text"
           label="Username"
+          placeholder="Username"
           component={ValidatedInput}
         />
       </GridItem>
@@ -42,6 +43,7 @@ export default reduxForm({
           name="password"
           type="password"
           label="Password"
+          placeholder="Password"
           component={ValidatedInput}
         />
       </GridItem>
