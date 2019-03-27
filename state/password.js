@@ -1,4 +1,4 @@
-export let password = 'test'
+export let password = null
 
 export const setPassword = pass => {
   password = pass

@@ -17,6 +17,9 @@ import { creators as authActions } from '~/state/actions/authActions'
 import * as AuthAPI from '~/state/api/auth'
 import * as UserAPI from '~/state/api/user'
 import { deduceError } from '~/state/errors'
+import { createWallet, wallet } from '~/state/wallet'
+import { createVault } from '~/state/api/vault'
+import { creators as vaultActions } from '~/state/actions/vaultActions'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -36,7 +39,8 @@ type Props = {
   children: React.Node,
   loginFormValues: Object,
   registerFormValues: Object,
-  updateAuth: Object => mixed
+  updateAuth: Object => mixed,
+  updateVault: Object => Promise<Object>
 }
 
 type State = {
@@ -64,9 +68,7 @@ class LoginRegister extends React.Component<Props, State> {
   }
 
   handleLogin = async event => {
-    if (this.state.isSubmitting) {
-      return
-    }
+    if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
     this.isSubmitting = true
@@ -77,8 +79,8 @@ class LoginRegister extends React.Component<Props, State> {
 
       const authData = await AuthAPI.login(username, password, recaptcha)
 
-      this.props.updateAuth(authData)
       setPassword(password)
+      this.props.updateAuth(authData)
     } catch (error) {
       this.setState({ loginError: deduceError(error) })
     }
@@ -87,16 +89,16 @@ class LoginRegister extends React.Component<Props, State> {
   }
 
   handleRegister = async event => {
-    if (this.state.isSubmitting) {
-      return
-    }
+    if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
     this.isSubmitting = true
 
+    const { username, email, password } = this.props.registerFormValues || {}
+
+    // Register an account
     try {
       const recaptcha = await this.recaptcha.execute()
-      const { username, email, password } = this.props.registerFormValues || {}
 
       const authData = await UserAPI.register({
         username,
@@ -105,13 +107,42 @@ class LoginRegister extends React.Component<Props, State> {
         recaptcha
       })
 
-      this.props.updateAuth(authData)
-      setPassword(password)
+      this.props.updateAuth({ ...authData, isRegistering: true })
     } catch (error) {
-      this.setState({ registrationError: deduceError(error) })
+      this.setState({
+        registrationError: deduceError(error),
+        isSubmitting: false
+      })
+      return
+    }
+    /*
+    // Create a vault
+    createWallet(password)
+    wallet.createWallet()
+    const accounts = wallet.getAccounts()
+    wallet.setLabel(accounts[0].account, 'Default Vault')
+    const hex = wallet.pack()
+
+    // Save the vault to the server
+    let vault
+    try {
+      vault = await createVault(hex)
+    } catch (e) {
+      this.setState({
+        registrationError: 'Could not create a new vault',
+        isSubmitting: false
+      })
+      return
     }
 
+    // Save the server-returned vault to redux
+    this.props.updateVault(vault)
+
+    // Let the client bootstrap deal with adding the accounts to redux
+
+    this.props.updateAuth({ isRegistering: false })
     this.setState({ isSubmitting: false })
+*/
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -206,7 +237,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateAuth: payload => dispatch(authActions.update(payload))
+  updateAuth: payload => dispatch(authActions.update(payload)),
+  updateVault: payload => dispatch(vaultActions.updateVault(payload))
 })
 
 export default withRouter(

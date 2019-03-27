@@ -113,7 +113,7 @@ class Header extends React.Component {
               </div>
             </div>
           )}
-          {variant === 'full' && (
+          {variant !== 'bare' && (
             <div className={styles.pageWidth}>
               <div className={styles.inner}>
                 <div className={styles.logo}>
@@ -124,32 +124,36 @@ class Header extends React.Component {
                     />
                   </Link>
                 </div>
+
                 <Media>
                   {({ breakpoints, currentBreakpoint }) =>
                     breakpoints[currentBreakpoint] >= breakpoints.tablet && (
                       <nav className={styles.menu}>
-                        <ul>
-                          {menuItems.map((item, i) => (
-                            <li
-                              className={cx({
-                                'is-active': router.pathname === item.href,
-                                'hide-mobile': !item.mobile
-                              })}
-                              key={`menu-item-${i}`}
-                            >
-                              <Link prefetch href={item.href}>
-                                <a>
-                                  {item.icon}
-                                  <span>{item.title}</span>
-                                </a>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
+                        {variant === 'full' && (
+                          <ul>
+                            {menuItems.map((item, i) => (
+                              <li
+                                className={cx({
+                                  'is-active': router.pathname === item.href,
+                                  'hide-mobile': !item.mobile
+                                })}
+                                key={`menu-item-${i}`}
+                              >
+                                <Link prefetch href={item.href}>
+                                  <a>
+                                    {item.icon}
+                                    <span>{item.title}</span>
+                                  </a>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </nav>
                     )
                   }
                 </Media>
+
                 {isWorking && (
                   <div className={styles.spinner}>
                     <Spinner size={24} color="#FFF" />
@@ -186,7 +190,7 @@ class Header extends React.Component {
                   destyleMerge={{ root: styles.userDropdown }}
                 >
                   <div className={styles.userDropdownInner}>
-                    <div className={styles.userSecurity}>
+                    {/*<div className={styles.userSecurity}>
                       <div className={styles.userSecurityIcon}>
                         <SecurityIcon />
                       </div>
@@ -220,17 +224,19 @@ class Header extends React.Component {
                           </Link>
                         </div>
                       </div>
-                    </div>
+                            </div>*/}
                     <div className={styles.userMenu}>
                       <ul className={styles.userMenuList}>
-                        <Link href="/settings?tab=profile">
-                          <li>
-                            <i>
-                              <UserIcon />
-                            </i>
-                            <span>Profile</span>
-                          </li>
-                        </Link>
+                        {variant === 'full' && (
+                          <Link href="/settings?tab=profile">
+                            <li>
+                              <i>
+                                <UserIcon />
+                              </i>
+                              <span>Profile</span>
+                            </li>
+                          </Link>
+                        )}
                         {/*<li>
                           <i>
                             <ContactsIcon />

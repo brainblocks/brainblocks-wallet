@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addAccount } from '~/state/thunks/walletThunks'
+import { addAccount } from '~/state/thunks/accountsThunks'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
 import { Typography } from 'brainblocks-components'

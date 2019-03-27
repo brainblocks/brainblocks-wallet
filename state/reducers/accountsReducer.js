@@ -24,12 +24,20 @@ const accountsReducer = (state, action) => {
   }
 
   const id =
-    action.type.indexOf('ACCOUNTS::') === 0 && action.hasOwnProperty('payload')
+    action.type.indexOf('ACCOUNTS::') === 0 &&
+    action.hasOwnProperty('payload') &&
+    action.payload.hasOwnProperty('account')
       ? action.payload.account
       : null
 
   return produce(state, draft => {
     switch (action.type) {
+      case actions.BULK_ADD_ACCOUNTS:
+        action.payload.forEach(acc => {
+          draft.allIds.push(acc.account)
+          draft.byId[acc.account] = { ...accountTemplate, ...acc }
+        })
+        break
       case actions.CREATE_ACCOUNT:
         draft.allIds.push(id)
         draft.byId[id] = { ...accountTemplate, ...action.payload }
