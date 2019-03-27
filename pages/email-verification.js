@@ -80,7 +80,6 @@ class EmailVerificationPage extends Component<State, Props> {
     return (
       <ClientBootstrap verifyEmail={false} getWallet={false} getPrice={false}>
         <Layout headerVariant="logout">
-          >
           <Head>
             <title>Email Verification</title>
           </Head>

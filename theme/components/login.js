@@ -73,6 +73,9 @@ addStyles('Login', ({ background, pad }) => ({
     top: 0;
     left: 0;
     z-index: 1;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      display: none;
+    }
   `,
   hex1: css`
     position: absolute;
