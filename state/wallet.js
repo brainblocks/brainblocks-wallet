@@ -11,6 +11,7 @@ import { Wallet, Block, RaiFunctions } from 'rai-wallet'
 import bigInt from 'big-integer'
 import type { NanoTransactionRedux } from '~/types'
 import nanoTransactionTemplate from '~/state/reducers/transactionsReducer'
+import * as VaultAPI from '~/state/api/vault'
 
 export let wallet: Object | null = null
 
@@ -24,8 +25,16 @@ export const destroyWallet = () => {
 }
 
 /**
+ * Pack the wallet and update it on the server
+ */
+export const syncVault = async () => {
+  const hex = wallet.pack()
+  return await VaultAPI.updateVault(hex)
+}
+
+/**
  * Takes an object of accounts as given by the BrainBlocks API
- * and adds them to the wallet accounts.
+ * and returns them in redux transaction format.
  * @param {Object} accounts
  */
 export const populateChains = (accounts: Object) => {

@@ -1,6 +1,6 @@
 const color = {
   gray: {
-    lightest: '#F7F7F7',
+    lightest: '#f5f5f5',
     light: '#e1e1e1',
     midLight: '#CCCCCC',
     mid: '#898989',

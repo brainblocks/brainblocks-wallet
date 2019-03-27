@@ -4,6 +4,7 @@ import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 import priceReducer, { priceInitialState } from '~/state/reducers/priceReducer'
 import userReducer, { userInitialState } from '~/state/reducers/userReducer'
 import authReducer, { authInitialState } from '~/state/reducers/authReducer'
+import vaultReducer, { vaultInitialState } from '~/state/reducers/vaultReducer'
 import accountsReducer, {
   accountsInitialState
 } from '~/state/reducers/accountsReducer'
@@ -18,7 +19,8 @@ export const initialState = {
   user: userInitialState,
   auth: authInitialState,
   accounts: accountsInitialState,
-  transactions: transactionsInitialState
+  transactions: transactionsInitialState,
+  vault: vaultInitialState
 }
 
 const combinedReducers = combineReducers({
@@ -28,7 +30,8 @@ const combinedReducers = combineReducers({
   user: userReducer,
   auth: authReducer,
   accounts: accountsReducer,
-  transactions: transactionsReducer
+  transactions: transactionsReducer,
+  vault: vaultReducer
 })
 
 export default combinedReducers

@@ -36,14 +36,21 @@ addStyles('AccountTitle', props => {
         css`
           color: #fff;
         `};
-      ${(props.hasOwnProperty('account') &&
+      ${props.hasOwnProperty('account') &&
+        !props.account.label &&
+        css`
+          letter-spacing: 0.025em;
+          font-size: ${theme.type.baseFontSize}px;
+          text-transform: none;
+        `}
+      /*${(props.hasOwnProperty('account') &&
         !props.account.hasOwnProperty('label')) ||
         (props.account.label.length === 0 &&
           css`
             letter-spacing: 0.025em;
             font-size: ${theme.type.baseFontSize}px;
             text-transform: none;
-          `)};
+          `)};*/
     `,
     subTitle: css`
       flex-basis: 100%;

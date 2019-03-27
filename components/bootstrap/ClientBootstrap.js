@@ -3,7 +3,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 import { getAccounts } from '~/state/selectors/accountSelectors'
-import { wallet } from '~/state/wallet'
+import { creators as accountActions } from '~/state/actions/accountActions'
+import { wallet, createWallet } from '~/state/wallet'
+import { password, destroyPassword } from '~/state/password'
 import {
   getCurrentAuth,
   getIsAuthorized
@@ -11,10 +13,13 @@ import {
 import { updatePrice } from '~/state/thunks/priceThunks'
 import Loading from '~/pages/loading'
 import Error from '~/pages/_error'
+import ReEnterPassword from '~/pages/re-enter-password'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { getTransactions } from '~/state/selectors/transactionSelectors'
-import { getOrCreateWallet } from '~/state/thunks/walletThunks'
+import { getOrCreateWallet } from '~/state/thunks/vaultThunks'
 import { importChains } from '~/state/thunks/transactionsThunks'
+import { getCipheredWallet } from '~/state/selectors/vaultSelectors'
+import { getVault } from '~/state/thunks/vaultThunks'
 
 type Props = {
   getPrice?: boolean,
@@ -31,8 +36,10 @@ type Props = {
  * on the client (E.g. Nano price).
  */
 class Bootstrap extends React.Component {
-  isGettingWallet = false
+  isGettingVault = false
   isGettingChains = false
+  didAddAccounts = false
+  didGetTransactions = false
   priceInterval = null
   state = {
     error: null
@@ -54,10 +61,25 @@ class Bootstrap extends React.Component {
     )
   }
 
+  get hasVault() {
+    return this.props.getWallet === false || !!this.props.cipheredWallet
+  }
+
+  get needsPassword() {
+    return this.props.getWallet !== false && !wallet && !password
+  }
+
   get hasWallet() {
+    return this.props.getWallet === false || !!wallet
+  }
+
+  get hasAccounts() {
+    return this.props.getWallet === false || !!this.props.accounts.allIds.length
+  }
+
+  get hasTransactions() {
     return (
-      this.props.getWallet === false ||
-      (!!wallet && !!this.props.accounts.allIds.length)
+      this.props.getWallet === false || !!this.props.transactions.allIds.length
     )
   }
 
@@ -65,16 +87,22 @@ class Bootstrap extends React.Component {
     const didRedirect = this.maybeRedirect()
     if (!didRedirect) {
       this.getPrice()
-      this.getWallet()
+      this.getVault()
+      this.createWallet()
+      this.addAccounts()
       this.getTransactions()
     }
   }
 
   componentDidUpdate() {
-    const didRedirect = this.maybeRedirect()
-    if (!didRedirect) {
-      this.getWallet()
-      this.getTransactions()
+    if (!this.state.error) {
+      const didRedirect = this.maybeRedirect()
+      if (!didRedirect) {
+        this.getVault()
+        this.createWallet()
+        this.addAccounts()
+        this.getTransactions()
+      }
     }
   }
 
@@ -102,6 +130,18 @@ class Bootstrap extends React.Component {
       return true
     }
 
+    // Redirect authorized + verified but no saved wallet to create/import
+    if (
+      this.props.isAuthorized &&
+      this.props.user.hasVerifiedEmail &&
+      !this.props.cipheredWallet &&
+      router.pathname !== '/new-account/create-import' &&
+      router.pathname !== '/new-account/vault'
+    ) {
+      router.push('/new-account/create-import')
+      return true
+    }
+
     // Redirect login to dashboard if authorized
     if (router.pathname === '/login' && this.props.isAuthorized) {
       router.push('/')
@@ -109,44 +149,66 @@ class Bootstrap extends React.Component {
     }
 
     // Redirect email-verification page to dashboard if already verified
-    if (
+    /*if (
       this.props.user.hasVerifiedEmail &&
       router.pathname === '/email-verification'
     ) {
       router.push('/')
       return true
-    }
+    }*/
 
     return false
   }
 
-  getWallet = () => {
-    if (
-      !this.hasWallet &&
-      !this.isGettingWallet &&
-      this.props.isAuthorized &&
-      this.hasVerifiedEmail
-    ) {
-      this.isGettingWallet = true
+  getVault = () => {
+    if (!this.hasVault && !this.isGettingVault) {
+      this.isGettingVault = true
       this.props
-        .getOrCreateWallet(this.props.auth.user)
-        .then(res => (this.isGettingWallet = false))
-        .catch(err => {
-          console.error('Error in getOrCreateWallet', err)
-          this.isGettingWallet = false
-          this.setState({ error: 'Error in getOrCreateWallet' })
+        .getVault()
+        .then(res => (this.isGettingVault = false))
+        .catch(e => {
+          console.error('Error in getVault', e)
+          this.isGettingVault = false
+          this.setState({ error: 'Error in getVault' })
         })
+    }
+  }
+
+  createWallet = () => {
+    if (this.hasVault && !this.hasWallet && !this.needsPassword) {
+      createWallet(password)
+      wallet.load(this.props.cipheredWallet)
+      destroyPassword()
+    }
+  }
+
+  addAccounts = () => {
+    if (!!wallet && !this.hasAccounts && !this.didAddAccounts) {
+      const accounts = wallet.getAccounts()
+      this.props.bulkAddAccounts(accounts)
+      this.didAddAccounts = true
     }
   }
 
   getTransactions = () => {
     if (
-      this.props.accounts.allIds.length &&
-      !this.props.transactions.allIds.length &&
-      !this.isGettingChains
+      this.hasAccounts &&
+      !this.hasTransactions &&
+      !this.isGettingChains &&
+      !this.didGetTransactions
     ) {
       this.isGettingChains = true
-      this.props.importChains().then(() => (this.isGettingChains = false))
+      this.props
+        .importChains()
+        .then(() => {
+          this.didGetTransactions = true
+          this.isGettingChains = false
+        })
+        .catch(e => {
+          console.error('Error in getTransactions', e)
+          this.isGettingChains = false
+          this.setState({ error: 'Error in getTransactions' })
+        })
     }
   }
 
@@ -160,6 +222,8 @@ class Bootstrap extends React.Component {
   render() {
     if (this.state.error) {
       return <Error />
+    } else if (this.needsPassword) {
+      return <ReEnterPassword onSubmit={() => this.forceUpdate()} />
     } else if (this.isReady) {
       return this.props.children
     } else {
@@ -173,13 +237,17 @@ const mapStateToProps = state => ({
   user: getCurrentUser(state),
   isAuthorized: getIsAuthorized(state),
   accounts: getAccounts(state),
-  transactions: getTransactions(state)
+  transactions: getTransactions(state),
+  cipheredWallet: getCipheredWallet(state)
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updatePrice: focusCheck => dispatch(updatePrice(focusCheck)),
   getOrCreateWallet: userId => dispatch(getOrCreateWallet(userId)),
-  importChains: () => dispatch(importChains())
+  importChains: () => dispatch(importChains()),
+  getVault: () => dispatch(getVault()),
+  bulkAddAccounts: accounts =>
+    dispatch(accountActions.bulkAddAccounts(accounts))
 })
 
 const ConnectedBootstrap = connect(

@@ -4,7 +4,7 @@ import { destyle } from 'destyle'
 import { withRouter } from 'next/router'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { addAccount } from '~/state/thunks/walletThunks'
+import { addAccount } from '~/state/thunks/accountsThunks'
 import {
   Grid,
   GridItem,

@@ -7,6 +7,7 @@ export const authInitialState = {
   token: undefined,
   expires: undefined,
   isAuthorized: false,
+  isRegistering: false,
   didCheck: false,
   isChecking: false,
   user: undefined,
@@ -29,14 +30,18 @@ const authReducer = (state, action) => {
         break
 
       case actions.UPDATE:
-        const { user, token, expires } = action.payload
+        const payload = { ...action.payload }
+        // delete anything from payload here
         draft = {
-          token,
-          expires,
-          user: user.id,
+          ...draft,
+          ...payload,
           isChecking: false,
           isAuthorized: true,
           didCheck: true
+        }
+
+        if (payload.hasOwnProperty('user')) {
+          draft.user = payload.user.id
         }
         break
 

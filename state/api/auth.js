@@ -7,7 +7,7 @@ import {
 } from '~/state/helpers'
 import { isServer } from '~/state'
 
-// Safely attempts to lookup and return the auth token from localStorage
+// Safely attempts to lookup and return the auth token cookie
 export function tryLoadToken() {
   try {
     if (isServer) return undefined
@@ -19,7 +19,7 @@ export function tryLoadToken() {
   }
 }
 
-// Safely attempts to store an auth token to localStorage
+// Safely attempts to store an auth token cookie
 export function tryStoreToken(token: string) {
   try {
     if (isServer) return
@@ -30,7 +30,7 @@ export function tryStoreToken(token: string) {
   }
 }
 
-// Safely attempts to delete the auth token from localStorage
+// Safely attempts to delete the auth token cookie
 export function tryDeleteToken() {
   try {
     if (isServer) return
