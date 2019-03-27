@@ -1,6 +1,5 @@
 /* @flow */
 import * as React from 'react'
-import { Media } from 'react-breakpoints'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import { getFormValues } from 'redux-form'
@@ -172,22 +171,16 @@ class LoginRegister extends React.Component<Props, State> {
             <h1 className={styles.title}>Log in now or sign up for free</h1>
           </div>
           <div className={styles.formContainer}>
-            <Media>
-              {({ breakpoints, currentBreakpoint }) =>
-                breakpoints[currentBreakpoint] >= breakpoints.medium && (
-                  <div className={styles.visuals}>
-                    <span className={styles.hex1}>
-                      <RoundedHexagon />
-                    </span>
-                    <span className={styles.hex2}>
-                      <RoundedHexagonPurple />
-                    </span>
-                    <div className={styles.circle1} />
-                    <div className={styles.circle2} />
-                  </div>
-                )
-              }
-            </Media>
+            <div className={styles.visuals}>
+              <span className={styles.hex1}>
+                <RoundedHexagon />
+              </span>
+              <span className={styles.hex2}>
+                <RoundedHexagonPurple />
+              </span>
+              <div className={styles.circle1} />
+              <div className={styles.circle2} />
+            </div>
             <div className={styles.formContainerInner}>
               <SwitchTabs
                 selectedIndex={this.state.activeTab}

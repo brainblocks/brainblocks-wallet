@@ -23,7 +23,18 @@ const PageHeader = ({
   return (
     <div className={styles.root} {...rest}>
       <div className={styles.pageWidth}>
-        <Alert style={{ marginBottom: 20 }}>Pre-Launch Beta Testing</Alert>
+        <Alert destyleMerge={{ root: styles.alert, icon: styles.alertIcon }}>
+          We're in beta! Please test with small amounts of Nano, and leave us
+          lots of{' '}
+          <a
+            href="mailto:support@brainblocks.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            feedback
+          </a>
+          .
+        </Alert>
         <div className={styles.inner}>
           {!!title && <h1 className={styles.title}>{title}</h1>}
           {!!children && <div className={styles.content}>{children}</div>}

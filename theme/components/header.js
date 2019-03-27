@@ -4,21 +4,7 @@ import theme from '~/theme/theme'
 import { pageWidth, resetList } from '~/theme/globals/utils'
 
 addStyles('Header', props => ({
-  root: css`
-    padding: 44px 0;
-    transition: padding 0.75s ease;
-    @media (max-width: ${theme.bp.desktop - 1}px) {
-      padding: 33px 0;
-    }
-    @media (max-width: ${theme.bp.tablet - 1}px) {
-      padding: 22px 0;
-    }
-    ${props.offset > 0 &&
-      css`
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
-        padding: 14px 0 10px !important;
-      `};
-  `,
+  root: css``,
   pageWidth,
   fullWidth: css`
     padding: 0 4%;

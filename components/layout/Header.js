@@ -104,7 +104,7 @@ class Header extends React.Component {
       <>
         <div className={styles.root} {...rest}>
           {variant === 'bare' && (
-            <div className={styles.fullWidth}>
+            <div className={styles.pageWidth}>
               <div className={styles.logotype}>
                 <img
                   src="/static/svg/brainblocks-logotype-white.svg"

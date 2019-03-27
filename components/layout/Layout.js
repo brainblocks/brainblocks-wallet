@@ -43,12 +43,11 @@ class Layout extends React.Component {
       footerVariant = 'full',
       ...rest
     } = this.props
-    const { scrollOffset } = this.state
     return (
       <>
         {headerVariant !== 'none' && (
           <div className={styles.header}>
-            <Header offset={scrollOffset} variant={headerVariant} />
+            <Header variant={headerVariant} />
           </div>
         )}
         <div className={styles.root}>

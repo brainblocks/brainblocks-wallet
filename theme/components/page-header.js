@@ -8,6 +8,18 @@ addStyles('PageHeader', props => ({
     padding: 0 0 30px;
   `,
   pageWidth,
+  alert: css`
+    margin: -20px 0 30px;
+    background: rgb(44, 64, 107);
+    font-size: ${theme.type.baseFontSize - 1}px;
+    @media (max-width: ${theme.bp.medium - 1}px) {
+      margin-top: -10px;
+    }
+  `,
+  alertIcon: css`
+    flex: 0 0 34px;
+    height: 34px;
+  `,
   inner: css`
     position: relative;
   `,
