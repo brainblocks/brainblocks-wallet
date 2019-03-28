@@ -135,10 +135,20 @@ class Bootstrap extends React.Component {
       this.props.isAuthorized &&
       this.props.user.hasVerifiedEmail &&
       !this.props.cipheredWallet &&
+      router.pathname !== '/email-verification' &&
       router.pathname !== '/new-account/create-import' &&
       router.pathname !== '/new-account/vault'
     ) {
       router.push('/new-account/create-import')
+      return true
+    }
+
+    // Redirect from create/import to dashboard if we already have a wallet
+    if (
+      this.props.cipheredWallet &&
+      router.pathname === '/new-account/create-import'
+    ) {
+      router.push('/')
       return true
     }
 

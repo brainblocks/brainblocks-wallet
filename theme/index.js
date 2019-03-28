@@ -34,6 +34,7 @@ import './components/page-header'
 import './components/page-content'
 import './components/footer'
 import './components/login'
+import './components/message'
 
 // Dashboard
 import './components/dashboard-header'
