@@ -8,12 +8,15 @@ const { BASE_API_URL } = publicRuntimeConfig
 
 export function getAuthToken() {
   const store = getClientSideStore()
+  console.log('store: ', store)
   if (!store) return undefined
 
   const state = store.getState()
+  console.log('state: ', state)
   if (!state) return undefined
 
   const currentAuth = state.auth
+  console.log('current auth: ', currentAuth)
   if (!currentAuth) return undefined
 
   return currentAuth.token
@@ -28,6 +31,9 @@ export function makeApiRequest(opts = {}) {
 }
 
 export function makeAuthorizedApiRequest(opts = {}, shouldThrow = true) {
+  console.log('opts token: ', opts.token)
+  console.log('get auth token: ', getAuthToken())
+
   const authToken = opts.token || getAuthToken()
   delete opts.token
 
