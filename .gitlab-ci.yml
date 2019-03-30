@@ -1,22 +1,59 @@
+before_script:
+  ## Install ssh-agent if not already installed, it is required by Docker.
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+
+  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+  # Create the SSH directory and give it the right permissions
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+
+  # Use ssh-keyscan to scan the keys of your private server.
+  - ssh-keyscan ssh.node1.brainblocks.io >> ~/.ssh/known_hosts
+  - ssh-keyscan git.brainblocks.io >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
 stages:
-    - build
-    - test
+  - build
+  - test
+  - staging
+  - deploy
 
 cache:
-    paths:
-        - node_modules/
-    
+  paths:
+    - node_modules/
+
 build:
-    stage: build
-    script:
-        - npm install
-        - npm run build
-    artifacts:
-        paths:
-            - node_modules/
-            - .next/
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - node_modules/
+      - .next/
 
 test:
-    stage: test
-    script:
-        - npm run test
+  stage: test
+  script:
+    - npm run test
+
+staging:
+  stage: staging
+  only:
+    refs:
+      - develop
+  script:
+    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && pm2 restart staging-wallet"
+
+deploy:
+  stage: deploy
+  only:
+    refs:
+      - master
+  script:
+    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && pm2 restart wallet"
