@@ -1,5 +1,6 @@
 import getConfig from 'next/config'
 import { getClientSideStore } from '~/state'
+import { tryLoadToken } from '~/state/api/auth'
 import axios from 'axios'
 import produce from 'immer'
 
@@ -18,6 +19,10 @@ export function getAuthToken() {
   const currentAuth = state.auth
   console.log('current auth: ', currentAuth)
   if (!currentAuth) return undefined
+
+  if (!currentAuth.token) {
+    currentAuth.token = tryLoadToken()
+  }
 
   return currentAuth.token
 }
