@@ -1,7 +1,10 @@
+import getConfig from 'next/config'
 import { getClientSideStore } from '~/state'
 import axios from 'axios'
 import produce from 'immer'
-import { BASE_API_URL } from '~/constants'
+
+const { publicRuntimeConfig } = getConfig()
+const { BASE_API_URL } = publicRuntimeConfig
 
 export function getAuthToken() {
   const store = getClientSideStore()
