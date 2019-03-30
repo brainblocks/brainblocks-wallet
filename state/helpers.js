@@ -20,9 +20,8 @@ export function getAuthToken() {
   console.log('current auth: ', currentAuth)
   if (!currentAuth) return undefined
 
-  if (!currentAuth.token) {
-    currentAuth.token = tryLoadToken()
-  }
+  const token = tryLoadToken()
+  console.log(token)
 
   return currentAuth.token
 }
