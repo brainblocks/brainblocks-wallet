@@ -4,7 +4,7 @@ import 'moment/locale/es'
 import 'moment/locale/zh-cn'*/
 import numbro from 'numbro'
 
-function formatNano(nanoVal, decimals = 3) {
+function formatNano(nanoVal, decimals = 5) {
   return new Intl.NumberFormat('en-US', {
     maximumFractionDigits: decimals,
     minimumFractionDigits: 2
@@ -32,19 +32,27 @@ function formatPercent(value, abs = false) {
   )
 }
 
-function formatTimeAgo(timestamp, shorten = false) {
+function unixToMs(unix) {
+  return unix * 1000
+}
+
+function formatTimeAgo(timestamp, unix = false, shorten = false) {
+  timestamp = unix ? unixToMs(timestamp) : timestamp
   return moment(timestamp).fromNow(shorten)
 }
 
-function formatTime(timestamp) {
+function formatTime(timestamp, unix = false) {
+  timestamp = unix ? unixToMs(timestamp) : timestamp
   return moment(timestamp).format('LT')
 }
 
-function formatDate(timestamp) {
+function formatDate(timestamp, unix = false) {
+  timestamp = unix ? unixToMs(timestamp) : timestamp
   return moment(timestamp).format('ll')
 }
 
-function formatDayMonth(timestamp) {
+function formatDayMonth(timestamp, unix = false) {
+  timestamp = unix ? unixToMs(timestamp) : timestamp
   return moment(timestamp).format('D MMM')
 }
 

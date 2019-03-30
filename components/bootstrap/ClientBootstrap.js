@@ -209,7 +209,7 @@ class Bootstrap extends React.Component {
     ) {
       this.isGettingChains = true
       this.props
-        .importChains()
+        .importChains(this.props.accounts.allIds)
         .then(() => {
           this.didGetTransactions = true
           this.isGettingChains = false

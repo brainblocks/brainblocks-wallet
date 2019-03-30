@@ -14,6 +14,7 @@ import {
   getPreferredCurrency,
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
+import { createSend } from '~/state/thunks/transactionsThunks'
 
 const SendReceive = props => {
   return (
@@ -30,6 +31,7 @@ const SendReceive = props => {
             preferredCurrency={props.preferredCurrency}
             router={props.router}
             defaultAccount={props.defaultAccount}
+            onSend={props.handleSend}
           />
         </PageContent>
       </Layout>
@@ -41,9 +43,14 @@ SendReceive.getInitialProps = async ctx => {
   return await bootstrapInitialProps(ctx)
 }
 
-export default connect(state => ({
-  accounts: getAccounts(state),
-  nanoPrice: getNanoPriceInPreferredCurrency(state),
-  preferredCurrency: getPreferredCurrency(state),
-  defaultAccount: getDefaultAccount(state)
-}))(withRouter(SendReceive))
+export default connect(
+  state => ({
+    accounts: getAccounts(state),
+    nanoPrice: getNanoPriceInPreferredCurrency(state),
+    preferredCurrency: getPreferredCurrency(state),
+    defaultAccount: getDefaultAccount(state)
+  }),
+  {
+    handleSend: createSend
+  }
+)(withRouter(SendReceive))

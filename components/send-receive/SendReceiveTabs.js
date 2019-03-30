@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import { TabComponents, SwitchTabs } from 'brainblocks-components'
+import { TabComponents, SwitchTabs, Button } from 'brainblocks-components'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
-import TransferForm from './TransferForm'
 import type { NormalizedState } from '~/types'
 import { getKeyByValue } from '~/functions/util'
+import Message from '~/components/layout/Message'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -24,16 +24,19 @@ type Props = {
   nanoPrice: number,
   preferredCurrency: string,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  onSend: (from: string, to: string, amount: string | number) => void
 }
 
 type State = {
-  activeTab: number
+  activeTab: number,
+  sendComplete: boolean
 }
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0
+    activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+    sendComplete: false
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -50,6 +53,18 @@ class SendReceiveTabs extends React.Component<Props, State> {
     )
   }
 
+  handleSendComplete = () => {
+    this.setState({ sendComplete: true })
+  }
+
+  handleResend = () => {
+    this.setState({ sendComplete: false })
+  }
+
+  handleGoToDashboard = () => {
+    this.props.router.push('/')
+  }
+
   render() {
     const {
       styles,
@@ -58,46 +73,74 @@ class SendReceiveTabs extends React.Component<Props, State> {
       nanoPrice,
       preferredCurrency,
       router,
+      onSend,
       ...rest
     } = this.props
-    const { activeTab } = this.state
+    const { activeTab, sendComplete } = this.state
     return (
       <div className={styles.root}>
-        <SwitchTabs selectedIndex={activeTab} onSelect={this.handleSwitchTabs}>
-          <TabList>
-            <Tab>Send</Tab>
-            <Tab>Receive</Tab>
-            {accounts.allIds.length > 1 && <Tab>Transfer</Tab>}
-          </TabList>
+        {sendComplete ? (
+          <Message
+            title="Success"
+            subtitle="Your transaction was sent successfully"
+            graphic="/static/svg/success.svg"
+          >
+            <Button
+              onClick={this.handleGoToDashboard}
+              color="blue"
+              style={{ marginBottom: 5 }}
+            >
+              Back to Dashboard
+            </Button>{' '}
+            <Button onClick={this.handleResend} color="green">
+              New Transaction
+            </Button>
+          </Message>
+        ) : (
+          <SwitchTabs
+            selectedIndex={activeTab}
+            onSelect={this.handleSwitchTabs}
+          >
+            <TabList>
+              <Tab>Send</Tab>
+              <Tab>Receive</Tab>
+              {accounts.allIds.length > 1 && <Tab>Transfer</Tab>}
+            </TabList>
 
-          <TabPanel>
-            <SendForm
-              nanoPrice={nanoPrice}
-              defaultAccount={defaultAccount}
-              preferredCurrency={preferredCurrency}
-              accounts={accounts}
-              router={router}
-            />
-          </TabPanel>
-          <TabPanel>
-            <ReceiveForm
-              accounts={accounts}
-              defaultAccount={defaultAccount}
-              router={router}
-            />
-          </TabPanel>
-          {accounts.allIds.length > 1 && (
             <TabPanel>
-              <TransferForm
+              <SendForm
+                onSend={onSend}
+                onSendComplete={this.handleSendComplete}
                 nanoPrice={nanoPrice}
+                defaultAccount={defaultAccount}
                 preferredCurrency={preferredCurrency}
+                accounts={accounts}
+                router={router}
+              />
+            </TabPanel>
+            <TabPanel>
+              <ReceiveForm
                 accounts={accounts}
                 defaultAccount={defaultAccount}
                 router={router}
               />
             </TabPanel>
-          )}
-        </SwitchTabs>
+            {accounts.allIds.length > 1 && (
+              <TabPanel>
+                <SendForm
+                  onSend={onSend}
+                  onSendComplete={this.handleSendComplete}
+                  nanoPrice={nanoPrice}
+                  defaultAccount={defaultAccount}
+                  preferredCurrency={preferredCurrency}
+                  accounts={accounts}
+                  router={router}
+                  variant="transfer"
+                />
+              </TabPanel>
+            )}
+          </SwitchTabs>
+        )}
       </div>
     )
   }

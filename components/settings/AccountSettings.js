@@ -18,23 +18,34 @@ import type { NormalizedState } from '~/types'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getDefaultAccount } from '~/state/selectors/userSelectors'
 import { updateAccount } from '~/state/thunks/accountsThunks'
+import { createChange } from '~/state/thunks/transactionsThunks'
 import { isValidNanoAddress } from '~/functions/validate'
 import { wallet } from '~/state/wallet'
 
 type Props = {
   router: Object,
   accounts: NormalizedState,
+  updateAccount: Object => Promise<string | void>,
+  createChange: (string, string) => Promise<string | void>,
+  enqueueSnackbar: (string, ?Object) => void,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
 
-class AccountSettings extends React.Component {
+type State = {
+  account: string,
+  label: string,
+  rep: string
+}
+
+class AccountSettings extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     let routerAccount = null
     if (
       props.router.query.hasOwnProperty('account') &&
-      isValidNanoAddress(props.router.query.account)
+      isValidNanoAddress(props.router.query.account) &&
+      props.accounts.allIds.includes(props.router.query.account)
     ) {
       routerAccount = props.router.query.account
     }
@@ -43,10 +54,18 @@ class AccountSettings extends React.Component {
     this.state = {
       account,
       label: props.accounts.byId[account].label,
-      rep:
-        props.accounts.byId[account].representative ||
-        wallet.getRepresentative(account) ||
-        ''
+      rep: props.accounts.byId[account].representative
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.accounts.byId[this.state.account].representative !==
+      this.props.accounts.byId[this.state.account].representative
+    ) {
+      this.setState({
+        rep: this.props.accounts.byId[this.state.account].representative
+      })
     }
   }
 
@@ -86,8 +105,22 @@ class AccountSettings extends React.Component {
   }
 
   handleUpdateRep = () => {
-    // Do update rep in wallet
-    this.handleUpdateAccount({ representative: this.state.rep })
+    const { account, rep } = this.state
+    this.props
+      .createChange(account, rep)
+      .then(() => {
+        this.props.enqueueSnackbar('Successfully updated representative', {
+          variant: 'success'
+        })
+      })
+      .catch(e => {
+        this.setState({
+          rep: this.props.accounts.byId[account].representative
+        })
+        this.props.enqueueSnackbar('Could not update representative', {
+          variant: 'error'
+        })
+      })
   }
 
   render() {
@@ -95,9 +128,7 @@ class AccountSettings extends React.Component {
     const { account, rep, label } = this.state
     const accountObj = accounts.byId[account]
     const isLabelDirty = label !== accounts.byId[account].label
-    const isRepDirty =
-      rep !== accounts.byId[account].representative ||
-      wallet.getRepresentative(account)
+    const isRepDirty = rep !== accounts.byId[account].representative
     return (
       <div className={styles.root}>
         <Grid>
@@ -216,7 +247,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  updateAccount
+  updateAccount,
+  createChange
 }
 
 export default compose(

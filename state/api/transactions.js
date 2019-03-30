@@ -1,7 +1,21 @@
-import { makeApiRequest, makeAuthorizedApiRequest } from '~/state/helpers'
-import sampleChains from '~/state/sampleChains.json'
+import { makeAuthorizedApiRequest } from '~/state/helpers'
 
-export async function getChains(accounts) {
-  const chains = sampleChains
-  return chains
+export const getChains = async accounts => {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/node/chains',
+    data: { accounts }
+  })
+
+  return data.accounts
+}
+
+export const broadcast = async (blockJSON, prevHash, amount = 'false') => {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/node/broadcast',
+    data: { block: blockJSON, amount, hash: prevHash }
+  })
+
+  return data
 }

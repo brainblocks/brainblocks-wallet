@@ -13,7 +13,8 @@ import { getPreferredCurrency } from '~/state/selectors/userSelectors'
 import {
   getTransactions,
   getTransactionsForDashboardAccount,
-  getVisibleTransactionsForDashboardAccount
+  getVisibleTransactionsForDashboardAccount,
+  getIsGettingChains
 } from '~/state/selectors/transactionSelectors'
 import { creators as uiActions } from '~/state/actions/uiActions'
 import {
@@ -42,7 +43,8 @@ type Props = {
   nanoPrice: number,
   totalBalance: number,
   updateDashboardAccount: string => void,
-  dashboardAccount: string
+  dashboardAccount: string,
+  isGettingTransactions: boolean
 }
 
 class Index extends Component<Props> {
@@ -78,7 +80,8 @@ class Index extends Component<Props> {
       totalBalance,
       dashboardAccount,
       updateDashboardAccount,
-      nanoPrice
+      nanoPrice,
+      isGettingTransactions
     } = this.props
     return (
       <ClientBootstrap>
@@ -108,6 +111,7 @@ class Index extends Component<Props> {
               }
             </Media>
             <TransactionsList
+              loading={isGettingTransactions}
               transactions={transactions}
               showTransactions={visibleTransactionIds}
               accounts={accounts}
@@ -138,7 +142,8 @@ export default connect(
     totalBalance: getTotalBalance(state),
     preferredCurrency: getPreferredCurrency(state),
     nanoPrice: getNanoPriceInPreferredCurrency(state),
-    dashboardAccount: getDashboardAccount(state)
+    dashboardAccount: getDashboardAccount(state),
+    isGettingTransactions: getIsGettingChains(state)
   }),
   {
     txPagingSet: uiActions.txPagingSet,
