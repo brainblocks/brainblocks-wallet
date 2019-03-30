@@ -2,9 +2,14 @@ import { createSelector } from 'reselect'
 
 const getUI = state => state.ui
 
-export const getIsWorking = createSelector(
+export const getActiveProcesses = createSelector(
   [getUI],
-  ui => ui.activeProcesses.length > 0
+  ui => ui.activeProcesses
+)
+
+export const getIsWorking = createSelector(
+  [getActiveProcesses],
+  processes => processes.length > 0
 )
 
 export const getTransactionPagingIndexes = createSelector(

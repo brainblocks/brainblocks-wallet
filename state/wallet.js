@@ -12,6 +12,7 @@ import bigInt from 'big-integer'
 import type { NanoTransactionRedux } from '~/types'
 import nanoTransactionTemplate from '~/state/reducers/transactionsReducer'
 import * as VaultAPI from '~/state/api/vault'
+import { isValidNanoAddress } from '~/functions/validate'
 
 export let wallet: Object | null = null
 
@@ -28,6 +29,7 @@ export const destroyWallet = () => {
  * Pack the wallet and update it on the server
  */
 export const syncVault = async () => {
+  if (wallet === null) throw new Error('Wallet not instantiated')
   const hex = wallet.pack()
   return await VaultAPI.updateVault(hex)
 }
@@ -56,7 +58,11 @@ export const populateChains = (accounts: Object) => {
 
       if (getBlockIntent(blk) !== 'change') {
         const tx = blockToReduxTx(blk)
-        tx.timestamp = parseInt(blocks[i].height, 10)
+        if (isValidNanoAddress(blocks[i].source_account)) {
+          tx.linkAddress = blocks[i].source_account
+        }
+        tx.timestamp = parseInt(blocks[i].local_timestamp, 10) * 1000
+        tx.height = parseInt(blocks[i].height, 10)
         tx.balanceNano = rawToNano(blocks[i].balance)
         txs[tx.id] = tx
       }
@@ -103,7 +109,7 @@ const getBlockLinkAsAddress: Object => string = block => {
       return block.getLinkAsAccount()
     case 'open':
     case 'receive':
-      return RaiFunctions.accountFromHexKey(block.getSource())
+      return RaiFunctions.accountFromHexKey(block.getOrigin())
     case 'send':
       return RaiFunctions.accountFromHexKey(block.getDestination())
     default:
@@ -114,10 +120,18 @@ const getBlockLinkAsAddress: Object => string = block => {
 /**
  * Raw to Nano
  */
-const rawToNano: string => number = raw =>
+export const rawToNano: (string | Object) => number = raw =>
   bigInt(raw)
     .over('1000000000000000000000000')
     .toJSNumber() / 1000000
+
+/**
+ * Nano to Raw
+ */
+export const nanoToRaw: number => Object = nano => {
+  const amountRai = parseInt(nano * 1000000, 10)
+  return bigInt(amountRai).multiply('1000000000000000000000000')
+}
 
 /**
  * Get Nano amount as Native JS Number from block
@@ -133,7 +147,6 @@ export const blockToReduxTx: Object => NanoTransactionRedux = block => {
     ...nanoTransactionTemplate,
     id: block.getHash(true),
     accountId: block.getAccount(),
-    timestamp: 0, // @todo
     amountNano: getBlockAmountNano(block),
     type: getBlockIntent(block),
     isState: block.getType() === 'state',

@@ -13,6 +13,7 @@ class Layout extends React.Component {
   componentDidMount() {
     if (typeof document !== 'undefined') {
       document.addEventListener('scroll', this.handleScroll)
+      this.handleScroll()
     }
   }
 

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import TransactionListItem from './TransactionListItem'
-import { getAccountById } from '~/functions/accounts'
+import { Spinner } from 'brainblocks-components'
 
 type Props = {
   accounts: NormalizedState,
@@ -11,7 +11,8 @@ type Props = {
   showTransactions: Array<string>,
   styles: Object,
   account: string,
-  pagination: React.Node
+  pagination: React.Node,
+  loading: boolean
 }
 
 class TransactionsList extends React.Component<Props> {
@@ -39,6 +40,7 @@ class TransactionsList extends React.Component<Props> {
       showTransactions,
       account = 'all',
       pagination,
+      loading = false,
       ...rest
     } = this.props
     const txIds = showTransactions.filter(
@@ -59,8 +61,13 @@ class TransactionsList extends React.Component<Props> {
               <th className={styles.actionCol} />
             </tr>
           </thead>
-          <tbody>{this.renderTransactions(txIds)}</tbody>
+          <tbody>{!loading && this.renderTransactions(txIds)}</tbody>
         </table>
+        {loading && (
+          <div className={styles.loading}>
+            <Spinner color="#666" size={24} />
+          </div>
+        )}
         <div className={styles.pagination}>{pagination}</div>
       </div>
     )

@@ -10,6 +10,7 @@ export const nanoTransactionTemplate: NanoTransactionRedux = {
   accountId: '', // which nano address is it associated with?
   timestamp: 0,
   amountNano: 0,
+  height: 0,
   type: 'send', // open, receive, send, change
   isState: true,
   linkAddress: '', // link_as_account
@@ -47,10 +48,12 @@ const transactionsReducer: (state: Object, action: Object) => Object = (
         return draft
     }
 
-    // sort descending by timestamp
-    draft.allIds.sort(
-      (a, b) => draft.byId[b].timestamp - draft.byId[a].timestamp
-    )
+    // sort descending by timestamp then height
+    draft.allIds.sort((a, b) => {
+      const byTime = draft.byId[b].timestamp - draft.byId[a].timestamp
+      const byHeight = draft.byId[b].height - draft.byId[a].height
+      return byTime !== 0 ? byTime : byHeight
+    })
 
     return draft
   })
