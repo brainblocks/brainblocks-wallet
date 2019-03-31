@@ -49,7 +49,7 @@ const Accounts = props => {
           <div style={{ marginTop: 10 }} />
           <AccountsList
             type={WALLET_KEY_TYPES}
-            nanoPrice={3.24}
+            nanoPrice={props.nanoPrice}
             accounts={props.accounts}
             preferredCurrency={props.preferredCurrency}
           />

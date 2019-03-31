@@ -102,8 +102,10 @@ export const createSend = (fromAddr, toAddr, amountNano) => (
     const transactions = getTransactions(state)
     const reduxTx = blockToReduxTx(blk)
     reduxTx.timestamp = time
-    reduxTx.height = transactions.byId[blk.getPrevious()].height + 1
     reduxTx.balanceNano = rawToNano(blk.getBalance())
+    if (transactions.byId[blk.getPrevious()]) {
+      reduxTx.height = transactions.byId[blk.getPrevious()].height + 1
+    }
     dispatch(creators.createTransaction(reduxTx))
 
     // sync redux accounts

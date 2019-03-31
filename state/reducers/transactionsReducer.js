@@ -51,7 +51,7 @@ const transactionsReducer: (state: Object, action: Object) => Object = (
     // sort descending by timestamp then height
     draft.allIds.sort((a, b) => {
       const byTime = draft.byId[b].timestamp - draft.byId[a].timestamp
-      const byHeight = draft.byId[b].height - draft.byId[a].height
+      const byHeight = draft.byId[b].height || 0 - draft.byId[a].height || 0
       return byTime !== 0 ? byTime : byHeight
     })
 
