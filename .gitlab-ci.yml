@@ -48,7 +48,7 @@ staging:
     refs:
       - develop
   script:
-    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && pm2 restart staging-wallet"
+    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && npm run build && pm2 restart staging-wallet"
 
 deploy:
   stage: deploy
@@ -56,4 +56,4 @@ deploy:
     refs:
       - master
   script:
-    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && pm2 restart wallet"
+    - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && npm install && npm run build && pm2 restart wallet"
