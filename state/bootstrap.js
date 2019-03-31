@@ -35,6 +35,9 @@ export const bootstrapInitialProps = async (ctx: NextJSContext) => {
   // Get the token from the cookie
   const { token } = nextCookie(ctx)
 
+  // log token
+  console.log(token)
+
   if (!isAuthorized) {
     try {
       // Authenticate (also gets user)
