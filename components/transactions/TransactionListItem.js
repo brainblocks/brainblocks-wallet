@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import { formatTimeAgo, formatNano } from '~/functions/format'
-import { Button, NanoAddress, KeyValue } from 'brainblocks-components'
+import { Button, NanoAddress, KeyValue, Spinner } from 'brainblocks-components'
 import TransactionImage from './TransactionImage'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import TransactionMenu from './TransactionMenu'
@@ -111,18 +111,26 @@ class TransactionListItem extends React.Component<Props, State> {
             {formatNano(tx.amountNano)} NANO
           </span>
           <span className={styles.timeAgo}>
-            {tx.timestamp === 0 ? 'Date unknown' : formatTimeAgo(tx.timestamp)}
+            {tx.status === 'pending'
+              ? 'Pending...'
+              : tx.timestamp === 0
+              ? 'Date unknown'
+              : formatTimeAgo(tx.timestamp)}
           </span>
         </td>
         <td className={styles.actionCol}>
-          <Button
-            variant="icon"
-            size="24"
-            style={{ marginRight: -6 }}
-            onClick={this.handleMoreOptionsOpen}
-          >
-            <MoreIcon />
-          </Button>
+          {tx.status === 'pending' ? (
+            <Spinner size={18} color="#666666" />
+          ) : (
+            <Button
+              variant="icon"
+              size="24"
+              style={{ marginRight: -6 }}
+              onClick={this.handleMoreOptionsOpen}
+            >
+              <MoreIcon />
+            </Button>
+          )}
           <TransactionMenu
             transaction={tx}
             id="transaction-more-options"

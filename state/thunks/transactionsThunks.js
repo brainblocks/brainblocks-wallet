@@ -7,6 +7,7 @@ import * as transactionsAPI from '~/state/api/transactions'
 import {
   wallet,
   populateChains,
+  getPendingBlocksFromAccountsObject,
   blockToReduxTx,
   nanoToRaw,
   rawToNano,
@@ -54,6 +55,54 @@ export const importChains = () => (dispatch, getState) => {
   })
 }
 
+export const handlePendingBlocks = accountsObject => async (
+  dispatch,
+  getState
+) => {
+  // get the pending blocks in block and redux format
+  // blocks is in the correct order to process
+  const { reduxTxs, blocks } = getPendingBlocksFromAccountsObject(
+    accountsObject
+  )
+
+  console.log(reduxTxs, blocks)
+  // update redux transactions
+  dispatch(creators.bulkAddTransactions(reduxTxs))
+
+  // broadcast them in sequence
+  for (let block of blocks) {
+    const hash = block.getHash(true)
+    dispatch(uiCreators.addActiveProcess(`broadcast-pending-receive-${hash}`))
+
+    let blk
+    try {
+      blk = await tryBroadcast(block)
+    } catch (e) {
+      console.error('Error broadcasting block', e)
+      dispatch(
+        uiCreators.removeActiveProcess(`broadcast-pending-receive-${hash}`)
+      )
+      break
+    }
+
+    // update in redux
+    dispatch(
+      creators.updateTransaction({
+        id: hash,
+        status: 'confirmed',
+        timestamp: Date.now()
+      })
+    )
+
+    // sync redux accounts
+    dispatch(syncReduxAccounts())
+
+    dispatch(
+      uiCreators.removeActiveProcess(`broadcast-pending-receive-${hash}`)
+    )
+  }
+}
+
 export const createSend = (fromAddr, toAddr, amountNano) => (
   dispatch,
   getState
@@ -93,7 +142,7 @@ export const createSend = (fromAddr, toAddr, amountNano) => (
 
     // broadcast
     try {
-      tryBroadcast(blk)
+      await tryBroadcast(blk)
     } catch (e) {
       return rejector('Error broadcasting block', e)
     }
@@ -142,7 +191,7 @@ export const createChange = (account, rep) => (dispatch, getState) => {
 
     // broadcast
     try {
-      tryBroadcast(blk)
+      await tryBroadcast(blk)
     } catch (e) {
       return rejector('Error broadcasting block', e)
     }

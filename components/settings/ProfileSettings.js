@@ -10,8 +10,6 @@ import {
   Button
 } from 'brainblocks-components'
 
-import mockState from '~/state/mockState'
-
 type Props = {
   user: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
