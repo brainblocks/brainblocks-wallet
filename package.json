@@ -7,6 +7,7 @@
     "dev": "npm install && NODE_ENV=development next",
     "build": "next build",
     "start": "next start -p 3010",
+    "start-staging": "next start",
     "flow": "flow",
     "styleguidist": "npx styleguidist server",
     "test": "echo 'Not Implemented'"
