@@ -6,6 +6,7 @@ import { getAccounts } from '~/state/selectors/accountSelectors'
 import { creators as accountActions } from '~/state/actions/accountActions'
 import { wallet, createWallet } from '~/state/wallet'
 import { password, destroyPassword } from '~/state/password'
+import { initWs, getWs, subscribeAccounts, getPending } from '~/state/websocket'
 import {
   getCurrentAuth,
   getIsAuthorized
@@ -17,7 +18,10 @@ import ReEnterPassword from '~/pages/re-enter-password'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { getTransactions } from '~/state/selectors/transactionSelectors'
 import { getOrCreateWallet } from '~/state/thunks/vaultThunks'
-import { importChains } from '~/state/thunks/transactionsThunks'
+import {
+  importChains,
+  handlePendingBlocks
+} from '~/state/thunks/transactionsThunks'
 import { getCipheredWallet } from '~/state/selectors/vaultSelectors'
 import { getVault } from '~/state/thunks/vaultThunks'
 
@@ -41,6 +45,7 @@ class Bootstrap extends React.Component {
   didAddAccounts = false
   didGetTransactions = false
   priceInterval = null
+  socketPingInterval = null
   state = {
     error: null
   }
@@ -91,6 +96,7 @@ class Bootstrap extends React.Component {
       this.createWallet()
       this.addAccounts()
       this.getTransactions()
+      this.socketInit()
     }
   }
 
@@ -102,12 +108,14 @@ class Bootstrap extends React.Component {
         this.createWallet()
         this.addAccounts()
         this.getTransactions()
+        this.socketInit()
       }
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.priceInterval)
+    clearInterval(this.socketPingInterval)
   }
 
   // returns true if redirected
@@ -229,6 +237,58 @@ class Bootstrap extends React.Component {
     }
   }
 
+  socketInit = () => {
+    if (this.hasTransactions) {
+      // get/init ws
+      const ws = initWs()
+      // ws won't exist on the server
+      if (ws) {
+        // handle errors
+        ws.onerror = err => {
+          console.error('Websocket error', err)
+          clearInterval(this.socketPingInterval)
+        }
+        // handle close
+        ws.onclose = e => {
+          console.warn('Websocket closed')
+          clearInterval(this.socketPingInterval)
+        }
+        // subscribe when connected
+        ws.onopen = event => {
+          console.log('Websocket connected successfully')
+          subscribeAccounts(this.props.accounts.allIds)
+          // setup ping pong
+          clearInterval(this.socketPingInterval)
+          this.socketPingInterval = setInterval(() => {
+            console.log('Socket: client ping')
+            ws.send(JSON.stringify({ event: 'ping' }))
+          }, 30 * 1000)
+        }
+        // handle new messages
+        ws.onmessage = message => {
+          let { data } = message
+          data = JSON.parse(data)
+          switch (data.event) {
+            case 'newBlock':
+              console.log('New block', data.data)
+              this.props.handlePendingBlocks(data.data.accounts)
+              break
+            case 'subscribed':
+              console.log('Subscribed', data.data)
+              getPending([data.data])
+              break
+            case 'error':
+              console.error('Error message from socket: ', data.data)
+              break
+            default:
+              console.log('Unknown socket event: ' + event)
+              break
+          }
+        }
+      }
+    }
+  }
+
   render() {
     if (this.state.error) {
       return <Error />
@@ -257,7 +317,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   importChains: () => dispatch(importChains()),
   getVault: () => dispatch(getVault()),
   bulkAddAccounts: accounts =>
-    dispatch(accountActions.bulkAddAccounts(accounts))
+    dispatch(accountActions.bulkAddAccounts(accounts)),
+  handlePendingBlocks: accountsObject =>
+    dispatch(handlePendingBlocks(accountsObject))
 })
 
 const ConnectedBootstrap = connect(

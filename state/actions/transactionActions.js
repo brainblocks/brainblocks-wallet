@@ -1,7 +1,8 @@
 // @flow
 const actions = {
   BULK_ADD_TRANSACTIONS: 'TRANSACTIONS::BULK_ADD',
-  CREATE_TRANSACTION: 'TRANSACTIONS::CREATE'
+  CREATE_TRANSACTION: 'TRANSACTIONS::CREATE',
+  UPDATE_TRANSACTION: 'TRANSACTIONS::UPDATE'
 }
 
 const creators = {
@@ -11,6 +12,10 @@ const creators = {
   }),
   createTransaction: (payload = {}) => ({
     type: actions.CREATE_TRANSACTION,
+    payload
+  }),
+  updateTransaction: (payload = {}) => ({
+    type: actions.UPDATE_TRANSACTION,
     payload
   })
 }

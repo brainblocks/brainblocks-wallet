@@ -75,6 +75,52 @@ export const populateChains = (accounts: Object) => {
 }
 
 /**
+ * Takes an object of accounts and their pending transactions
+ * as given by the BrainBlocks API
+ * and returns them in both redux transaction format and as block objects.
+ * IMPORTANT: The returned blocks array must be in the order of the chain
+ * @param {Object} accounts
+ * @returns { reduxTxs: Object, blocks: array }
+ */
+export const getPendingBlocksFromAccountsObject = (accounts: Object) => {
+  if (wallet === null) throw new Error('Wallet not instantiated')
+
+  const txs = {}
+  const blocks = []
+  for (let acc in accounts) {
+    if (!Array.isArray(accounts[acc].blocks)) continue
+    accounts[acc].blocks.forEach(blk => {
+      // wallet format
+      const block = wallet.addPendingReceiveBlock(
+        blk.hash,
+        acc,
+        blk.from,
+        blk.amount
+      )
+      if (!block) {
+        console.error(`Error adding block ${blk.hash}`)
+        return
+      }
+      blocks.push(block)
+
+      // redux format
+      const tx = blockToReduxTx(block)
+      tx.status = 'pending'
+      tx.linkAddress = blk.from
+      tx.timestamp = Date.now()
+      tx.balanceNano = rawToNano(block.balance)
+      txs[tx.id] = tx
+    })
+
+    // do I need this?
+    /*wallet.useAccount(acc)
+    wallet.setAccountBalancePublic(accounts[acc].balance, acc)*/
+  }
+
+  return { reduxTxs: txs, blocks }
+}
+
+/**
  * Return whether a block is a send|receive|open|change (regardless of being a state block)
  */
 const getBlockIntent: Object =>
@@ -93,7 +139,7 @@ const getBlockIntent: Object =>
   if (previousBalance.eq(block.getBalance())) return 'change'
   if (block.getBalance().greater(previousBalance)) return 'receive'
   if (block.getBalance().lesser(previousBalance)) return 'send'
-  throw new Error(`Cannot determine block intent for ${block.getHash()}`)
+  throw new Error(`Cannot determine block intent for ${block.getHash(true)}`)
 }
 
 /**
