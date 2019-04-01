@@ -16,10 +16,8 @@ import {
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'
 
-import mockState from '~/state/mockState'
-
 type Props = {
-  enqueueSnackbar: func,
+  enqueueSnackbar: (string, ?Object) => void,
   router: Object,
   accounts: NormalizedState,
   defaultAccount: string,

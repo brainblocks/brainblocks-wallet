@@ -14,7 +14,7 @@ export const nanoTransactionTemplate: NanoTransactionRedux = {
   type: 'send', // open, receive, send, change
   isState: true,
   linkAddress: '', // link_as_account
-  status: 'local', // local | pending | confirmed
+  status: 'confirmed', // local | pending | confirmed
   note: ''
 }
 
@@ -33,15 +33,25 @@ const transactionsReducer: (state: Object, action: Object) => Object = (
 
   //$FlowFixMe
   return produce(state, draft => {
+    let id
+    if (
+      action.hasOwnProperty('payload') &&
+      action.payload.hasOwnProperty('id')
+    ) {
+      id = action.payload.id
+    }
+
     switch (action.type) {
       case actions.BULK_ADD_TRANSACTIONS:
         draft.allIds = [...draft.allIds, ...Object.keys(action.payload)]
         draft.byId = { ...draft.byId, ...action.payload }
         break
       case actions.CREATE_TRANSACTION:
-        const { id } = action.payload
         draft.allIds.push(id)
         draft.byId[id] = { ...nanoTransactionTemplate, ...action.payload }
+        break
+      case actions.UPDATE_TRANSACTION:
+        draft.byId[id] = { ...draft.byId[id], ...action.payload }
         break
       default:
         // return early from here to skip re-sorting unnecessarily

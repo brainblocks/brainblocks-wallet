@@ -5,6 +5,7 @@ import theme from '~/theme/theme'
 addStyles('TransactionListItem', props => {
   const td = css`
     vertical-align: middle;
+    opacity: ${props.transaction.status === 'pending' ? '0.5' : '1'};
   `
 
   return {
@@ -71,6 +72,7 @@ addStyles('TransactionListItem', props => {
       ${td};
       text-align: center;
       padding-left: 12px;
+      padding-right: 4px;
     `
   }
 })
