@@ -1,7 +1,7 @@
 import { creators } from '~/state/actions/accountActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import * as accountsAPI from '~/state/api/accounts'
-import { wallet, syncVault } from '~/state/wallet'
+import { wallet, syncVault, rawToNano } from '~/state/wallet'
 
 export const updateAccount = account => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
@@ -21,7 +21,7 @@ export const updateAccount = account => (dispatch, getState) => {
       await syncVault()
 
       // update on server
-      updatedAccount = await accountsAPI.updateAccount(account)
+      //updatedAccount = await accountsAPI.updateAccount(account)
       resolve()
     } catch (e) {
       dispatch(
@@ -72,4 +72,18 @@ export const addAccount = accountSettings => {
       }
     })
   }
+}
+
+// Sync redux accounts with values retrieved from the wallet
+export const syncReduxAccounts = () => (dispatch, getState) => {
+  const accounts = wallet.getAccounts()
+  const updatedAccounts = accounts.map(acc => {
+    const account = { ...acc }
+    account.balance = rawToNano(wallet.getAccountBalance(acc.account))
+    account.representative = wallet.getRepresentative(acc.account)
+    wallet.useAccount(acc.account)
+    account.pendingBalance = rawToNano(wallet.getPendingBalance())
+    return account
+  })
+  dispatch(creators.bulkUpdateAccounts(updatedAccounts))
 }

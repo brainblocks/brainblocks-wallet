@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { wallet, createWallet } from '~/state/wallet'
 import { Wallet } from 'rai-wallet'
 import { createVault } from '~/state/api/vault'
+import { verifyPassword } from '~/state/api/auth'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { addAccount } from '~/state/thunks/accountsThunks'
@@ -88,7 +89,8 @@ class NewVault extends React.Component<Props, State> {
     })
     // verify password
     try {
-      //await verifyPassword(password)
+      let correct = await verifyPassword(password)
+      if (!correct) throw new Error('Invalid password')
     } catch (e) {
       console.error('Error verifying password')
       this.setState({

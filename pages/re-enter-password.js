@@ -5,6 +5,7 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
+import { verifyPassword } from '~/state/api/auth'
 import { setPassword } from '~/state/password'
 import { Formik } from 'formik'
 import {
@@ -21,9 +22,11 @@ class ReEnterPassword extends React.Component {
     error: false
   }
 
-  handleSubmit = (values, { setSubmitting }) => {
+  handleSubmit = async (values, { setSubmitting }) => {
+    // verify password
     try {
-      //await verifyPassword(values.password)
+      let correct = await verifyPassword(values.password)
+      if (!correct) throw new Error('Invalid password')
     } catch (e) {
       console.error('Error verifying password')
       setSubmitting(false)
@@ -50,13 +53,7 @@ class ReEnterPassword extends React.Component {
               initialValues={{ password: '' }}
               onSubmit={this.handleSubmit}
             >
-              {({
-                values,
-                handleChange,
-                handleSubmit,
-                isSubmitting
-                /* and other goodies */
-              }) => (
+              {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Grid gutter={16}>
                     <GridItem>

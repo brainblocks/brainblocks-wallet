@@ -2,7 +2,6 @@
 import React from 'react'
 import { Media } from 'react-breakpoints'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
-import { getAccountById } from '~/functions/accounts'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'

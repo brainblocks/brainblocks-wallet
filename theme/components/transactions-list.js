@@ -69,6 +69,10 @@ addStyles('TransactionsList', props => {
     valueCol: css`
       ${valueCol};
     `,
+    loading: css`
+      margin: 40px;
+      text-align: center;
+    `,
     pagination: css`
       text-align: center;
       margin: 14px 0 0;

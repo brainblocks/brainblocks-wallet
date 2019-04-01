@@ -3,6 +3,7 @@ const actions = {
   BULK_ADD_ACCOUNTS: 'ACCOUNTS::BULK_ADD_ACCOUNTS',
   CREATE_ACCOUNT: 'ACCOUNTS::CREATE_ACCOUNT',
   UPDATE_ACCOUNT: 'ACCOUNTS::UPDATE_ACCOUNT',
+  BULK_UPDATE_ACCOUNTS: 'ACCOUNTS::BULK_UPDATE_ACCOUNTS',
   DELETE_ACCOUNT: 'ACCOUNTS::DELETE_ACCOUNT'
 }
 
@@ -17,6 +18,10 @@ const creators = {
   }),
   updateAccount: (payload = {}) => ({
     type: actions.UPDATE_ACCOUNT,
+    payload
+  }),
+  bulkUpdateAccounts: (payload = []) => ({
+    type: actions.BULK_UPDATE_ACCOUNTS,
     payload
   }),
   deleteAccount: accountId => ({

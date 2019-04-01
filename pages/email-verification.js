@@ -135,7 +135,6 @@ class EmailVerificationPage extends Component<Props, State> {
           ) : this.isVerified ? (
             <Message
               title="Success!"
-              subtitle="Here is a test subtitle so we can see how it looks."
               graphic="/static/svg/undraw_mail_cg1t.svg"
             >
               <p>

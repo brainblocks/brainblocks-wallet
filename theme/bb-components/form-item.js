@@ -38,5 +38,8 @@ addStyles('BB-FormItem', {
     margin-top: 12px;
     margin-left: 22px;
     color: ${theme.color.status.error};
+    p {
+      margin: 0;
+    }
   `
 })

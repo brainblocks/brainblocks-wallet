@@ -26,6 +26,7 @@ export type NanoTransactionRedux = {
   accountId: string,
   timestamp: number,
   amountNano: number,
+  height: number,
   type: 'open' | 'receive' | 'send' | 'change',
   isState: boolean,
   linkAddress: string, // link_as_account

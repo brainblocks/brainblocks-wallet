@@ -16,12 +16,11 @@ export const updatePrice = (focusCheck = true) => (dispatch, getState) => {
       let prices
       try {
         prices = await priceAPI.getNanoPrices()
+        // update in redux
+        dispatch(creators.updateNanoPrices(prices))
       } catch (e) {
         console.error('Error getting price', e)
       }
-
-      // update in redux
-      dispatch(creators.updateNanoPrices(prices))
 
       // let ui know we're done
       dispatch(uiCreators.removeActiveProcess(`check-price-${time}`))

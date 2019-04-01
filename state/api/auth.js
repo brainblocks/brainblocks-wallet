@@ -92,3 +92,17 @@ export async function logout(token) {
     return data
   }
 }
+
+export async function verifyPassword(password) {
+  try {
+    let { data } = await makeAuthorizedApiRequest({
+      method: 'post',
+      url: '/auth/validatepwd',
+      data: { password }
+    })
+    return true
+  } catch (e) {
+    console.error('Could not validate password', e)
+    return false
+  }
+}

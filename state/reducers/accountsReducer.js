@@ -10,7 +10,8 @@ const accountTemplate = {
   pendingBalance: 0,
   type: '',
   color: '',
-  transactions: []
+  transactions: [],
+  representative: ''
 }
 
 export const accountsInitialState = {
@@ -47,6 +48,14 @@ const accountsReducer = (state, action) => {
           ...draft.byId[id],
           ...action.payload
         }
+        break
+      case actions.BULK_UPDATE_ACCOUNTS:
+        action.payload.forEach(acc => {
+          draft.byId[acc.account] = {
+            ...draft.byId[acc.account],
+            ...acc
+          }
+        })
         break
       case actions.DELETE_ACCOUNT:
         break

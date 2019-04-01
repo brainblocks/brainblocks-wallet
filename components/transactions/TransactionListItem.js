@@ -110,7 +110,9 @@ class TransactionListItem extends React.Component<Props, State> {
             {tx.type === 'send' && '- '}
             {formatNano(tx.amountNano)} NANO
           </span>
-          <span className={styles.timeAgo}>{formatTimeAgo(tx.timestamp)}</span>
+          <span className={styles.timeAgo}>
+            {tx.timestamp === 0 ? 'Date unknown' : formatTimeAgo(tx.timestamp)}
+          </span>
         </td>
         <td className={styles.actionCol}>
           <Button
