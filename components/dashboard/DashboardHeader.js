@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import moment from 'moment'
 import { Media } from 'react-breakpoints'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
@@ -30,6 +31,8 @@ type Props = {
   accounts: NormalizedState,
   preferredCurrency: string,
   totalBalance: number,
+  accountTransactions: Array<string>,
+  transactions: NormalizedState,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -49,14 +52,6 @@ function allAccountsBalance(accounts) {
     0
   )
 }
-
-const data = [
-  { date: '2018-07-19', balance: 100 },
-  { date: '2018-07-20', balance: 300 },
-  { date: '2018-07-21', balance: 1500 },
-  { date: '2018-07-22', balance: 600 },
-  { date: '2018-07-23', balance: 400 }
-]
 
 class DashboardHeader extends React.Component<Props, State> {
   state = {
@@ -85,11 +80,48 @@ class DashboardHeader extends React.Component<Props, State> {
       account = 'all',
       onSelectAccount,
       preferredCurrency,
+      transactions,
+      accountTransactions,
       ...rest
     }: Props = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const balance =
       account === 'all' ? totalBalance : accounts.byId[account].balance
+
+    function buildChartData() {
+      // create array to hold chart data
+      let chartData = []
+
+      // check every transaction
+      for (let hash of accountTransactions) {
+        // for (let account of Object.keys(accountTransactions)) {
+        if (transactions.byId.hasOwnProperty(hash)) {
+          // pull and break down block for hash
+          const block = transactions.byId[hash]
+          const timestamp = block.timestamp
+          const balance = block.balanceNano
+
+          let chartObject = {}
+          chartObject.date = moment(timestamp).format('YYYY-MM-DD')
+          chartObject.balance = balance
+          chartData.push(chartObject)
+        }
+      }
+
+      // return a history if we don't have one
+      if (chartData.length <= 7) {
+        while (chartData.length <= 7) {
+          const today = moment()
+            .subtract(chartData.length, 'days')
+            .format('YYYY-MM-DD')
+          const chartObject = { date: today, balance: 0 }
+          chartData.push(chartObject)
+        }
+      }
+
+      // return chart data
+      return chartData.reverse()
+    }
 
     return (
       <div className={styles.root} {...rest}>
@@ -208,7 +240,7 @@ class DashboardHeader extends React.Component<Props, State> {
                   History
                 </Typography>
                 <HistoryChart
-                  data={data}
+                  data={buildChartData()}
                   xAxisName={'date'}
                   yAxisName={'balance'}
                 />

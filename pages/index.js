@@ -94,6 +94,8 @@ class Index extends Component<Props> {
               accounts={accounts}
               preferredCurrency={preferredCurrency}
               account={dashboardAccount}
+              accountTransactions={currentAccountTransactions}
+              transactions={transactions}
               onSelectAccount={this.handleUpdateAccount}
               nanoPrice={nanoPrice}
               nano24hChange={-2.31}
