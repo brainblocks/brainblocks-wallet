@@ -65,7 +65,6 @@ export const handlePendingBlocks = accountsObject => async (
     accountsObject
   )
 
-  console.log(reduxTxs, blocks)
   // update redux transactions
   dispatch(creators.bulkAddTransactions(reduxTxs))
 
