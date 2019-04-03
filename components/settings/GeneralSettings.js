@@ -47,8 +47,8 @@ const GeneralSettings = ({
               balances="all"
               account={defaultAccount}
               accounts={accounts}
-              onChange={account => {
-                onUpdateUser({ defaultAccount: account })
+              onChange={e => {
+                onUpdateUser({ defaultAccount: e.target.value })
               }}
             />
           </FormField>
