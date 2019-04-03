@@ -17,9 +17,9 @@ addStyles('BB-MenuItem', props => {
   return {
     root: css`
       ${libStyles.root};
-      font-family: ${theme.type.baseFontFamily};
-      font-weight: ${theme.type.baseFontWeight};
-      line-height: ${theme.type.baseLineHeight};
+      font-family: ${theme.type.baseFontFamily} !important;
+      font-weight: ${theme.type.baseFontWeight} !important;
+      line-height: ${theme.type.baseLineHeight} !important;
     `,
     selected: css`
       ${libStyles.selected};
