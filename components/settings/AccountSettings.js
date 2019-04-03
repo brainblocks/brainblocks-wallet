@@ -69,10 +69,12 @@ class AccountSettings extends React.Component<Props, State> {
     }
   }
 
-  handleSwitchAccount = acc => {
+  handleSwitchAccount = e => {
+    const acc = e.target.value
     this.setState({
       account: acc,
-      label: this.props.accounts.byId[acc].label
+      label: this.props.accounts.byId[acc].label,
+      rep: this.props.accounts.byId[acc].representative
     })
   }
 
@@ -127,8 +129,9 @@ class AccountSettings extends React.Component<Props, State> {
     const { styles, accounts, ...rest }: Props = this.props
     const { account, rep, label } = this.state
     const accountObj = accounts.byId[account]
+    const accountRep = accountObj.representative
     const isLabelDirty = label !== accounts.byId[account].label
-    const isRepDirty = rep !== accounts.byId[account].representative
+    const isRepDirty = !!accountRep && rep !== accountRep
     return (
       <div className={styles.root}>
         <Grid>
@@ -198,7 +201,8 @@ class AccountSettings extends React.Component<Props, State> {
               label="Representative"
               fieldId="account-name"
               error={
-                rep !== '' &&
+                !!accountRep &&
+                !!rep &&
                 !isValidNanoAddress(rep) &&
                 'Please enter a valid Nano address'
               }
@@ -211,10 +215,14 @@ class AccountSettings extends React.Component<Props, State> {
                   Choose a rep
                 </a>
               }
-              description="Your representative confirms Nano transactions on your behalf"
+              description={
+                !!accountRep
+                  ? 'Your representative confirms Nano transactions on your behalf'
+                  : 'Your account must be opened before you can set a representative'
+              }
             >
               <FormField
-                valid={rep === '' || isValidNanoAddress(rep)}
+                valid={!accountRep || rep === '' || isValidNanoAddress(rep)}
                 adornEnd={
                   isRepDirty && isValidNanoAddress(rep) ? (
                     <Button
@@ -229,7 +237,8 @@ class AccountSettings extends React.Component<Props, State> {
               >
                 <Input
                   id="account-rep"
-                  value={rep}
+                  value={rep || ''}
+                  readOnly={!accountRep}
                   onChange={this.handleDirtyRep}
                 />
               </FormField>
