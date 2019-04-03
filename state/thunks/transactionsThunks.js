@@ -24,11 +24,11 @@ const tryBroadcast = async blk => {
   wallet.confirmBlock(hash)
 }
 
-export const importChains = () => (dispatch, getState) => {
+export const importChains = accounts => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
     const time = Date.now()
     const state = getState()
-    const accounts = state.accounts.allIds
+    accounts = accounts || state.accounts.allIds
 
     // show we're working
     dispatch(uiCreators.addActiveProcess(`get-chains-${time}`))
@@ -65,7 +65,6 @@ export const handlePendingBlocks = accountsObject => async (
     accountsObject
   )
 
-  console.log(reduxTxs, blocks)
   // update redux transactions
   dispatch(creators.bulkAddTransactions(reduxTxs))
 

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import { destyle } from 'destyle'
 import { cx } from 'emotion'
 import type { NormalizedState } from '~/types'
@@ -12,6 +12,8 @@ import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
 type Props = {
   /** Currently selected account id */
   account: string,
+  /** Input name to append to event.target */
+  name?: string,
   /** Accounts */
   accounts: NormalizedState,
   /** Nano Addresses */
@@ -35,13 +37,18 @@ type Props = {
   styles: Object
 }
 
+type State = {
+  open: boolean,
+  anchorEl: mixed
+}
+
 /**
  * AccountSelector
  *
  * @todo twoLine version
  * @todo include balances
  */
-class AccountSelector extends React.Component<Props> {
+class AccountSelector extends React.Component<Props, State> {
   state = {
     open: false,
     anchorEl: null
@@ -79,13 +86,18 @@ class AccountSelector extends React.Component<Props> {
     )
   }
 
-  handleSelect = val => {
+  getHandleSelect = value => event => {
+    const { name, onChange } = this.props
+    event.persist()
+    event.target = { value, name }
     this.setState(
       {
         open: false,
         anchorEl: null
       },
-      () => this.props.onChange(val)
+      () => {
+        onChange(event)
+      }
     )
   }
 
@@ -167,9 +179,11 @@ class AccountSelector extends React.Component<Props> {
         >
           {!!all && (
             <MenuItem
-              onClick={() => this.handleSelect('all')}
+              onClick={this.getHandleSelect('all')}
               destyleMerge={{ root: styles.listItem }}
               selected={account === 'all'}
+              role="option"
+              value={'all'}
             >
               <AccountTitle
                 account="all"
@@ -180,12 +194,14 @@ class AccountSelector extends React.Component<Props> {
           {accounts.allIds.map((acc, i) => (
             <MenuItem
               key={`account-selector-${i}`}
-              onClick={() => this.handleSelect(acc)}
+              onClick={this.getHandleSelect(acc)}
               destyleMerge={{
                 root: styles.listItem,
                 selected: styles.selectedItem
               }}
               selected={account === acc}
+              role="option"
+              value={acc}
             >
               <div className={styles.itemAccountTitle}>
                 <AccountTitle
