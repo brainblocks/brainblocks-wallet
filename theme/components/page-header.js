@@ -9,6 +9,7 @@ addStyles('PageHeader', props => ({
   `,
   pageWidth,
   alert: css`
+    padding: 12px 16px;
     margin: -20px 0 30px;
     background: rgb(44, 64, 107);
     font-size: ${theme.type.baseFontSize - 1}px;

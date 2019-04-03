@@ -48,7 +48,7 @@ addStyles('TransactionsList', props => {
           padding-bottom: 10px;
         }
       }
-      tr:first-child td {
+      tr:first-of-type td {
         @media (max-width: ${theme.bp.medium - 1}px) {
           border-top: none;
         }
