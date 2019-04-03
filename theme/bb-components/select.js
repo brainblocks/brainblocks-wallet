@@ -1,19 +1,25 @@
 import { addStyles } from 'destyle'
 import { css } from 'emotion'
 import theme from '../theme'
+import { styles } from 'brainblocks-components'
 
-const styles = addStyles('BB-Select', {
-  root: css`
-    border: none;
-    background-color: transparent;
-    font-family: ${theme.type.baseFontFamily};
-    font-size: 12px;
-    font-weight: 700;
-    padding-left: 10px;
-    padding-top: 5px;
-    background-position: right 1.25em center;
-  `,
-  select: css`
-    color: white;
-  `
+addStyles('BB-Select', props => {
+  const libStyles = styles.select(props)
+  return {
+    root: css`
+      ${libStyles.root};
+      border: none;
+      background-color: transparent;
+      font-family: ${theme.type.baseFontFamily};
+      font-size: 12px;
+      font-weight: 700;
+      padding-left: 10px;
+      padding-top: 5px;
+      background-position: right 1.25em center;
+    `,
+    select: css`
+      ${libStyles.select};
+      color: white;
+    `
+  }
 })

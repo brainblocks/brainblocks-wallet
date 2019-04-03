@@ -255,7 +255,6 @@ class Bootstrap extends React.Component {
         }
         // subscribe when connected
         ws.onopen = event => {
-          console.log('Websocket connected successfully')
           subscribeAccounts(this.props.accounts.allIds)
           // setup ping pong
           clearInterval(this.socketPingInterval)
@@ -282,7 +281,7 @@ class Bootstrap extends React.Component {
               console.log('Socket: server pong')
               break
             default:
-              console.log('Unknown socket event: ' + event)
+              console.log('Unknown socket event: ' + data)
               break
           }
         }
