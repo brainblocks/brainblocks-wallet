@@ -10,7 +10,9 @@ const Footer = ({ styles, variant = 'full', ...rest }) => {
           {variant === 'full' && (
             <>
               &copy; BrainBlocks {new Date().getFullYear()}.{' '}
-              <a href="#">Help / Suggestions</a>
+              <a href="mailto:support@brainblocks.io?subject=Platform%20Feedback">
+                Help / Suggestions
+              </a>
             </>
           )}
         </div>
