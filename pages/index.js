@@ -64,8 +64,8 @@ class Index extends Component<Props> {
     )
   }
 
-  handleUpdateAccount = acc => {
-    this.props.updateDashboardAccount(acc)
+  handleUpdateAccount = e => {
+    this.props.updateDashboardAccount(e.target.value)
     this.props.txPagingReset()
   }
 

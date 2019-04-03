@@ -99,7 +99,11 @@ class DashboardHeader extends React.Component<Props, State> {
           // pull and break down block for hash
           const block = transactions.byId[hash]
           const timestamp = block.timestamp
-          const balance = block.balanceNano
+          let balance = 0
+
+          if (account === 'all') {
+            balance = totalBalance
+          }
 
           let chartObject = {}
           chartObject.date = moment(timestamp).format('YYYY-MM-DD')

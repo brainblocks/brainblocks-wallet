@@ -1,5 +1,7 @@
 import { creators } from '~/state/actions/accountActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
+import { importChains } from '~/state/thunks/transactionsThunks'
+import { subscribeAccounts } from '~/state/websocket'
 import * as accountsAPI from '~/state/api/accounts'
 import { wallet, syncVault, rawToNano } from '~/state/wallet'
 
@@ -45,7 +47,7 @@ export const updateAccount = account => (dispatch, getState) => {
 // function will need to account for that
 export const addAccount = accountSettings => {
   return (dispatch, getState) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const key = wallet.newKeyFromSeed()
       if (typeof accountSettings.label === 'string') {
         wallet.setLabel(key, accountSettings.label)
@@ -62,9 +64,13 @@ export const addAccount = accountSettings => {
       try {
         // add the account to redux
         dispatch(creators.createAccount(account))
+        // look for existing blocks for this account
+        await dispatch(importChains([account.account]))
+        // subscribe to new blocks for this account
+        subscribeAccounts([account.account])
         // call the updateAccount thunk to handle updating
         // on the server
-        dispatch(updateAccount(account))
+        await dispatch(updateAccount(account))
         resolve(account)
       } catch (e) {
         console.error('Error in addAccount', e)

@@ -270,15 +270,16 @@ class Bootstrap extends React.Component {
           data = JSON.parse(data)
           switch (data.event) {
             case 'newBlock':
-              console.log('New block', data.data)
               this.props.handlePendingBlocks(data.data.accounts)
               break
             case 'subscribed':
-              console.log('Subscribed', data.data)
               getPending([data.data])
               break
             case 'error':
               console.error('Error message from socket: ', data.data)
+              break
+            case 'pong':
+              console.log('Socket: server pong')
               break
             default:
               console.log('Unknown socket event: ' + event)
