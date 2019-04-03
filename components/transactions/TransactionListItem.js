@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import { formatTimeAgo, formatNano } from '~/functions/format'
+import type { NormalizedState } from '~/types'
 import { Button, NanoAddress, KeyValue, Spinner } from 'brainblocks-components'
 import TransactionImage from './TransactionImage'
 import AccountTitle from '~/components/accounts/AccountTitle'
@@ -11,7 +12,8 @@ import MoreIcon from '~/static/svg/icons/more.svg'
 type Props = {
   styles: Object,
   transaction: Object,
-  account?: Object
+  account?: Object,
+  accounts: NormalizedState
 }
 
 type State = {
@@ -41,15 +43,34 @@ class TransactionListItem extends React.Component<Props, State> {
   /**
    * Get the contact info based on the transaction
    */
-  getContactInfo = tx => {
-    const contactInfo: { title: string, subTitle: string | React.Node } = {
+  getContactInfo = data => {
+    const tx = data.tx
+    const accounts = data.accounts
+
+    let contactInfo: { title: string, subTitle: string | React.Node } = {
       title: 'Unknown',
       subTitle: ''
     }
+    // console.log('tx: ', tx);
+
     switch (tx.type) {
       case 'receive':
+        if (tx.linkAddress) {
+          if (accounts.byId.hasOwnProperty(tx.linkAddress)) {
+            contactInfo.title = accounts.byId[tx.linkAddress].label
+          }
+          contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
+        } else if (tx.fromType === 'account') {
+          /** @todo get info by account Id */
+          contactInfo.title = 'Rahim Sterling'
+          contactInfo.subTitle = '@rahim1984'
+        }
+        break
       case 'open':
         if (tx.linkAddress) {
+          if (accounts.byId.hasOwnProperty(tx.linkAddress)) {
+            contactInfo.title = accounts.byId[tx.linkAddress].label
+          }
           contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
         } else if (tx.fromType === 'account') {
           /** @todo get info by account Id */
@@ -59,6 +80,9 @@ class TransactionListItem extends React.Component<Props, State> {
         break
       case 'send':
         if (tx.linkAddress) {
+          if (accounts.byId.hasOwnProperty(tx.linkAddress)) {
+            contactInfo.title = accounts.byId[tx.linkAddress].label
+          }
           contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
         } else if (tx.toType === 'contact') {
           /** @todo get info by account Id */
@@ -74,10 +98,11 @@ class TransactionListItem extends React.Component<Props, State> {
    * Render a single transaction as a table row
    */
   render() {
-    const { styles, transaction, account } = this.props
+    const { styles, transaction, account, accounts } = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const tx = transaction
-    const contactInfo = this.getContactInfo(tx)
+    const data = { tx, accounts }
+    const contactInfo = this.getContactInfo(data)
 
     return (
       <tr>

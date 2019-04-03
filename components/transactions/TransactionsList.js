@@ -21,12 +21,14 @@ class TransactionsList extends React.Component<Props> {
    */
   renderTransactions = txKeys => {
     const { transactions, account, accounts } = this.props
+    console.log(accounts)
     return txKeys.map((txId, i) => {
       const tx = transactions.byId[txId]
       return (
         <TransactionListItem
           key={txId}
           transaction={tx}
+          accounts={accounts}
           account={account === 'all' ? accounts.byId[tx.accountId] : null}
         />
       )
