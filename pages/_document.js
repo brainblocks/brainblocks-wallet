@@ -3,8 +3,8 @@ import { extractCritical } from 'emotion-server'
 import getConfig from 'next/config'
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    const page = renderPage()
+  static getInitialProps(ctx) {
+    const page = ctx.renderPage()
     const styles = extractCritical(page.html)
     return { ...page, ...styles }
   }

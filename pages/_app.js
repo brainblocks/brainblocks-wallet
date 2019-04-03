@@ -13,6 +13,11 @@ import ExclaimIcon from '~/static/svg/icons/alert-exclaim.svg'
 import InfoIcon from '~/static/svg/icons/alert-info.svg'
 import CrossIcon from '~/static/svg/icons/alert-cross.svg'
 import ErrorBoundary from '~/components/error/ErrorBoundary'
+import { hydrate } from 'emotion'
+
+if (typeof window !== 'undefined') {
+  hydrate(window.__NEXT_DATA__.ids)
+}
 
 class MyApp extends App {
   componentDidMount() {

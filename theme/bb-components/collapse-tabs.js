@@ -4,7 +4,7 @@ import theme from '../theme'
 import Color from 'color'
 import { resetList } from '../globals/utils'
 
-setStyles('BB-CollapseTabs', () => {
+setStyles('BB-CollapseTabs', props => {
   return {
     root: css``,
     collapsedRoot: css``,

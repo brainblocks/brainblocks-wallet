@@ -1,12 +1,17 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
+import { styles } from 'brainblocks-components'
 
 addStyles('BB-KeyValue', props => {
+  const libStyles = styles.keyValue(props)
   const isDL = !props.hasOwnProperty('keyEl') || props.keyEl === 'dt'
   return {
-    root: css``,
+    root: css`
+      ${libStyles.root};
+    `,
     key: css`
+      ${libStyles.key};
       ${props.theme === 'header' &&
         css`
           white-space: nowrap;
@@ -22,6 +27,7 @@ addStyles('BB-KeyValue', props => {
         `};
     `,
     value: css`
+      ${libStyles.value};
       margin-top: 6px;
       ${props.theme === 'header' &&
         css`

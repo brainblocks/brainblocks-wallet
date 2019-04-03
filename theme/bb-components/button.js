@@ -3,12 +3,15 @@ import { addStyles } from 'destyle'
 import Color from 'color'
 import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
+import { styles } from 'brainblocks-components'
 
 addStyles('BB-Button', props => {
+  const libStyles = styles.button(props)
   const backgroundColor =
     theme.color.palette[props.color] || props.color || theme.color.palette.teal
   return {
     root: css`
+      ${libStyles.root};
       cursor: pointer;
       border-radius: ${theme.buttons.borderRadius}px;
       border: none;

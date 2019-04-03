@@ -5,6 +5,8 @@
     [
       "emotion",
       {
+        "autoLabel": true,
+        "labelFormat": "[filename]--[local]",
         "sourceMap": false,
         "cssPropOptimization": true
       }
@@ -36,9 +38,9 @@
         [
           "emotion",
           {
-            "autoLabel": true,
+            "autoLabel": false,
             "labelFormat": "[filename]--[local]",
-            "sourceMap": true
+            "sourceMap": false
           }
         ]
       ]
