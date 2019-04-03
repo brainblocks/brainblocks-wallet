@@ -26,7 +26,7 @@ addStyles('AccountSelector', (props, state) => {
     font-size: ${theme.type.baseFontSize - 2}px;
   `
   const thinItem = css`
-    padding: 12px 26px 12px 26px;
+    padding: 12px 26px 12px 26px !important;
   `
   return {
     root: css``,
@@ -87,9 +87,9 @@ addStyles('AccountSelector', (props, state) => {
     `,
     list: css``,
     listItem: css`
-      padding: ${pad.t}px ${pad.l}px;
-      display: flex;
-      align-items: center;
+      padding: ${pad.t}px ${pad.l}px !important;
+      display: flex !important;
+      align-items: center !important;
       ${!props.twoLine && thinItem};
     `,
     listItemWithSubs: css`
