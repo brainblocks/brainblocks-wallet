@@ -283,10 +283,14 @@ class Bootstrap extends React.Component {
         clearInterval(this.socketPingInterval)
         this.socketPingInterval = setInterval(() => {
           console.log('Socket: client ping')
-          ws.send(JSON.stringify({ event: 'ping' }))
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ event: 'ping' }))
+          }
         }, 25 * 1000)
         // ping immediately to avoid a loss of ping-pong if continuously changing pages
-        ws.send(JSON.stringify({ event: 'ping' }))
+        if (ws.readyState === 1) {
+          ws.send(JSON.stringify({ event: 'ping' }))
+        }
       }
     }
   }
