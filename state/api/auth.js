@@ -45,18 +45,21 @@ export function tryDeleteToken() {
 export async function init(token) {
   let authToken = token || tryLoadToken()
 
-  const { data } = await makeApiRequest({
-    method: 'get',
-    url: `/auth`,
-    headers: {
-      'x-auth-token': authToken
-    }
-  })
+  if (authToken) {
+    const { data } = await makeApiRequest({
+      method: 'get',
+      url: `/auth`,
+      headers: {
+        'x-auth-token': authToken
+      }
+    })
 
-  // Attempt to re-store the toekn from the response in case it's updated
-  tryStoreToken(data.token)
+    // Attempt to re-store the toekn from the response in case it's updated
+    tryStoreToken(data.token)
 
-  return data
+    return data
+  }
+  return false
 }
 
 export async function login(username, password, recaptcha) {
