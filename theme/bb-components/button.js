@@ -96,6 +96,20 @@ addStyles('BB-Button', props => {
           cursor: default;
           opacity: 0.5;
         `};
+    `,
+    children: css`
+      ${libStyles.children};
+    `,
+    spinnerWrap: css`
+      ${libStyles.spinnerWrap};
+      line-height: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    `,
+    spinner: css`
+      ${libStyles.spinner};
     `
   }
 })
