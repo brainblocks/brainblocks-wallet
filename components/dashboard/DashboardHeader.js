@@ -54,9 +54,61 @@ function allAccountsBalance(accounts) {
 }
 
 class DashboardHeader extends React.Component<Props, State> {
-  state = {
-    moreOptionsOpen: false,
-    moreOptionsAnchorEl: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      moreOptionsOpen: false,
+      moreOptionsAnchorEl: null
+    }
+  }
+
+  buildChartData = () => {
+    const {
+      accountTransactions,
+      transactions,
+      account,
+      totalBalance
+    } = this.props
+
+    // create array to hold chart data
+    let chartData = []
+
+    // check every transaction
+    for (let hash of accountTransactions) {
+      // for (let account of Object.keys(accountTransactions)) {
+      if (transactions.byId.hasOwnProperty(hash)) {
+        // pull and break down block for hash
+        const tx = transactions.byId[hash]
+        const dataPoint = {
+          date: moment(tx.timestamp).format('YYYY-MM-DD'),
+          balance: tx.balanceNano
+        }
+
+        /**
+         * Calculating 'all' is actually a bit trickier than this.
+         * Will leave it as an exercise for another day
+         */
+        if (account === 'all') {
+          dataPoint.balance = totalBalance
+        }
+
+        chartData.push(dataPoint)
+      }
+    }
+
+    // return a history if we don't have one
+    if (chartData.length <= 7) {
+      while (chartData.length <= 7) {
+        const today = moment()
+          .subtract(chartData.length, 'days')
+          .format('YYYY-MM-DD')
+        const chartObject = { date: today, balance: 0 }
+        chartData.push(chartObject)
+      }
+    }
+
+    // return chart data
+    return chartData.reverse()
   }
 
   handleMoreOptionsOpen = e => {
@@ -67,7 +119,10 @@ class DashboardHeader extends React.Component<Props, State> {
   }
 
   handleMoreOptionsClose = e => {
-    this.setState({ moreOptionsOpen: false, moreOptionsAnchorEl: null })
+    this.setState({
+      moreOptionsOpen: false,
+      moreOptionsAnchorEl: null
+    })
   }
 
   render() {
@@ -87,45 +142,6 @@ class DashboardHeader extends React.Component<Props, State> {
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const balance =
       account === 'all' ? totalBalance : accounts.byId[account].balance
-
-    function buildChartData() {
-      // create array to hold chart data
-      let chartData = []
-
-      // check every transaction
-      for (let hash of accountTransactions) {
-        // for (let account of Object.keys(accountTransactions)) {
-        if (transactions.byId.hasOwnProperty(hash)) {
-          // pull and break down block for hash
-          const block = transactions.byId[hash]
-          const timestamp = block.timestamp
-          let balance = 0
-
-          if (account === 'all') {
-            balance = totalBalance
-          }
-
-          let chartObject = {}
-          chartObject.date = moment(timestamp).format('YYYY-MM-DD')
-          chartObject.balance = balance
-          chartData.push(chartObject)
-        }
-      }
-
-      // return a history if we don't have one
-      if (chartData.length <= 7) {
-        while (chartData.length <= 7) {
-          const today = moment()
-            .subtract(chartData.length, 'days')
-            .format('YYYY-MM-DD')
-          const chartObject = { date: today, balance: 0 }
-          chartData.push(chartObject)
-        }
-      }
-
-      // return chart data
-      return chartData.reverse()
-    }
 
     return (
       <div className={styles.root} {...rest}>
@@ -158,23 +174,25 @@ class DashboardHeader extends React.Component<Props, State> {
               />
             </div>
             {account !== 'all' && (
-              <Button
-                variant="icon"
-                destyleMerge={{ root: styles.moreButton }}
-                size={26}
-                onClick={this.handleMoreOptionsOpen}
-              >
-                <MoreIcon />
+              <>
+                <Button
+                  variant="icon"
+                  destyleMerge={{ root: styles.moreButton }}
+                  size={26}
+                  onClick={this.handleMoreOptionsOpen}
+                >
+                  <MoreIcon />
+                </Button>
                 <AccountMenu
                   id="account-more-options"
-                  account={account}
+                  account={accounts.byId[account]}
                   open={moreOptionsOpen}
                   anchorEl={moreOptionsAnchorEl}
                   onClose={this.handleMoreOptionsClose}
                   anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
                   transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                 />
-              </Button>
+              </>
             )}
           </div>
           <div className={styles.infoRow2}>
@@ -244,7 +262,7 @@ class DashboardHeader extends React.Component<Props, State> {
                   History
                 </Typography>
                 <HistoryChart
-                  data={buildChartData()}
+                  data={this.buildChartData()}
                   xAxisName={'date'}
                   yAxisName={'balance'}
                 />

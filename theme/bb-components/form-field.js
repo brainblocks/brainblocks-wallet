@@ -16,6 +16,7 @@ addStyles('BB-FormField', props => {
       /* A border in case it ever appears on a white background */
       border: 1px solid ${theme.color.gray.lightest};
       padding: 0;
+      overflow: hidden;
       > div,
       > input,
       > select,
