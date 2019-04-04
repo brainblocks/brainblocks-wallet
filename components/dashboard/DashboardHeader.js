@@ -73,30 +73,50 @@ class DashboardHeader extends React.Component<Props, State> {
     // create array to hold chart data
     let chartData = []
 
+    // filter out transactions without timestamps
+    const txs = accountTransactions.filter(
+      tx => transactions.byId[tx].timestamp > 0
+    )
+
+    if (!txs.length) return []
+
     // check every transaction
-    for (let hash of accountTransactions) {
-      // for (let account of Object.keys(accountTransactions)) {
-      if (transactions.byId.hasOwnProperty(hash)) {
-        // pull and break down block for hash
-        const tx = transactions.byId[hash]
-        const dataPoint = {
-          date: moment(tx.timestamp).format('YYYY-MM-DD'),
-          balance: tx.balanceNano
-        }
-
-        /**
-         * Calculating 'all' is actually a bit trickier than this.
-         * Will leave it as an exercise for another day
-         */
-        if (account === 'all') {
-          dataPoint.balance = totalBalance
-        }
-
-        chartData.push(dataPoint)
+    // keep track of the latest one
+    let latestTx = txs[0]
+    let maxTimestamp = 0
+    for (let hash of txs) {
+      // pull and break down block for hash
+      const tx = transactions.byId[hash]
+      const dataPoint = {
+        date: tx.timestamp,
+        balance: tx.balanceNano
       }
+
+      if (tx.timestamp > maxTimestamp) {
+        maxTimestamp = tx.timestamp
+        latestTx = hash
+      }
+
+      /**
+       * Calculating 'all' is actually a bit trickier than this.
+       * Will leave it as an exercise for another day
+       */
+      if (account === 'all') {
+        dataPoint.balance = totalBalance
+      }
+
+      chartData.push(dataPoint)
     }
 
+    // add a data point for the current moment, equal to the latest balance
+    // so that the chart doesn't end in the past
+    chartData.unshift({
+      date: Date.now(),
+      balance: transactions.byId[latestTx].balanceNano
+    })
+
     // return a history if we don't have one
+    /*
     if (chartData.length <= 7) {
       while (chartData.length <= 7) {
         const today = moment()
@@ -105,10 +125,10 @@ class DashboardHeader extends React.Component<Props, State> {
         const chartObject = { date: today, balance: 0 }
         chartData.push(chartObject)
       }
-    }
+    }*/
 
     // return chart data
-    return chartData.reverse()
+    return chartData
   }
 
   handleMoreOptionsOpen = e => {
