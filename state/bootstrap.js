@@ -25,35 +25,42 @@ const redirectUnauthorized = res => {
  * for page transitions
  */
 export const bootstrapInitialProps = async (ctx: NextJSContext) => {
-  const { reduxStore, res, pathName } = ctx
+  const { reduxStore, res, pathname } = ctx
   const { dispatch, getState } = reduxStore
   const props = {}
 
   const state = getState()
-  const isAuthorized = getIsAuthorized(state)
+  let isAuthorized = getIsAuthorized(state)
 
   // Get the token from the cookie
   const { token } = nextCookie(ctx)
+
+  // Add UI process (server only)
+  if (res) {
+    dispatch(uiActions.addActiveProcess('hydrating'))
+  }
 
   if (!isAuthorized) {
     try {
       // Authenticate (also gets user)
       const authData = await AuthAPI.init(token)
 
-      // Update redux store (auth + user)
-      dispatch(authActions.update(authData))
+      if (authData) {
+        isAuthorized = true
+        // Update redux store (auth + user)
+        dispatch(authActions.update(authData))
+      }
     } catch (err) {
       console.warn('Auth error:', err)
-      return props
-      /*if (pathName !== '/login') {
-        redirectUnauthorized(res)
-      }*/
+      isAuthorized = false
     }
-  }
 
-  // Add UI process (server only)
-  if (res) {
-    dispatch(uiActions.addActiveProcess('hydrating'))
+    // redirect if still not authorized
+    if (!isAuthorized) {
+      if (pathname !== '/login') {
+        redirectUnauthorized(res)
+      }
+    }
   }
 
   return props

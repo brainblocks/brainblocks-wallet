@@ -71,6 +71,7 @@ class AccountMenu extends React.Component<Props> {
       anchorEl,
       enqueueSnackbar,
       onPresentSnackbar,
+      closeSnackbar,
       destyleMerge,
       ...rest
     }: Props = this.props
