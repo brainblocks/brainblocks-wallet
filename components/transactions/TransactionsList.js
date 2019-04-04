@@ -3,7 +3,9 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import TransactionListItem from './TransactionListItem'
-import { Spinner } from 'brainblocks-components'
+import NoTransactions from './NoTransactions'
+import { Spinner, Typography } from 'brainblocks-components'
+import { Media } from 'react-breakpoints'
 
 type Props = {
   accounts: NormalizedState,
@@ -12,7 +14,8 @@ type Props = {
   styles: Object,
   account: string,
   pagination: React.Node,
-  loading: boolean
+  loading: boolean,
+  empty: boolean
 }
 
 class TransactionsList extends React.Component<Props> {
@@ -40,8 +43,10 @@ class TransactionsList extends React.Component<Props> {
       transactions,
       showTransactions,
       account = 'all',
+      accounts,
       pagination,
       loading = false,
+      empty = false,
       ...rest
     } = this.props
     const txIds = showTransactions.filter(
@@ -49,27 +54,46 @@ class TransactionsList extends React.Component<Props> {
     )
     return (
       <div className={styles.root}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.imgCol}>Type</th>
-              {account === 'all' && (
-                <th className={styles.accountCol}>Account</th>
-              )}
-              <th className={styles.contactCol}>Contact</th>
-              <th className={styles.noteCol}>Note</th>
-              <th className={styles.valueCol}>Value</th>
-              <th className={styles.actionCol} />
-            </tr>
-          </thead>
-          <tbody>{!loading && this.renderTransactions(txIds)}</tbody>
-        </table>
-        {loading && (
-          <div className={styles.loading}>
-            <Spinner color="#666" size={24} />
+        {empty ? (
+          <div style={{ margin: '40px 0' }}>
+            <NoTransactions
+              address={account === 'all' ? accounts.allIds[0] : account}
+            />
           </div>
+        ) : (
+          <>
+            <Media>
+              {({ breakpoints, currentBreakpoint }) =>
+                breakpoints[currentBreakpoint] >= breakpoints.tablet && (
+                  <Typography el="h2" spaceBelow={1}>
+                    Transactions
+                  </Typography>
+                )
+              }
+            </Media>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.imgCol}>Type</th>
+                  {account === 'all' && (
+                    <th className={styles.accountCol}>Account</th>
+                  )}
+                  <th className={styles.contactCol}>Contact</th>
+                  <th className={styles.noteCol}>Note</th>
+                  <th className={styles.valueCol}>Value</th>
+                  <th className={styles.actionCol} />
+                </tr>
+              </thead>
+              <tbody>{!loading && this.renderTransactions(txIds)}</tbody>
+            </table>
+            {loading && (
+              <div className={styles.loading}>
+                <Spinner color="#666" size={24} />
+              </div>
+            )}
+            <div className={styles.pagination}>{pagination}</div>
+          </>
         )}
-        <div className={styles.pagination}>{pagination}</div>
       </div>
     )
   }

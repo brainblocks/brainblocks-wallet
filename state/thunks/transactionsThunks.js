@@ -48,6 +48,11 @@ export const importChains = accounts => (dispatch, getState) => {
     // update redux transactions
     dispatch(creators.bulkAddTransactions(reduxTxs))
     // and accounts...
+    const updatedAccounts = accounts.map(acc => ({
+      account: acc,
+      didGetChain: true
+    }))
+    dispatch(accountCreators.bulkUpdateAccounts(updatedAccounts))
     dispatch(syncReduxAccounts())
 
     dispatch(uiCreators.removeActiveProcess(`get-chains-${time}`))
