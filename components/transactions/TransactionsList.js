@@ -21,7 +21,6 @@ class TransactionsList extends React.Component<Props> {
    */
   renderTransactions = txKeys => {
     const { transactions, account, accounts } = this.props
-    console.log(accounts)
     return txKeys.map((txId, i) => {
       const tx = transactions.byId[txId]
       return (

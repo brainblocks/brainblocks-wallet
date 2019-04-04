@@ -251,17 +251,11 @@ class Bootstrap extends React.Component {
         // handle close
         ws.onclose = e => {
           console.warn('Websocket closed')
-          clearInterval(this.socketPingInterval)
+          this.socketInit()
         }
         // subscribe when connected
         ws.onopen = event => {
           subscribeAccounts(this.props.accounts.allIds)
-          // setup ping pong
-          clearInterval(this.socketPingInterval)
-          this.socketPingInterval = setInterval(() => {
-            console.log('Socket: client ping')
-            ws.send(JSON.stringify({ event: 'ping' }))
-          }, 30 * 1000)
         }
         // handle new messages
         ws.onmessage = message => {
@@ -285,6 +279,14 @@ class Bootstrap extends React.Component {
               break
           }
         }
+        // setup ping pong
+        clearInterval(this.socketPingInterval)
+        this.socketPingInterval = setInterval(() => {
+          console.log('Socket: client ping')
+          ws.send(JSON.stringify({ event: 'ping' }))
+        }, 25 * 1000)
+        // ping immediately to avoid a loss of ping-pong if continuously changing pages
+        ws.send(JSON.stringify({ event: 'ping' }))
       }
     }
   }
