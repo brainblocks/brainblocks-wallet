@@ -2,7 +2,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
-import { getAccounts } from '~/state/selectors/accountSelectors'
+import {
+  getAccounts,
+  getDidGetChainForAnyAccount
+} from '~/state/selectors/accountSelectors'
 import { creators as accountActions } from '~/state/actions/accountActions'
 import { wallet, createWallet } from '~/state/wallet'
 import { password, destroyPassword } from '~/state/password'
@@ -83,9 +86,7 @@ class Bootstrap extends React.Component {
   }
 
   get hasTransactions() {
-    return (
-      this.props.getWallet === false || !!this.props.transactions.allIds.length
-    )
+    return this.props.getWallet === false || this.props.didGetChainForAnyAccount
   }
 
   componentDidMount() {
@@ -238,7 +239,9 @@ class Bootstrap extends React.Component {
   }
 
   socketInit = () => {
+    console.log('socket init')
     if (this.hasTransactions) {
+      console.log('has transactions')
       // get/init ws
       const ws = initWs()
       // ws won't exist on the server
@@ -313,6 +316,7 @@ const mapStateToProps = state => ({
   user: getCurrentUser(state),
   isAuthorized: getIsAuthorized(state),
   accounts: getAccounts(state),
+  didGetChainForAnyAccount: getDidGetChainForAnyAccount(state),
   transactions: getTransactions(state),
   cipheredWallet: getCipheredWallet(state)
 })

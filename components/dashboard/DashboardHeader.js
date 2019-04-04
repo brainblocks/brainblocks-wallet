@@ -46,13 +46,6 @@ type State = {
   moreOptionsAnchorEl?: {} | null
 }
 
-function allAccountsBalance(accounts) {
-  return accounts.allIds.reduce(
-    (acc, curr) => acc + accounts.byId[curr].balance,
-    0
-  )
-}
-
 class DashboardHeader extends React.Component<Props, State> {
   constructor(props) {
     super(props)
@@ -78,7 +71,14 @@ class DashboardHeader extends React.Component<Props, State> {
       tx => transactions.byId[tx].timestamp > 0
     )
 
-    if (!txs.length) return []
+    if (!txs.length) {
+      return [
+        {
+          date: Date.now(),
+          balance: 0
+        }
+      ]
+    }
 
     // check every transaction
     // keep track of the latest one

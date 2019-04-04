@@ -1,9 +1,7 @@
 /* @flow */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Media } from 'react-breakpoints'
 import Head from 'next/head'
-import { Typography } from 'brainblocks-components'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
@@ -23,6 +21,7 @@ import {
 } from '~/state/selectors/uiSelectors'
 import {
   getAccounts,
+  getDidGetChainForAnyAccount,
   getTotalBalance
 } from '~/state/selectors/accountSelectors'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
@@ -40,6 +39,7 @@ type Props = {
   txPagingSet: (number, number) => void,
   txPagingReset: () => void,
   accounts: NormalizedState,
+  didGetChainForAnyAccount: boolean,
   nanoPrice: number,
   totalBalance: number,
   updateDashboardAccount: string => void,
@@ -77,12 +77,24 @@ class Index extends Component<Props> {
       currentAccountTransactions,
       txPagingIndexes,
       accounts,
+      didGetChainForAnyAccount,
       totalBalance,
       dashboardAccount,
       updateDashboardAccount,
       nanoPrice,
       isGettingTransactions
     } = this.props
+
+    let transactionsEmpty = false
+    if (visibleTransactionIds.length === 0 && didGetChainForAnyAccount) {
+      if (
+        dashboardAccount === 'all' ||
+        accounts.byId[dashboardAccount].didGetChain
+      ) {
+        transactionsEmpty = true
+      }
+    }
+
     return (
       <ClientBootstrap>
         <Layout>
@@ -103,17 +115,9 @@ class Index extends Component<Props> {
             />
           </PageHeader>
           <PageContent pad background="white">
-            <Media>
-              {({ breakpoints, currentBreakpoint }) =>
-                breakpoints[currentBreakpoint] >= breakpoints.tablet && (
-                  <Typography el="h2" spaceBelow={1}>
-                    Transactions
-                  </Typography>
-                )
-              }
-            </Media>
             <TransactionsList
               loading={isGettingTransactions}
+              empty={transactionsEmpty}
               transactions={transactions}
               showTransactions={visibleTransactionIds}
               accounts={accounts}
@@ -141,6 +145,7 @@ export default connect(
     currentAccountTransactions: getTransactionsForDashboardAccount(state),
     txPagingIndexes: getTransactionPagingIndexes(state),
     accounts: getAccounts(state),
+    didGetChainForAnyAccount: getDidGetChainForAnyAccount(state),
     totalBalance: getTotalBalance(state),
     preferredCurrency: getPreferredCurrency(state),
     nanoPrice: getNanoPriceInPreferredCurrency(state),

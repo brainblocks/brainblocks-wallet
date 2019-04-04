@@ -125,11 +125,11 @@ class Header extends React.Component {
                   </Link>
                 </div>
 
-                <Media>
-                  {({ breakpoints, currentBreakpoint }) =>
-                    breakpoints[currentBreakpoint] >= breakpoints.tablet && (
-                      <nav className={styles.menu}>
-                        {variant === 'full' && (
+                {variant === 'full' && (
+                  <Media>
+                    {({ breakpoints, currentBreakpoint }) =>
+                      breakpoints[currentBreakpoint] >= breakpoints.tablet && (
+                        <nav className={styles.menu}>
                           <ul>
                             {menuItems.map((item, i) => (
                               <li
@@ -148,11 +148,11 @@ class Header extends React.Component {
                               </li>
                             ))}
                           </ul>
-                        )}
-                      </nav>
-                    )
-                  }
-                </Media>
+                        </nav>
+                      )
+                    }
+                  </Media>
+                )}
 
                 {isWorking && (
                   <div className={styles.spinner}>
