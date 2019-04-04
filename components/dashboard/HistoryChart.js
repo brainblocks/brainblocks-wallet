@@ -106,6 +106,8 @@ const HistoryChart = ({ data, styles, xAxisName, yAxisName }: Props) => {
           />
           <XAxis
             dataKey={xAxisName}
+            type="number"
+            domain={['dataMin', 'dataMax']}
             stroke="#FFF"
             axisLine={false}
             tickLine={false}
