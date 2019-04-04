@@ -33,13 +33,12 @@ const transactionsReducer: (state: Object, action: Object) => Object = (
 
   //$FlowFixMe
   return produce(state, draft => {
-    let id
-    if (
+    const id =
+      action.type.indexOf('TRANSACTIONS::') === 0 &&
       action.hasOwnProperty('payload') &&
       action.payload.hasOwnProperty('id')
-    ) {
-      id = action.payload.id
-    }
+        ? action.payload.id
+        : null
 
     switch (action.type) {
       case actions.BULK_ADD_TRANSACTIONS:

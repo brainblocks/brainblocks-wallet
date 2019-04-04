@@ -18,6 +18,10 @@ addStyles('Header', props => ({
   `,
   logo: css`
     margin-right: 44px;
+    ${props.variant !== 'full' &&
+      css`
+        flex-grow: 1;
+      `}
     img {
       width: 36px;
       height: auto;

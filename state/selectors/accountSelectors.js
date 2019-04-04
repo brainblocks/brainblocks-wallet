@@ -18,3 +18,13 @@ export const getTotalBalance = createSelector(
     return balance
   }
 )
+
+export const getDidGetChainForAnyAccount = createSelector(
+  getAccounts,
+  accounts => {
+    const accountsWithChains = accounts.allIds.filter(
+      acc => accounts.byId[acc].didGetChain
+    )
+    return accountsWithChains.length > 0
+  }
+)

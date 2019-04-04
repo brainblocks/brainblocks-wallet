@@ -10,7 +10,7 @@ const accountTemplate = {
   pendingBalance: 0,
   type: '',
   color: '',
-  transactions: [],
+  didGetChain: false,
   representative: ''
 }
 
