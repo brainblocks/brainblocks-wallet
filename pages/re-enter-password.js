@@ -54,7 +54,7 @@ class ReEnterPassword extends React.Component {
               onSubmit={this.handleSubmit}
             >
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} method="post">
                   <Grid gutter={16}>
                     <GridItem>
                       <FormItem
@@ -65,7 +65,7 @@ class ReEnterPassword extends React.Component {
                         <FormField>
                           <Input
                             id="password"
-                            placeholder="••••••••"
+                            placeholder="password"
                             type="password"
                             name="password"
                             value={values.password}
