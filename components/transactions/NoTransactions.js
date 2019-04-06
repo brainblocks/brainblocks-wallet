@@ -32,7 +32,6 @@ class NoTransactions extends React.Component<Props> {
           To get some free Nano, click the button below and enter your address,
           then come back and wait for it to appear in your account.
         </Typography>
-
         <Typography el="h4" spaceBelow={0.5} spaceAbove={1.5}>
           1. Copy Your Address
         </Typography>
@@ -57,7 +56,7 @@ class NoTransactions extends React.Component<Props> {
         <Button
           color="red"
           el="a"
-          href="https://nanofaucet.org/"
+          href={'https://nano-faucet.org/?addr=' + address}
           target="_blank"
           rel="noopener noreferrer"
         >
