@@ -36,3 +36,35 @@ export const updateUser = user => (dispatch, getState) => {
     resolve(updatedUser)
   })
 }
+
+export const enableIpAuth = user => (dispatch, getState) => {
+  return new Promise(async (resolve, reject) => {
+    const state = getState()
+
+    // show we're working
+    dispatch(uiCreators.addActiveProcess(`enable-ipauth-${Date.now()}`))
+
+    // update in redux
+    dispatch(creators.updateUser({ ipAuthEnabled: true }))
+
+    // update on server
+    let updatedUser
+    try {
+      await userAPI.enableIpAuth({ ipAuthEnabled: true })
+      resolve()
+    } catch (e) {
+      // revert
+      dispatch(creators.updateUser({ ipAuthEnabled: false }))
+      dispatch(
+        dispatch(uiCreators.removeActiveProcess(`enable-ipauth-${Date.now()}`))
+      )
+      reject('Error updating user')
+    }
+
+    dispatch(
+      dispatch(uiCreators.removeActiveProcess(`enable-ipauth-${Date.now()}`))
+    )
+
+    resolve(updatedUser)
+  })
+}

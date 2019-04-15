@@ -42,3 +42,12 @@ export async function updateUser(user) {
 
   return data
 }
+
+export async function enableIpAuth(user) {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/users/ipauth/enable'
+  })
+
+  return data
+}

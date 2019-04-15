@@ -19,6 +19,7 @@ const initialSeed =
   '0000000000000000000000000000000000000000000000000000000000000000000000'
 
 type Props = {
+  user: Object,
   enqueueSnackbar: func,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
@@ -73,8 +74,16 @@ class SecuritySettings extends React.Component {
     })
   }
 
+  handleIpAuthToggle = e => {
+    if (e.target.checked) {
+      this.props.onEnableIpAuth()
+    } else {
+      this.props.onUpdateUser({ ipAuthEnabled: false })
+    }
+  }
+
   render() {
-    const { styles, ...rest }: Props = this.props
+    const { styles, user, ...rest }: Props = this.props
     const { seed, password, passwordError, seedInputType } = this.state
     return (
       <div className={styles.root}>
@@ -167,7 +176,11 @@ class SecuritySettings extends React.Component {
               If activated, every time you log in from a new IP address, we will
               send you a verification email to confirm it's you.
             </Typography>
-            <Checkbox checked={true} label="Enable IP Authorization" />
+            <Checkbox
+              checked={user.ipAuthEnabled}
+              onChange={this.handleIpAuthToggle}
+              label="Enable IP Authorization"
+            />
           </GridItem>
           <GridItem>
             <hr className={styles.divider} />

@@ -21,7 +21,7 @@ import {
 } from '~/state/selectors/userSelectors'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import type { NormalizedState } from '~/types'
-import { updateUser } from '~/state/thunks/userThunks'
+import { updateUser, enableIpAuth } from '~/state/thunks/userThunks'
 import { getKeyByValue } from '~/functions/util'
 import { getSupportedCurrencies } from '~/state/selectors/priceSelectors'
 
@@ -104,6 +104,21 @@ class SettingsTabs extends React.Component<Props, State> {
         })
       )
       .catch(e => this.props.enqueueSnackbar(errorMsg, { variant: 'error' }))
+  }
+
+  handleEnableIpAuth = () => {
+    this.props
+      .enableIpAuth()
+      .then(updatedUser =>
+        this.props.enqueueSnackbar('IP auth enabled', {
+          variant: 'success'
+        })
+      )
+      .catch(e =>
+        this.props.enqueueSnackbar("Couldn't enable IP auth.", {
+          variant: 'error'
+        })
+      )
   }
 
   render() {
@@ -193,7 +208,11 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Security Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <SecuritySettings user={user} />
+                    <SecuritySettings
+                      user={user}
+                      onUpdateUser={this.handleUpdateUser}
+                      onEnableIpAuth={this.handleEnableIpAuth}
+                    />
                   </div>
                 </div>
               )
@@ -231,7 +250,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  updateUser
+  updateUser,
+  enableIpAuth
 }
 
 export default compose(

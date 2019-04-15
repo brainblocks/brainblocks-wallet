@@ -12,7 +12,8 @@ export const userInitialState = {
   birthday: null,
   hasVerifiedEmail: false,
   wallet: null,
-  defaultAccount: null
+  defaultAccount: null,
+  ipAuthEnabled: false
 }
 
 const userReducer = (state, action) => {
