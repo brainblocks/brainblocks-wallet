@@ -272,8 +272,8 @@ class Bootstrap extends React.Component {
             case 'error':
               console.error('Error message from socket: ', data.data)
               break
-            case 'pong':
-              console.log('Socket: server pong')
+            case 'ping':
+              console.log('Socket: server ping')
               break
             default:
               console.log('Unknown socket event: ' + data)

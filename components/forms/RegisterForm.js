@@ -34,7 +34,7 @@ export default reduxForm({
     return errors
   }
 })(({ handleSubmit, onSubmit, isRegistering, submitting }) => (
-  <form onSubmit={handleSubmit(onSubmit)}>
+  <form onSubmit={handleSubmit(onSubmit)} method="post">
     <Grid>
       <GridItem>
         <Field
