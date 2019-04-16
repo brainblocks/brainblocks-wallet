@@ -29,7 +29,7 @@ const ProfileSettings = ({
         <FormItem
           label="User name"
           fieldId="your-name"
-          extra="Your user name cannot be changed"
+          description="Your user name cannot be changed"
         >
           <FormField>
             <Input readOnly id="your-name" value={user.username} />

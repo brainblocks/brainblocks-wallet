@@ -54,6 +54,7 @@ addStyles('DashboardHeader', props => {
       flex-basis: 154px;
       position: relative;
       background-size: 101% 101%;
+      border-radius: ${theme.borderRadius.md + 3}px;
       svg {
         margin-bottom: 6px;
         width: 28px;

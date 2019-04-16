@@ -14,17 +14,27 @@ import {
 } from 'brainblocks-components'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { wallet } from '~/state/wallet'
+import MFASettings from '~/components/settings/MFASettings'
 
 const initialSeed =
   '0000000000000000000000000000000000000000000000000000000000000000000000'
 
 type Props = {
-  enqueueSnackbar: func,
+  user: Object,
+  enqueueSnackbar: (string, Object) => void,
+  onUpdateUser: () => mixed,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
 
-class SecuritySettings extends React.Component {
+type State = {
+  seed: string,
+  seedInputType: string,
+  password: string,
+  passwordError: string
+}
+
+class SecuritySettings extends React.Component<Props, State> {
   state = {
     seed: initialSeed,
     seedInputType: 'password',
@@ -74,7 +84,13 @@ class SecuritySettings extends React.Component {
   }
 
   render() {
-    const { styles, ...rest }: Props = this.props
+    const {
+      styles,
+      user,
+      onUpdateUser,
+      enqueueSnackbar,
+      ...rest
+    }: Props = this.props
     const { seed, password, passwordError, seedInputType } = this.state
     return (
       <div className={styles.root}>
@@ -83,7 +99,7 @@ class SecuritySettings extends React.Component {
             <Typography el="h3" spaceAbove={0} spaceBelow={1}>
               Save your seed
             </Typography>
-            <Typography el="p" spaceBelow={1}>
+            <Typography el="p" spaceBelow={1.66}>
               Save your seed somewhere where you can't lose it, and no-one else
               can find or access it. As long as you've got your seed saved, you
               can never lose access to your account, BUT if someone else finds
@@ -150,11 +166,17 @@ class SecuritySettings extends React.Component {
             <Typography el="h3" spaceAbove={0} spaceBelow={1}>
               Two-Factor Authentication (2FA)
             </Typography>
-            <Typography el="p" spaceBelow={1}>
-              2FA adds a second layer of security to your account. You can use
-              Google Authenticator or Authy.
+            <Typography el="p" spaceBelow={1.66}>
+              {user.is2FAEnabled
+                ? `2FA is enabled`
+                : `2FA adds a second layer of security to your account. You can use
+              Google Authenticator or Authy.`}
             </Typography>
-            <Button>Enable 2FA</Button>
+            <MFASettings
+              enqueueSnackbar={enqueueSnackbar}
+              onUpdateUser={onUpdateUser}
+              enabled={user.is2FAEnabled}
+            />
           </GridItem>
           <GridItem>
             <hr className={styles.divider} />
@@ -163,7 +185,7 @@ class SecuritySettings extends React.Component {
             <Typography el="h3" spaceAbove={0} spaceBelow={1}>
               IP Authorization
             </Typography>
-            <Typography el="p" spaceBelow={1}>
+            <Typography el="p" spaceBelow={1.66}>
               If activated, every time you log in from a new IP address, we will
               send you a verification email to confirm it's you.
             </Typography>
@@ -172,6 +194,7 @@ class SecuritySettings extends React.Component {
           <GridItem>
             <hr className={styles.divider} />
           </GridItem>
+          {/*
           <GridItem>
             <Typography el="h3" spaceAbove={0} spaceBelow={1}>
               Account Locking
@@ -191,7 +214,7 @@ class SecuritySettings extends React.Component {
               devices.
             </Typography>
             <Button>Enable Account Locking</Button>
-          </GridItem>
+          </GridItem>*/}
         </Grid>
       </div>
     )

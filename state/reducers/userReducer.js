@@ -12,7 +12,8 @@ export const userInitialState = {
   birthday: null,
   hasVerifiedEmail: false,
   wallet: null,
-  defaultAccount: null
+  defaultAccount: null,
+  is2FAEnabled: false
 }
 
 const userReducer = (state, action) => {

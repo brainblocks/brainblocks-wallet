@@ -193,7 +193,10 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Security Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <SecuritySettings user={user} />
+                    <SecuritySettings
+                      user={user}
+                      onUpdateUser={this.handleUpdateUser}
+                    />
                   </div>
                 </div>
               )

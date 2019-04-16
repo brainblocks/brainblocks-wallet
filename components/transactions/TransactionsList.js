@@ -57,6 +57,7 @@ class TransactionsList extends React.Component<Props> {
         {empty ? (
           <div style={{ margin: '40px 0' }}>
             <NoTransactions
+              faucet={transactions.allIds.length === 0}
               address={account === 'all' ? accounts.allIds[0] : account}
             />
           </div>
