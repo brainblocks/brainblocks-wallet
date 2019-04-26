@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux'
-import { reducer as formReducer } from 'redux-form'
 import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 import priceReducer, { priceInitialState } from '~/state/reducers/priceReducer'
 import userReducer, { userInitialState } from '~/state/reducers/userReducer'
@@ -13,7 +12,6 @@ import transactionsReducer, {
 } from '~/state/reducers/transactionsReducer'
 
 export const initialState = {
-  form: {},
   ui: uiInitialState,
   price: priceInitialState,
   user: userInitialState,
@@ -24,7 +22,6 @@ export const initialState = {
 }
 
 const combinedReducers = combineReducers({
-  form: formReducer,
   ui: uiReducer,
   price: priceReducer,
   user: userReducer,

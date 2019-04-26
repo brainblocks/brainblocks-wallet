@@ -61,17 +61,17 @@ class TransactionMenu extends React.Component<Props> {
     }: Props = this.props
     return (
       <Menu open={open} anchorEl={anchorEl} onClose={onClose} {...rest}>
-        <CopyToClipboard text={transaction.id} onCopy={this.handleCopy}>
-          <MenuItem>Copy block hash</MenuItem>
-        </CopyToClipboard>
-        <MenuItem onClick={this.handleViewInExplorer}>
-          View in explorer
-        </MenuItem>
         <MenuItem onClick={this.handleResend}>
           {transaction.type === 'send'
             ? 'Make this payment again'
             : 'Refund this payment'}
         </MenuItem>
+        <MenuItem onClick={this.handleViewInExplorer}>
+          View in explorer
+        </MenuItem>
+        <CopyToClipboard text={transaction.id} onCopy={this.handleCopy}>
+          <MenuItem>Copy block hash</MenuItem>
+        </CopyToClipboard>
       </Menu>
     )
   }

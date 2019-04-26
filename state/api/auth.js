@@ -62,12 +62,12 @@ export async function init(token) {
   return false
 }
 
-export async function login(username, password, recaptcha) {
+export async function login(username, password, recaptcha, mfaCode) {
   // First perform the login to receive an auth token
   let { data } = await makeApiRequest({
     method: 'post',
     url: '/auth',
-    data: { username, password, recaptcha }
+    data: { username, password, recaptcha, token2fa: mfaCode }
   })
 
   // Keep the auth token in a cookie
