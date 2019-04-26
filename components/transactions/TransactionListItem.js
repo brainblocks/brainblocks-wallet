@@ -118,6 +118,10 @@ class TransactionListItem extends React.Component<Props, State> {
           <KeyValue
             label={contactInfo.title}
             value={contactInfo.subTitle}
+            destyleMerge={{
+              key: styles.contactTitle,
+              value: styles.contactSubtitle
+            }}
             keyEl="h4"
             valueEl="span"
           />
@@ -150,7 +154,7 @@ class TransactionListItem extends React.Component<Props, State> {
             <Button
               variant="icon"
               size="24"
-              style={{ marginRight: -6 }}
+              destyleMerge={{ root: styles.actionBtn }}
               onClick={this.handleMoreOptionsOpen}
             >
               <MoreIcon />

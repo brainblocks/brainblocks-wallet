@@ -141,10 +141,15 @@ class MFASettings extends React.Component<Props, State> {
                   <form onSubmit={handleSubmit} method="post">
                     <Grid>
                       <GridItem>
-                        <FormItem label="Enter 2FA code to confirm">
+                        <FormItem
+                          fieldId="mfaCode"
+                          label="Enter 2FA code to confirm"
+                        >
                           <FormField>
                             <Input
+                              id="mfaCode"
                               name="mfaCode"
+                              placeholder="2FA Code"
                               value={values.mfaCode}
                               onChange={handleChange}
                             />
@@ -217,10 +222,15 @@ class MFASettings extends React.Component<Props, State> {
                         </FormItem>
                       </GridItem>
                       <GridItem>
-                        <FormItem label="Enter the 2FA code from your app to confirm">
+                        <FormItem
+                          fieldId="mfaCode"
+                          label="Enter the 2FA code from your app to confirm"
+                        >
                           <FormField>
                             <Input
+                              id="mfaCode"
                               name="mfaCode"
+                              placeholder="2FA Code"
                               value={values.mfaCode}
                               onChange={handleChange}
                             />

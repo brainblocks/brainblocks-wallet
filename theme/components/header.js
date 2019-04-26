@@ -251,7 +251,7 @@ addStyles('Header', props => ({
 injectGlobal`
   @media (max-width: ${theme.bp.tablet - 1}px) {
     body {
-      padding-bottom: 56px;
+      padding-bottom: 50px;
     }
   }
 `

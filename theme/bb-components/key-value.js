@@ -1,6 +1,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
+import { ellipsis } from '../globals/utils'
 import { styles } from 'brainblocks-components'
 
 addStyles('BB-KeyValue', props => {
@@ -12,6 +13,7 @@ addStyles('BB-KeyValue', props => {
     `,
     key: css`
       ${libStyles.key};
+      /* ${ellipsis}; */
       ${props.theme === 'header' &&
         css`
           white-space: nowrap;
@@ -28,6 +30,7 @@ addStyles('BB-KeyValue', props => {
     `,
     value: css`
       ${libStyles.value};
+      /* ${ellipsis}; */
       margin-top: 6px;
       ${props.theme === 'header' &&
         css`

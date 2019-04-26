@@ -48,22 +48,15 @@ const AccountTitle = ({
       break
   }
   // Title
-  let title = account.label
+  let title
   if (account) {
+    title = account.label
     if (account === 'all') title = 'All Accounts'
     if (
       (!title && account.hasOwnProperty('account')) ||
       account.hasOwnProperty('address')
     ) {
-      title = '[Untitled]'
-      /*title = (
-        <NanoAddress
-          hoverable
-          address={account.account || account.address}
-          startChars={8}
-          endChars={5}
-        />
-      )*/
+      title = 'Untitled'
     }
   }
   if (overrideTitle) {
@@ -89,10 +82,12 @@ const AccountTitle = ({
 
   return (
     <div className={styles.root}>
-      <div className={styles.icon}>
-        <Icon />
+      <div className={styles.top}>
+        <div className={styles.icon}>
+          <Icon />
+        </div>
+        <h4 className={styles.title}>{title}</h4>
       </div>
-      <h4 className={styles.title}>{title}</h4>
       {!!sub && !!subtitle && <p className={styles.subTitle}>{subtitle}</p>}
     </div>
   )
