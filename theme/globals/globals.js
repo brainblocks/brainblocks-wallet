@@ -22,6 +22,9 @@ injectGlobal`
     background: ${theme.color.palette.darkBlue};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    @media (max-width: ${theme.bp.small}px) {
+      font-size: ${theme.type.baseFontSize - 1}px;
+    }
   }
   #__next {
     overflow: hidden;

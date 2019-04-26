@@ -46,7 +46,6 @@ const Accounts = props => {
           <Typography el="h3" color="heavyOnDark" spaceBelow={1} spaceAbove={3}>
             Vaults
           </Typography>*/}
-          <div style={{ marginTop: 10 }} />
           <AccountsList
             type={WALLET_KEY_TYPES}
             nanoPrice={props.nanoPrice}

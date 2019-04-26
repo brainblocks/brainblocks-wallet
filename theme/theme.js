@@ -87,7 +87,11 @@ const theme = {
     pageWidth: 1016,
     pagePadding: 18,
     pageMinHeight: 300,
-    contentPadding: 36
+    contentPadding: 36,
+    mobile: {
+      contentPadding: 14,
+      pagePadding: 14
+    }
   },
   bp: {
     mobile: 480,
@@ -107,6 +111,12 @@ const theme = {
         r: 18,
         b: 24,
         l: 26
+      },
+      mobile: {
+        t: 20,
+        r: 14,
+        b: 20,
+        l: 18
       }
     }
   }

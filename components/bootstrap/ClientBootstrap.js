@@ -239,7 +239,7 @@ class Bootstrap extends React.Component {
   }
 
   socketInit = () => {
-    if (this.hasTransactions) {
+    if (this.props.didGetChainForAnyAccount) {
       // get/init ws
       const ws = initWs()
       // ws won't exist on the server

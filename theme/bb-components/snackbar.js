@@ -12,6 +12,14 @@ addStyles('BB-Snackbar', props => {
     font-family: ${theme.type.baseFontFamily} !important;
     font-size: ${theme.type.baseFontSize - 1}px !important;
     font-weight: ${theme.type.baseFontWeight} !important;
+    max-width: 90%;
+    /* Note - same breakpoint as bottom tabs in Header.js component */
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 50px;
+    }
     > div {
       flex-grow: 1;
     }

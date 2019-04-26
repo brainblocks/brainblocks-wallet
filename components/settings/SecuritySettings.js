@@ -96,15 +96,17 @@ class SecuritySettings extends React.Component<Props, State> {
       <div className={styles.root}>
         <Grid>
           <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              Save your seed
-            </Typography>
-            <Typography el="p" spaceBelow={1.66}>
-              Save your seed somewhere where you can't lose it, and no-one else
-              can find or access it. As long as you've got your seed saved, you
-              can never lose access to your account, BUT if someone else finds
-              it, they can use it to steal all your money.
-            </Typography>
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                Save your seed
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                Save your seed somewhere where you can't lose it, and no-one
+                else can find or access it. As long as you've got your seed
+                saved, you can never lose access to your account, BUT if someone
+                else finds it, they can use it to steal all your money.
+              </Typography>
+            </div>
             <Grid>
               <GridItem>
                 <FormItem label="Seed" fieldId="wallet-seed">
@@ -163,15 +165,17 @@ class SecuritySettings extends React.Component<Props, State> {
             <hr className={styles.divider} />
           </GridItem>
           <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              Two-Factor Authentication (2FA)
-            </Typography>
-            <Typography el="p" spaceBelow={1.66}>
-              {user.is2FAEnabled
-                ? `2FA is enabled`
-                : `2FA adds a second layer of security to your account. You can use
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                Two-Factor Authentication (2FA)
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                {user.is2FAEnabled
+                  ? `2FA is enabled`
+                  : `2FA adds a second layer of security to your account. You can use
               Google Authenticator or Authy.`}
-            </Typography>
+              </Typography>
+            </div>
             <MFASettings
               enqueueSnackbar={enqueueSnackbar}
               onUpdateUser={onUpdateUser}
@@ -182,39 +186,17 @@ class SecuritySettings extends React.Component<Props, State> {
             <hr className={styles.divider} />
           </GridItem>
           <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              IP Authorization
-            </Typography>
-            <Typography el="p" spaceBelow={1.66}>
-              If activated, every time you log in from a new IP address, we will
-              send you a verification email to confirm it's you.
-            </Typography>
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                IP Authorization
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                If activated, every time you log in from a new IP address, we
+                will send you a verification email to confirm it's you.
+              </Typography>
+            </div>
             <Checkbox checked={true} label="Enable IP Authorization" />
           </GridItem>
-          <GridItem>
-            <hr className={styles.divider} />
-          </GridItem>
-          {/*
-          <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              Account Locking
-            </Typography>
-            <Typography el="p" spaceBelow={1}>
-              If you like to be able to quickly log-in, you can choose to remain
-              logged in on known devices, but have your account auto-lock after
-              a set time.
-            </Typography>
-            <Typography el="p" spaceBelow={1}>
-              Once your account is locked, your can simply enter a pin-code to
-              unlock it. This is much faster than the standard username,
-              password and 2FA login process.
-            </Typography>
-            <Typography el="p" spaceBelow={1}>
-              You will still need to complete the standard login process on new
-              devices.
-            </Typography>
-            <Button>Enable Account Locking</Button>
-          </GridItem>*/}
         </Grid>
       </div>
     )

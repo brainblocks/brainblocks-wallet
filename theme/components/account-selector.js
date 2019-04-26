@@ -3,7 +3,8 @@ import { addStyles } from 'destyle'
 import theme from '../theme'
 import { ellipsis } from '../globals/utils'
 
-const pad = theme.forms.itemPadding.desktop
+const padD = theme.forms.itemPadding.desktop
+const padM = theme.forms.itemPadding.mobile
 
 addStyles('AccountSelector', (props, state) => {
   const accountTitle = css`
@@ -33,12 +34,15 @@ addStyles('AccountSelector', (props, state) => {
     field: css`
       display: flex;
       align-items: center;
-      padding: ${pad.t}px ${pad.r}px ${pad.b}px ${pad.l}px;
+      padding: ${padD.t}px ${padD.r}px ${padD.b}px ${padD.l}px;
       box-shadow: none !important;
       outline: none !important;
+      @media (max-width: ${theme.bp.small}px) {
+        padding: ${padM.t}px ${padM.r}px ${padM.b}px ${padM.l}px;
+      }
       ${props.theme === 'outlined-on-dark' &&
         css`
-          padding: 12px 18px 12px 20px;
+          padding: 12px 18px 12px 20px !important;
         `};
     `,
     accountTitle: css`
@@ -87,7 +91,7 @@ addStyles('AccountSelector', (props, state) => {
     `,
     list: css``,
     listItem: css`
-      padding: ${pad.t}px ${pad.l}px !important;
+      padding: ${padD.t}px ${padD.l}px !important;
       display: flex !important;
       align-items: center !important;
       ${!props.twoLine && thinItem};

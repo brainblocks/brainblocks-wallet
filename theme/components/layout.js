@@ -35,5 +35,9 @@ addStyles('Layout', (props, state) => ({
         background: ${theme.color.palette.darkBlue};
       `};
   `,
-  footer: css``
+  footer: css`
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      display: none;
+    }
+  `
 }))

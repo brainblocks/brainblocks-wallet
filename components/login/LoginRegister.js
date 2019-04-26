@@ -67,23 +67,30 @@ class LoginRegister extends React.Component<Props, State> {
     this.forceUpdate()
   }
 
-  handleLogin = async (username, password, mfaCode) => {
+  handleLogin = (username, password, mfaCode) => {
     if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
     this.isSubmitting = true
 
     try {
-      const recaptcha = await this.recaptcha.execute()
-      const authData = await AuthAPI.login(
-        username,
-        password,
-        recaptcha,
-        mfaCode
-      )
+      this.setState(
+        {
+          loginError: undefined
+        },
+        async () => {
+          const recaptcha = await this.recaptcha.execute()
+          const authData = await AuthAPI.login(
+            username,
+            password,
+            recaptcha,
+            mfaCode
+          )
 
-      setPassword(password)
-      this.props.updateAuth(authData)
+          setPassword(password)
+          this.props.updateAuth(authData)
+        }
+      )
     } catch (error) {
       // check if it's because we need 2fa
       if (
@@ -91,7 +98,8 @@ class LoginRegister extends React.Component<Props, State> {
         error.response.data.reason === '2FA_REQUIRED'
       ) {
         this.setState({
-          mfaRequired: true
+          mfaRequired: true,
+          loginError: undefined
         })
       } else {
         this.setState({ loginError: deduceError(error) })
@@ -101,7 +109,7 @@ class LoginRegister extends React.Component<Props, State> {
     this.setState({ isSubmitting: false })
   }
 
-  handleRegister = async (username, email, password) => {
+  handleRegister = (username, email, password) => {
     if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
@@ -109,16 +117,23 @@ class LoginRegister extends React.Component<Props, State> {
 
     // Register an account
     try {
-      const recaptcha = await this.recaptcha.execute()
+      this.setState(
+        {
+          registrationError: undefined
+        },
+        async () => {
+          const recaptcha = await this.recaptcha.execute()
 
-      const authData = await UserAPI.register({
-        username,
-        email,
-        password,
-        recaptcha
-      })
+          const authData = await UserAPI.register({
+            username,
+            email,
+            password,
+            recaptcha
+          })
 
-      this.props.updateAuth({ ...authData, isRegistering: true })
+          this.props.updateAuth({ ...authData, isRegistering: true })
+        }
+      )
     } catch (error) {
       this.setState({
         registrationError: deduceError(error),

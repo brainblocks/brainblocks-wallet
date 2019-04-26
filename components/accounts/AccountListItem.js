@@ -77,7 +77,7 @@ class AccountListItem extends React.Component<Props, State> {
                 value={
                   <span>
                     {formatNano(account.balance)}{' '}
-                    <small style={{ fontSize: '80%' }}>NANO</small>
+                    <small style={{ fontSize: '72%' }}>NANO</small>
                   </span>
                 }
                 destyleMerge={{

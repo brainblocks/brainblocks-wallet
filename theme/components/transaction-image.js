@@ -44,6 +44,14 @@ const styles = addStyles('TransactionImage', props => {
         css`
           background: ${theme.color.status.infoLight};
         `}
+      @media (max-width: ${theme.bp.small - 1}px) {
+        width: 36px;
+        height: 36px;
+      }
+      @media (max-width: ${theme.bp.mobile - 1}px) {
+        width: 32px;
+        height: 32px;
+      }
     `,
     icon: css`
       overflow: hidden;
