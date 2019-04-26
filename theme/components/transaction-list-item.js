@@ -93,6 +93,9 @@ addStyles('TransactionListItem', props => {
       text-align: center;
       padding-left: 12px;
       padding-right: 4px;
+      @media (max-width: ${theme.bp.small - 1}px) {
+        width: 38px;
+      }
       @media (max-width: ${theme.bp.mobile - 1}px) {
         padding-left: 4px;
         padding-right: 0;
