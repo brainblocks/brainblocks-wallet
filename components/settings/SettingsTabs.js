@@ -245,9 +245,9 @@ const mapDispatchToProps = {
 }
 
 export default compose(
-  withBreakpoints,
   withSnackbar,
   withRouter,
+  withBreakpoints,
   connect(
     mapStateToProps,
     mapDispatchToProps

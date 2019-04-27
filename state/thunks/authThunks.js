@@ -1,6 +1,6 @@
 import { creators } from '~/state/actions/authActions'
 import { destroyWallet } from '~/state/wallet'
-import { closeWs } from '~/state/websocket'
+import { getWs, closeWs } from '~/state/websocket'
 import * as authAPI from '~/state/api/auth'
 
 export const logout = () => (dispatch, getState) => {
@@ -13,7 +13,9 @@ export const logout = () => (dispatch, getState) => {
     destroyWallet()
 
     // close the websocket connection
-    closeWs()
+    if (getWs()) {
+      closeWs()
+    }
 
     // redux state reset
     dispatch(creators.logout())
