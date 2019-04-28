@@ -22,7 +22,6 @@ export const logout = () => (dispatch, getState) => {
 
     // remove cookie and invalidate token on server
     try {
-      console.log(token)
       await authAPI.logout(token)
     } catch (e) {
       console.error('Error in logout request', e)

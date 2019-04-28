@@ -17,10 +17,8 @@ const EmailVerificationPage = () => {
       <ClientBootstrap
         verifyEmail={false}
         getPrice={false}
-        /* These two are only necessary to prevent the
-        bug with enqueueSnackbar and SSR */
-        requiresAuth={true}
-        getWallet={true}
+        requiresAuth={false}
+        getWallet={false}
       >
         <EmailVerification />
       </ClientBootstrap>

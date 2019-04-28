@@ -19,6 +19,7 @@ import { deduceError } from '~/state/errors'
 import Loading from '~/pages/loading'
 import Message from '~/components/layout/Message'
 import { Button, withSnackbar } from 'brainblocks-components'
+import { isServer } from '~/state'
 
 type State = {
   isLoading: boolean,
@@ -179,11 +180,16 @@ const mapDispatchToProps = dispatch => ({
   updateUser: payload => dispatch(userActions.updateUser(payload))
 })
 
-export default compose(
-  withSnackbar,
+let ExportableEmailVerification = compose(
   withRouter,
   connect(
     mapStateToProps,
     mapDispatchToProps
   )
 )(EmailVerification)
+
+if (!isServer) {
+  ExportableEmailVerification = withSnackbar(ExportableEmailVerification)
+}
+
+export default ExportableEmailVerification
