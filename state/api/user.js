@@ -24,6 +24,35 @@ export async function verifyEmail(hash, verification) {
   return data
 }
 
+export async function set2fa() {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/users/2fa'
+  })
+
+  return data
+}
+
+export async function confirm2fa(token2fa) {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/users/2fa/confirm',
+    data: { token2fa }
+  })
+
+  return data
+}
+
+export async function disable2fa(token2fa) {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'delete',
+    url: '/users/2fa',
+    data: { token2fa }
+  })
+
+  return data
+}
+
 export async function resendVerificationEmail() {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',

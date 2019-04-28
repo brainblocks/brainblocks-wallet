@@ -16,6 +16,9 @@ addStyles('PageHeader', props => ({
     @media (max-width: ${theme.bp.medium - 1}px) {
       margin-top: -10px;
     }
+    @media (max-width: ${theme.bp.small - 1}px) {
+      margin-bottom: 20px;
+    }
   `,
   alertIcon: css`
     flex: 0 0 34px;

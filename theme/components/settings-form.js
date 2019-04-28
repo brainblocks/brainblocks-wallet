@@ -8,6 +8,10 @@ addStyles('SettingsForm', props => ({
     border: none;
     border-top: 1px solid ${theme.color.borders.sep};
   `,
+  textWrap: css`
+    @media (max-width: ${theme.bp.small}px) {
+    }
+  `,
   avatarChooser: css`
     padding: 12px;
     display: flex;

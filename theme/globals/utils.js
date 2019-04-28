@@ -7,6 +7,9 @@ export const pageWidth = css`
   margin-left: auto;
   margin-right: auto;
   padding: 0 ${theme.layout.pagePadding}px;
+  @media (max-width: ${theme.bp.small}px) {
+    padding: 0 ${theme.layout.mobile.pagePadding}px;
+  }
 `
 
 export const formPageWidth = css`

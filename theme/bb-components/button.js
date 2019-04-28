@@ -26,6 +26,9 @@ addStyles('BB-Button', props => {
       ${backgroundGradient(backgroundColor, true)};
       background-position: left top;
       background-size: 200% 150%;
+      @media (max-width: ${theme.bp.small}px) {
+        padding: 0.75em 1.66em;
+      }
       &:hover:not(:disabled) {
         color: #fff;
         background-size: 101% 101%;
@@ -65,6 +68,9 @@ addStyles('BB-Button', props => {
               background: ${Color(props.color || theme.color.gray.midLight)
                 .darken(0.2)
                 .toString()};
+            }
+            @media (max-width: ${theme.bp.small}px) {
+              padding: 0.3em 0.5em;
             }
           `
         : null};

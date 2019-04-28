@@ -47,8 +47,8 @@ class ReceiveForm extends Component<Props, State> {
     }
   }
 
-  handleUpdateAccount = acc => {
-    this.setState({ account: acc, copied: false })
+  handleUpdateAccount = e => {
+    this.setState({ account: e.target.value, copied: false })
   }
 
   handleCopyAddress = () => {
@@ -105,9 +105,7 @@ class ReceiveForm extends Component<Props, State> {
                   style={{ textAlign: 'center' }}
                 >
                   <QRCode
-                    value={`xrb:${
-                      accounts.byId[account].account
-                    }?amount=${amount}`}
+                    value={`xrb:${accounts.byId[account].account}`}
                     size={150}
                   />
                 </div>

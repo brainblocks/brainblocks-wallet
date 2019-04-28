@@ -8,7 +8,14 @@ const TransactionImage = ({ styles, transaction, ...rest }) => {
   return (
     <div className={styles.root}>
       <div className={styles.circle}>
-        {!!transaction.image && <img src={transaction.image} alt="Profile" />}
+        {/*
+        <img
+          src={`https://robohash.org/${
+            transaction.linkAddress
+          }?gravatar=yes&set=set3&bgset=bg2&size=44x44`}
+          alt={transaction.type}
+        />
+        */}
       </div>
       <span className={styles.icon}>
         {transaction.type === 'send' && (

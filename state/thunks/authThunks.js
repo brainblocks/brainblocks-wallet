@@ -1,5 +1,6 @@
 import { creators } from '~/state/actions/authActions'
 import { destroyWallet } from '~/state/wallet'
+import { getWs, closeWs } from '~/state/websocket'
 import * as authAPI from '~/state/api/auth'
 
 export const logout = () => (dispatch, getState) => {
@@ -11,12 +12,16 @@ export const logout = () => (dispatch, getState) => {
     // destroy the wallet
     destroyWallet()
 
+    // close the websocket connection
+    if (getWs()) {
+      closeWs()
+    }
+
     // redux state reset
     dispatch(creators.logout())
 
     // remove cookie and invalidate token on server
     try {
-      console.log(token)
       await authAPI.logout(token)
     } catch (e) {
       console.error('Error in logout request', e)
