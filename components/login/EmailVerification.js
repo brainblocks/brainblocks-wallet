@@ -1,5 +1,6 @@
 /* @flow */
 import React, { Component } from 'react'
+import { compose } from 'redux'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 import Link from 'next/link'
@@ -178,9 +179,11 @@ const mapDispatchToProps = dispatch => ({
   updateUser: payload => dispatch(userActions.updateUser(payload))
 })
 
-const ExportableEmailVerification = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(EmailVerification))
-
-export default ExportableEmailVerification
+export default compose(
+  withSnackbar,
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(EmailVerification)

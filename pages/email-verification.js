@@ -10,17 +10,21 @@ import EmailVerification from '~/components/login/EmailVerification'
 
 const EmailVerificationPage = () => {
   return (
-    <ClientBootstrap
-      verifyEmail={false}
-      getPrice={false}
-      requiresAuth={false}
-      getWallet={false}
-    >
+    <div>
       <Head>
-        <title>Login</title>
+        <title>Email Verification</title>
       </Head>
-      <EmailVerification />
-    </ClientBootstrap>
+      <ClientBootstrap
+        verifyEmail={false}
+        getPrice={false}
+        /* These two are only necessary to prevent the
+        bug with enqueueSnackbar and SSR */
+        requiresAuth={true}
+        getWallet={true}
+      >
+        <EmailVerification />
+      </ClientBootstrap>
+    </div>
   )
 }
 
