@@ -20,6 +20,7 @@ addStyles('SettingsTabs', props => ({
   `,
   backIcon: css`
     margin-right: 12px;
+    margin-left: ${theme.forms.itemPadding.mobile.l}px;
     line-height: 0;
     color: ${theme.color.palette.blue};
     .bb-svg-icon {
@@ -58,6 +59,7 @@ addStyles('SettingsTabs', props => ({
     font-weight: bold;
     margin-top: 2px;
     margin-bottom: ${theme.spacing.rhythmUnit * 3}px;
+    margin-left: ${theme.forms.itemPadding.mobile.l}px;
     letter-spacing: 0.12em;
   `,
   tabPanelContent: css``

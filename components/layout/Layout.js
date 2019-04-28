@@ -65,7 +65,7 @@ class Layout extends React.Component {
             />
           </Head>
           {children}
-          {footerVariant !== 'none' && (
+          {footerVariant !== 'none' && false && (
             <div className={styles.footer}>
               <Footer variant={footerVariant} />
             </div>

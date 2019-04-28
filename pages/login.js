@@ -7,8 +7,7 @@ import LoginRegister from '~/components/login/LoginRegister'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 
-const Login = props => {
-  const { styles } = props
+const Login = () => {
   return (
     <ClientBootstrap
       verifyEmail={false}

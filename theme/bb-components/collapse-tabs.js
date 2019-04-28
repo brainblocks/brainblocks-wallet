@@ -11,10 +11,17 @@ setStyles('BB-CollapseTabs', props => {
     collapsedBack: css`
       cursor: pointer;
       margin: ${theme.layout.contentPadding}px;
+      @media (max-width: ${theme.bp.small}px) {
+        margin: 20px 10px;
+      }
     `,
     collapsedTab: css`
       margin: ${theme.layout.contentPadding}px;
       margin-top: 0;
+      @media (max-width: ${theme.bp.small}px) {
+        margin: 20px 10px;
+        margin-top: 0;
+      }
     `,
     collapsedList: css`
       ${resetList};
@@ -22,11 +29,13 @@ setStyles('BB-CollapseTabs', props => {
       li {
         cursor: pointer;
         padding: ${theme.spacing.paddingSm.mobile}px
-          ${theme.layout.contentPadding}px;
+          ${theme.layout.mobile.contentPadding +
+            theme.forms.itemPadding.mobile.l}px;
         color: ${Color(theme.color.text.light)
           .darken(0.2)
           .toString()};
         font-weight: bold;
+        font-size: ${theme.type.baseFontSize}px;
         &:hover {
           background: #fff;
           color: #000;

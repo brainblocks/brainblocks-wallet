@@ -17,6 +17,11 @@ export const getWs = () => {
   return ws
 }
 
+export const closeWs = () => {
+  ws.close()
+  ws = null
+}
+
 export const subscribeAccounts = accounts => {
   ws.send(
     JSON.stringify({

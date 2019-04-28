@@ -24,6 +24,7 @@ import type { NormalizedState } from '~/types'
 import { updateUser } from '~/state/thunks/userThunks'
 import { getKeyByValue } from '~/functions/util'
 import { getSupportedCurrencies } from '~/state/selectors/priceSelectors'
+import { ContentHeightContext } from '~/components/layout/PageContent'
 
 const tabIndexMap = {
   general: 0,
@@ -57,8 +58,10 @@ type State = {
 }
 
 class SettingsTabs extends React.Component<Props, State> {
+  static contextType = ContentHeightContext
+
   constructor(props) {
-    super()
+    super(props)
     this.state = {
       activeTab: tabIndexMap[props.router.query.tab] || 0,
       viewingTab: false
@@ -120,6 +123,7 @@ class SettingsTabs extends React.Component<Props, State> {
     } = this.props
     const { activeTab, viewingTab } = this.state
     const collapsed = this.getCollapsed()
+    const contentHeight = this.context
     return (
       <div className={styles.root}>
         <CollapseTabs
@@ -148,7 +152,10 @@ class SettingsTabs extends React.Component<Props, State> {
                 </div>
               ),
               content: (
-                <div className={styles.tabPanel}>
+                <div
+                  className={styles.tabPanel}
+                  style={{ minHeight: contentHeight }}
+                >
                   <h3 className={styles.tabPanelTitle}>General Settings</h3>
                   <div className={styles.tabPanelContent}>
                     <GeneralSettings
@@ -193,7 +200,10 @@ class SettingsTabs extends React.Component<Props, State> {
                 <div className={styles.tabPanel}>
                   <h3 className={styles.tabPanelTitle}>Security Settings</h3>
                   <div className={styles.tabPanelContent}>
-                    <SecuritySettings user={user} />
+                    <SecuritySettings
+                      user={user}
+                      onUpdateUser={this.handleUpdateUser}
+                    />
                   </div>
                 </div>
               )
@@ -235,9 +245,9 @@ const mapDispatchToProps = {
 }
 
 export default compose(
-  withBreakpoints,
   withSnackbar,
   withRouter,
+  withBreakpoints,
   connect(
     mapStateToProps,
     mapDispatchToProps

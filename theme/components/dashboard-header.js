@@ -54,6 +54,7 @@ addStyles('DashboardHeader', props => {
       flex-basis: 154px;
       position: relative;
       background-size: 101% 101%;
+      border-radius: ${theme.borderRadius.md + 3}px;
       svg {
         margin-bottom: 6px;
         width: 28px;
@@ -68,7 +69,7 @@ addStyles('DashboardHeader', props => {
         background-size: 150% 200%;
       }
       @media (max-width: ${theme.bp.small - 1}px) {
-        margin: 28px -18px -50px;
+        margin: 28px ${theme.layout.mobile.pagePadding * -1}px -50px;
         padding-bottom: 36px;
         padding-top: 20px;
         flex: 1 0 100%;
@@ -113,6 +114,7 @@ addStyles('DashboardHeader', props => {
       max-width: 260px;
       @media (max-width: ${theme.bp.mobile - 1}px) {
         max-width: 100%;
+        margin-bottom: 20px;
       }
     `,
     infoRow1: css`
