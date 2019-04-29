@@ -73,12 +73,12 @@ class LoginRegister extends React.Component<Props, State> {
     // synchronous to avoid double-submitting
     this.isSubmitting = true
 
-    try {
-      this.setState(
-        {
-          loginError: undefined
-        },
-        async () => {
+    this.setState(
+      {
+        loginError: undefined
+      },
+      async () => {
+        try {
           const recaptcha = await this.recaptcha.execute()
           const authData = await AuthAPI.login(
             username,
@@ -90,22 +90,27 @@ class LoginRegister extends React.Component<Props, State> {
           setPassword(password)
           this.props.updateAuth(authData)
           this.setState({ isSubmitting: false })
+        } catch (error) {
+          // check if it's because we need 2fa
+          console.log('Yoy', error.response)
+          if (
+            error.response.data.hasOwnProperty('reason') &&
+            error.response.data.reason === '2FA_REQUIRED'
+          ) {
+            this.setState({
+              mfaRequired: true,
+              loginError: undefined,
+              isSubmitting: false
+            })
+          } else {
+            this.setState({
+              loginError: deduceError(error),
+              isSubmitting: false
+            })
+          }
         }
-      )
-    } catch (error) {
-      // check if it's because we need 2fa
-      if (
-        error.response.data.hasOwnProperty('reason') &&
-        error.response.data.reason === '2FA_REQUIRED'
-      ) {
-        this.setState({
-          mfaRequired: true,
-          loginError: undefined
-        })
-      } else {
-        this.setState({ loginError: deduceError(error), isSubmitting: false })
       }
-    }
+    )
   }
 
   handleRegister = (username, email, password) => {
