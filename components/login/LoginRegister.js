@@ -92,7 +92,6 @@ class LoginRegister extends React.Component<Props, State> {
           this.setState({ isSubmitting: false })
         } catch (error) {
           // check if it's because we need 2fa
-          console.log('Yoy', error.response)
           if (
             error.response.data.hasOwnProperty('reason') &&
             error.response.data.reason === '2FA_REQUIRED'
