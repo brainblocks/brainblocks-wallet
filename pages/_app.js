@@ -7,7 +7,7 @@ import theme from '~/theme/theme'
 import { creators as uiActions } from '~/state/actions/uiActions'
 import { withReduxStore } from '~/state'
 import { Snackbar } from 'brainblocks-components'
-import ReactBreakpoints from 'react-breakpoints'
+import ReactBreakpoints, { Media } from 'react-breakpoints'
 import CheckIcon from '~/static/svg/icons/alert-check.svg'
 import ExclaimIcon from '~/static/svg/icons/alert-exclaim.svg'
 import InfoIcon from '~/static/svg/icons/alert-info.svg'
@@ -31,20 +31,30 @@ class MyApp extends App {
       <Container>
         <ErrorBoundary>
           <Provider store={reduxStore}>
-            <Snackbar
-              successIcon={<CheckIcon />}
-              errorIcon={<CrossIcon />}
-              infoIcon={<InfoIcon />}
-              warningIcon={<ExclaimIcon />}
+            <ReactBreakpoints
+              breakpoints={theme.bp}
+              debounceResize={true}
+              debounceDelay={200}
             >
-              <ReactBreakpoints
-                breakpoints={theme.bp}
-                debounceResize={true}
-                debounceDelay={200}
-              >
-                <Component {...pageProps} />
-              </ReactBreakpoints>
-            </Snackbar>
+              <Media>
+                {({ breakpoints, currentBreakpoint }) => (
+                  <Snackbar
+                    successIcon={<CheckIcon />}
+                    errorIcon={<CrossIcon />}
+                    infoIcon={<InfoIcon />}
+                    warningIcon={<ExclaimIcon />}
+                    notistackProps={{
+                      maxSnack:
+                        breakpoints[currentBreakpoint] >= breakpoints.tablet
+                          ? 3
+                          : 1
+                    }}
+                  >
+                    <Component {...pageProps} />
+                  </Snackbar>
+                )}
+              </Media>
+            </ReactBreakpoints>
           </Provider>
         </ErrorBoundary>
       </Container>

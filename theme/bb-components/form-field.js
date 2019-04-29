@@ -24,10 +24,7 @@ addStyles('BB-FormField', props => {
         flex-grow: 1;
       }
       &:focus-within {
-        box-shadow: 0 0 15px
-          ${Color(theme.color.palette.lightBlue)
-            .lighten(0.1)
-            .toString()};
+        box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.1);
         input:focus,
         select:focus,
         textarea:focus {
@@ -56,11 +53,11 @@ addStyles('BB-FormField', props => {
         `};
       ${props.valid === false &&
         css`
-          background: ${theme.color.status.errorLight};
+          border-color: ${theme.color.status.error};
           input,
           select,
           textarea {
-            color: ${theme.color.status.error};
+            /* color: ${theme.color.status.error}; */
           }
         `};
     `,

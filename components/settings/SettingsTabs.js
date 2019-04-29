@@ -64,7 +64,7 @@ class SettingsTabs extends React.Component<Props, State> {
     super(props)
     this.state = {
       activeTab: tabIndexMap[props.router.query.tab] || 0,
-      viewingTab: false
+      viewingTab: Boolean(props.router.query.tab)
     }
   }
 
