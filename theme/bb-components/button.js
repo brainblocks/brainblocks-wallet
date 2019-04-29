@@ -76,7 +76,7 @@ addStyles('BB-Button', props => {
         : null};
       ${props.variant === 'icon'
         ? css`
-            padding: 0;
+            padding: 0 !important;
             width: ${props.size || 24}px;
             height: ${props.size || 24}px;
             border-radius: 100%;

@@ -23,6 +23,7 @@ setStyles('BB-Input', props => {
         `};
       &::placeholder {
         color: ${theme.color.text.light};
+        font-weight: 600;
       }
     `
   }

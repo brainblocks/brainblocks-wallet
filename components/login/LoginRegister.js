@@ -89,6 +89,7 @@ class LoginRegister extends React.Component<Props, State> {
 
           setPassword(password)
           this.props.updateAuth(authData)
+          this.setState({ isSubmitting: false })
         }
       )
     } catch (error) {
@@ -102,11 +103,9 @@ class LoginRegister extends React.Component<Props, State> {
           loginError: undefined
         })
       } else {
-        this.setState({ loginError: deduceError(error) })
+        this.setState({ loginError: deduceError(error), isSubmitting: false })
       }
     }
-
-    this.setState({ isSubmitting: false })
   }
 
   handleRegister = (username, email, password) => {
