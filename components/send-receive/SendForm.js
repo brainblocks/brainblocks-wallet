@@ -107,7 +107,9 @@ class SendForm extends Component<Props, State> {
       errors.amount = 'Required'
     } else if (values.amount <= 0) {
       errors.amount = 'Amount must be positive'
-    } else if (values.amount > this.props.accounts.byId[values.from].balance) {
+    } else if (
+      this.getAmountNano(values) > this.props.accounts.byId[values.from].balance
+    ) {
       errors.amount = 'Insufficient balance'
     }
 
@@ -248,10 +250,17 @@ class SendForm extends Component<Props, State> {
                             href="#"
                             onClick={e => {
                               e.preventDefault()
-                              setFieldValue(
-                                'amount',
-                                accounts.byId[values.from].balance,
-                                true
+                              this.setState(
+                                {
+                                  amountFieldEditing: 'nano'
+                                },
+                                () => {
+                                  setFieldValue(
+                                    'amount',
+                                    accounts.byId[values.from].balance,
+                                    true
+                                  )
+                                }
                               )
                             }}
                           >
