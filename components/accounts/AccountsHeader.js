@@ -58,7 +58,7 @@ const AccountsHeader = ({
           value={formatFiat(nanoPrice, preferredCurrency)}
         />
       </div>
-      <div className={styles.change}>
+      {/*<div className={styles.change}>
         <KeyValue
           theme="header"
           label="Last 24h"
@@ -69,7 +69,7 @@ const AccountsHeader = ({
             </span>
           }
         />
-      </div>
+      </div>*/}
       <div className={styles.new}>
         <Link prefetch href="/new-account/settings">
           <Button block el="a">
