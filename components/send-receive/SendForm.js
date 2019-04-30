@@ -107,7 +107,11 @@ class SendForm extends Component<Props, State> {
       errors.amount = 'Required'
     } else if (values.amount <= 0) {
       errors.amount = 'Amount must be positive'
-    } // @todo get account balance here and ensure amount is less
+    } else if (
+      this.getAmountNano(values) > this.props.accounts.byId[values.from].balance
+    ) {
+      errors.amount = 'Insufficient balance'
+    }
 
     return errors
   }
@@ -172,7 +176,8 @@ class SendForm extends Component<Props, State> {
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting
+            isSubmitting,
+            setFieldValue
           }) => {
             const amountFieldNano = this.getAmountNano(values)
             const amountFieldFiat = this.getAmountFiat(values)
@@ -239,6 +244,30 @@ class SendForm extends Component<Props, State> {
                       label="Amount"
                       fieldId="send-amount"
                       error={errors.amount && touched.amount && errors.amount}
+                      extra={
+                        accounts.byId.hasOwnProperty(values.from) && (
+                          <a
+                            href="#"
+                            onClick={e => {
+                              e.preventDefault()
+                              this.setState(
+                                {
+                                  amountFieldEditing: 'nano'
+                                },
+                                () => {
+                                  setFieldValue(
+                                    'amount',
+                                    accounts.byId[values.from].balance,
+                                    true
+                                  )
+                                }
+                              )
+                            }}
+                          >
+                            Max
+                          </a>
+                        )
+                      }
                     >
                       <AmountField
                         value={values.amount}

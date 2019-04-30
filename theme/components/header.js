@@ -213,6 +213,8 @@ addStyles('Header', props => ({
     right: 0;
     background: #fff;
     border-top: 1px solid ${theme.color.borders.sep};
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
     ul {
       ${resetList};
       display: flex;

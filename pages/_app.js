@@ -31,20 +31,27 @@ class MyApp extends App {
       <Container>
         <ErrorBoundary>
           <Provider store={reduxStore}>
-            <Snackbar
-              successIcon={<CheckIcon />}
-              errorIcon={<CrossIcon />}
-              infoIcon={<InfoIcon />}
-              warningIcon={<ExclaimIcon />}
+            <ReactBreakpoints
+              breakpoints={theme.bp}
+              debounceResize={true}
+              debounceDelay={200}
             >
-              <ReactBreakpoints
-                breakpoints={theme.bp}
-                debounceResize={true}
-                debounceDelay={200}
+              <Snackbar
+                successIcon={<CheckIcon />}
+                errorIcon={<CrossIcon />}
+                infoIcon={<InfoIcon />}
+                warningIcon={<ExclaimIcon />}
+                notistackProps={{
+                  maxSnack:
+                    typeof window !== 'undefined' &&
+                    window.outerWidth >= theme.bp.tablet
+                      ? 3
+                      : 1
+                }}
               >
                 <Component {...pageProps} />
-              </ReactBreakpoints>
-            </Snackbar>
+              </Snackbar>
+            </ReactBreakpoints>
           </Provider>
         </ErrorBoundary>
       </Container>
