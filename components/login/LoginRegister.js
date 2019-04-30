@@ -119,14 +119,13 @@ class LoginRegister extends React.Component<Props, State> {
     this.isSubmitting = true
 
     // Register an account
-    try {
-      this.setState(
-        {
-          registrationError: undefined
-        },
-        async () => {
+    this.setState(
+      {
+        registrationError: undefined
+      },
+      async () => {
+        try {
           const recaptcha = await this.recaptcha.execute()
-
           const authData = await UserAPI.register({
             username,
             email,
@@ -135,15 +134,16 @@ class LoginRegister extends React.Component<Props, State> {
           })
 
           this.props.updateAuth({ ...authData, isRegistering: true })
+          this.setState({ isSubmitting: false })
+        } catch (error) {
+          this.setState({
+            registrationError: deduceError(error),
+            isSubmitting: false
+          })
+          return
         }
-      )
-    } catch (error) {
-      this.setState({
-        registrationError: deduceError(error),
-        isSubmitting: false
-      })
-      return
-    }
+      }
+    )
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
