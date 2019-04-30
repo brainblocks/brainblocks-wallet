@@ -235,7 +235,7 @@ class DashboardHeader extends React.Component<Props, State> {
                 value={formatFiat(nanoPrice, preferredCurrency)}
               />
             </div>
-            <div className={styles.change}>
+            {/*<div className={styles.change}>
               <KeyValue
                 theme="header"
                 size="sm"
@@ -247,7 +247,7 @@ class DashboardHeader extends React.Component<Props, State> {
                   </span>
                 }
               />
-            </div>
+            </div>*/}
           </div>
         </div>
         <Link
