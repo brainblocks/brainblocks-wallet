@@ -37,6 +37,7 @@
     "next": "^8.1.0",
     "next-cookies": "^1.1.2",
     "numbro": "^2.1.1",
+    "pbkdf2": "^3.0.14",
     "qrcode.react": "^0.9.0",
     "rai-wallet": "^0.4.0",
     "react": "^16.8.6",
@@ -49,7 +50,8 @@
     "redux-devtools-extension": "^2.13.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.0.0",

@@ -9,7 +9,7 @@ import RegisterForm from '~/components/login/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import { withRouter } from 'next/router'
-import { setPassword } from '~/state/password'
+import { setPassword, hashPassword } from '~/state/password'
 import { getKeyByValue } from '~/functions/util'
 import { creators as authActions } from '~/state/actions/authActions'
 import * as AuthAPI from '~/state/api/auth'
@@ -79,15 +79,17 @@ class LoginRegister extends React.Component<Props, State> {
       },
       async () => {
         try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
+
           const recaptcha = await this.recaptcha.execute()
           const authData = await AuthAPI.login(
             username,
-            password,
+            hashedPassword,
             recaptcha,
             mfaCode
           )
 
-          setPassword(password)
           this.props.updateAuth(authData)
           this.setState({ isSubmitting: false })
         } catch (error) {
@@ -125,11 +127,14 @@ class LoginRegister extends React.Component<Props, State> {
       },
       async () => {
         try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
+
           const recaptcha = await this.recaptcha.execute()
           const authData = await UserAPI.register({
             username,
             email,
-            password,
+            password: hashedPassword,
             recaptcha
           })
 

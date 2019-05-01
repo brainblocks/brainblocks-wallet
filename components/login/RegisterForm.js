@@ -7,9 +7,13 @@ import {
   FormField,
   Input
 } from 'brainblocks-components'
-import validatePassword from '~/utils/validatePassword'
 import { validate as isEmail } from 'isemail'
 import { Formik } from 'formik'
+import zxcvbn from 'zxcvbn'
+
+const testPassword = (password, username) => {
+  return zxcvbn(password, [username, 'brainblocks'])
+}
 
 class RegisterForm extends React.Component {
   validate = ({ username, email, password, retype }) => {
@@ -25,9 +29,15 @@ class RegisterForm extends React.Component {
       errors['email'] = 'Please enter a valid email'
     }
 
-    const passwordValidation = validatePassword(password)
-    if (passwordValidation) {
-      errors['password'] = passwordValidation
+    if (!password) {
+      errors['password'] = 'Please enter a password'
+    } else {
+      const strength = testPassword(password, username)
+      if (strength.score < 3) {
+        errors['password'] =
+          strength.feedback.warning ||
+          "That password is too weak. You're storing money!"
+      }
     }
 
     if (!retype) {
@@ -109,6 +119,15 @@ class RegisterForm extends React.Component {
                   label="Password"
                   fieldId="password"
                   error={errors.password && touched.password && errors.password}
+                  description={
+                    !!values.password &&
+                    testPassword(
+                      values.password,
+                      values.username
+                    ).feedback.suggestions.map(suggestion => (
+                      <div>{suggestion}</div>
+                    ))
+                  }
                 >
                   <FormField valid={touched.password && !errors.password}>
                     <Input
