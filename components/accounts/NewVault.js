@@ -26,6 +26,8 @@ import {
 } from 'brainblocks-components'
 import { getKeyByValue } from '~/functions/util'
 import { isValidNanoSeed } from '~/functions/validate'
+import { setPassword, hashPassword, destroyPassword } from '~/state/password'
+import { getUsername } from '~/state/selectors/userSelectors'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -88,8 +90,11 @@ class NewVault extends React.Component<Props, State> {
       [`${form}Submitting`]: true
     })
     // verify password
+    setPassword(password)
+    const hashedPassword = hashPassword(this.props.username)
+    destroyPassword()
     try {
-      let correct = await verifyPassword(password)
+      let correct = await verifyPassword(hashedPassword)
       if (!correct) throw new Error('Invalid password')
     } catch (e) {
       console.error('Error verifying password')
@@ -363,7 +368,8 @@ class NewVault extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  vaults: state.vaults
+  vaults: state.vaults,
+  username: getUsername(state)
 })
 
 const mapDispatchToProps = {

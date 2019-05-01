@@ -8,7 +8,6 @@ import {
   FormField,
   Input
 } from 'brainblocks-components'
-import validatePassword from '~/utils/validatePassword'
 import { Formik } from 'formik'
 
 type Props = {
