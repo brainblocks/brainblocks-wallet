@@ -264,7 +264,13 @@ class Header extends React.Component {
           <Media>
             {({ breakpoints, currentBreakpoint }) =>
               breakpoints[currentBreakpoint] < breakpoints.tablet && (
-                <nav className={styles.bottomTabs}>
+                <nav
+                  className={styles.bottomTabs}
+                  style={{
+                    padding:
+                      '0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)'
+                  }}
+                >
                   <ul>
                     {menuItems
                       .filter(item => item.mobile)
