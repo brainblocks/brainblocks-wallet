@@ -4,11 +4,11 @@
   "description": "UI for the BrainBlocks Platform",
   "main": "index.js",
   "scripts": {
-    "dev": "npm install && NODE_ENV=development next",
+    "dev": "npm install && NODE_ENV=development node server.js",
     "build": "next build",
     "export": "next export",
     "serve": "serve -p 3000 out",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "start-prod": "next start -p 3010",
     "flow": "flow",
     "styleguidist": "npx styleguidist server",
