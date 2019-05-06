@@ -32,7 +32,7 @@ export default class MyDocument extends Document {
             name="viewport"
             content="width=device-width, initial-scale=1, user-scalable=no"
           />
-          <link rel="manifest" href="/static/pwa/manifest.json" />
+          <link rel="manifest" href="/static/manifest.json" />
           <meta name="theme-color" content="#1a2d58" />
           <meta name="msapplication-TileColor" content="#1a2d58" />
           <link
