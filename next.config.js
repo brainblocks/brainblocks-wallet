@@ -2,6 +2,7 @@ require('dotenv').config()
 const withOffline = require('next-offline')
 
 const nextConfig = {
+  poweredByHeader: false,
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
     GOOGLE_RECAPTCHA_SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
