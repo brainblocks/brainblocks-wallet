@@ -38,13 +38,20 @@ module.exports = function useCsp(app) {
       directives: {
         baseUri: ["'none'"],
         objectSrc: ["'none'"],
-        defaultSrc: ["'self'", '*.brainblocks.io'],
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          '*.brainblocks.io',
+          'localhost:*',
+          'ws://localhost:*'
+        ],
         scriptSrc,
         // styleSrc: [nonce, "'strict-dynamic'", 'https://fonts.googleapis.com'], // Helmet doesn't allow strict-dynamic. I don't think there is any XSS possibility with our scripts anyway.
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: [
           "'self'",
+          'data:',
           'https://robohash.org',
           'https://secure.gravatar.com'
         ]
