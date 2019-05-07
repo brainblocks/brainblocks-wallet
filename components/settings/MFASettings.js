@@ -213,7 +213,9 @@ class MFASettings extends React.Component<Props, State> {
                                 text={mfaKey}
                                 onCopy={this.handleCopy2faKey}
                               >
-                                <Button variant="util">Copy</Button>
+                                <Button type="button" variant="util">
+                                  Copy
+                                </Button>
                               </CopyToClipboard>
                             }
                           >
