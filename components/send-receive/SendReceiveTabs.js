@@ -35,7 +35,10 @@ type State = {
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+    // XSS-safe
+    activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+      ? tabIndexMap[this.props.router.query.tab]
+      : 0,
     sendComplete: false
   }
 

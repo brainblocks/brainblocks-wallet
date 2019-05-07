@@ -20,6 +20,7 @@ import Loading from '~/pages/loading'
 import Message from '~/components/layout/Message'
 import { Button, withSnackbar } from 'brainblocks-components'
 import { isServer } from '~/state'
+import { isHex, isBcryptHash } from '~/functions/validate'
 
 type State = {
   isLoading: boolean,
@@ -56,11 +57,17 @@ class EmailVerification extends Component<Props, State> {
   }
 
   get hash() {
-    return this.props.router.query.hash
+    // XSS-safe via validation
+    return isBcryptHash(this.props.router.query.hash)
+      ? this.props.router.query.hash
+      : null
   }
 
   get verification() {
-    return this.props.router.query.verification
+    // XSS-safe via validation
+    return isHex(this.props.router.query.verification)
+      ? this.props.router.query.verification
+      : null
   }
 
   get hasQueryParameters() {

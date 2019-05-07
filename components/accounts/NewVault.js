@@ -66,7 +66,9 @@ class NewVault extends React.Component<Props, State> {
     const wallet = new Wallet('')
     wallet.setRandomSeed()
     this.state = {
-      activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0, // XSS-safe
       createSeed: wallet.getSeed(''),
       createPassword: '',
       createPasswordValid: true,

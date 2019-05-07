@@ -63,8 +63,13 @@ class SettingsTabs extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
-      viewingTab: Boolean(props.router.query.tab)
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
+      viewingTab: Boolean(
+        typeof tabIndexMap[props.router.query.tab] === 'number'
+      )
     }
   }
 

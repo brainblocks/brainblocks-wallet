@@ -50,12 +50,14 @@ class SendForm extends Component<Props, State> {
 
     if (variant === 'transfer') {
       let from = accounts.allIds[0]
+      // XSS-safe
       if (router.query.from && accounts.allIds.includes(router.query.from)) {
         from = router.query.from
       } else if (accounts.allIds.includes(defaultAccount)) {
         from = defaultAccount
       }
       let to = accounts.allIds[1]
+      // XSS-safe
       if (router.query.to && accounts.allIds.includes(router.query.to)) {
         to = router.query.to
       }
@@ -65,9 +67,16 @@ class SendForm extends Component<Props, State> {
       this.initialFrom = from
       this.initialTo = to
     } else {
+      // XSS-safe
       this.initialFrom =
-        router.query.from || defaultAccount || accounts.allIds[0]
-      this.initialTo = router.query.to || ''
+        router.query.from && accounts.allIds.includes(router.query.from)
+          ? router.query.from
+          : defaultAccount || accounts.allIds[0]
+      // XSS-safe, but will need updating when we can send to contacts, aliases etc
+      this.initialTo =
+        Boolean(router.query.to) && isValidNanoAddress(router.query.to)
+          ? router.query.to
+          : ''
     }
   }
 
@@ -164,7 +173,8 @@ class SendForm extends Component<Props, State> {
             from: this.initialFrom,
             to: this.initialTo,
             message: '',
-            amount: router.query.amount || 0
+            amount:
+              typeof router.query.amount === 'number' ? router.query.amount : 0 // XSS-safe
           }}
           validate={this.validate}
           onSubmit={this.handleSubmit}
