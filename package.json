@@ -65,7 +65,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@zeit/next-bundle-analyzer": "^0.1.2",
     "babel-plugin-emotion": "^9.2.11",
-    "babel-plugin-inline-react-svg": "^1.0.0",
+    "babel-plugin-inline-react-svg": "^1.1.0",
     "babel-plugin-root-import": "^6.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-import": "^2.17.2",
