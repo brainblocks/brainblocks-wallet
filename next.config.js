@@ -9,6 +9,9 @@ const nextConfig = {
     BASE_API_URL: process.env.BASE_API_URL,
     LOCAL_API: process.env.LOCAL_API,
     WEBSOCKET_URL: process.env.WEBSOCKET_URL
+  },
+  workboxOpts: {
+    runtimeCaching: [{ urlPattern: /^https?.*/, handler: 'networkFirst' }]
   }
 }
 
