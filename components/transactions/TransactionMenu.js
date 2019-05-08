@@ -2,7 +2,9 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import { compose } from 'redux'
-import { Menu, MenuItem, withSnackbar } from 'brainblocks-components'
+import Menu from 'brainblocks-components/build/Menu'
+import MenuItem from 'brainblocks-components/build/MenuItem'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { withRouter } from 'next/router'
 

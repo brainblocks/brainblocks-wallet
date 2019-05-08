@@ -1,20 +1,17 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
 import { Media } from 'react-breakpoints'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
-import {
-  Button,
-  FormField,
-  KeyValue,
-  Select,
-  Typography,
-  Menu,
-  MenuItem
-} from 'brainblocks-components'
+import KeyValue from 'brainblocks-components/build/KeyValue'
+import FormField from 'brainblocks-components/build/FormField'
+import Button from 'brainblocks-components/build/Button'
+import Select from 'brainblocks-components/build/Select'
+import Typography from 'brainblocks-components/build/Typography'
+import Menu from 'brainblocks-components/build/Menu'
+import MenuItem from 'brainblocks-components/build/MenuItem'
 import AccountMenu from '~/components/accounts/AccountMenu'
 import HistoryChart from '~/components/dashboard/HistoryChart'
 import Link from 'next/link'
@@ -114,18 +111,6 @@ class DashboardHeader extends React.Component<Props, State> {
       date: Date.now(),
       balance: transactions.byId[latestTx].balanceNano
     })
-
-    // return a history if we don't have one
-    /*
-    if (chartData.length <= 7) {
-      while (chartData.length <= 7) {
-        const today = moment()
-          .subtract(chartData.length, 'days')
-          .format('YYYY-MM-DD')
-        const chartObject = { date: today, balance: 0 }
-        chartData.push(chartObject)
-      }
-    }*/
 
     // return chart data
     return chartData

@@ -4,16 +4,14 @@ import { destyle } from 'destyle'
 import { isValidNanoAddress } from '~/functions/validate'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  AmountField,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import AmountField from 'brainblocks-components/build/AmountField'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { Formik } from 'formik'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'

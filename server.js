@@ -1,6 +1,7 @@
 const { join } = require('path')
 const next = require('next')
 const express = require('express')
+const compression = require('compression')
 const helmet = require('helmet')
 const useCsp = require('./csp')
 
@@ -11,6 +12,7 @@ const handle = nextApp.getRequestHandler()
 nextApp.prepare().then(() => {
   const app = express()
 
+  app.use(compression())
   app.use(helmet())
   app.use(
     helmet.referrerPolicy({
@@ -32,22 +34,4 @@ nextApp.prepare().then(() => {
     if (err) throw err
     console.log(`> Ready on http://localhost:${port}`)
   })
-
-  /*
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url, true)
-    const { pathname } = parsedUrl
-
-    // handle GET request to /service-worker.js
-    if (pathname === '/service-worker.js') {
-      const filePath = join(__dirname, '.next', pathname)
-
-      nextApp.serveStatic(req, res, filePath)
-    } else {
-      handle(req, res, parsedUrl)
-    }
-  }).listen(3000, () => {
-    console.log(`> Ready on http://localhost:${3000}`)
-  })
-  */
 })

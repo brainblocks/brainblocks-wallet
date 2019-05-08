@@ -1,5 +1,6 @@
 require('dotenv').config()
 const withOffline = require('next-offline')
+const withBundleAnalyzer = require('@zeit/next-bundle-analyzer')
 
 const nextConfig = {
   poweredByHeader: false,
@@ -12,8 +13,26 @@ const nextConfig = {
     WEBSOCKET_URL: process.env.WEBSOCKET_URL
   },
   workboxOpts: {
-    runtimeCaching: [{ urlPattern: /^https?.*/, handler: 'networkFirst' }]
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/fonts\.gstatic\.com/,
+        handler: 'cacheFirst'
+      },
+      { urlPattern: /^https?.*/, handler: 'networkFirst' }
+    ]
+  },
+  analyzeServer: ['server', 'both'].includes(process.env.BUNDLE_ANALYZE),
+  analyzeBrowser: ['browser', 'both'].includes(process.env.BUNDLE_ANALYZE),
+  bundleAnalyzerConfig: {
+    server: {
+      analyzerMode: 'static',
+      reportFilename: '../bundles/server.html'
+    },
+    browser: {
+      analyzerMode: 'static',
+      reportFilename: '../bundles/client.html'
+    }
   }
 }
 
-module.exports = withOffline(nextConfig)
+module.exports = withBundleAnalyzer(withOffline(nextConfig))

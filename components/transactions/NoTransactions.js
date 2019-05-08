@@ -1,6 +1,8 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { Typography, Button, withSnackbar } from 'brainblocks-components'
+import Typography from 'brainblocks-components/build/Typography'
+import Button from 'brainblocks-components/build/Button'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import Message from '~/components/layout/Message'
 
 type Props = {

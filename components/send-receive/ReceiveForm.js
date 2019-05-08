@@ -4,15 +4,13 @@ import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'
 

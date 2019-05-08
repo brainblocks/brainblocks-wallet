@@ -20,21 +20,26 @@ export default class MyDocument extends Document {
   render() {
     const { nonce } = this.props
     return (
-      <html>
+      <html lang="en">
         <Head nonce={nonce}>
+          <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"
+            rel="stylesheet"
+          />
           <style
             nonce={nonce}
             dangerouslySetInnerHTML={{ __html: this.props.css }}
+          />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+            key="viewport"
           />
           <meta name="description" content="BrainBlocks Wallet" />
           <meta property="og:title" content="BrainBlocks" />
           <meta
             property="og:image"
             content="/static/pwa/apple-touch-icon-precomposed.png"
-          />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, user-scalable=no"
           />
           <link rel="manifest" href="/static/manifest.json" />
           <meta name="theme-color" content="#1a2d58" />

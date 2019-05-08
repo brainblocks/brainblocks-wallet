@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import { Alert } from 'brainblocks-components'
+import Alert from 'brainblocks-components/build/Alert'
 import { destyle } from 'destyle'
 
 type Props = {

@@ -52,18 +52,6 @@ class Layout extends React.Component {
           </div>
         )}
         <div className={styles.root}>
-          <Head>
-            <link
-              href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"
-              rel="stylesheet"
-            />
-            <title>My page title</title>
-            <meta
-              name="viewport"
-              content="initial-scale=1.0, width=device-width"
-              key="viewport"
-            />
-          </Head>
           {children}
           {footerVariant !== 'none' && false && (
             <div className={styles.footer}>
