@@ -81,6 +81,8 @@ class DashboardHeader extends React.Component<Props, State> {
     // keep track of the latest one
     let latestTx = txs[0]
     let maxTimestamp = 0
+    let balance = 0
+    let lastamount = 0
     for (let hash of txs) {
       // pull and break down block for hash
       const tx = transactions.byId[hash]
@@ -94,12 +96,21 @@ class DashboardHeader extends React.Component<Props, State> {
         latestTx = hash
       }
 
-      /**
-       * Calculating 'all' is actually a bit trickier than this.
-       * Will leave it as an exercise for another day
-       */
+      // Graph for all wallets
       if (account === 'all') {
-        dataPoint.balance = totalBalance
+        balance += lastamount
+        // For last transaction in time set balance as the final one
+        if (hash === txs[0]) {
+          balance = totalBalance
+        }
+
+        // Set last amount of transaction for calculations
+        if (tx.type === 'receive') {
+          lastamount = -tx.amountNano
+        } else {
+          lastamount = tx.amountNano
+        }
+        dataPoint.balance = balance
       }
 
       chartData.push(dataPoint)
@@ -107,9 +118,22 @@ class DashboardHeader extends React.Component<Props, State> {
 
     // add a data point for the current moment, equal to the latest balance
     // so that the chart doesn't end in the past
-    chartData.unshift({
-      date: Date.now(),
-      balance: transactions.byId[latestTx].balanceNano
+    if (account === 'all') {
+      chartData.unshift({
+        date: Date.now(),
+        balance: totalBalance
+      })
+    } else {
+      chartData.unshift({
+        date: Date.now(),
+        balance: transactions.byId[latestTx].balanceNano
+      })
+    }
+
+    // Set a first point in the chart to 0 - before the first transaction
+    chartData.push({
+      date: transactions.byId[txs[txs.length - 1]].timestamp - 1000000,
+      balance: 0
     })
 
     // return chart data
