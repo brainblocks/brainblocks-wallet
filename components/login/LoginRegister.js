@@ -1,11 +1,16 @@
 /* @flow */
 import * as React from 'react'
 import { connect } from 'react-redux'
+import dynamic from 'next/dynamic'
 import { destyle } from 'destyle'
-import { Alert, SwitchTabs, TabComponents } from 'brainblocks-components'
+import {
+  Alert,
+  SwitchTabs,
+  TabComponents,
+  Spinner
+} from 'brainblocks-components'
 import LoginForm from '~/components/login/LoginForm'
 import Recaptcha from '~/components/auth/Recaptcha'
-import RegisterForm from '~/components/login/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import { withRouter } from 'next/router'
@@ -25,6 +30,19 @@ const tabIndexMap = {
   login: 0,
   register: 1
 }
+
+// RegisterForm contains zxcvbn which we want to avoid loading if possible
+const LazyRegisterForm = dynamic(
+  () => import('~/components/login/RegisterForm'),
+  {
+    ssr: true,
+    loading: () => (
+      <div style={{ margin: '50px auto' }}>
+        <Spinner />
+      </div>
+    )
+  }
+)
 
 type Props = {
   auth: Object,
@@ -220,7 +238,7 @@ class LoginRegister extends React.Component<Props, State> {
                         {this.state.registrationError.message}
                       </Alert>
                     )}
-                    <RegisterForm
+                    <LazyRegisterForm
                       onSubmit={this.handleRegister}
                       submitting={isSubmitting}
                     />

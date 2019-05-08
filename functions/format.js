@@ -1,7 +1,4 @@
-import moment from 'moment'
-/*import 'moment/locale/en'
-import 'moment/locale/es'
-import 'moment/locale/zh-cn'*/
+import { distanceInWordsToNow, format } from 'date-fns'
 import numbro from 'numbro'
 
 function formatNano(nanoVal, decimals = 5) {
@@ -38,26 +35,25 @@ function unixToMs(unix) {
 
 function formatTimeAgo(timestamp, unix = false, shorten = false) {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).fromNow(shorten)
+  return distanceInWordsToNow(new Date(timestamp), {
+    includeSeconds: true,
+    addSuffix: !shorten
+  })
 }
 
 function formatTime(timestamp, unix = false) {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('LT')
+  return format(new Date(timestamp), 'hh:mm a')
 }
 
 function formatDate(timestamp, unix = false) {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('ll')
+  return format(new Date(timestamp), 'MMM D, YYYY')
 }
 
 function formatDayMonth(timestamp, unix = false) {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('D MMM')
-}
-
-function changeMomentLocale(locale) {
-  moment.locale(locale)
+  return format(new Date(timestamp), 'D MMM')
 }
 
 function abbreviateNumber(number, options = {}) {
@@ -68,7 +64,6 @@ function abbreviateNumber(number, options = {}) {
 }
 
 export {
-  moment,
   formatNano,
   formatFiat,
   formatPercent,
@@ -76,6 +71,5 @@ export {
   formatTime,
   formatDate,
   formatDayMonth,
-  changeMomentLocale,
   abbreviateNumber
 }

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
 import { Media } from 'react-breakpoints'
 import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
@@ -114,18 +113,6 @@ class DashboardHeader extends React.Component<Props, State> {
       date: Date.now(),
       balance: transactions.byId[latestTx].balanceNano
     })
-
-    // return a history if we don't have one
-    /*
-    if (chartData.length <= 7) {
-      while (chartData.length <= 7) {
-        const today = moment()
-          .subtract(chartData.length, 'days')
-          .format('YYYY-MM-DD')
-        const chartObject = { date: today, balance: 0 }
-        chartData.push(chartObject)
-      }
-    }*/
 
     // return chart data
     return chartData

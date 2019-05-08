@@ -1,16 +1,10 @@
 // Adapted from https://github.com/zeit/next.js/tree/canary/examples/with-strict-csp
 
-const crypto = require('crypto')
+const uuidv4 = require('uuid/v4')
 const helmet = require('helmet')
 
 const generateNonce = () => {
-  return new Promise((resolve, reject) => {
-    crypto.randomBytes(48, function(err, buffer) {
-      if (err) return reject(err)
-      var token = buffer.toString('base64')
-      resolve(token)
-    })
-  })
+  return Buffer.from(uuidv4()).toString('base64')
 }
 
 module.exports = function useCsp(app) {
@@ -39,11 +33,16 @@ module.exports = function useCsp(app) {
         baseUri: ["'none'"],
         objectSrc: ["'none'"],
         defaultSrc: ["'self'"],
+        frameSrc: ["'self'", 'https://www.google.com/'],
         connectSrc: [
           "'self'",
           '*.brainblocks.io',
           'localhost:*',
-          'ws://localhost:*'
+          'ws://localhost:*',
+          'webpack:',
+          'https://fonts.googleapis.com',
+          'https://robohash.org',
+          'https://secure.gravatar.com'
         ],
         scriptSrc,
         // styleSrc: [nonce, "'strict-dynamic'", 'https://fonts.googleapis.com'], // Helmet doesn't allow strict-dynamic. I don't think there is any XSS possibility with our inline styles anyway.
