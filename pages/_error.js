@@ -5,7 +5,7 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import Link from 'next/link'
-import { Button } from 'brainblocks-components'
+import Button from 'brainblocks-components/build/Button'
 
 class Error extends React.Component {
   static getInitialProps({ res, err }) {

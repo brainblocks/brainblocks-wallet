@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageContent from '~/components/layout/PageContent'
-import { Spinner } from 'brainblocks-components'
+import Spinner from 'brainblocks-components/build/Spinner'
 
 const LoadingPage = props => (
   <Layout headerVariant="none" footerVariant="none">

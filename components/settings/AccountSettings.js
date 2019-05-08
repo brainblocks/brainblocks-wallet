@@ -4,16 +4,14 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button,
-  withSnackbar,
-  ColorChoice
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import ColorChoice from 'brainblocks-components/build/ColorChoice'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import type { NormalizedState } from '~/types'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getDefaultAccount } from '~/state/selectors/userSelectors'

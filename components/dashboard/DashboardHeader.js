@@ -5,15 +5,13 @@ import { formatFiat, formatNano, formatPercent } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
 import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
-import {
-  Button,
-  FormField,
-  KeyValue,
-  Select,
-  Typography,
-  Menu,
-  MenuItem
-} from 'brainblocks-components'
+import KeyValue from 'brainblocks-components/build/KeyValue'
+import FormField from 'brainblocks-components/build/FormField'
+import Button from 'brainblocks-components/build/Button'
+import Select from 'brainblocks-components/build/Select'
+import Typography from 'brainblocks-components/build/Typography'
+import Menu from 'brainblocks-components/build/Menu'
+import MenuItem from 'brainblocks-components/build/MenuItem'
 import AccountMenu from '~/components/accounts/AccountMenu'
 import HistoryChart from '~/components/dashboard/HistoryChart'
 import Link from 'next/link'

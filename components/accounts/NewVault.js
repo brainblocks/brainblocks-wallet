@@ -11,19 +11,17 @@ import { verifyPassword } from '~/state/api/auth'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { addAccount } from '~/state/thunks/accountsThunks'
-import {
-  SwitchTabs,
-  TabComponents,
-  Alert,
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Alert from 'brainblocks-components/build/Alert'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { getKeyByValue } from '~/functions/util'
 import { isValidNanoSeed } from '~/functions/validate'
 import { setPassword, hashPassword, destroyPassword } from '~/state/password'

@@ -3,12 +3,10 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import dynamic from 'next/dynamic'
 import { destyle } from 'destyle'
-import {
-  Alert,
-  SwitchTabs,
-  TabComponents,
-  Spinner
-} from 'brainblocks-components'
+import Alert from 'brainblocks-components/build/Alert'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Spinner from 'brainblocks-components/build/Spinner'
 import LoginForm from '~/components/login/LoginForm'
 import Recaptcha from '~/components/auth/Recaptcha'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'

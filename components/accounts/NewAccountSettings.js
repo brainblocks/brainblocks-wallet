@@ -5,16 +5,14 @@ import { withRouter } from 'next/router'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { addAccount } from '~/state/thunks/accountsThunks'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  ColorChoice,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import ColorChoice from 'brainblocks-components/build/ColorChoice'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 
 type Props = {
   addAccount: Object => Promise<Object>,

@@ -1,12 +1,11 @@
 /* @flow */
-import {
-  Grid,
-  GridItem,
-  Button,
-  FormItem,
-  FormField,
-  Input
-} from 'brainblocks-components'
+import React from 'react'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
 import { validate as isEmail } from 'isemail'
 import { Formik } from 'formik'
 import zxcvbn from 'zxcvbn'

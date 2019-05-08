@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import { NanoAddress } from 'brainblocks-components'
+import NanoAddress from 'brainblocks-components/build/NanoAddress'
 import WalletIcon from '~/static/svg/icons/wallet.svg'
 import WalletsIcon from '~/static/svg/icons/wallets.svg'
 import HotWalletIcon from '~/static/svg/icons/wallet-hot.svg'
