@@ -43,6 +43,7 @@ class AccountSettings extends React.Component<Props, State> {
     super(props)
     let routerAccount = null
     if (
+      // XSS-safe
       props.router.query.hasOwnProperty('account') &&
       isValidNanoAddress(props.router.query.account) &&
       props.accounts.allIds.includes(props.router.query.account)

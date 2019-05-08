@@ -55,7 +55,10 @@ class LoginRegister extends React.Component<Props, State> {
     this.recaptcha = null
     this.state = {
       isSubmitting: false,
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
       loginError: undefined,
       registrationError: undefined,
       mfaRequired: false

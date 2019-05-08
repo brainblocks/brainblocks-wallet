@@ -6,7 +6,7 @@ export default class MyDocument extends Document {
   static getInitialProps(ctx) {
     const page = ctx.renderPage()
     const styles = extractCritical(page.html)
-    return { ...page, ...styles }
+    return { ...page, ...styles, nonce: ctx.res.locals.nonce }
   }
 
   constructor(props) {
@@ -18,10 +18,14 @@ export default class MyDocument extends Document {
   }
 
   render() {
+    const { nonce } = this.props
     return (
       <html>
-        <Head>
-          <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
+        <Head nonce={nonce}>
+          <style
+            nonce={nonce}
+            dangerouslySetInnerHTML={{ __html: this.props.css }}
+          />
           <meta name="description" content="BrainBlocks Wallet" />
           <meta property="og:title" content="BrainBlocks" />
           <meta
@@ -68,7 +72,7 @@ export default class MyDocument extends Document {
         </Head>
         <body>
           <Main />
-          <NextScript />
+          <NextScript nonce={nonce} />
         </body>
       </html>
     )

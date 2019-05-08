@@ -25,15 +25,14 @@ type Props = {
 }
 
 type State = {
-  account: string,
-  amount: string,
-  copied: boolean
+  account: string
 }
 
 class ReceiveForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     let account = props.defaultAccount || props.accounts.allIds[0]
+    // checking that the router-given account is in the allIds array is a form of XSS prevention
     if (
       props.router.query.account &&
       this.props.accounts.allIds.includes(props.router.query.account)
@@ -41,14 +40,12 @@ class ReceiveForm extends Component<Props, State> {
       account = props.router.query.account
     }
     this.state = {
-      account,
-      amount: '10000000000000000000000000000000',
-      copied: false
+      account
     }
   }
 
   handleUpdateAccount = e => {
-    this.setState({ account: e.target.value, copied: false })
+    this.setState({ account: e.target.value })
   }
 
   handleCopyAddress = () => {
@@ -59,7 +56,7 @@ class ReceiveForm extends Component<Props, State> {
 
   render() {
     const { router, accounts, styles } = this.props
-    const { account, amount, copied } = this.state
+    const { account } = this.state
     return (
       <div className={styles.root}>
         <Grid>
