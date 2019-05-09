@@ -50,14 +50,6 @@ const authReducer = (state, action) => {
         draft = authInitialState
         break
 
-      case actions.STORE_USER_PASSWORD:
-        auth.password = action.password
-        break
-
-      case actions.DELETE_USER_PASSWORD:
-        draft.password = undefined
-        break
-
       case userActions.UPDATE_AUTHORIZED_USER:
         draft.user = payload.id
         break

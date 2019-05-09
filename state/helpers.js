@@ -20,18 +20,17 @@ export function getAuthToken() {
 }
 
 export function makeApiRequest(opts = {}) {
-  // determine if the call is from the server
-  let reqURL = ''
-
-  if (isServer) {
-    reqURL = LOCAL_API
-  } else {
-    reqURL = BASE_API_URL
-  }
-
   return axios(
     produce(opts, draft => {
-      draft.baseURL = reqURL
+      draft.baseURL = BASE_API_URL
+    })
+  )
+}
+
+export function makeLocalApiRequest(opts = {}) {
+  return axios(
+    produce(opts, draft => {
+      draft.baseURL = LOCAL_API
     })
   )
 }

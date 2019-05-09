@@ -1,11 +1,15 @@
 /* @flow */
 import Router from 'next/router'
+import getConfig from 'next/config'
 import nextCookie from 'next-cookies'
 import { creators as authActions } from '~/state/actions/authActions'
 import { creators as uiActions } from '~/state/actions/uiActions'
 import * as AuthAPI from '~/state/api/auth'
 import { getIsAuthorized } from '~/state/selectors/authSelectors'
 import type { NextJSContext } from '~/types'
+
+const { publicRuntimeConfig } = getConfig()
+const { AUTH_TOKEN_COOKIE_KEY } = publicRuntimeConfig
 
 const redirectUnauthorized = res => {
   if (res) {
@@ -33,7 +37,8 @@ export const bootstrapInitialProps = async (ctx: NextJSContext) => {
   let isAuthorized = getIsAuthorized(state)
 
   // Get the token from the cookie
-  const { token } = nextCookie(ctx)
+  const cookie = nextCookie(ctx)
+  const token = cookie[AUTH_TOKEN_COOKIE_KEY]
 
   // Add UI process (server only)
   if (res) {
