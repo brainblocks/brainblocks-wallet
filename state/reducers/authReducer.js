@@ -1,6 +1,5 @@
 import { actions } from '~/state/actions/authActions'
 import { actions as userActions } from '~/state/actions/userActions'
-import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
 
 export const authInitialState = {
@@ -10,8 +9,7 @@ export const authInitialState = {
   isRegistering: false,
   didCheck: false,
   isChecking: false,
-  user: undefined,
-  password: undefined
+  user: undefined
 }
 
 const authReducer = (state, action) => {
@@ -48,14 +46,6 @@ const authReducer = (state, action) => {
       // Assume that logout will work for immediate response
       case actions.LOGOUT:
         draft = authInitialState
-        break
-
-      case actions.STORE_USER_PASSWORD:
-        auth.password = action.password
-        break
-
-      case actions.DELETE_USER_PASSWORD:
-        draft.password = undefined
         break
 
       case userActions.UPDATE_AUTHORIZED_USER:

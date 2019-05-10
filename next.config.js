@@ -10,7 +10,8 @@ const nextConfig = {
     DEBUG: process.env.DEBUG,
     BASE_API_URL: process.env.BASE_API_URL,
     LOCAL_API: process.env.LOCAL_API,
-    WEBSOCKET_URL: process.env.WEBSOCKET_URL
+    WEBSOCKET_URL: process.env.WEBSOCKET_URL,
+    AUTH_TOKEN_COOKIE_KEY: process.env.AUTH_TOKEN_COOKIE_KEY
   },
   workboxOpts: {
     runtimeCaching: [

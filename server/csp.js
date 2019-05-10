@@ -33,7 +33,11 @@ module.exports = function useCsp(app) {
         baseUri: ["'none'"],
         objectSrc: ["'none'"],
         defaultSrc: ["'self'"],
-        frameSrc: ["'self'", 'https://www.google.com/'],
+        frameSrc: [
+          "'self'",
+          'https://www.google.com',
+          'https://www.gstatic.com'
+        ],
         connectSrc: [
           "'self'",
           '*.brainblocks.io',
@@ -42,7 +46,9 @@ module.exports = function useCsp(app) {
           'webpack:',
           'https://fonts.googleapis.com',
           'https://robohash.org',
-          'https://secure.gravatar.com'
+          'https://secure.gravatar.com',
+          'https://www.google.com',
+          'https://www.gstatic.com'
         ],
         scriptSrc,
         // styleSrc: [nonce, "'strict-dynamic'", 'https://fonts.googleapis.com'], // Helmet doesn't allow strict-dynamic. I don't think there is any XSS possibility with our inline styles anyway.

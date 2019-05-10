@@ -1,5 +1,4 @@
-import { wallet } from '~/state/wallet'
-import { makeAuthorizedApiRequest } from '~/state/helpers'
+import { makeAuthorizedApiRequest } from './helpers'
 
 export const getVault = async () => {
   const { data } = await makeAuthorizedApiRequest({

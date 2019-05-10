@@ -66,9 +66,9 @@ class Error extends React.Component {
               </p>
             )}
             <div className={styles.button}>
-              <Link href="/">
-                <Button el="a">Go to the dashboard</Button>
-              </Link>
+              <Button el="a" href="/">
+                Go to the dashboard
+              </Button>
             </div>
           </div>
         </PageContent>

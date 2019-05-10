@@ -1,15 +1,11 @@
-import { tryStoreToken } from './auth'
-import { makeApiRequest, makeAuthorizedApiRequest } from '~/state/helpers'
+import { makeLocalApiRequest, makeAuthorizedApiRequest } from './helpers'
 
 export async function register({ username, email, password, recaptcha }) {
-  const { data } = await makeApiRequest({
+  const { data } = await makeLocalApiRequest({
     method: 'post',
     url: '/users',
     data: { username, email, password, recaptcha }
   })
-
-  // Keep the auth token in localStorage
-  tryStoreToken(data.token)
 
   return data
 }
