@@ -2,6 +2,7 @@
 import {
   makeApiRequest,
   makeLocalApiRequest,
+  makeLocalAuthorizedApiRequest,
   makeAuthorizedApiRequest,
   getAuthToken
 } from '~/state/helpers'
@@ -33,26 +34,25 @@ export async function login(username, password, recaptcha, mfaCode) {
   return data
 }
 
-export async function logout(token) {
-  // Attempt to make the proper call to the backend as well
-  if (!token) {
-    token = getAuthToken()
-  }
+export async function logout() {
+  const token = getAuthToken()
   if (token) {
-    const { data } = await makeAuthorizedApiRequest({
-      token,
+    // response header unsets cookie
+    const { data } = await makeLocalAuthorizedApiRequest({
       method: 'delete',
       url: '/auth',
       data: { token }
     })
 
     return data
+  } else {
+    throw new Error('Could not logout - no token found')
   }
 }
 
 export async function verifyPassword(password) {
   try {
-    let { data } = await makeAuthorizedApiRequest({
+    await makeAuthorizedApiRequest({
       method: 'post',
       url: '/auth/validatepwd',
       data: { password }

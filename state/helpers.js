@@ -35,19 +35,30 @@ export function makeLocalApiRequest(opts = {}) {
   )
 }
 
-export function makeAuthorizedApiRequest(opts = {}, shouldThrow = true) {
-  const authToken = opts.token || getAuthToken()
-  delete opts.token
+function authorizedRequest(opts = {}, shouldThrow = true, local) {
+  const authToken = getAuthToken()
 
   if (shouldThrow && !authToken) {
     // TODO: We should consider making this an auth specific error
     throw new Error('No auth token set')
   }
 
-  return makeApiRequest(
-    produce(opts, draft => {
-      draft['headers'] = draft['headers'] || {}
-      draft['headers']['x-auth-token'] = authToken
-    })
-  )
+  const options = produce(opts, draft => {
+    draft['headers'] = draft['headers'] || {}
+    draft['headers']['x-auth-token'] = authToken
+  })
+
+  if (local) {
+    return makeLocalApiRequest(options)
+  } else {
+    return makeApiRequest(options)
+  }
+}
+
+export function makeAuthorizedApiRequest(opts, shouldThrow) {
+  return authorizedRequest(opts, shouldThrow, false)
+}
+
+export function makeLocalAuthorizedApiRequest(opts, shouldThrow) {
+  return authorizedRequest(opts, shouldThrow, true)
 }

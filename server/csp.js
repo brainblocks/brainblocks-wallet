@@ -43,7 +43,8 @@ module.exports = function useCsp(app) {
           'https://fonts.googleapis.com',
           'https://robohash.org',
           'https://secure.gravatar.com',
-          'https://www.google.com'
+          'https://www.google.com',
+          'https://www.gstatic.com'
         ],
         scriptSrc,
         // styleSrc: [nonce, "'strict-dynamic'", 'https://fonts.googleapis.com'], // Helmet doesn't allow strict-dynamic. I don't think there is any XSS possibility with our inline styles anyway.

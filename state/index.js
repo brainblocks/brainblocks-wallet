@@ -23,7 +23,7 @@ function initializeStore(initialState) {
   middleware.push(thunk)
 
   if (DEBUG && isDevelopment && !isServer) {
-    middleware.push(createLogger({ collapsed: true }))
+    //middleware.push(createLogger({ collapsed: true }))
   }
 
   let appliedMiddleware = applyMiddleware(...middleware)
