@@ -36,35 +36,35 @@ export const bootstrapInitialProps = async (ctx: NextJSContext) => {
   const state = getState()
   let isAuthorized = getIsAuthorized(state)
 
-  // Get the token from the cookie
-  const cookie = nextCookie(ctx)
-  const token = cookie[AUTH_TOKEN_COOKIE_KEY]
-
-  // Add UI process (server only)
+  // If we're on the server
   if (res) {
+    // Add UI process
     dispatch(uiActions.addActiveProcess('hydrating'))
-  }
+    // Get the token from the cookie
+    const cookie = nextCookie(ctx)
+    const token = cookie[AUTH_TOKEN_COOKIE_KEY]
+    // Authorize
+    if (token) {
+      try {
+        const authData = await AuthAPI.init(token)
 
-  if (!isAuthorized) {
-    try {
-      // Authenticate (also gets user)
-      const authData = await AuthAPI.init(token)
-
-      if (authData) {
-        isAuthorized = true
-        // Update redux store (auth + user)
-        dispatch(authActions.update(authData))
+        if (authData) {
+          isAuthorized = true
+          // Update redux store (auth + user)
+          dispatch(authActions.update(authData))
+        }
+      } catch (err) {
+        isAuthorized = false
       }
-    } catch (err) {
-      console.warn('Auth error:', err)
+    } else {
       isAuthorized = false
     }
+  }
 
-    // redirect if still not authorized
-    if (!isAuthorized) {
-      if (pathname !== '/login') {
-        redirectUnauthorized(res)
-      }
+  // redirect if still not authorized
+  if (!isAuthorized) {
+    if (pathname !== '/login') {
+      redirectUnauthorized(res)
     }
   }
 

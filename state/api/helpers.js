@@ -1,5 +1,5 @@
 import getConfig from 'next/config'
-import { getClientSideStore, isServer } from '~/state'
+import { getClientSideStore } from '~/state'
 import axios from 'axios'
 import produce from 'immer'
 

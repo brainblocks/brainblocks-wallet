@@ -1,4 +1,4 @@
-import { makeApiRequest, makeAuthorizedApiRequest } from '~/state/helpers'
+import { makeApiRequest, makeAuthorizedApiRequest } from './helpers'
 
 export async function updateAccount() {
   return new Promise(resolve => {

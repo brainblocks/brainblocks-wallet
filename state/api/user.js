@@ -1,4 +1,4 @@
-import { makeLocalApiRequest, makeAuthorizedApiRequest } from '~/state/helpers'
+import { makeLocalApiRequest, makeAuthorizedApiRequest } from './helpers'
 
 export async function register({ username, email, password, recaptcha }) {
   const { data } = await makeLocalApiRequest({

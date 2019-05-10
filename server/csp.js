@@ -33,7 +33,11 @@ module.exports = function useCsp(app) {
         baseUri: ["'none'"],
         objectSrc: ["'none'"],
         defaultSrc: ["'self'"],
-        frameSrc: ["'self'", 'https://www.google.com'],
+        frameSrc: [
+          "'self'",
+          'https://www.google.com',
+          'https://www.gstatic.com'
+        ],
         connectSrc: [
           "'self'",
           '*.brainblocks.io',

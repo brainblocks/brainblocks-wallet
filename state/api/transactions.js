@@ -1,4 +1,4 @@
-import { makeAuthorizedApiRequest } from '~/state/helpers'
+import { makeAuthorizedApiRequest } from './helpers'
 
 export const getChains = async accounts => {
   const { data } = await makeAuthorizedApiRequest({

@@ -5,22 +5,23 @@ import {
   makeLocalAuthorizedApiRequest,
   makeAuthorizedApiRequest,
   getAuthToken
-} from '~/state/helpers'
+} from './helpers'
 
 // Runs in `getInitialProps` only
 export async function init(token) {
-  if (token) {
-    const { data } = await makeApiRequest({
-      method: 'get',
-      url: `/auth`,
-      headers: {
-        'x-auth-token': token
-      }
-    })
-
-    return data
+  if (!token) {
+    throw new Error('No token passed')
   }
-  return false
+
+  const { data } = await makeApiRequest({
+    method: 'get',
+    url: `/auth`,
+    headers: {
+      'x-auth-token': token
+    }
+  })
+
+  return data
 }
 
 // Runs client-side only, requests from the next server (not API server)

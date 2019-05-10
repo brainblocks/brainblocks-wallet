@@ -1,6 +1,5 @@
 import { actions } from '~/state/actions/authActions'
 import { actions as userActions } from '~/state/actions/userActions'
-import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
 
 export const authInitialState = {
@@ -10,8 +9,7 @@ export const authInitialState = {
   isRegistering: false,
   didCheck: false,
   isChecking: false,
-  user: undefined,
-  password: undefined
+  user: undefined
 }
 
 const authReducer = (state, action) => {
