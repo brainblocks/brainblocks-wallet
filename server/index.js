@@ -26,14 +26,14 @@ nextApp.prepare().then(() => {
   useCsp(app)
 
   app.use(
-    ['/api/auth', '/api/users'],
+    ['/local-api/auth', '/local-api/users'],
     proxy({
-      target: process.env.BASE_API_URL.replace('/api', ''),
+      target: process.env.API_PROXY_BASE_URL,
+      pathRewrite: function(path) {
+        return path.replace('/local-api', '')
+      },
       onProxyRes: function(proxyRes, req, res) {
-        if (
-          req.method === 'POST' &&
-          ['/api/auth', '/api/users'].includes(req.path)
-        ) {
+        if (req.method === 'POST' && ['/auth', '/users'].includes(req.path)) {
           // login
           // https://github.com/nodejitsu/node-http-proxy#modify-response
           proxyRes.on('data', function(buf) {
@@ -43,7 +43,7 @@ nextApp.prepare().then(() => {
               setAuthCookie(res, data.token)
             }
           })
-        } else if (req.method === 'DELETE' && req.path === '/api/auth') {
+        } else if (req.method === 'DELETE' && req.path === '/auth') {
           // logout
           deleteAuthCookie(res, req.headers['x-auth-token'])
         }
