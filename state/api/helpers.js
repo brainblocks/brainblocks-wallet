@@ -1,10 +1,10 @@
 import getConfig from 'next/config'
-import { getClientSideStore } from '~/state'
+import { getClientSideStore, isServer } from '~/state'
 import axios from 'axios'
 import produce from 'immer'
 
 const { publicRuntimeConfig } = getConfig()
-const { BASE_API_URL, LOCAL_API } = publicRuntimeConfig
+const { BASE_API_URL, LOCAL_API, BASE_API_URL_SERVERSIDE } = publicRuntimeConfig
 
 export function getAuthToken() {
   const store = getClientSideStore()
@@ -20,9 +20,15 @@ export function getAuthToken() {
 }
 
 export function makeApiRequest(opts = {}) {
+  let baseURL = BASE_API_URL
+
+  if (isServer) {
+    baseURL = BASE_API_URL_SERVERSIDE
+  }
+
   return axios(
     produce(opts, draft => {
-      draft.baseURL = BASE_API_URL
+      draft.baseURL = baseURL
     })
   )
 }

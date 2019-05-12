@@ -9,6 +9,7 @@ const nextConfig = {
     GOOGLE_RECAPTCHA_SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
     DEBUG: process.env.DEBUG,
     BASE_API_URL: process.env.BASE_API_URL,
+    BASE_API_URL_SERVERSIDE: process.env.BASE_API_URL_SERVERSIDE,
     LOCAL_API: process.env.LOCAL_API,
     WEBSOCKET_URL: process.env.WEBSOCKET_URL,
     AUTH_TOKEN_COOKIE_KEY: process.env.AUTH_TOKEN_COOKIE_KEY
