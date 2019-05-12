@@ -3,7 +3,8 @@ module.exports.setAuthCookie = function(res, token) {
     secure: process.env.IS_HTTPS == 'true',
     httpOnly: true,
     sameSite: 'lax',
-    maxAge: process.env.AUTH_TOKEN_COOKIE_EXPIRY_DAYS * 24 * 3600 * 1000
+    maxAge:
+      parseInt(process.env.AUTH_TOKEN_COOKIE_EXPIRY_DAYS, 10) * 24 * 3600 * 1000
   })
 }
 
