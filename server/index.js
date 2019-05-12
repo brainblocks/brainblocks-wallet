@@ -28,7 +28,7 @@ nextApp.prepare().then(() => {
   app.use(
     ['/local-api/auth', '/local-api/users'],
     proxy({
-      target: process.env.API_PROXY_BASE_URL,
+      target: process.env.BASE_API_URL_SERVERSIDE,
       pathRewrite: function(path) {
         return path.replace('/local-api', '')
       },
