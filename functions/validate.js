@@ -12,3 +12,11 @@ export function isValidNanoSeed(seed) {
   const re = /^[0-9A-Fa-f]{64}$/
   return re.test(seed)
 }
+
+export function isHex(str) {
+  return /^[0-9A-Fa-f]+$/.test(str)
+}
+
+export function isBcryptHash(str) {
+  return /^\$2[ayb]\$.{56}$/.test(str)
+}

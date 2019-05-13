@@ -1,15 +1,18 @@
 /* @flow */
 import * as React from 'react'
 import { connect } from 'react-redux'
+import dynamic from 'next/dynamic'
 import { destyle } from 'destyle'
-import { Alert, SwitchTabs, TabComponents } from 'brainblocks-components'
+import Alert from 'brainblocks-components/build/Alert'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Spinner from 'brainblocks-components/build/Spinner'
 import LoginForm from '~/components/login/LoginForm'
 import Recaptcha from '~/components/auth/Recaptcha'
-import RegisterForm from '~/components/login/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import { withRouter } from 'next/router'
-import { setPassword } from '~/state/password'
+import { setPassword, hashPassword } from '~/state/password'
 import { getKeyByValue } from '~/functions/util'
 import { creators as authActions } from '~/state/actions/authActions'
 import * as AuthAPI from '~/state/api/auth'
@@ -25,6 +28,19 @@ const tabIndexMap = {
   login: 0,
   register: 1
 }
+
+// RegisterForm contains zxcvbn which we want to avoid loading if possible
+const LazyRegisterForm = dynamic(
+  () => import('~/components/login/RegisterForm'),
+  {
+    ssr: true,
+    loading: () => (
+      <div style={{ margin: '50px auto' }}>
+        <Spinner />
+      </div>
+    )
+  }
+)
 
 type Props = {
   auth: Object,
@@ -55,7 +71,10 @@ class LoginRegister extends React.Component<Props, State> {
     this.recaptcha = null
     this.state = {
       isSubmitting: false,
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
       loginError: undefined,
       registrationError: undefined,
       mfaRequired: false
@@ -79,15 +98,17 @@ class LoginRegister extends React.Component<Props, State> {
       },
       async () => {
         try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
+
           const recaptcha = await this.recaptcha.execute()
           const authData = await AuthAPI.login(
             username,
-            password,
+            hashedPassword,
             recaptcha,
             mfaCode
           )
 
-          setPassword(password)
           this.props.updateAuth(authData)
           this.setState({ isSubmitting: false })
         } catch (error) {
@@ -125,11 +146,14 @@ class LoginRegister extends React.Component<Props, State> {
       },
       async () => {
         try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
+
           const recaptcha = await this.recaptcha.execute()
           const authData = await UserAPI.register({
             username,
             email,
-            password,
+            password: hashedPassword,
             recaptcha
           })
 
@@ -212,7 +236,7 @@ class LoginRegister extends React.Component<Props, State> {
                         {this.state.registrationError.message}
                       </Alert>
                     )}
-                    <RegisterForm
+                    <LazyRegisterForm
                       onSubmit={this.handleRegister}
                       submitting={isSubmitting}
                     />

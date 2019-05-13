@@ -9,6 +9,11 @@ export const getCurrentUser = createSelector(
   user => user
 )
 
+export const getUsername = createSelector(
+  getCurrentUser,
+  user => user.username
+)
+
 export const getPreferredCurrency = createSelector(
   getCurrentUser,
   user => user.preferredCurrency

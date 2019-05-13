@@ -22,13 +22,6 @@ const creators = {
   }),
   logout: () => ({
     type: actions.LOGOUT
-  }),
-  storePassword: password => ({
-    type: actions.STORE_USER_PASSWORD,
-    password
-  }),
-  deletePassword: () => ({
-    type: actions.DELETE_USER_PASSWORD
   })
 }
 

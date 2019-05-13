@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 import { withBreakpoints } from 'react-breakpoints'
 import { destyle } from 'destyle'
-import { CollapseTabs, withSnackbar } from 'brainblocks-components'
+import CollapseTabs from 'brainblocks-components/build/CollapseTabs'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
@@ -63,8 +64,13 @@ class SettingsTabs extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
-      viewingTab: Boolean(props.router.query.tab)
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
+      viewingTab: Boolean(
+        typeof tabIndexMap[props.router.query.tab] === 'number'
+      )
     }
   }
 

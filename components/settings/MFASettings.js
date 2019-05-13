@@ -1,18 +1,16 @@
 // @flow
 import * as React from 'react'
 import { Formik } from 'formik'
-import {
-  Alert,
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button,
-  Typography,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import Alert from 'brainblocks-components/build/Alert'
+import Typography from 'brainblocks-components/build/Typography'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import * as UserAPI from '~/state/api/user'
 import QRCode from 'qrcode.react'
@@ -213,7 +211,9 @@ class MFASettings extends React.Component<Props, State> {
                                 text={mfaKey}
                                 onCopy={this.handleCopy2faKey}
                               >
-                                <Button variant="util">Copy</Button>
+                                <Button type="button" variant="util">
+                                  Copy
+                                </Button>
                               </CopyToClipboard>
                             }
                           >

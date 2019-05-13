@@ -10,7 +10,8 @@ import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
-import { Alert } from 'brainblocks-components'
+import Alert from 'brainblocks-components/build/Alert'
+import Button from 'brainblocks-components/build/Button'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { creators as userActions } from '~/state/actions/userActions'
@@ -18,8 +19,9 @@ import * as UserAPI from '~/state/api/user'
 import { deduceError } from '~/state/errors'
 import Loading from '~/pages/loading'
 import Message from '~/components/layout/Message'
-import { Button, withSnackbar } from 'brainblocks-components'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { isServer } from '~/state'
+import { isHex, isBcryptHash } from '~/functions/validate'
 
 type State = {
   isLoading: boolean,
@@ -56,11 +58,17 @@ class EmailVerification extends Component<Props, State> {
   }
 
   get hash() {
-    return this.props.router.query.hash
+    // XSS-safe via validation
+    return isBcryptHash(this.props.router.query.hash)
+      ? this.props.router.query.hash
+      : null
   }
 
   get verification() {
-    return this.props.router.query.verification
+    // XSS-safe via validation
+    return isHex(this.props.router.query.verification)
+      ? this.props.router.query.verification
+      : null
   }
 
   get hasQueryParameters() {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
@@ -6,16 +7,15 @@ import PageContent from '~/components/layout/PageContent'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import { verifyPassword } from '~/state/api/auth'
-import { setPassword } from '~/state/password'
+import { setPassword, hashPassword } from '~/state/password'
 import { Formik } from 'formik'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import { getUsername } from '~/state/selectors/userSelectors'
 
 class ReEnterPassword extends React.Component {
   state = {
@@ -24,8 +24,10 @@ class ReEnterPassword extends React.Component {
 
   handleSubmit = async (values, { setSubmitting }) => {
     // verify password
+    setPassword(values.password)
+    const hashedPassword = hashPassword(this.props.username)
     try {
-      let correct = await verifyPassword(values.password)
+      let correct = await verifyPassword(hashedPassword)
       if (!correct) throw new Error('Invalid password')
     } catch (e) {
       console.error('Error verifying password')
@@ -35,7 +37,7 @@ class ReEnterPassword extends React.Component {
       })
       return
     }
-    setPassword(values.password)
+
     this.props.onSubmit()
     setSubmitting(false)
   }
@@ -100,4 +102,6 @@ ReEnterPassword.getInitialProps = async ctx => {
   return await bootstrapInitialProps(ctx)
 }
 
-export default ReEnterPassword
+export default connect(state => ({
+  username: getUsername(state)
+}))(ReEnterPassword)

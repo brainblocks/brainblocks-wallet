@@ -2,15 +2,13 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Select,
-  Grid,
-  GridItem,
-  Button
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import Select from 'brainblocks-components/build/Select'
 import type { NormalizedState } from '~/types'
 import { SUPPORTED_CURRENCIES } from '~/constants/currencies'
 

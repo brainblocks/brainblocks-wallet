@@ -11,21 +11,21 @@ import { verifyPassword } from '~/state/api/auth'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { addAccount } from '~/state/thunks/accountsThunks'
-import {
-  SwitchTabs,
-  TabComponents,
-  Alert,
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Alert from 'brainblocks-components/build/Alert'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { getKeyByValue } from '~/functions/util'
 import { isValidNanoSeed } from '~/functions/validate'
+import { setPassword, hashPassword, destroyPassword } from '~/state/password'
+import { getUsername } from '~/state/selectors/userSelectors'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -64,7 +64,9 @@ class NewVault extends React.Component<Props, State> {
     const wallet = new Wallet('')
     wallet.setRandomSeed()
     this.state = {
-      activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0, // XSS-safe
       createSeed: wallet.getSeed(''),
       createPassword: '',
       createPasswordValid: true,
@@ -88,8 +90,11 @@ class NewVault extends React.Component<Props, State> {
       [`${form}Submitting`]: true
     })
     // verify password
+    setPassword(password)
+    const hashedPassword = hashPassword(this.props.username)
+    destroyPassword()
     try {
-      let correct = await verifyPassword(password)
+      let correct = await verifyPassword(hashedPassword)
       if (!correct) throw new Error('Invalid password')
     } catch (e) {
       console.error('Error verifying password')
@@ -363,7 +368,8 @@ class NewVault extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  vaults: state.vaults
+  vaults: state.vaults,
+  username: getUsername(state)
 })
 
 const mapDispatchToProps = {

@@ -4,7 +4,8 @@ import { destyle } from 'destyle'
 import type { NormalizedState } from '~/types'
 import TransactionListItem from './TransactionListItem'
 import NoTransactions from './NoTransactions'
-import { Spinner, Typography } from 'brainblocks-components'
+import Spinner from 'brainblocks-components/build/Spinner'
+import Typography from 'brainblocks-components/build/Typography'
 import { Media } from 'react-breakpoints'
 
 type Props = {

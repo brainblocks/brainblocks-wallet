@@ -15,7 +15,9 @@ import CogIcon from '~/static/svg/icons/cog.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
-import { Popover, Button, Spinner } from 'brainblocks-components'
+import Popover from 'brainblocks-components/build/Popover'
+import Button from 'brainblocks-components/build/Button'
+import Spinner from 'brainblocks-components/build/Spinner'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { logout } from '~/state/thunks/authThunks'
 
@@ -264,7 +266,13 @@ class Header extends React.Component {
           <Media>
             {({ breakpoints, currentBreakpoint }) =>
               breakpoints[currentBreakpoint] < breakpoints.tablet && (
-                <nav className={styles.bottomTabs}>
+                <nav
+                  className={styles.bottomTabs}
+                  style={{
+                    padding:
+                      '0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)'
+                  }}
+                >
                   <ul>
                     {menuItems
                       .filter(item => item.mobile)

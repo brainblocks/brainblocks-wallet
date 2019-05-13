@@ -1,7 +1,9 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import { TabComponents, SwitchTabs, Button } from 'brainblocks-components'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import Button from 'brainblocks-components/build/Button'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
 import type { NormalizedState } from '~/types'
@@ -35,7 +37,10 @@ type State = {
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+    // XSS-safe
+    activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+      ? tabIndexMap[this.props.router.query.tab]
+      : 0,
     sendComplete: false
   }
 

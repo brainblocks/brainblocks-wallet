@@ -1,17 +1,15 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button,
-  Typography,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import Typography from 'brainblocks-components/build/Typography'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { wallet } from '~/state/wallet'
 import MFASettings from '~/components/settings/MFASettings'

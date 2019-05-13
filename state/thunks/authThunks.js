@@ -5,9 +5,8 @@ import * as authAPI from '~/state/api/auth'
 import Router from 'next/router'
 
 export const logout = () => async (dispatch, getState) => {
-  // cache the token
-  const { auth } = getState()
-  const token = auth.token
+  // send the logout request _before_ we reset redux/auth
+  const logoutReq = authAPI.logout()
 
   // destroy the wallet
   destroyWallet()
@@ -20,9 +19,9 @@ export const logout = () => async (dispatch, getState) => {
   // redux state reset
   dispatch(creators.logout())
 
-  // remove cookie and invalidate token on server
+  // await the logout request - invalidate token on server, response header unsets cookie
   try {
-    await authAPI.logout(token)
+    await logoutReq
   } catch (e) {
     console.error('Error in logout request', e)
   }

@@ -1,14 +1,11 @@
 /* @flow */
 import React from 'react'
-import {
-  Grid,
-  GridItem,
-  Button,
-  FormItem,
-  FormField,
-  Input
-} from 'brainblocks-components'
-import validatePassword from '~/utils/validatePassword'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
 import { Formik } from 'formik'
 
 type Props = {

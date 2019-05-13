@@ -9,6 +9,7 @@
 - [Style guide](#style-guide)
 - [Reusable components](#reusable-components)
 - [Redux](#redux)
+- [Auth](#auth)
 
 ## Getting started
 
@@ -127,3 +128,19 @@ We are using Redux for state management. To reduce boilerplate, there is a redux
 Action handlers created by the redux helper can mutate state directly, because the helper uses Immer. Mutating state directly makes your action handlers much simpler to read and write.
 
 Redux thunk is used for intercepting actions where necessary.
+
+## Auth
+
+Most API endpoints use `makeAuthorizedApiRequest`, which gets the token from Redux and adds it as a header to the request.
+
+_Getting_ the token happens on the Next server. On the initial page load, each page has a `getInitialProps` function that calls `bootstrapInitialProps` to populate the auth data (token etc) into Redux before it is sent back to the client. Because this runs on the server, it has access to our cookie, which is httponly / secure / samesite. The cookie contains the auth token, so `bootstrapInitialProps` grabs it from the cookie, calls the API’s `auth/init` and populates the data into Redux.
+
+_Setting_ the token is done on `login` and `register`. The API server has login and register methods, but we proxy these with our Next server so that we can intercept the token and add the cookie to the response. That way any subsequent _fresh_ page loads (refresh, open in a new tab, etc - i.e. not client side routing) include the token via the cookie.
+
+### CSRF
+
+By using the method described above, the API server can remain stateless. It does not read any cookies - all authorization is done via the `x-auth-token` header. That means it is not vulnerable to CSRF.
+
+The Next server _only_ uses the cookie data to populate Redux. It doesn’t manipulate anything, and is a GET request.
+
+Thus, we are not susceptible to CSRF attacks.

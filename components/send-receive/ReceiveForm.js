@@ -4,15 +4,13 @@ import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { isValidNanoAddress } from '~/functions/validate'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { NormalizedState } from '~/types'
 
@@ -25,15 +23,14 @@ type Props = {
 }
 
 type State = {
-  account: string,
-  amount: string,
-  copied: boolean
+  account: string
 }
 
 class ReceiveForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     let account = props.defaultAccount || props.accounts.allIds[0]
+    // checking that the router-given account is in the allIds array is a form of XSS prevention
     if (
       props.router.query.account &&
       this.props.accounts.allIds.includes(props.router.query.account)
@@ -41,14 +38,12 @@ class ReceiveForm extends Component<Props, State> {
       account = props.router.query.account
     }
     this.state = {
-      account,
-      amount: '10000000000000000000000000000000',
-      copied: false
+      account
     }
   }
 
   handleUpdateAccount = e => {
-    this.setState({ account: e.target.value, copied: false })
+    this.setState({ account: e.target.value })
   }
 
   handleCopyAddress = () => {
@@ -59,7 +54,7 @@ class ReceiveForm extends Component<Props, State> {
 
   render() {
     const { router, accounts, styles } = this.props
-    const { account, amount, copied } = this.state
+    const { account } = this.state
     return (
       <div className={styles.root}>
         <Grid>
