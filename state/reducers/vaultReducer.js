@@ -1,13 +1,18 @@
+// @flow
 import { actions } from '~/state/actions/vaultActions'
 import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
+import type { VaultState, ReduxAction } from '~/types/reduxTypes'
 
-export const vaultInitialState = {
+export const vaultInitialState: VaultState = {
   identifier: '',
   wallet: ''
 }
 
-const vaultReducer = (state, action) => {
+const vaultReducer: (state: ?VaultState, action: ReduxAction) => ?VaultState = (
+  state,
+  action
+) => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return vaultInitialState
   }

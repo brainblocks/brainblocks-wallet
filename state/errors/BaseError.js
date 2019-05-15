@@ -1,19 +1,19 @@
 // @flow
 export default class BaseError extends Error {
-  message
-  originalError
+  message: string
+  originalError: Error
 
-  constructor(error = {}) {
+  constructor(error: Error) {
     super(error)
     this.originalError = error
     this.message = error.message || 'An Error Occurred'
   }
 
-  toString() {
+  toString(): string {
     return this.message
   }
 
-  serialize() {
+  serialize(): { message: string } {
     return { message: this.message }
   }
 }

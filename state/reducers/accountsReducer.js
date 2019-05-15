@@ -1,8 +1,14 @@
+// @flow
 import { actions } from '~/state/actions/accountActions'
 import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
+import type {
+  ReduxAction,
+  AccountsState,
+  ReduxAccount
+} from '~/types/reduxTypes'
 
-const accountTemplate = {
+const accountTemplate: ReduxAccount = {
   account: '',
   label: '',
   lastHash: '',
@@ -14,23 +20,20 @@ const accountTemplate = {
   representative: ''
 }
 
-export const accountsInitialState = {
+export const accountsInitialState: AccountsState = {
   allIds: [],
   byId: {}
 }
 
-const accountsReducer = (state, action) => {
+const accountsReducer: (
+  state: AccountsState,
+  action: ReduxAction
+) => AccountsState = (state, action) => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return accountsInitialState
   }
 
-  const id =
-    action.type.indexOf('ACCOUNTS::') === 0 &&
-    action.hasOwnProperty('payload') &&
-    action.payload.hasOwnProperty('account')
-      ? action.payload.account
-      : null
-
+  let id
   return produce(state, draft => {
     switch (action.type) {
       case actions.BULK_ADD_ACCOUNTS:
@@ -40,10 +43,12 @@ const accountsReducer = (state, action) => {
         })
         break
       case actions.CREATE_ACCOUNT:
+        id = action.payload.account
         draft.allIds.push(id)
         draft.byId[id] = { ...accountTemplate, ...action.payload }
         break
       case actions.UPDATE_ACCOUNT:
+        id = action.payload.account
         draft.byId[id] = {
           ...draft.byId[id],
           ...action.payload

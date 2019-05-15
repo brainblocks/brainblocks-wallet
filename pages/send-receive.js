@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
@@ -15,8 +16,22 @@ import {
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
 import { createSend } from '~/state/thunks/transactionsThunks'
+import type { WithRouter } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 
-const SendReceive = props => {
+type Props = WithRouter & {
+  accounts: AccountsState,
+  nanoPrice: number,
+  preferredCurrency: ?string,
+  defaultAccount: ?string,
+  handleSend: (
+    fromAddr: string,
+    toAddr: string,
+    amountNano: number
+  ) => Promise<void>
+}
+
+const SendReceive = (props: Props) => {
   return (
     <ClientBootstrap>
       <Layout>

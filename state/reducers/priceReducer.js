@@ -1,11 +1,16 @@
+// @flow
 import { actions } from '~/state/actions/priceActions'
 import { actions as authActions } from '~/state/actions/authActions'
+import type { PriceState, ReduxAction } from '~/types/reduxTypes'
 
-export const priceInitialState = {
+export const priceInitialState: PriceState = {
   nano: {}
 }
 
-const priceReducer = (state, action) => {
+const priceReducer: (state: PriceState, action: ReduxAction) => PriceState = (
+  state,
+  action
+) => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return priceInitialState
   }

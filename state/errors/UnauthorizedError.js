@@ -2,12 +2,17 @@
 import BaseError from './BaseError'
 
 export default class UnauthorizedError extends BaseError {
-  constructor(error = {}) {
+  constructor(error: Error) {
     super(error)
 
     let message = undefined
 
-    if (error.response && error.response.data) {
+    if (
+      error.hasOwnProperty('response') &&
+      // $FlowFixMe
+      error.response.hasOwnProperty('data')
+    ) {
+      // $FlowFixMe
       message = error.response.data.error
     }
 

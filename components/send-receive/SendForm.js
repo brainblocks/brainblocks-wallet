@@ -14,11 +14,12 @@ import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { Formik } from 'formik'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import type { NormalizedState } from '~/types'
+import type { WithRouter } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
+import log from '~/functions/log'
 
-type Props = {
-  router: Object,
-  accounts: NormalizedState,
+type Props = WithRouter & {
+  accounts: AccountsState,
   defaultAccount: string,
   nanoPrice: number,
   preferredCurrency: string,
@@ -143,7 +144,7 @@ class SendForm extends Component<Props, State> {
       resetForm({ to: this.initialTo, amount: 0, from: this.initialFrom })
       this.props.onSendComplete()
     } catch (e) {
-      console.error(e)
+      log.error(e)
       this.props.enqueueSnackbar('Could not broadcast transaction', {
         variant: 'error'
       })
@@ -157,7 +158,6 @@ class SendForm extends Component<Props, State> {
       accounts,
       nanoPrice,
       preferredCurrency,
-      defaultAccount,
       router,
       variant = 'send'
     } = this.props
@@ -171,8 +171,9 @@ class SendForm extends Component<Props, State> {
             from: this.initialFrom,
             to: this.initialTo,
             message: '',
-            amount:
-              typeof router.query.amount === 'number' ? router.query.amount : 0 // XSS-safe
+            amount: isNaN(parseFloat(router.query.amount))
+              ? 0
+              : router.query.amount // XSS-safe
           }}
           validate={this.validate}
           onSubmit={this.handleSubmit}
@@ -238,7 +239,7 @@ class SendForm extends Component<Props, State> {
                           <Input
                             id="send-to"
                             name="to"
-                            placeholder="NANO address or contact..."
+                            placeholder="NANO address"
                             value={values.to}
                             onChange={handleChange}
                             onBlur={handleBlur}

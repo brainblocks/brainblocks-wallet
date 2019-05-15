@@ -1,3 +1,4 @@
+// @flow
 import { creators } from '~/state/actions/transactionActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import { creators as accountCreators } from '~/state/actions/accountActions'
@@ -5,7 +6,7 @@ import { syncReduxAccounts } from '~/state/thunks/accountsThunks'
 import { isValidNanoAddress } from '~/functions/validate'
 import * as transactionsAPI from '~/state/api/transactions'
 import {
-  wallet,
+  getWallet,
   populateChains,
   getPendingBlocksFromAccountsObject,
   blockToReduxTx,
@@ -14,8 +15,12 @@ import {
   syncVault
 } from '~/state/wallet'
 import { getTransactions } from '~/state/selectors/transactionSelectors'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
+import type { WebsocketReceiveAccountsObject } from '~/types/apiTypes'
 
 const tryBroadcast = async blk => {
+  const wallet = getWallet()
   const json = blk.getJSONBlock()
   const prev = blk.getPrevious()
   // @todo include amount in broadcast for sends
@@ -24,7 +29,9 @@ const tryBroadcast = async blk => {
   wallet.confirmBlock(hash)
 }
 
-export const importChains = accounts => (dispatch, getState) => {
+export const importChains: (
+  accounts?: Array<string>
+) => ThunkAction = accounts => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
     const time = Date.now()
     const state = getState()
@@ -39,7 +46,8 @@ export const importChains = accounts => (dispatch, getState) => {
       accountsObject = await transactionsAPI.getChains(accounts)
     } catch (e) {
       dispatch(uiCreators.removeActiveProcess(`get-chains-${time}`))
-      reject('Error getting chains', e)
+      log.error('Error getting chains', e)
+      return reject('Error getting chains')
     }
 
     // put them into the wallet
@@ -60,7 +68,7 @@ export const importChains = accounts => (dispatch, getState) => {
   })
 }
 
-export const handlePendingBlocks = accountsObject => async (
+export const handlePendingBlocks: WebsocketReceiveAccountsObject => ThunkAction = accountsObject => async (
   dispatch,
   getState
 ) => {
@@ -78,11 +86,10 @@ export const handlePendingBlocks = accountsObject => async (
     const hash = block.getHash(true)
     dispatch(uiCreators.addActiveProcess(`broadcast-pending-receive-${hash}`))
 
-    let blk
     try {
-      blk = await tryBroadcast(block)
+      await tryBroadcast(block)
     } catch (e) {
-      console.error('Error broadcasting block', e)
+      log.error('Error broadcasting block', e)
       dispatch(
         uiCreators.removeActiveProcess(`broadcast-pending-receive-${hash}`)
       )
@@ -107,16 +114,18 @@ export const handlePendingBlocks = accountsObject => async (
   }
 }
 
-export const createSend = (fromAddr, toAddr, amountNano) => (
-  dispatch,
-  getState
-) => {
+export const createSend: (
+  fromAddr: string,
+  toAddr: string,
+  amountNano: string | number
+) => ThunkAction = (fromAddr, toAddr, amountNano) => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
+    const wallet = getWallet()
     const state = getState()
     const time = Date.now()
     amountNano = parseFloat(amountNano)
     const rejector = (reason, e) => {
-      console.error(reason, e)
+      log.error(reason, e)
       dispatch(uiCreators.removeActiveProcess(`create-send-${time}`))
       return reject(reason)
     }
@@ -169,11 +178,15 @@ export const createSend = (fromAddr, toAddr, amountNano) => (
   })
 }
 
-export const createChange = (account, rep) => (dispatch, getState) => {
+export const createChange: (account: string, rep: string) => ThunkAction = (
+  account,
+  rep
+) => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
+    const wallet = getWallet()
     const time = Date.now()
     const rejector = (reason, e) => {
-      console.error(reason, e)
+      log.error(reason, e)
       dispatch(uiCreators.removeActiveProcess(`create-change-${time}`))
       return reject(reason)
     }
@@ -205,7 +218,7 @@ export const createChange = (account, rep) => (dispatch, getState) => {
       await syncVault()
     } catch (e) {
       // we don't need to reject this one
-      console.error('Error syncing vault', e)
+      log.error('Error syncing vault', e)
     }
 
     // add to redux

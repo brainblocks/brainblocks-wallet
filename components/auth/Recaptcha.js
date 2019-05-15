@@ -1,6 +1,6 @@
-// @flow
+/* eslint-disable */
+import React, { Component } from 'react'
 import getConfig from 'next/config'
-import { Component } from 'react'
 import { isServer } from '~/state'
 
 const { publicRuntimeConfig } = getConfig()
@@ -13,7 +13,11 @@ let recaptchaDidLoad = false
 // recaptcha responses that are delayed due to recaptcha not being loaded yet
 let delayedRenders = []
 
-export default class Recaptcha extends Component {
+type Props = {
+  onStart?: () => mixed
+}
+
+export default class Recaptcha extends Component<Props> {
   container: any
   recaptchaId: any
   promiseResolver: Promise

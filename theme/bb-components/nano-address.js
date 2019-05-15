@@ -1,6 +1,6 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
-import theme from '../theme'
 import { styles } from 'brainblocks-components'
 
 addStyles('BB-NanoAddress', props => {

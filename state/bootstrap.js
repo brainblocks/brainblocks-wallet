@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import Router from 'next/router'
 import getConfig from 'next/config'
 import nextCookie from 'next-cookies'
@@ -28,8 +28,14 @@ const redirectUnauthorized = res => {
  * Run on server for new page loads, and client
  * for page transitions
  */
-export const bootstrapInitialProps = async (ctx: NextJSContext) => {
+export const bootstrapInitialProps: (
+  ctx: NextJSContext
+) => Promise<Object> = async ctx => {
   const { reduxStore, res, pathname } = ctx
+  if (!ctx.hasOwnProperty('reduxStore')) {
+    throw new Error('No Redux Store in bootstrapInitialProps')
+  }
+  // $FlowFixMe
   const { dispatch, getState } = reduxStore
   const props = {}
 

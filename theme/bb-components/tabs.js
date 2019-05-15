@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { setStyles } from 'destyle'
 import Color from 'color'

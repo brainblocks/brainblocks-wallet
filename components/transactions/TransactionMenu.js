@@ -7,19 +7,19 @@ import MenuItem from 'brainblocks-components/build/MenuItem'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { withRouter } from 'next/router'
+import type { WithSnackbar, WithRouter } from '~/types'
+import type { ReduxTransaction } from '~/types/reduxTypes'
 
-type Props = {
-  transaction: Object,
-  router: Object,
-  open: boolean,
-  anchorEl: mixed,
-  onClose: () => mixed,
-  enqueueSnackbar: (string, ?Object) => void,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object,
-  onPresentSnackbar?: () => mixed,
-  destyleMerge?: Object
-}
+type Props = WithSnackbar &
+  WithRouter & {
+    transaction: ReduxTransaction,
+    open: boolean,
+    anchorEl: mixed,
+    onClose: () => mixed,
+    /** Given by destyle. Do not pass this to the component as a prop. */
+    styles: Object,
+    destyleMerge?: Object
+  }
 
 class TransactionMenu extends React.Component<Props> {
   handleCopy = () => {
@@ -59,6 +59,7 @@ class TransactionMenu extends React.Component<Props> {
       enqueueSnackbar,
       onPresentSnackbar,
       destyleMerge,
+      closeSnackbar,
       ...rest
     }: Props = this.props
     return (

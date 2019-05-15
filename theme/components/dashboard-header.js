@@ -1,3 +1,4 @@
+// @flow
 import { addStyles } from 'destyle'
 import { backgroundGradient } from '../globals/mixins'
 import { css } from 'emotion'

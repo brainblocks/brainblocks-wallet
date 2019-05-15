@@ -1,8 +1,7 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
-import Color from 'color'
-import { pageWidth } from '~/theme/globals/utils'
 
 addStyles('SettingsTabs', props => ({
   root: css``,

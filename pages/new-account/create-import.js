@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
@@ -7,7 +8,7 @@ import CreateImportVault from '~/components/login/CreateImportVault'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 
-const NewAccount = props => {
+const NewAccount = () => {
   return (
     <ClientBootstrap getPrice={false} getWallet={false}>
       <Layout headerVariant="logout">

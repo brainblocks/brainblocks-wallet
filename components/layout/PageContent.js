@@ -3,6 +3,7 @@ import * as React from 'react'
 import { destyle } from 'destyle'
 import { isServer } from '~/state'
 
+// $FlowFixMe
 export const ContentHeightContext = React.createContext('100vh')
 
 type Props = {
@@ -41,9 +42,10 @@ class PageContent extends React.Component<Props, State> {
   }
 
   resize = () => {
-    if (!isServer) {
+    if (!isServer && this.contentDiv) {
       const docHeight = window.innerHeight
       const contentRect = this.contentDiv.current.getBoundingClientRect()
+      // $FlowFixMe
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
       const contentOffset = contentRect.top + scrollTop
       this.setState({
@@ -53,13 +55,7 @@ class PageContent extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      pad = false,
-      background,
-      styles,
-      children,
-      ...rest
-    }: Props = this.props
+    const { pad, background, styles, children, ...rest }: Props = this.props
 
     return (
       <div className={styles.root} {...rest}>

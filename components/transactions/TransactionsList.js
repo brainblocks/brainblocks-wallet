@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import type { NormalizedState } from '~/types'
+import type { AccountsState, TransactionsState } from '~/types/reduxTypes'
 import TransactionListItem from './TransactionListItem'
 import NoTransactions from './NoTransactions'
 import Spinner from 'brainblocks-components/build/Spinner'
@@ -9,8 +9,8 @@ import Typography from 'brainblocks-components/build/Typography'
 import { Media } from 'react-breakpoints'
 
 type Props = {
-  accounts: NormalizedState,
-  transactions: NormalizedState,
+  accounts: AccountsState,
+  transactions: TransactionsState,
   showTransactions: Array<string>,
   styles: Object,
   account: string,
@@ -47,8 +47,7 @@ class TransactionsList extends React.Component<Props> {
       accounts,
       pagination,
       loading = false,
-      empty = false,
-      ...rest
+      empty = false
     } = this.props
     const txIds = showTransactions.filter(
       txId => account === 'all' || transactions.byId[txId].accountId === account

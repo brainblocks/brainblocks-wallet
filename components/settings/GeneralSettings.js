@@ -6,17 +6,14 @@ import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
 import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
-import Input from 'brainblocks-components/build/Input'
-import Button from 'brainblocks-components/build/Button'
 import Select from 'brainblocks-components/build/Select'
-import type { NormalizedState } from '~/types'
-import { SUPPORTED_CURRENCIES } from '~/constants/currencies'
+import type { AccountsState } from '~/types/reduxTypes'
 
 type Props = {
   defaultAccount: string,
   user: Object,
-  accounts: NormalizedState,
-  onUpdateUser: () => mixed,
+  accounts: AccountsState,
+  onUpdateUser: (user: Object) => mixed,
   supportedCurrencies: Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object

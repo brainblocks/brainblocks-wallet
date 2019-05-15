@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react'
 import Link from 'next/link'
 import Typography from 'brainblocks-components/build/Typography'
