@@ -1,3 +1,4 @@
+// @flow
 import { combineReducers } from 'redux'
 import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 import priceReducer, { priceInitialState } from '~/state/reducers/priceReducer'
@@ -10,8 +11,9 @@ import accountsReducer, {
 import transactionsReducer, {
   transactionsInitialState
 } from '~/state/reducers/transactionsReducer'
+import type { ReduxState } from '~/types/reduxTypes'
 
-export const initialState = {
+export const initialState: ReduxState = {
   ui: uiInitialState,
   price: priceInitialState,
   user: userInitialState,

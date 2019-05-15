@@ -6,7 +6,6 @@ import GridItem from 'brainblocks-components/build/GridItem'
 import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
-import Button from 'brainblocks-components/build/Button'
 
 type Props = {
   user: Object,
@@ -14,13 +13,7 @@ type Props = {
   styles: Object
 }
 
-const ProfileSettings = ({
-  user,
-  userName,
-  userEmail,
-  styles,
-  ...rest
-}: Props) => (
+const ProfileSettings = ({ user, styles, ...rest }: Props) => (
   <div className={styles.root}>
     <Grid>
       <GridItem>

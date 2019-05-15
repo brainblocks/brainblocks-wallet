@@ -1,10 +1,11 @@
+// @flow
+import * as React from 'react'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import { Component } from 'react'
 import getConfig from 'next/config'
-
 import rootReducer from '~/state/reducers'
+import type { ReduxStore } from '~/types/reduxTypes'
 
 const { publicRuntimeConfig } = getConfig()
 const { NODE_ENV, DEBUG } = publicRuntimeConfig
@@ -55,8 +56,12 @@ export function getClientSideStore() {
   return clientSideStore
 }
 
-export function withReduxStore(App) {
-  return class AppWithRedux extends Component {
+type Props = Object
+
+export function withReduxStore(App: Object): Object {
+  return class AppWithRedux extends React.Component<Props> {
+    reduxStore: ReduxStore
+
     static async getInitialProps(appContext) {
       // Get or Create the store with `undefined` as initialState
       // This allows you to set a custom default initialState

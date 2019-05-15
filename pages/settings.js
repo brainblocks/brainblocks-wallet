@@ -1,7 +1,6 @@
+// @flow
 import React from 'react'
 import { withRouter } from 'next/router'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
@@ -9,8 +8,11 @@ import PageContent from '~/components/layout/PageContent'
 import SettingsTabs from '~/components/settings/SettingsTabs'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
+import type { WithRouter } from '~/types'
 
-const Settings = props => {
+type Props = WithRouter
+
+const Settings = (props: Props) => {
   return (
     <ClientBootstrap>
       <Layout>

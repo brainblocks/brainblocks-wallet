@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React from 'react'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
@@ -14,8 +14,20 @@ const testPassword = (password, username) => {
   return zxcvbn(password, [username, 'brainblocks'])
 }
 
-class RegisterForm extends React.Component {
-  validate = ({ username, email, password, retype }) => {
+type Props = {
+  submitting: boolean,
+  onSubmit: (username: string, email: string, password: string) => void
+}
+
+type Values = {
+  username: string,
+  email: string,
+  password: string,
+  retype: string
+}
+
+class RegisterForm extends React.Component<Props> {
+  validate = ({ username, email, password, retype }: Values) => {
     const errors = {}
 
     if (!username) {
@@ -48,7 +60,7 @@ class RegisterForm extends React.Component {
     return errors
   }
 
-  handleSubmit = async ({ username, email, password }) => {
+  handleSubmit = async ({ username, email, password }: Values) => {
     this.props.onSubmit(username, email, password)
   }
 

@@ -1,4 +1,5 @@
-import React from 'react'
+// @flow
+import * as React from 'react'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import { destyle } from 'destyle'
@@ -9,23 +10,15 @@ import { getIsWorking } from '~/state/selectors/uiSelectors'
 import DashboardIcon from '~/static/svg/icons/dashboard.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
-import SecurityIcon from '~/static/svg/icons/shield.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
-import CogIcon from '~/static/svg/icons/cog.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
-import ContactsIcon from '~/static/svg/icons/users.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import Popover from 'brainblocks-components/build/Popover'
-import Button from 'brainblocks-components/build/Button'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { logout } from '~/state/thunks/authThunks'
-
-// Import selectors
-import { getCurrentAuth } from '~/state/selectors/authSelectors'
-
-// Import API Calls
-import * as AuthAPI from '~/state/api/auth'
+import type { WithRouter } from '~/types'
+import type { UserState } from '~/types/reduxTypes'
 
 const menuItems = [
   {
@@ -64,7 +57,21 @@ const menuItems = [
   }
 ]
 
-class Header extends React.Component {
+type Props = WithRouter & {
+  styles: Object,
+  children: React.Node,
+  user: UserState,
+  isWorking: boolean,
+  variant?: string,
+  logout: () => mixed
+}
+
+type State = {
+  userDropdownOpen: boolean,
+  userDropdownAnchorEl: ?Object
+}
+
+class Header extends React.Component<Props, State> {
   state = {
     userDropdownOpen: false,
     userDropdownAnchorEl: null
@@ -93,13 +100,12 @@ class Header extends React.Component {
       styles,
       children,
       router,
-      auth,
       user,
       isWorking,
       variant = 'full',
       logout,
       ...rest
-    } = this.props
+    }: Props = this.props
     const { userDropdownOpen, userDropdownAnchorEl } = this.state
 
     return (
@@ -168,7 +174,7 @@ class Header extends React.Component {
                   <img
                     className={styles.userAvatar}
                     src={`https://robohash.org/${
-                      user.email
+                      user.email ? user.email : ''
                     }?gravatar=yes&set=set3&bgset=bg2&size=28x28`}
                     alt={user.username}
                   />
@@ -304,7 +310,6 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  auth: getCurrentAuth(state),
   user: getCurrentUser(state),
   isWorking: getIsWorking(state)
 })

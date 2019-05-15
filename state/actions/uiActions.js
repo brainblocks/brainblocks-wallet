@@ -1,4 +1,12 @@
 // @flow
+import type {
+  AddActiveProcessAction,
+  RemoveActiveProcessAction,
+  TxPagingResetAction,
+  TxPagingSetAction,
+  UpdateDashboardAccountAction
+} from '~/types/reduxTypes'
+
 const actions = {
   ADD_ACTIVE_PROCESS: 'UI::ADD_ACTIVE_PROCESS',
   REMOVE_ACTIVE_PROCESS: 'UI::REMOVE_ACTIVE_PROCESS',
@@ -7,7 +15,15 @@ const actions = {
   UPDATE_DASHBOARD_ACCOUNT: 'UI::UPDATE_DASHBOARD_ACCOUNT'
 }
 
-const creators = {
+type Creators = {
+  addActiveProcess: string => AddActiveProcessAction,
+  removeActiveProcess: string => RemoveActiveProcessAction,
+  txPagingReset: () => TxPagingResetAction,
+  txPagingSet: (startIndex: number, endIndex: number) => TxPagingSetAction,
+  updateDashboardAccount: string => UpdateDashboardAccountAction
+}
+
+const creators: Creators = {
   addActiveProcess: processId => ({
     type: actions.ADD_ACTIVE_PROCESS,
     processId

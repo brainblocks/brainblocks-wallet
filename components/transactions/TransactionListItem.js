@@ -2,7 +2,6 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import { formatTimeAgo, formatNano } from '~/functions/format'
-import type { NormalizedState } from '~/types'
 import NanoAddress from 'brainblocks-components/build/NanoAddress'
 import KeyValue from 'brainblocks-components/build/KeyValue'
 import Spinner from 'brainblocks-components/build/Spinner'
@@ -11,12 +10,13 @@ import TransactionImage from './TransactionImage'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import TransactionMenu from './TransactionMenu'
 import MoreIcon from '~/static/svg/icons/more.svg'
+import type { ReduxTransaction, AccountsState } from '~/types/reduxTypes'
 
 type Props = {
   styles: Object,
-  transaction: Object,
+  transaction: ReduxTransaction,
   account?: Object,
-  accounts: NormalizedState
+  accounts: AccountsState
 }
 
 type State = {
@@ -63,11 +63,12 @@ class TransactionListItem extends React.Component<Props, State> {
             contactInfo.title = accounts.byId[tx.linkAddress].label
           }
           contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
-        } else if (tx.fromType === 'account') {
-          /** @todo get info by account Id */
+        }
+        /* else if (tx.fromType === 'account') {
+          // @todo get info by account Id
           contactInfo.title = 'Rahim Sterling'
           contactInfo.subTitle = '@rahim1984'
-        }
+        }*/
         break
       case 'open':
         if (tx.linkAddress) {
@@ -75,11 +76,12 @@ class TransactionListItem extends React.Component<Props, State> {
             contactInfo.title = accounts.byId[tx.linkAddress].label
           }
           contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
-        } else if (tx.fromType === 'account') {
-          /** @todo get info by account Id */
+        }
+        /* else if (tx.fromType === 'account') {
+          // @todo get info by account Id
           contactInfo.title = 'Rahim Sterling'
           contactInfo.subTitle = '@rahim1984'
-        }
+        }*/
         break
       case 'send':
         if (tx.linkAddress) {
@@ -87,11 +89,12 @@ class TransactionListItem extends React.Component<Props, State> {
             contactInfo.title = accounts.byId[tx.linkAddress].label
           }
           contactInfo.subTitle = <NanoAddress address={tx.linkAddress} />
-        } else if (tx.toType === 'contact') {
-          /** @todo get info by account Id */
+        }
+        /* else if (tx.toType === 'account') {
+          // @todo get info by account Id
           contactInfo.title = 'Rahim Sterling'
           contactInfo.subTitle = '@rahim1984'
-        }
+        }*/
         break
     }
     return contactInfo

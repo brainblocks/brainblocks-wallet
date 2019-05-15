@@ -1,22 +1,26 @@
+// @flow
 import { actions } from '~/state/actions/userActions'
 import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
+import type { UserState, ReduxAction } from '~/types/reduxTypes'
 
-export const userInitialState = {
-  id: null,
-  firstName: null,
-  lastName: null,
-  username: null,
-  preferredCurrency: null,
-  email: null,
-  birthday: null,
+export const userInitialState: UserState = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  username: '',
+  preferredCurrency: '',
+  email: '',
+  birthday: '',
   hasVerifiedEmail: false,
-  wallet: null,
-  defaultAccount: null,
+  defaultAccount: '',
   is2FAEnabled: false
 }
 
-const userReducer = (state, action) => {
+const userReducer: (state: ?UserState, action: ReduxAction) => ?UserState = (
+  state,
+  action
+) => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return userInitialState
   }

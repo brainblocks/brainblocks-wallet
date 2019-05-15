@@ -8,7 +8,7 @@ import HotWalletIcon from '~/static/svg/icons/wallet-hot.svg'
 
 type Props = {
   /** Account object */
-  account?: Object,
+  account?: 'all' | Object,
   /** Include sub title */
   sub?: boolean,
   /** Override title */
@@ -29,8 +29,7 @@ const AccountTitle = ({
   overrideTitle,
   overrideSubTitle,
   overrideIcon,
-  addressCopyable = true,
-  ...rest
+  addressCopyable = true
 }: Props) => {
   // Icon
   let Icon = WalletIcon
@@ -50,8 +49,7 @@ const AccountTitle = ({
   // Title
   let title
   if (account) {
-    title = account.label
-    if (account === 'all') title = 'All Accounts'
+    title = account === 'all' ? 'All Accounts' : account.label
     if (
       (!title && account.hasOwnProperty('account')) ||
       account.hasOwnProperty('address')
@@ -65,7 +63,7 @@ const AccountTitle = ({
   // Subtitle
   let subtitle = ''
   if (sub) {
-    if (account && account.hasOwnProperty('account')) {
+    if (typeof account === 'object' && account.hasOwnProperty('account')) {
       subtitle = (
         <NanoAddress
           hoverable={addressCopyable}
@@ -91,31 +89,6 @@ const AccountTitle = ({
       {!!sub && !!subtitle && <p className={styles.subTitle}>{subtitle}</p>}
     </div>
   )
-
-  if (account === 'all') {
-    return (
-      <div className={styles.root}>
-        <div className={styles.icon}>
-          <WalletsIcon />
-        </div>
-        <h4 className={styles.title}>{!!title ? title : 'All Accounts'}</h4>
-      </div>
-    )
-  } else {
-    return (
-      <div className={styles.root}>
-        <div className={styles.icon}>
-          <Icon />
-        </div>
-        <h4 className={styles.title}>{!!title ? title : account.name}</h4>
-        {!!sub && (
-          <p className={styles.subTitle}>
-            {!!subTitle ? subTitle : '@todo-subtitle'}
-          </p>
-        )}
-      </div>
-    )
-  }
 }
 
 export default destyle(AccountTitle, 'AccountTitle')

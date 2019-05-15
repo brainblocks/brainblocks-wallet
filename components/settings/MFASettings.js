@@ -8,17 +8,17 @@ import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import Alert from 'brainblocks-components/build/Alert'
-import Typography from 'brainblocks-components/build/Typography'
 import Checkbox from 'brainblocks-components/build/Checkbox'
-import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import * as UserAPI from '~/state/api/user'
 import QRCode from 'qrcode.react'
+import log from '~/functions/log'
 
 type Props = {
   enabled: boolean,
   onUpdateUser: Object => mixed,
-  enqueueSnackbar: (string, Object) => void
+  // this is actually passed in
+  enqueueSnackbar: (msg: string, ?Object) => void
 }
 
 type State = {
@@ -27,6 +27,15 @@ type State = {
   mfaError: string,
   mfaLoading: boolean,
   isDisabling: boolean
+}
+
+type Values = {
+  mfaCode: string,
+  mfaBackedUp?: boolean
+}
+
+type FormikOnSubmitObj = {
+  setSubmitting: boolean => void
 }
 
 class MFASettings extends React.Component<Props, State> {
@@ -64,7 +73,7 @@ class MFASettings extends React.Component<Props, State> {
             mfaLoading: false
           })
         } catch (e) {
-          console.error('2fa error', e)
+          log.error('2fa error', e)
           this.setState({
             mfaError: 'Sorry, something went wrong',
             mfaLoading: false
@@ -74,7 +83,10 @@ class MFASettings extends React.Component<Props, State> {
     )
   }
 
-  handleConfirm2fa = async (values, { setSubmitting }) => {
+  handleConfirm2fa = async (
+    values: Values,
+    { setSubmitting }: FormikOnSubmitObj
+  ) => {
     try {
       const { status } = await UserAPI.confirm2fa(values.mfaCode)
       if (status !== 'success') throw 'Error confirming 2fa'
@@ -86,7 +98,7 @@ class MFASettings extends React.Component<Props, State> {
         mfaError: ''
       })
     } catch (e) {
-      console.error('2fa confirmation error', e)
+      log.error('2fa confirmation error', e)
       setSubmitting(false)
       this.setState({
         mfaError: 'Invalid 2fa code'
@@ -94,7 +106,10 @@ class MFASettings extends React.Component<Props, State> {
     }
   }
 
-  handleDisable2fa = async (values, { setSubmitting }) => {
+  handleDisable2fa = async (
+    values: Values,
+    { setSubmitting }: FormikOnSubmitObj
+  ) => {
     try {
       const { status } = await UserAPI.disable2fa(values.mfaCode)
       if (status !== 'success') throw 'Error disabling 2fa'
@@ -105,7 +120,7 @@ class MFASettings extends React.Component<Props, State> {
         mfaError: ''
       })
     } catch (e) {
-      console.error('2fa confirmation error', e)
+      log.error('2fa confirmation error', e)
       setSubmitting(false)
       this.setState({
         mfaError: 'Invalid 2fa code'
@@ -114,16 +129,8 @@ class MFASettings extends React.Component<Props, State> {
   }
 
   render() {
-    const { enabled, ...rest }: Props = this.props
-    const {
-      mfaError,
-      mfaKey,
-      mfaURI,
-      mfaLoading,
-      mfaCode,
-      mfaBackedUp,
-      isDisabling
-    } = this.state
+    const { enabled }: Props = this.props
+    const { mfaError, mfaKey, mfaURI, mfaLoading, isDisabling } = this.state
     return (
       <div>
         {enabled ? (

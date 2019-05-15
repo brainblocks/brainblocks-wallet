@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
@@ -13,7 +14,7 @@ addStyles('TransactionListItem', props => {
       ${td};
       text-align: left;
       padding-right: 24px;
-      width: ${!!props.account ? '11%' : '12%'};
+      width: ${props.account ? '11%' : '12%'};
       @media (max-width: ${theme.bp.small - 1}px) {
         padding-right: 12px;
       }
@@ -29,7 +30,7 @@ addStyles('TransactionListItem', props => {
     contactCol: css`
       ${td};
       text-align: left;
-      width: ${!!props.account ? '24%' : '33%'};
+      width: ${props.account ? '24%' : '33%'};
       > div {
         max-width: 100%;
       }
@@ -45,7 +46,7 @@ addStyles('TransactionListItem', props => {
     noteCol: css`
       ${td};
       text-align: left;
-      width: ${!!props.account ? '24%' : '35%'};
+      width: ${props.account ? '24%' : '35%'};
       @media (max-width: ${theme.bp.small - 1}px) {
         display: none;
       }

@@ -1,8 +1,14 @@
+// @flow
 import { creators } from '~/state/actions/priceActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import * as priceAPI from '~/state/api/price'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const updatePrice = (focusCheck = true) => (dispatch, getState) => {
+export const updatePrice: boolean => ThunkAction = (focusCheck = true) => (
+  dispatch,
+  getState
+) => {
   return new Promise(async (resolve, reject) => {
     if (
       !focusCheck ||
@@ -19,7 +25,7 @@ export const updatePrice = (focusCheck = true) => (dispatch, getState) => {
         // update in redux
         dispatch(creators.updateNanoPrices(prices))
       } catch (e) {
-        console.error('Error getting price', e)
+        log.error('Error getting price', e)
       }
 
       // let ui know we're done

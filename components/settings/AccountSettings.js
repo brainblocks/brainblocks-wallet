@@ -12,23 +12,22 @@ import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import ColorChoice from 'brainblocks-components/build/ColorChoice'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
-import type { NormalizedState } from '~/types'
+import type { WithRouter, WithSnackbar } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getDefaultAccount } from '~/state/selectors/userSelectors'
 import { updateAccount } from '~/state/thunks/accountsThunks'
 import { createChange } from '~/state/thunks/transactionsThunks'
 import { isValidNanoAddress } from '~/functions/validate'
-import { wallet } from '~/state/wallet'
 
-type Props = {
-  router: Object,
-  accounts: NormalizedState,
-  updateAccount: Object => Promise<string | void>,
-  createChange: (string, string) => Promise<string | void>,
-  enqueueSnackbar: (string, ?Object) => void,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
-}
+type Props = WithRouter &
+  WithSnackbar & {
+    accounts: AccountsState,
+    updateAccount: Object => Promise<string | void>,
+    createChange: (string, string) => Promise<string | void>,
+    /** Given by destyle. Do not pass this to the component as a prop. */
+    styles: Object
+  }
 
 type State = {
   account: string,
@@ -125,7 +124,7 @@ class AccountSettings extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, accounts, ...rest }: Props = this.props
+    const { styles, accounts }: Props = this.props
     const { account, rep, label } = this.state
     const accountObj = accounts.byId[account]
     const accountRep = accountObj.representative
@@ -215,7 +214,7 @@ class AccountSettings extends React.Component<Props, State> {
                 </a>
               }
               description={
-                !!accountRep
+                accountRep
                   ? 'Your representative confirms Nano transactions on your behalf'
                   : 'Your account must be opened before you can set a representative'
               }

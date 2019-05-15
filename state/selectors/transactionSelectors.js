@@ -5,15 +5,16 @@ import {
   getDashboardAccount,
   getActiveProcesses
 } from '~/state/selectors/uiSelectors'
+import type { TransactionsState, ReduxState } from '~/types/reduxTypes'
 
 const transactionsSelector = state => state.transactions
 
-export const getTransactions = createSelector(
+export const getTransactions: ReduxState => TransactionsState = createSelector(
   transactionsSelector,
   txs => txs
 )
 
-export const getTransactionsForDashboardAccount = createSelector(
+export const getTransactionsForDashboardAccount: ReduxState => Array<string> = createSelector(
   [transactionsSelector, getDashboardAccount],
   (transactions, dashboardAccount) =>
     transactions.allIds.filter(
@@ -23,13 +24,13 @@ export const getTransactionsForDashboardAccount = createSelector(
     )
 )
 
-export const getVisibleTransactionsForDashboardAccount = createSelector(
+export const getVisibleTransactionsForDashboardAccount: ReduxState => Array<string> = createSelector(
   [getTransactionsForDashboardAccount, getTransactionPagingIndexes],
   (transactions, indexes) =>
     transactions.slice(indexes.startIndex, indexes.endIndex)
 )
 
-export const getIsGettingChains = createSelector(
+export const getIsGettingChains: ReduxState => boolean = createSelector(
   [getActiveProcesses, getTransactions],
   (processes, txs) =>
     txs.allIds.length === 0 &&

@@ -1,10 +1,11 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
 import { styles } from 'brainblocks-components'
 
 addStyles('BB-Typography', props => {
-  const { el = 'span', size, color, noWrap, spaceAbove, spaceBelow } = props
+  const { el = 'span', size, color, spaceAbove, spaceBelow } = props
   const libStyles = styles.typography(props)
 
   let root = css`
@@ -39,7 +40,7 @@ addStyles('BB-Typography', props => {
         textColor = theme.color.text.base
         break
       case 'lightOnLight':
-        textColor = theme.color.text.LightbulbOnOutlineIcon
+        textColor = theme.color.text.light
         break
       case 'heavyOnLight':
         textColor = 'black'

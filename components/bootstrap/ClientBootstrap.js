@@ -1,5 +1,5 @@
-/* flow */
-import React from 'react'
+// @flow
+import * as React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 import {
@@ -7,9 +7,9 @@ import {
   getDidGetChainForAnyAccount
 } from '~/state/selectors/accountSelectors'
 import { creators as accountActions } from '~/state/actions/accountActions'
-import { wallet, createWallet } from '~/state/wallet'
-import { password, destroyPassword } from '~/state/password'
-import { initWs, getWs, subscribeAccounts, getPending } from '~/state/websocket'
+import { getWallet, createWallet } from '~/state/wallet'
+import { getPassword, destroyPassword } from '~/state/password'
+import { initWs, subscribeAccounts, getPending } from '~/state/websocket'
 import {
   getCurrentAuth,
   getIsAuthorized
@@ -17,22 +17,47 @@ import {
 import { updatePrice } from '~/state/thunks/priceThunks'
 import Loading from '~/pages/loading'
 import Error from '~/pages/_error'
-import ReEnterPassword from '~/pages/re-enter-password'
+import ReEnterPassword from '~/components/bootstrap/ReEnterPassword'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { getTransactions } from '~/state/selectors/transactionSelectors'
-import { getOrCreateWallet } from '~/state/thunks/vaultThunks'
 import {
   importChains,
   handlePendingBlocks
 } from '~/state/thunks/transactionsThunks'
 import { getCipheredWallet } from '~/state/selectors/vaultSelectors'
 import { getVault } from '~/state/thunks/vaultThunks'
+import type { WithRouter } from '~/types'
+import type {
+  UserState,
+  TransactionsState,
+  AccountsState
+} from '~/types/reduxTypes'
+import log from '~/functions/log'
 
-type Props = {
+type Props = WithRouter & {
+  children: React.Node,
   getPrice?: boolean,
   getWallet?: boolean,
   verifyEmail?: boolean,
-  requiresAuth?: boolean
+  requiresAuth?: boolean,
+  // From mapStateToProps
+  auth: Object,
+  transactions: TransactionsState,
+  isAuthorized: boolean,
+  user: UserState,
+  cipheredWallet: string,
+  accounts: AccountsState,
+  didGetChainForAnyAccount: boolean,
+  // From mapDispatchToProps
+  updatePrice: (?boolean) => Promise<void>,
+  importChains: (?Array<Object>) => Promise<void>,
+  getVault: () => Promise<void>,
+  bulkAddAccounts: (Array<Object>) => Promise<void>,
+  handlePendingBlocks: Object => Promise<void>
+}
+
+type State = {
+  error: ?string
 }
 
 /**
@@ -42,7 +67,7 @@ type Props = {
  * redux hydration of anything that we only want to get
  * on the client (E.g. Nano price).
  */
-class Bootstrap extends React.Component {
+class Bootstrap extends React.Component<Props, State> {
   isGettingVault = false
   isGettingChains = false
   didAddAccounts = false
@@ -69,16 +94,34 @@ class Bootstrap extends React.Component {
     )
   }
 
+  get wallet() {
+    try {
+      const wallet = getWallet()
+      return wallet
+    } catch (e) {
+      return null
+    }
+  }
+
+  get password() {
+    try {
+      const password = getPassword()
+      return password
+    } catch (e) {
+      return null
+    }
+  }
+
   get hasVault() {
     return this.props.getWallet === false || !!this.props.cipheredWallet
   }
 
   get needsPassword() {
-    return this.props.getWallet !== false && !wallet && !password
+    return this.props.getWallet !== false && !this.wallet && !this.password
   }
 
   get hasWallet() {
-    return this.props.getWallet === false || !!wallet
+    return this.props.getWallet === false || !!this.wallet
   }
 
   get hasAccounts() {
@@ -184,9 +227,9 @@ class Bootstrap extends React.Component {
       this.isGettingVault = true
       this.props
         .getVault()
-        .then(res => (this.isGettingVault = false))
+        .then(() => (this.isGettingVault = false))
         .catch(e => {
-          console.error('Error in getVault', e)
+          log.error('Error in getVault', e)
           this.isGettingVault = false
           this.setState({ error: 'Error in getVault' })
         })
@@ -195,15 +238,16 @@ class Bootstrap extends React.Component {
 
   createWallet = () => {
     if (this.hasVault && !this.hasWallet && !this.needsPassword) {
-      createWallet(password)
+      createWallet(getPassword())
+      const wallet = getWallet()
       wallet.load(this.props.cipheredWallet)
       destroyPassword()
     }
   }
 
   addAccounts = () => {
-    if (!!wallet && !this.hasAccounts && !this.didAddAccounts) {
-      const accounts = wallet.getAccounts()
+    if (!!this.wallet && !this.hasAccounts && !this.didAddAccounts) {
+      const accounts = this.wallet.getAccounts()
       this.props.bulkAddAccounts(accounts)
       this.didAddAccounts = true
     }
@@ -224,7 +268,7 @@ class Bootstrap extends React.Component {
           this.isGettingChains = false
         })
         .catch(e => {
-          console.error('Error in getTransactions', e)
+          log.error('Error in getTransactions', e)
           this.isGettingChains = false
           this.setState({ error: 'Error in getTransactions' })
         })
@@ -246,21 +290,23 @@ class Bootstrap extends React.Component {
       if (ws) {
         // handle errors
         ws.onerror = err => {
-          console.error('Websocket error', err)
+          log.error('Websocket error', err)
           clearInterval(this.socketPingInterval)
         }
         // handle close
-        ws.onclose = e => {
-          console.warn('Websocket closed')
+        ws.onclose = () => {
+          log.warn('Websocket closed')
           this.socketInit()
         }
         // subscribe when connected
-        ws.onopen = event => {
+        ws.onopen = () => {
           subscribeAccounts(this.props.accounts.allIds)
         }
         // handle new messages
         ws.onmessage = message => {
           let { data } = message
+          if (typeof data !== 'string')
+            throw new Error('Unknown websocket message data')
           data = JSON.parse(data)
           switch (data.event) {
             case 'newBlock':
@@ -270,20 +316,20 @@ class Bootstrap extends React.Component {
               getPending([data.data])
               break
             case 'error':
-              console.error('Error message from socket: ', data.data)
+              log.error('Error message from socket: ', data.data)
               break
             case 'ping':
-              console.log('Socket: server ping')
+              //log.info('Socket: server ping')
               break
             default:
-              console.log('Unknown socket event: ' + data)
+              log.info('Unknown socket event: ' + data)
               break
           }
         }
         // setup ping pong
         clearInterval(this.socketPingInterval)
         this.socketPingInterval = setInterval(() => {
-          console.log('Socket: client ping')
+          log.info('Socket: client ping')
           if (ws.readyState === 1) {
             ws.send(JSON.stringify({ event: 'ping' }))
           }
@@ -319,9 +365,8 @@ const mapStateToProps = state => ({
   cipheredWallet: getCipheredWallet(state)
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   updatePrice: focusCheck => dispatch(updatePrice(focusCheck)),
-  getOrCreateWallet: userId => dispatch(getOrCreateWallet(userId)),
   importChains: () => dispatch(importChains()),
   getVault: () => dispatch(getVault()),
   bulkAddAccounts: accounts =>

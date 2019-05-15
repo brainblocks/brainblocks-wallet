@@ -1,12 +1,14 @@
+// @flow
 import BadRequestError from './BadRequestError'
 import UnauthorizedError from './UnauthorizedError'
 import InternalServerError from './InternalServerError'
 import ForbiddenError from './ForbiddenError'
 import GenericError from './GenericError'
 
-export function deduceError(error = {}) {
+export function deduceError(error: Error) {
   // Is this some kind of request error
-  if (error.response) {
+  if (error.hasOwnProperty('response')) {
+    // $FlowFixMe
     switch (error.response.status) {
       case 400:
         return new BadRequestError(error)

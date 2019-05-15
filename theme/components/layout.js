@@ -1,4 +1,5 @@
-import { css, injectGlobal } from 'emotion'
+// @flow
+import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 

@@ -24,8 +24,8 @@ const PageHeader = ({
     <div className={styles.root} {...rest}>
       <div className={styles.pageWidth}>
         <Alert destyleMerge={{ root: styles.alert, icon: styles.alertIcon }}>
-          We're in beta! Please test with small amounts of Nano, and leave us
-          lots of{' '}
+          We&apos;re in beta! Please test with small amounts of Nano, and leave
+          us lots of{' '}
           <a
             href="mailto:support@brainblocks.io"
             target="_blank"

@@ -1,12 +1,12 @@
+// @flow
 import getConfig from 'next/config'
 import { getClientSideStore, isServer } from '~/state'
 import axios from 'axios'
-import produce from 'immer'
 
 const { publicRuntimeConfig } = getConfig()
 const { BASE_API_URL, LOCAL_API, BASE_API_URL_SERVERSIDE } = publicRuntimeConfig
 
-export function getAuthToken() {
+export function getAuthToken(): ?string {
   const store = getClientSideStore()
   if (!store) return undefined
 
@@ -19,29 +19,31 @@ export function getAuthToken() {
   return currentAuth.token
 }
 
-export function makeApiRequest(opts = {}) {
+export function makeApiRequest(opts: Object = {}): Promise<Object> {
   let baseURL = BASE_API_URL
 
   if (isServer) {
     baseURL = BASE_API_URL_SERVERSIDE
   }
 
-  return axios(
-    produce(opts, draft => {
-      draft.baseURL = baseURL
-    })
-  )
+  return axios({
+    baseURL,
+    ...opts
+  })
 }
 
-export function makeLocalApiRequest(opts = {}) {
-  return axios(
-    produce(opts, draft => {
-      draft.baseURL = LOCAL_API
-    })
-  )
+export function makeLocalApiRequest(opts: Object = {}): Promise<Object> {
+  return axios({
+    baseURL: LOCAL_API,
+    ...opts
+  })
 }
 
-function authorizedRequest(opts = {}, shouldThrow = true, local) {
+function authorizedRequest(
+  opts: Object = {},
+  shouldThrow: ?boolean = true,
+  local: boolean
+): Promise<Object> {
   const authToken = getAuthToken()
 
   if (shouldThrow && !authToken) {
@@ -49,10 +51,11 @@ function authorizedRequest(opts = {}, shouldThrow = true, local) {
     throw new Error('No auth token set')
   }
 
-  const options = produce(opts, draft => {
-    draft['headers'] = draft['headers'] || {}
-    draft['headers']['x-auth-token'] = authToken
-  })
+  const options = {
+    headers: {},
+    ...opts
+  }
+  options.headers['x-auth-token'] = authToken
 
   if (local) {
     return makeLocalApiRequest(options)
@@ -61,10 +64,16 @@ function authorizedRequest(opts = {}, shouldThrow = true, local) {
   }
 }
 
-export function makeAuthorizedApiRequest(opts, shouldThrow) {
+export function makeAuthorizedApiRequest(
+  opts: Object,
+  shouldThrow: ?boolean
+): Promise<Object> {
   return authorizedRequest(opts, shouldThrow, false)
 }
 
-export function makeLocalAuthorizedApiRequest(opts, shouldThrow) {
+export function makeLocalAuthorizedApiRequest(
+  opts: Object,
+  shouldThrow: ?boolean
+): Promise<Object> {
   return authorizedRequest(opts, shouldThrow, true)
 }
