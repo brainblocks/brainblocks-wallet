@@ -14,6 +14,9 @@ import Button from 'brainblocks-components/build/Button'
 import ColorChoice from 'brainblocks-components/build/ColorChoice'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import type { WithSnackbar } from '~/types'
+import { isValidAccountName } from '~/functions/validate'
+import { ACCOUNT_LABEL_MAX_CHARS, ACCOUNT_COLORS } from '~/constants/config'
+import log from '~/functions/log'
 
 type Props = WithSnackbar & {
   addAccount: Object => Promise<Object>,
@@ -35,6 +38,10 @@ class NewAccountSettings extends React.Component<Props, State> {
 
   createAccountWithSettings = () => {
     const { label, color } = this.state
+    if (!isValidAccountName(label)) {
+      log.error('Account label invalid')
+      return
+    }
     this.props.addAccount({ label, color }).then(() => {
       this.props.enqueueSnackbar(`Added account - ${label}`, {
         variant: 'success'
@@ -52,12 +59,21 @@ class NewAccountSettings extends React.Component<Props, State> {
   render() {
     const { styles }: Props = this.props
     const { label, color }: State = this.state
+    const isLabelValid = isValidAccountName(label)
     return (
       <div className={styles.root}>
         <Grid>
           <GridItem>
-            <FormItem label="Account Name" fieldId="account-name">
-              <FormField>
+            <FormItem
+              label="Account Name"
+              fieldId="account-name"
+              error={
+                isLabelValid
+                  ? null
+                  : `Up to ${ACCOUNT_LABEL_MAX_CHARS} characters. No symbols.`
+              }
+            >
+              <FormField valid={isLabelValid}>
                 <Input
                   id="account-name"
                   placeholder="E.g. 'Savings' or 'Spending'"
@@ -76,7 +92,7 @@ class NewAccountSettings extends React.Component<Props, State> {
               <FormField>
                 <ColorChoice
                   value={color}
-                  options={['gold', 'purple', 'pink', 'aqua', 'orange', 'jade']}
+                  options={ACCOUNT_COLORS}
                   onChange={this.getHandleUpdate('color')}
                 />
               </FormField>
@@ -87,6 +103,7 @@ class NewAccountSettings extends React.Component<Props, State> {
               onClick={this.createAccountWithSettings}
               variant="primary"
               color="green"
+              disabled={!isLabelValid}
             >
               Create Account
             </Button>

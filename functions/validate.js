@@ -1,5 +1,5 @@
 // @flow
-
+import { ACCOUNT_LABEL_MAX_CHARS } from '~/constants/config'
 import { RaiFunctions } from 'rai-wallet'
 
 export function isValidNanoAddress(address: string): boolean {
@@ -21,4 +21,15 @@ export function isHex(str: string): boolean {
 
 export function isBcryptHash(str: string): boolean {
   return /^\$2[ayb]\$.{56}$/.test(str)
+}
+
+function isLettersAndNumbersOnly(str: string): boolean {
+  return /^[0-9A-Za-z ]+$/.test(str)
+}
+
+export function isValidAccountName(str: string): boolean {
+  return (
+    str === '' ||
+    (str.length <= ACCOUNT_LABEL_MAX_CHARS && isLettersAndNumbersOnly(str))
+  )
 }
