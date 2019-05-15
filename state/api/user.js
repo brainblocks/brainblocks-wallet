@@ -1,6 +1,19 @@
+// @flow
 import { makeLocalApiRequest, makeAuthorizedApiRequest } from './helpers'
 
-export async function register({ username, email, password, recaptcha }) {
+type RegisterObj = {
+  username: string,
+  email: string,
+  password: string,
+  recaptcha: string
+}
+
+export async function register({
+  username,
+  email,
+  password,
+  recaptcha
+}: RegisterObj): Promise<Object> {
   const { data } = await makeLocalApiRequest({
     method: 'post',
     url: '/users',
@@ -10,7 +23,10 @@ export async function register({ username, email, password, recaptcha }) {
   return data
 }
 
-export async function verifyEmail(hash, verification) {
+export async function verifyEmail(
+  hash: string,
+  verification: string
+): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/users/rpc/verify-email',
@@ -20,7 +36,7 @@ export async function verifyEmail(hash, verification) {
   return data
 }
 
-export async function set2fa() {
+export async function set2fa(): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/users/2fa'
@@ -29,7 +45,7 @@ export async function set2fa() {
   return data
 }
 
-export async function confirm2fa(token2fa) {
+export async function confirm2fa(token2fa: string): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/users/2fa/confirm',
@@ -39,7 +55,7 @@ export async function confirm2fa(token2fa) {
   return data
 }
 
-export async function disable2fa(token2fa) {
+export async function disable2fa(token2fa: string): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'delete',
     url: '/users/2fa',
@@ -49,7 +65,7 @@ export async function disable2fa(token2fa) {
   return data
 }
 
-export async function resendVerificationEmail() {
+export async function resendVerificationEmail(): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/users/rpc/resend-verification-email'
@@ -58,7 +74,7 @@ export async function resendVerificationEmail() {
   return data
 }
 
-export async function updateUser(user) {
+export async function updateUser(user: Object): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'patch',
     url: '/users',

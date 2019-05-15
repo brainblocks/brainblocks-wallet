@@ -8,9 +8,6 @@ import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
-import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
-import { bootstrapInitialProps } from '~/state/bootstrap'
-import Alert from 'brainblocks-components/build/Alert'
 import Button from 'brainblocks-components/build/Button'
 import { getCurrentAuth } from '~/state/selectors/authSelectors'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
@@ -22,6 +19,7 @@ import Message from '~/components/layout/Message'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { isServer } from '~/state'
 import { isHex, isBcryptHash } from '~/functions/validate'
+import log from '~/functions/log'
 
 type State = {
   isLoading: boolean,
@@ -72,16 +70,17 @@ class EmailVerification extends Component<Props, State> {
   }
 
   get hasQueryParameters() {
-    return !!this.hash || !!this.verification
+    return !!this.hash && !!this.verification
   }
 
   async tryVerifyEmail() {
     if (this.hasQueryParameters) {
       try {
+        // $FlowFixMe -> Flow doesn't get that this.hasQueryParameters ensures we have hash and verification
         const userData = await UserAPI.verifyEmail(this.hash, this.verification)
         this.props.updateUser(userData)
       } catch (error) {
-        console.error('Error verifying email', error)
+        log.error('Error verifying email', error)
         this.setState({ error: deduceError(error), isLoading: false })
       }
     }
@@ -99,7 +98,7 @@ class EmailVerification extends Component<Props, State> {
         })
         this.setState({ isResending: false, didResend: true })
       } catch (e) {
-        console.error('Error re-sending email', e)
+        log.error('Error re-sending email', e)
         this.props.enqueueSnackbar('Could not re-send verification email', {
           variant: 'error'
         })
@@ -130,8 +129,9 @@ class EmailVerification extends Component<Props, State> {
               graphic="/static/svg/undraw_emails_6uqr.svg"
             >
               <p>
-                Didn't receive the email? Check your spam folder. If you don't
-                get it within a few minutes, click below and we will try again.
+                Didn&apos;t receive the email? Check your spam folder. If you
+                don&apos;t get it within a few minutes, click below and we will
+                try again.
               </p>
               {!this.state.didResend && (
                 <Button
@@ -160,7 +160,7 @@ class EmailVerification extends Component<Props, State> {
               graphic="/static/svg/mail_error.svg"
             >
               <p>
-                We couldn't verify your email. Click below and we will try
+                We couldn&apos;t verify your email. Click below and we will try
                 again.
               </p>
               {!this.state.didResend && (

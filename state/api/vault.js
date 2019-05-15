@@ -1,6 +1,7 @@
+// @flow
 import { makeAuthorizedApiRequest } from './helpers'
 
-export const getVault = async () => {
+export async function getVault(): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'get',
     url: '/users/vault'
@@ -9,7 +10,7 @@ export const getVault = async () => {
   return data.vault
 }
 
-export const updateVault = async wallet => {
+export async function updateVault(wallet: Object): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'patch',
     url: '/users/vault',
@@ -19,11 +20,11 @@ export const updateVault = async wallet => {
   return data.vault
 }
 
-export const createVault = async vault => {
+export async function createVault(hex: string): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/users/vault',
-    data: { wallet: vault }
+    data: { wallet: hex }
   })
 
   return data.vault

@@ -1,3 +1,4 @@
+// @flow
 const color = {
   gray: {
     lightest: '#f5f5f5',

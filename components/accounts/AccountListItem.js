@@ -2,18 +2,13 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { destyle } from 'destyle'
-import { compose } from 'redux'
-import NanoAddress from 'brainblocks-components/build/NanoAddress'
 import Button from 'brainblocks-components/build/Button'
 import KeyValue from 'brainblocks-components/build/KeyValue'
 import AccountMenu from '~/components/accounts/AccountMenu'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import type { NormalizedState } from '~/types'
 import AccountTitle from './AccountTitle'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
-import ChevronDownIcon from '~/static/svg/icons/chevron-down.svg'
 import MoreIcon from '~/static/svg/icons/more.svg'
 
 type Props = {
@@ -44,18 +39,12 @@ class AccountListItem extends React.Component<Props, State> {
     })
   }
 
-  handleMoreOptionsClose = e => {
+  handleMoreOptionsClose = () => {
     this.setState({ moreOptionsOpen: false, moreOptionsAnchorEl: null })
   }
 
   render() {
-    const {
-      styles,
-      preferredCurrency,
-      account,
-      nanoPrice,
-      ...rest
-    }: Props = this.props
+    const { styles, preferredCurrency, account, nanoPrice }: Props = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl }: State = this.state
     return (
       <div className={styles.root}>

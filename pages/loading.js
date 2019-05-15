@@ -1,9 +1,10 @@
+// @flow
+import React from 'react'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
-import PageContent from '~/components/layout/PageContent'
 import Spinner from 'brainblocks-components/build/Spinner'
 
-const LoadingPage = props => (
+const LoadingPage = () => (
   <Layout headerVariant="none" footerVariant="none">
     <Head>
       <title>Loading...</title>

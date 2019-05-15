@@ -18,8 +18,6 @@ import { creators as authActions } from '~/state/actions/authActions'
 import * as AuthAPI from '~/state/api/auth'
 import * as UserAPI from '~/state/api/user'
 import { deduceError } from '~/state/errors'
-import { createWallet, wallet } from '~/state/wallet'
-import { createVault } from '~/state/api/vault'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 
 const { Tab, TabList, TabPanel } = TabComponents
@@ -34,6 +32,7 @@ const LazyRegisterForm = dynamic(
   () => import('~/components/login/RegisterForm'),
   {
     ssr: true,
+    // eslint-disable-next-line react/display-name
     loading: () => (
       <div style={{ margin: '50px auto' }}>
         <Spinner />
@@ -66,6 +65,8 @@ type State = {
 }
 
 class LoginRegister extends React.Component<Props, State> {
+  recaptcha: ?Object
+
   constructor(props: Props) {
     super(props)
     this.recaptcha = null
@@ -82,6 +83,7 @@ class LoginRegister extends React.Component<Props, State> {
   }
 
   set isSubmitting(value) {
+    // eslint-disable-next-line react/no-direct-mutation-state
     this.state.isSubmitting = value
     this.forceUpdate()
   }
@@ -101,6 +103,7 @@ class LoginRegister extends React.Component<Props, State> {
           setPassword(password)
           const hashedPassword = hashPassword(username)
 
+          // $FlowFixMe
           const recaptcha = await this.recaptcha.execute()
           const authData = await AuthAPI.login(
             username,
@@ -149,6 +152,7 @@ class LoginRegister extends React.Component<Props, State> {
           setPassword(password)
           const hashedPassword = hashPassword(username)
 
+          // $FlowFixMe
           const recaptcha = await this.recaptcha.execute()
           const authData = await UserAPI.register({
             username,
@@ -171,6 +175,7 @@ class LoginRegister extends React.Component<Props, State> {
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index
@@ -178,7 +183,7 @@ class LoginRegister extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/login',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )

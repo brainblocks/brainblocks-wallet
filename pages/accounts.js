@@ -1,9 +1,7 @@
+// @flow
 import React from 'react'
 import { connect } from 'react-redux'
-import { addAccount } from '~/state/thunks/accountsThunks'
 import Head from 'next/head'
-import { withRouter } from 'next/router'
-import Typography from 'brainblocks-components/build/Typography'
 import { WALLET_KEY_TYPES } from '~/constants/wallet'
 import {
   getTotalBalance,
@@ -18,8 +16,16 @@ import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
 import { getPreferredCurrency } from '~/state/selectors/userSelectors'
+import type { AccountsState } from '~/types/reduxTypes'
 
-const Accounts = props => {
+type Props = {
+  totalBalance: number,
+  nanoPrice: number,
+  preferredCurrency: ?string,
+  accounts: AccountsState
+}
+
+const Accounts = (props: Props) => {
   return (
     <ClientBootstrap>
       <Layout>

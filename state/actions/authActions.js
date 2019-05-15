@@ -1,21 +1,17 @@
 // @flow
+import type { UpdateAuthAction, LogoutAction } from '~/types/reduxTypes'
+
 const actions = {
-  SET_IS_CHECKING: 'AUTH::IS_CHECKING',
-  DID_CHECK: 'AUTH::DID_CHECK',
   UPDATE: 'AUTH::UPDATE',
-  LOGOUT: 'AUTH::LOGOUT',
-  STORE_USER_PASSWORD: 'AUTH::STORE_PASSWORD',
-  DELETE_USER_PASSWORD: 'AUTH::DELETE_PASSWORD'
+  LOGOUT: 'AUTH::LOGOUT'
 }
 
-const creators = {
-  setIsChecking: (isChecking = true) => ({
-    type: actions.SET_IS_CHECKING,
-    payload: isChecking
-  }),
-  didCheck: () => ({
-    type: actions.DID_CHECK
-  }),
+type Creators = {
+  update: Object => UpdateAuthAction,
+  logout: () => LogoutAction
+}
+
+const creators: Creators = {
   update: (payload = {}) => ({
     type: actions.UPDATE,
     payload

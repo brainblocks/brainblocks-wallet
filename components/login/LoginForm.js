@@ -10,16 +10,18 @@ import { Formik } from 'formik'
 
 type Props = {
   submitting: boolean,
-  onSubmit: (
-    username: string,
-    password: string,
-    mfaCode?: string
-  ) => Promise<void>,
+  onSubmit: (username: string, password: string, mfaCode: string) => void,
   show2fa: boolean
 }
 
+type Values = {
+  username: string,
+  password: string,
+  mfaCode: string
+}
+
 class LoginForm extends React.Component<Props> {
-  validate = values => {
+  validate = (values: Values) => {
     let errors = {}
 
     if (!values.username) {
@@ -33,7 +35,7 @@ class LoginForm extends React.Component<Props> {
     return errors
   }
 
-  handleSubmit = async values => {
+  handleSubmit = async (values: Values) => {
     this.props.onSubmit(values.username, values.password, values.mfaCode)
   }
 

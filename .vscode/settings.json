@@ -1,5 +1,7 @@
 {
   "javascript.validate.enable": false,
   "editor.formatOnSave": true,
-  "flow.pathToFlow": "${workspaceRoot}/node_modules/.bin/flow"
+  "flow.pathToFlow": "${workspaceFolder}/node_modules/.bin/flow",
+  "eslint.alwaysShowStatus": true,
+  "eslint.autoFixOnSave": true
 }

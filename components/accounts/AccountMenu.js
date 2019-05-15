@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react'
-import Link from 'next/link'
 import { destyle } from 'destyle'
 import { compose } from 'redux'
 import Menu from 'brainblocks-components/build/Menu'
@@ -8,18 +7,17 @@ import MenuItem from 'brainblocks-components/build/MenuItem'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { withRouter } from 'next/router'
+import type { WithSnackbar } from '~/types'
 
-type Props = {
+type Props = WithSnackbar & {
   /** Accounts */
   account: Object,
   router: Object,
   open: boolean,
   anchorEl: mixed,
   onClose: () => mixed,
-  enqueueSnackbar: (string, ?Object) => void,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
-  onPresentSnackbar?: () => mixed,
   destyleMerge?: Object
 }
 
@@ -64,10 +62,9 @@ class AccountMenu extends React.Component<Props> {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const {
-      styles,
       account,
-      router,
       open,
       onClose,
       anchorEl,

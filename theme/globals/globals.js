@@ -1,3 +1,4 @@
+// @flow
 import { injectGlobal } from 'emotion'
 import theme from '../theme'
 import { pageWidth } from './utils'

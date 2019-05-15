@@ -1,11 +1,10 @@
+// @flow
 import React from 'react'
 import { connect } from 'react-redux'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
-import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
-import { bootstrapInitialProps } from '~/state/bootstrap'
 import { verifyPassword } from '~/state/api/auth'
 import { setPassword, hashPassword } from '~/state/password'
 import { Formik } from 'formik'
@@ -16,8 +15,18 @@ import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import { getUsername } from '~/state/selectors/userSelectors'
+import log from '~/functions/log'
 
-class ReEnterPassword extends React.Component {
+type Props = {
+  username: string,
+  onSubmit: () => void
+}
+
+type State = {
+  error: boolean
+}
+
+class ReEnterPassword extends React.Component<Props, State> {
   state = {
     error: false
   }
@@ -30,7 +39,7 @@ class ReEnterPassword extends React.Component {
       let correct = await verifyPassword(hashedPassword)
       if (!correct) throw new Error('Invalid password')
     } catch (e) {
-      console.error('Error verifying password')
+      log.error('Error verifying password')
       setSubmitting(false)
       this.setState({
         error: true
@@ -96,10 +105,6 @@ class ReEnterPassword extends React.Component {
       </Layout>
     )
   }
-}
-
-ReEnterPassword.getInitialProps = async ctx => {
-  return await bootstrapInitialProps(ctx)
 }
 
 export default connect(state => ({

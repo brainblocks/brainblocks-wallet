@@ -2,9 +2,13 @@
 import { actions } from '~/state/actions/transactionActions'
 import { actions as authActions } from '~/state/actions/authActions'
 import produce from 'immer'
-import type { NanoTransactionRedux } from '~/types'
+import type {
+  ReduxNanoTransaction,
+  TransactionsState,
+  ReduxAction
+} from '~/types/reduxTypes'
 
-export const nanoTransactionTemplate: NanoTransactionRedux = {
+export const nanoTransactionTemplate: ReduxNanoTransaction = {
   currency: 'nano',
   id: '',
   accountId: '', // which nano address is it associated with?
@@ -18,53 +22,53 @@ export const nanoTransactionTemplate: NanoTransactionRedux = {
   note: ''
 }
 
-export const transactionsInitialState = {
+export const transactionsInitialState: TransactionsState = {
   allIds: [],
   byId: {}
 }
 
-const transactionsReducer: (state: Object, action: Object) => Object = (
-  state,
-  action
-) => {
+const transactionsReducer: (
+  state: TransactionsState,
+  action: ReduxAction
+) => TransactionsState = (state, action) => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return transactionsInitialState
   }
 
-  //$FlowFixMe
   return produce(state, draft => {
-    const id =
-      action.type.indexOf('TRANSACTIONS::') === 0 &&
-      action.hasOwnProperty('payload') &&
-      action.payload.hasOwnProperty('id')
-        ? action.payload.id
-        : null
-
+    let id
     switch (action.type) {
       case actions.BULK_ADD_TRANSACTIONS:
         draft.allIds = [...draft.allIds, ...Object.keys(action.payload)]
         draft.byId = { ...draft.byId, ...action.payload }
+        sort()
         break
+      // return {
+      //   allIds: [...draft.allIds, ...Object.keys(action.payload)],
+      //   byId: { ...draft.byId, ...action.payload }
+      // }
       case actions.CREATE_TRANSACTION:
+        id = action.payload.id
         draft.allIds.push(id)
         draft.byId[id] = { ...nanoTransactionTemplate, ...action.payload }
+        sort()
         break
       case actions.UPDATE_TRANSACTION:
+        id = action.payload.id
         draft.byId[id] = { ...draft.byId[id], ...action.payload }
+        sort()
         break
       default:
-        // return early from here to skip re-sorting unnecessarily
-        return draft
     }
 
     // sort descending by timestamp then height
-    draft.allIds.sort((a, b) => {
-      const byTime = draft.byId[b].timestamp - draft.byId[a].timestamp
-      const byHeight = draft.byId[b].height || 0 - draft.byId[a].height || 0
-      return byTime !== 0 ? byTime : byHeight
-    })
-
-    return draft
+    function sort() {
+      draft.allIds.sort((a, b) => {
+        const byTime = draft.byId[b].timestamp - draft.byId[a].timestamp
+        const byHeight = draft.byId[b].height || 0 - draft.byId[a].height || 0
+        return byTime !== 0 ? byTime : byHeight
+      })
+    }
   })
 }
 

@@ -1,8 +1,8 @@
+// @flow
 import { css } from 'emotion'
 import Color from 'color'
-import mixins from '../globals/mixins'
 
-export function backgroundGradient(color, darken = false) {
+export function backgroundGradient(color: string, darken: boolean = false) {
   const lighterColor = Color(color)
     .lighten(0.2)
     .toString()

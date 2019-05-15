@@ -8,7 +8,6 @@ import {
 import {
   ResponsiveContainer,
   CartesianGrid,
-  Legend,
   Area,
   AreaChart,
   Tooltip,
@@ -23,10 +22,6 @@ const tickStyles = {
   fontSize: 8.5,
   fill: '#FFF'
 }
-const tooltipContentStyles = {
-  fontFamily: 'Montserrat, sans-serif',
-  fontSize: 10
-}
 
 const dateFormatter = date => formatDayMonth(date).toUpperCase()
 const numberFormatter = number =>
@@ -35,10 +30,17 @@ const tooltipDataFormatter = (value, name, props) => {
   return formatNano(value) + ' NANO'
 }
 
+type TooltipProps = {
+  payload: Object,
+  label: number,
+  active: boolean,
+  styles: Object
+}
+
 /**
  * Custom Tooltip
  */
-const CustomTooltip = ({ type, payload, label, active, styles }) => {
+const CustomTooltip = ({ payload, label, active, styles }: TooltipProps) => {
   if (active) {
     return (
       <div className={styles.tooltip}>
@@ -56,7 +58,7 @@ const StyledTooltip = destyle(CustomTooltip, 'Chart')
 // History Chart Props
 type Props = {
   /** Data for line chart */
-  data: Array,
+  data: Array<Object>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
   /** Name of the x-axis */
@@ -115,7 +117,6 @@ const HistoryChart = ({ data, styles, xAxisName, yAxisName }: Props) => {
             tickMargin={6}
             {...tickStyles}
           />
-          }
           <YAxis
             dataKey={yAxisName}
             stroke="#FFF"

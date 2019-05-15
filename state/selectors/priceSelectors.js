@@ -1,10 +1,11 @@
 // @flow
 import { createSelector } from 'reselect'
 import { getPreferredCurrency } from '~/state/selectors/userSelectors'
+import type { ReduxState } from '~/types/reduxTypes'
 
 const getPrices = state => state.price
 
-export const getNanoPriceInPreferredCurrency = createSelector(
+export const getNanoPriceInPreferredCurrency: ReduxState => number = createSelector(
   getPrices,
   getPreferredCurrency,
   (prices, preferredCurrency) => {
@@ -14,7 +15,7 @@ export const getNanoPriceInPreferredCurrency = createSelector(
   }
 )
 
-export const getSupportedCurrencies = createSelector(
+export const getSupportedCurrencies: ReduxState => Array<string> = createSelector(
   getPrices,
   prices => Object.keys(prices.nano).sort()
 )

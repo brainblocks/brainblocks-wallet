@@ -21,7 +21,8 @@ import {
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
 import { getAccounts } from '~/state/selectors/accountSelectors'
-import type { NormalizedState } from '~/types'
+import type { WithSnackbar, WithRouter, WithBreakpoints } from '~/types'
+import type { AccountsState, UserState } from '~/types/reduxTypes'
 import { updateUser } from '~/state/thunks/userThunks'
 import { getKeyByValue } from '~/functions/util'
 import { getSupportedCurrencies } from '~/state/selectors/priceSelectors'
@@ -35,23 +36,18 @@ const tabIndexMap = {
 }
 const collapseBreakpoint = 'small'
 
-type Props = {
-  breakpoints: {
-    mobile?: number,
-    small?: number,
-    tablet?: number,
-    medium?: number,
-    desktop?: number,
-    large?: number
-  },
-  user: Object,
-  accounts: NormalizedState,
-  currentBreakpoint: string,
-  router: Object,
-  supportedCurrencies: Array<string>,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
-}
+type Props = WithSnackbar &
+  WithRouter &
+  WithBreakpoints & {
+    user: UserState,
+    defaultAccount: string,
+    accounts: AccountsState,
+    currentBreakpoint: string,
+    supportedCurrencies: Array<string>,
+    updateUser: Object => void,
+    /** Given by destyle. Do not pass this to the component as a prop. */
+    styles: Object
+  }
 
 type State = {
   activeTab: number,
@@ -86,6 +82,7 @@ class SettingsTabs extends React.Component<Props, State> {
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index,
@@ -94,7 +91,7 @@ class SettingsTabs extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/settings',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )
@@ -105,6 +102,7 @@ class SettingsTabs extends React.Component<Props, State> {
     successMsg = 'User settings updated',
     errorMsg = "Couldn't update user settings"
   ) => {
+    // $FlowFixMe
     this.props
       .updateUser(user)
       .then(updatedUser =>
@@ -119,13 +117,10 @@ class SettingsTabs extends React.Component<Props, State> {
     const {
       styles,
       router,
-      breakpoints,
-      currentBreakpoint,
       user,
       defaultAccount,
       accounts,
-      supportedCurrencies,
-      ...rest
+      supportedCurrencies
     } = this.props
     const { activeTab, viewingTab } = this.state
     const collapsed = this.getCollapsed()

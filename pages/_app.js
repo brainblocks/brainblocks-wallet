@@ -1,3 +1,4 @@
+// @flow
 import 'focus-visible/dist/focus-visible.js'
 import App, { Container } from 'next/app'
 import React from 'react'
@@ -14,12 +15,17 @@ import InfoIcon from '~/static/svg/icons/alert-info.svg'
 import CrossIcon from '~/static/svg/icons/alert-cross.svg'
 import ErrorBoundary from '~/components/error/ErrorBoundary'
 import { hydrate } from 'emotion'
+import type { ReduxStore } from '~/types/reduxTypes'
 
 if (typeof window !== 'undefined') {
   hydrate(window.__NEXT_DATA__.ids)
 }
 
-class MyApp extends App {
+type Props = {
+  reduxStore: ReduxStore
+}
+
+class MyApp extends App<Props> {
   componentDidMount() {
     // this action is added by bootstrapInitialProps on the server
     this.props.reduxStore.dispatch(uiActions.removeActiveProcess('hydrating'))

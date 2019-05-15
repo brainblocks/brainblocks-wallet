@@ -1,22 +1,18 @@
 // @flow
 import React from 'react'
 import { Media } from 'react-breakpoints'
-import { formatFiat, formatNano, formatPercent } from '~/functions/format'
+import { formatFiat, formatNano /*formatPercent*/ } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
-import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
+/*import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
+import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'*/
 import KeyValue from 'brainblocks-components/build/KeyValue'
-import FormField from 'brainblocks-components/build/FormField'
 import Button from 'brainblocks-components/build/Button'
-import Select from 'brainblocks-components/build/Select'
 import Typography from 'brainblocks-components/build/Typography'
-import Menu from 'brainblocks-components/build/Menu'
-import MenuItem from 'brainblocks-components/build/MenuItem'
 import AccountMenu from '~/components/accounts/AccountMenu'
 import HistoryChart from '~/components/dashboard/HistoryChart'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
-import type { NormalizedState } from '~/types'
+import type { AccountsState, TransactionsState } from '~/types/reduxTypes'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import { convert } from '~/functions/convert'
 import { destyle } from 'destyle'
@@ -25,11 +21,11 @@ import theme from '~/theme/theme'
 type Props = {
   nanoPrice: number,
   nano24hChange: number,
-  accounts: NormalizedState,
+  accounts: AccountsState,
   preferredCurrency: string,
   totalBalance: number,
   accountTransactions: Array<string>,
-  transactions: NormalizedState,
+  transactions: TransactionsState,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -147,7 +143,7 @@ class DashboardHeader extends React.Component<Props, State> {
     })
   }
 
-  handleMoreOptionsClose = e => {
+  handleMoreOptionsClose = () => {
     this.setState({
       moreOptionsOpen: false,
       moreOptionsAnchorEl: null

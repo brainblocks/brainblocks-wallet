@@ -13,14 +13,13 @@ import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import ColorChoice from 'brainblocks-components/build/ColorChoice'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
+import type { WithSnackbar } from '~/types'
 
-type Props = {
+type Props = WithSnackbar & {
   addAccount: Object => Promise<Object>,
   router: Object,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object,
-  /** Given by notistack */
-  enqueueSnackbar: () => void
+  styles: Object
 }
 
 type State = {
@@ -36,7 +35,7 @@ class NewAccountSettings extends React.Component<Props, State> {
 
   createAccountWithSettings = () => {
     const { label, color } = this.state
-    this.props.addAccount({ label, color }).then(account => {
+    this.props.addAccount({ label, color }).then(() => {
       this.props.enqueueSnackbar(`Added account - ${label}`, {
         variant: 'success'
       })
@@ -51,7 +50,7 @@ class NewAccountSettings extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, ...rest }: Props = this.props
+    const { styles }: Props = this.props
     const { label, color }: State = this.state
     return (
       <div className={styles.root}>
@@ -78,7 +77,6 @@ class NewAccountSettings extends React.Component<Props, State> {
                 <ColorChoice
                   value={color}
                   options={['gold', 'purple', 'pink', 'aqua', 'orange', 'jade']}
-                  onChange={() => {}}
                   onChange={this.getHandleUpdate('color')}
                 />
               </FormField>

@@ -1,15 +1,23 @@
+// @flow
+import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import { extractCritical } from 'emotion-server'
-import getConfig from 'next/config'
+import type { NextJSContext } from '~/types'
 
-export default class MyDocument extends Document {
-  static getInitialProps(ctx) {
+type Props = {
+  css: string,
+  ids: mixed,
+  __NEXT_DATA__: Object
+}
+
+export default class MyDocument extends Document<Props> {
+  static getInitialProps(ctx: NextJSContext) {
     const page = ctx.renderPage()
     const styles = extractCritical(page.html)
     return { ...page, ...styles, nonce: ctx.res.locals.nonce }
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
     const { __NEXT_DATA__, ids } = props
     if (ids) {

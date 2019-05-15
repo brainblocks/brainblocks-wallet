@@ -1,4 +1,5 @@
 /* @flow */
+import log from '~/functions/log'
 import {
   makeApiRequest,
   makeLocalApiRequest,
@@ -8,7 +9,7 @@ import {
 } from './helpers'
 
 // Runs in `getInitialProps` only
-export async function init(token) {
+export async function init(token: string): Object {
   if (!token) {
     throw new Error('No token passed')
   }
@@ -25,7 +26,12 @@ export async function init(token) {
 }
 
 // Runs client-side only, requests from the next server (not API server)
-export async function login(username, password, recaptcha, mfaCode) {
+export async function login(
+  username: string,
+  password: string,
+  recaptcha: string,
+  mfaCode: string
+): Object {
   let { data } = await makeLocalApiRequest({
     method: 'post',
     url: '/auth',
@@ -35,7 +41,7 @@ export async function login(username, password, recaptcha, mfaCode) {
   return data
 }
 
-export async function logout() {
+export async function logout(): Object {
   const token = getAuthToken()
   if (token) {
     // response header unsets cookie
@@ -51,7 +57,7 @@ export async function logout() {
   }
 }
 
-export async function verifyPassword(password) {
+export async function verifyPassword(password: string): Promise<boolean> {
   try {
     await makeAuthorizedApiRequest({
       method: 'post',
@@ -60,7 +66,7 @@ export async function verifyPassword(password) {
     })
     return true
   } catch (e) {
-    console.error('Could not validate password', e)
+    log.error('Could not validate password', e)
     return false
   }
 }

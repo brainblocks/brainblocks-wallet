@@ -1,10 +1,13 @@
+// @flow
 import { creators } from '~/state/actions/authActions'
 import { destroyWallet } from '~/state/wallet'
 import { getWs, closeWs } from '~/state/websocket'
 import * as authAPI from '~/state/api/auth'
 import Router from 'next/router'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const logout = () => async (dispatch, getState) => {
+export const logout: () => ThunkAction = () => async (dispatch, getState) => {
   // send the logout request _before_ we reset redux/auth
   const logoutReq = authAPI.logout()
 
@@ -23,7 +26,7 @@ export const logout = () => async (dispatch, getState) => {
   try {
     await logoutReq
   } catch (e) {
-    console.error('Error in logout request', e)
+    log.error('Error in logout request', e)
   }
 
   Router.push('/login')

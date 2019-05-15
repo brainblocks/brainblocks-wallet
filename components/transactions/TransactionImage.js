@@ -1,10 +1,17 @@
+// @flow
 import React from 'react'
 import { destyle } from 'destyle'
 import SendIcon from '~/static/svg/icons/arrow-up.svg'
 import ReceiveIcon from '~/static/svg/icons/arrow-down.svg'
-import TransferIcon from '~/static/svg/icons/transfer.svg'
+//import TransferIcon from '~/static/svg/icons/transfer.svg'
+import type { ReduxTransaction } from '~/types/reduxTypes'
 
-const TransactionImage = ({ styles, transaction, ...rest }) => {
+type Props = {
+  styles: Object,
+  transaction: ReduxTransaction
+}
+
+const TransactionImage = ({ styles, transaction, ...rest }: Props) => {
   return (
     <div className={styles.root}>
       <div className={styles.circle}>
@@ -28,11 +35,13 @@ const TransactionImage = ({ styles, transaction, ...rest }) => {
             <ReceiveIcon />
           </span>
         )}
+        {/*}
         {transaction.type === 'transfer' && (
           <span className={styles.transferIcon}>
             <TransferIcon />
           </span>
         )}
+        */}
       </span>
     </div>
   )

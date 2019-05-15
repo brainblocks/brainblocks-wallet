@@ -1,12 +1,20 @@
+// @flow
 import { creators } from '~/state/actions/accountActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import { importChains } from '~/state/thunks/transactionsThunks'
 import { subscribeAccounts } from '~/state/websocket'
-import * as accountsAPI from '~/state/api/accounts'
-import { wallet, syncVault, rawToNano } from '~/state/wallet'
+//import * as accountsAPI from '~/state/api/accounts'
+import { getWallet, syncVault, rawToNano } from '~/state/wallet'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const updateAccount = account => (dispatch, getState) => {
+export const updateAccount: (account: Object) => ThunkAction = account => (
+  dispatch,
+  getState
+) => {
   return new Promise(async (resolve, reject) => {
+    const wallet = getWallet()
+
     // show we're working
     dispatch(
       uiCreators.addActiveProcess(`update-account-${JSON.stringify(account)}`)
@@ -31,7 +39,7 @@ export const updateAccount = account => (dispatch, getState) => {
           `update-account-${JSON.stringify(account)}`
         )
       )
-      reject('Error updating account')
+      return reject('Error updating account')
     }
 
     dispatch(
@@ -45,9 +53,12 @@ export const updateAccount = account => (dispatch, getState) => {
 
 // When we have both hot and cold wallets, this
 // function will need to account for that
-export const addAccount = accountSettings => {
+export const addAccount: (
+  accountSettings: Object
+) => ThunkAction = accountSettings => {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
+      const wallet = getWallet()
       const key = wallet.newKeyFromSeed()
       if (typeof accountSettings.label === 'string') {
         wallet.setLabel(key, accountSettings.label)
@@ -58,8 +69,8 @@ export const addAccount = accountSettings => {
       const accounts = wallet.getAccounts()
       const filtered = accounts.filter(acc => acc.account === key)
       const account = filtered.length ? filtered[0] : null
-      if (!account) {
-        reject('Something is wrong with the wallet accounts')
+      if (account === null) {
+        return reject('Something is wrong with the wallet accounts')
       }
       try {
         // add the account to redux
@@ -73,7 +84,7 @@ export const addAccount = accountSettings => {
         await dispatch(updateAccount(account))
         resolve(account)
       } catch (e) {
-        console.error('Error in addAccount', e)
+        log.error('Error in addAccount', e)
         reject('Could not add the new account')
       }
     })
@@ -81,7 +92,11 @@ export const addAccount = accountSettings => {
 }
 
 // Sync redux accounts with values retrieved from the wallet
-export const syncReduxAccounts = () => (dispatch, getState) => {
+export const syncReduxAccounts: () => ThunkAction = () => (
+  dispatch,
+  getState
+) => {
+  const wallet = getWallet()
   const accounts = wallet.getAccounts()
   const updatedAccounts = accounts.map(acc => {
     const account = { ...acc }

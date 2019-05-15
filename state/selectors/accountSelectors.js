@@ -1,14 +1,15 @@
 // @flow
 import { createSelector } from 'reselect'
+import type { AccountsState, ReduxState } from '~/types/reduxTypes'
 
 const accountsSelector = state => state.accounts
 
-export const getAccounts = createSelector(
+export const getAccounts: ReduxState => AccountsState = createSelector(
   accountsSelector,
   accounts => accounts
 )
 
-export const getTotalBalance = createSelector(
+export const getTotalBalance: ReduxState => number = createSelector(
   getAccounts,
   accounts => {
     let balance = 0
@@ -19,7 +20,7 @@ export const getTotalBalance = createSelector(
   }
 )
 
-export const getDidGetChainForAnyAccount = createSelector(
+export const getDidGetChainForAnyAccount: ReduxState => boolean = createSelector(
   getAccounts,
   accounts => {
     const accountsWithChains = accounts.allIds.filter(

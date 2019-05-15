@@ -8,10 +8,10 @@ import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import Typography from 'brainblocks-components/build/Typography'
-import Checkbox from 'brainblocks-components/build/Checkbox'
+//import Checkbox from 'brainblocks-components/build/Checkbox'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { wallet } from '~/state/wallet'
+import { getWallet } from '~/state/wallet'
 import MFASettings from '~/components/settings/MFASettings'
 
 const initialSeed =
@@ -48,6 +48,7 @@ class SecuritySettings extends React.Component<Props, State> {
 
   handleUnlockSeed = e => {
     let seed
+    const wallet = getWallet()
     try {
       seed = wallet.getSeed(this.state.password)
     } catch (e) {
@@ -82,13 +83,7 @@ class SecuritySettings extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      styles,
-      user,
-      onUpdateUser,
-      enqueueSnackbar,
-      ...rest
-    }: Props = this.props
+    const { styles, user, onUpdateUser, enqueueSnackbar }: Props = this.props
     const { seed, password, passwordError, seedInputType } = this.state
     return (
       <div className={styles.root}>
@@ -99,10 +94,11 @@ class SecuritySettings extends React.Component<Props, State> {
                 Save your seed
               </Typography>
               <Typography el="p" spaceBelow={1.66}>
-                Save your seed somewhere where you can't lose it, and no-one
-                else can find or access it. As long as you've got your seed
-                saved, you can never lose access to your account, BUT if someone
-                else finds it, they can use it to steal all your money.
+                Save your seed somewhere where you can&apos;t lose it, and
+                no-one else can find or access it. As long as you&apos;ve got
+                your seed saved, you can never lose access to your account, BUT
+                if someone else finds it, they can use it to steal all your
+                money.
               </Typography>
             </div>
             <Grid>
@@ -180,6 +176,7 @@ class SecuritySettings extends React.Component<Props, State> {
               enabled={user.is2FAEnabled}
             />
           </GridItem>
+          {/*
           <GridItem>
             <hr className={styles.divider} />
           </GridItem>
@@ -190,11 +187,11 @@ class SecuritySettings extends React.Component<Props, State> {
               </Typography>
               <Typography el="p" spaceBelow={1.66}>
                 If activated, every time you log in from a new IP address, we
-                will send you a verification email to confirm it's you.
+                will send you a verification email to confirm it&apos;s you.
               </Typography>
             </div>
             <Checkbox checked={true} label="Enable IP Authorization" />
-          </GridItem>
+          </GridItem>*/}
         </Grid>
       </div>
     )
