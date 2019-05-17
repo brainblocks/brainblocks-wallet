@@ -1,10 +1,13 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import { TabComponents, SwitchTabs, Button } from 'brainblocks-components'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import Button from 'brainblocks-components/build/Button'
 import SendForm from './SendForm'
 import ReceiveForm from './ReceiveForm'
-import type { NormalizedState } from '~/types'
+import type { WithRouter } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 import { getKeyByValue } from '~/functions/util'
 import Message from '~/components/layout/Message'
 
@@ -16,10 +19,9 @@ const tabIndexMap = {
   transfer: 2
 }
 
-type Props = {
-  router: Object,
+type Props = WithRouter & {
   vaults: Object,
-  accounts: NormalizedState,
+  accounts: AccountsState,
   defaultAccount: string,
   nanoPrice: number,
   preferredCurrency: string,
@@ -35,11 +37,15 @@ type State = {
 
 class SendReceiveTabs extends React.Component<Props, State> {
   state = {
-    activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+    // XSS-safe
+    activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+      ? tabIndexMap[this.props.router.query.tab]
+      : 0,
     sendComplete: false
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index
@@ -47,7 +53,7 @@ class SendReceiveTabs extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/send-receive',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )
@@ -73,8 +79,7 @@ class SendReceiveTabs extends React.Component<Props, State> {
       nanoPrice,
       preferredCurrency,
       router,
-      onSend,
-      ...rest
+      onSend
     } = this.props
     const { activeTab, sendComplete } = this.state
     return (

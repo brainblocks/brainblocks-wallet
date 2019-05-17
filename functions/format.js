@@ -1,17 +1,15 @@
-import moment from 'moment'
-/*import 'moment/locale/en'
-import 'moment/locale/es'
-import 'moment/locale/zh-cn'*/
+// @flow
+import { distanceInWordsToNow, format } from 'date-fns'
 import numbro from 'numbro'
 
-function formatNano(nanoVal, decimals = 5) {
+function formatNano(nanoVal: number, decimals?: number = 5): string {
   return new Intl.NumberFormat('en-US', {
     maximumFractionDigits: decimals,
     minimumFractionDigits: 2
   }).format(nanoVal)
 }
 
-function formatFiat(fiatVal, currency = 'USD') {
+function formatFiat(fiatVal: number, currency?: string = 'USD'): string {
   try {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -23,7 +21,7 @@ function formatFiat(fiatVal, currency = 'USD') {
   }
 }
 
-function formatPercent(value, abs = false) {
+function formatPercent(value: number, abs?: boolean = false): string {
   value = abs ? Math.abs(value) : value
   return (
     new Intl.NumberFormat('en-US', {
@@ -32,43 +30,45 @@ function formatPercent(value, abs = false) {
   )
 }
 
-function unixToMs(unix) {
+function unixToMs(unix: number): number {
   return unix * 1000
 }
 
-function formatTimeAgo(timestamp, unix = false, shorten = false) {
+function formatTimeAgo(
+  timestamp: number,
+  unix?: boolean = false,
+  shorten?: boolean = false
+): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).fromNow(shorten)
+  return distanceInWordsToNow(new Date(timestamp), {
+    includeSeconds: true,
+    addSuffix: !shorten
+  })
 }
 
-function formatTime(timestamp, unix = false) {
+function formatTime(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('LT')
+  return format(new Date(timestamp), 'hh:mm a')
 }
 
-function formatDate(timestamp, unix = false) {
+function formatDate(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('ll')
+  return format(new Date(timestamp), 'MMM D, YYYY')
 }
 
-function formatDayMonth(timestamp, unix = false) {
+function formatDayMonth(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return moment(timestamp).format('D MMM')
+  return format(new Date(timestamp), 'D MMM')
 }
 
-function changeMomentLocale(locale) {
-  moment.locale(locale)
-}
-
-function abbreviateNumber(number, options = {}) {
-  return numbro(number).format({
+function abbreviateNumber(num: number, options?: Object = {}): string {
+  return numbro(num).format({
     average: true,
     ...options
   })
 }
 
 export {
-  moment,
   formatNano,
   formatFiat,
   formatPercent,
@@ -76,6 +76,5 @@ export {
   formatTime,
   formatDate,
   formatDayMonth,
-  changeMomentLocale,
   abbreviateNumber
 }

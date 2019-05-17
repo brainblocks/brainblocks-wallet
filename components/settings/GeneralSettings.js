@@ -2,23 +2,18 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Select,
-  Grid,
-  GridItem,
-  Button
-} from 'brainblocks-components'
-import type { NormalizedState } from '~/types'
-import { SUPPORTED_CURRENCIES } from '~/constants/currencies'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Select from 'brainblocks-components/build/Select'
+import type { AccountsState } from '~/types/reduxTypes'
 
 type Props = {
   defaultAccount: string,
   user: Object,
-  accounts: NormalizedState,
-  onUpdateUser: () => mixed,
+  accounts: AccountsState,
+  onUpdateUser: (user: Object) => mixed,
   supportedCurrencies: Array<string>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object

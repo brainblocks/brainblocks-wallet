@@ -1,31 +1,39 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button,
-  Typography,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import Typography from 'brainblocks-components/build/Typography'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { wallet } from '~/state/wallet'
+import { getWallet } from '~/state/wallet'
+import MFASettings from '~/components/settings/MFASettings'
 
 const initialSeed =
   '0000000000000000000000000000000000000000000000000000000000000000000000'
 
 type Props = {
   user: Object,
-  enqueueSnackbar: func,
+  enqueueSnackbar: (string, Object) => void,
+  onUpdateUser: Object => mixed,
+  onEnableIpAuth: () => void,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object
 }
 
-class SecuritySettings extends React.Component {
+type State = {
+  seed: string,
+  seedInputType: string,
+  password: string,
+  passwordError: string
+}
+
+class SecuritySettings extends React.Component<Props, State> {
   state = {
     seed: initialSeed,
     seedInputType: 'password',
@@ -41,6 +49,7 @@ class SecuritySettings extends React.Component {
 
   handleUnlockSeed = e => {
     let seed
+    const wallet = getWallet()
     try {
       seed = wallet.getSeed(this.state.password)
     } catch (e) {
@@ -83,21 +92,24 @@ class SecuritySettings extends React.Component {
   }
 
   render() {
-    const { styles, user, ...rest }: Props = this.props
+    const { styles, user, onUpdateUser, enqueueSnackbar }: Props = this.props
     const { seed, password, passwordError, seedInputType } = this.state
     return (
       <div className={styles.root}>
         <Grid>
           <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              Save your seed
-            </Typography>
-            <Typography el="p" spaceBelow={1}>
-              Save your seed somewhere where you can't lose it, and no-one else
-              can find or access it. As long as you've got your seed saved, you
-              can never lose access to your account, BUT if someone else finds
-              it, they can use it to steal all your money.
-            </Typography>
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                Save your seed
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                Save your seed somewhere where you can&apos;t lose it, and
+                no-one else can find or access it. As long as you&apos;ve got
+                your seed saved, you can never lose access to your account, BUT
+                if someone else finds it, they can use it to steal all your
+                money.
+              </Typography>
+            </div>
             <Grid>
               <GridItem>
                 <FormItem label="Seed" fieldId="wallet-seed">
@@ -156,14 +168,22 @@ class SecuritySettings extends React.Component {
             <hr className={styles.divider} />
           </GridItem>
           <GridItem>
-            <Typography el="h3" spaceAbove={0} spaceBelow={1}>
-              Two-Factor Authentication (2FA)
-            </Typography>
-            <Typography el="p" spaceBelow={1}>
-              2FA adds a second layer of security to your account. You can use
-              Google Authenticator or Authy.
-            </Typography>
-            <Button>Enable 2FA</Button>
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                Two-Factor Authentication (2FA)
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                {user.is2FAEnabled
+                  ? `2FA is enabled`
+                  : `2FA adds a second layer of security to your account. You can use
+              Google Authenticator or Authy.`}
+              </Typography>
+            </div>
+            <MFASettings
+              enqueueSnackbar={enqueueSnackbar}
+              onUpdateUser={onUpdateUser}
+              enabled={user.is2FAEnabled}
+            />
           </GridItem>
           <GridItem>
             <hr className={styles.divider} />
@@ -174,7 +194,7 @@ class SecuritySettings extends React.Component {
             </Typography>
             <Typography el="p" spaceBelow={1}>
               If activated, every time you log in from a new IP address, we will
-              send you a verification email to confirm it's you.
+              send you a verification email to confirm it&apos;s you.
             </Typography>
             <Checkbox
               checked={user.ipAuthEnabled}
@@ -182,7 +202,7 @@ class SecuritySettings extends React.Component {
               label="Enable IP Authorization"
             />
           </GridItem>
-          <GridItem>
+          {/*<GridItem>
             <hr className={styles.divider} />
           </GridItem>
           <GridItem>
@@ -204,7 +224,7 @@ class SecuritySettings extends React.Component {
               devices.
             </Typography>
             <Button>Enable Account Locking</Button>
-          </GridItem>
+          </GridItem>*/}
         </Grid>
       </div>
     )

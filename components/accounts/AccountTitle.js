@@ -1,14 +1,14 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import { NanoAddress } from 'brainblocks-components'
+import NanoAddress from 'brainblocks-components/build/NanoAddress'
 import WalletIcon from '~/static/svg/icons/wallet.svg'
 import WalletsIcon from '~/static/svg/icons/wallets.svg'
 import HotWalletIcon from '~/static/svg/icons/wallet-hot.svg'
 
 type Props = {
   /** Account object */
-  account?: Object,
+  account?: 'all' | Object,
   /** Include sub title */
   sub?: boolean,
   /** Override title */
@@ -29,8 +29,7 @@ const AccountTitle = ({
   overrideTitle,
   overrideSubTitle,
   overrideIcon,
-  addressCopyable = true,
-  ...rest
+  addressCopyable = true
 }: Props) => {
   // Icon
   let Icon = WalletIcon
@@ -48,22 +47,14 @@ const AccountTitle = ({
       break
   }
   // Title
-  let title = account.label
+  let title
   if (account) {
-    if (account === 'all') title = 'All Accounts'
+    title = account === 'all' ? 'All Accounts' : account.label
     if (
       (!title && account.hasOwnProperty('account')) ||
       account.hasOwnProperty('address')
     ) {
-      title = '[Untitled]'
-      /*title = (
-        <NanoAddress
-          hoverable
-          address={account.account || account.address}
-          startChars={8}
-          endChars={5}
-        />
-      )*/
+      title = 'Untitled'
     }
   }
   if (overrideTitle) {
@@ -72,7 +63,7 @@ const AccountTitle = ({
   // Subtitle
   let subtitle = ''
   if (sub) {
-    if (account && account.hasOwnProperty('account')) {
+    if (typeof account === 'object' && account.hasOwnProperty('account')) {
       subtitle = (
         <NanoAddress
           hoverable={addressCopyable}
@@ -89,38 +80,15 @@ const AccountTitle = ({
 
   return (
     <div className={styles.root}>
-      <div className={styles.icon}>
-        <Icon />
-      </div>
-      <h4 className={styles.title}>{title}</h4>
-      {!!sub && !!subtitle && <p className={styles.subTitle}>{subtitle}</p>}
-    </div>
-  )
-
-  if (account === 'all') {
-    return (
-      <div className={styles.root}>
-        <div className={styles.icon}>
-          <WalletsIcon />
-        </div>
-        <h4 className={styles.title}>{!!title ? title : 'All Accounts'}</h4>
-      </div>
-    )
-  } else {
-    return (
-      <div className={styles.root}>
+      <div className={styles.top}>
         <div className={styles.icon}>
           <Icon />
         </div>
-        <h4 className={styles.title}>{!!title ? title : account.name}</h4>
-        {!!sub && (
-          <p className={styles.subTitle}>
-            {!!subTitle ? subTitle : '@todo-subtitle'}
-          </p>
-        )}
+        <h4 className={styles.title}>{title}</h4>
       </div>
-    )
-  }
+      {!!sub && !!subtitle && <p className={styles.subTitle}>{subtitle}</p>}
+    </div>
+  )
 }
 
 export default destyle(AccountTitle, 'AccountTitle')

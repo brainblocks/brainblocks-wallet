@@ -1,23 +1,23 @@
 /* @flow */
 import * as React from 'react'
 import { connect } from 'react-redux'
+import dynamic from 'next/dynamic'
 import { destyle } from 'destyle'
-import { getFormValues } from 'redux-form'
-import { Alert, SwitchTabs, TabComponents } from 'brainblocks-components'
-import LoginForm from '~/components/forms/LoginForm'
+import Alert from 'brainblocks-components/build/Alert'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Spinner from 'brainblocks-components/build/Spinner'
+import LoginForm from '~/components/login/LoginForm'
 import Recaptcha from '~/components/auth/Recaptcha'
-import RegisterForm from '~/components/forms/RegisterForm'
 import RoundedHexagon from '~/static/svg/rounded-hexagon.svg'
 import RoundedHexagonPurple from '~/static/svg/rounded-hexagon-purple.svg'
 import { withRouter } from 'next/router'
-import { setPassword } from '~/state/password'
+import { setPassword, hashPassword } from '~/state/password'
 import { getKeyByValue } from '~/functions/util'
 import { creators as authActions } from '~/state/actions/authActions'
 import * as AuthAPI from '~/state/api/auth'
 import * as UserAPI from '~/state/api/user'
 import { deduceError } from '~/state/errors'
-import { createWallet, wallet } from '~/state/wallet'
-import { createVault } from '~/state/api/vault'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 
 const { Tab, TabList, TabPanel } = TabComponents
@@ -26,6 +26,20 @@ const tabIndexMap = {
   login: 0,
   register: 1
 }
+
+// RegisterForm contains zxcvbn which we want to avoid loading if possible
+const LazyRegisterForm = dynamic(
+  () => import('~/components/login/RegisterForm'),
+  {
+    ssr: true,
+    // eslint-disable-next-line react/display-name
+    loading: () => (
+      <div style={{ margin: '50px auto' }}>
+        <Spinner />
+      </div>
+    )
+  }
+)
 
 type Props = {
   auth: Object,
@@ -46,105 +60,122 @@ type State = {
   activeTab: number,
   loginError?: Object,
   registrationError?: Object,
-  isSubmitting: boolean
+  isSubmitting: boolean,
+  mfaRequired: boolean
 }
 
 class LoginRegister extends React.Component<Props, State> {
+  recaptcha: ?Object
+
   constructor(props: Props) {
     super(props)
     this.recaptcha = null
     this.state = {
       isSubmitting: false,
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
       loginError: undefined,
-      registrationError: undefined
+      registrationError: undefined,
+      mfaRequired: false
     }
   }
 
   set isSubmitting(value) {
+    // eslint-disable-next-line react/no-direct-mutation-state
     this.state.isSubmitting = value
     this.forceUpdate()
   }
 
-  handleLogin = async event => {
+  handleLogin = (username, password, mfaCode) => {
     if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
     this.isSubmitting = true
 
-    try {
-      const recaptcha = await this.recaptcha.execute()
-      const { username, password } = this.props.loginFormValues || {}
+    this.setState(
+      {
+        loginError: undefined
+      },
+      async () => {
+        try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
 
-      const authData = await AuthAPI.login(username, password, recaptcha)
+          // $FlowFixMe
+          const recaptcha = await this.recaptcha.execute()
+          const authData = await AuthAPI.login(
+            username,
+            hashedPassword,
+            recaptcha,
+            mfaCode
+          )
 
-      setPassword(password)
-      this.props.updateAuth(authData)
-    } catch (error) {
-      this.setState({ loginError: deduceError(error) })
-    }
-
-    this.setState({ isSubmitting: false })
+          this.props.updateAuth(authData)
+          this.setState({ isSubmitting: false })
+        } catch (error) {
+          // check if it's because we need 2fa
+          if (
+            error.response.data.hasOwnProperty('reason') &&
+            error.response.data.reason === '2FA_REQUIRED'
+          ) {
+            this.setState({
+              mfaRequired: true,
+              loginError: undefined,
+              isSubmitting: false
+            })
+          } else {
+            this.setState({
+              loginError: deduceError(error),
+              isSubmitting: false
+            })
+          }
+        }
+      }
+    )
   }
 
-  handleRegister = async event => {
+  handleRegister = (username, email, password) => {
     if (this.state.isSubmitting) return
 
     // synchronous to avoid double-submitting
     this.isSubmitting = true
 
-    const { username, email, password } = this.props.registerFormValues || {}
-
     // Register an account
-    try {
-      const recaptcha = await this.recaptcha.execute()
+    this.setState(
+      {
+        registrationError: undefined
+      },
+      async () => {
+        try {
+          setPassword(password)
+          const hashedPassword = hashPassword(username)
 
-      const authData = await UserAPI.register({
-        username,
-        email,
-        password,
-        recaptcha
-      })
+          // $FlowFixMe
+          const recaptcha = await this.recaptcha.execute()
+          const authData = await UserAPI.register({
+            username,
+            email,
+            password: hashedPassword,
+            recaptcha
+          })
 
-      this.props.updateAuth({ ...authData, isRegistering: true })
-    } catch (error) {
-      this.setState({
-        registrationError: deduceError(error),
-        isSubmitting: false
-      })
-      return
-    }
-    /*
-    // Create a vault
-    createWallet(password)
-    wallet.createWallet()
-    const accounts = wallet.getAccounts()
-    wallet.setLabel(accounts[0].account, 'Default Vault')
-    const hex = wallet.pack()
-
-    // Save the vault to the server
-    let vault
-    try {
-      vault = await createVault(hex)
-    } catch (e) {
-      this.setState({
-        registrationError: 'Could not create a new vault',
-        isSubmitting: false
-      })
-      return
-    }
-
-    // Save the server-returned vault to redux
-    this.props.updateVault(vault)
-
-    // Let the client bootstrap deal with adding the accounts to redux
-
-    this.props.updateAuth({ isRegistering: false })
-    this.setState({ isSubmitting: false })
-*/
+          this.props.updateAuth({ ...authData, isRegistering: true })
+          this.setState({ isSubmitting: false })
+        } catch (error) {
+          this.setState({
+            registrationError: deduceError(error),
+            isSubmitting: false
+          })
+          return
+        }
+      }
+    )
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index
@@ -152,7 +183,7 @@ class LoginRegister extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/login',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )
@@ -160,7 +191,7 @@ class LoginRegister extends React.Component<Props, State> {
 
   render() {
     const { styles } = this.props
-    const { isSubmitting } = this.state
+    const { isSubmitting, mfaRequired } = this.state
 
     return (
       <div className={styles.root}>
@@ -201,6 +232,7 @@ class LoginRegister extends React.Component<Props, State> {
                     <LoginForm
                       onSubmit={this.handleLogin}
                       submitting={isSubmitting}
+                      show2fa={mfaRequired}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -209,7 +241,7 @@ class LoginRegister extends React.Component<Props, State> {
                         {this.state.registrationError.message}
                       </Alert>
                     )}
-                    <RegisterForm
+                    <LazyRegisterForm
                       onSubmit={this.handleRegister}
                       submitting={isSubmitting}
                     />
@@ -224,10 +256,7 @@ class LoginRegister extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = state => ({
-  loginFormValues: getFormValues('login')(state),
-  registerFormValues: getFormValues('register')(state)
-})
+const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
   updateAuth: payload => dispatch(authActions.update(payload)),

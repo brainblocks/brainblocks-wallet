@@ -1,27 +1,33 @@
+// @flow
 import { creators } from '~/state/actions/authActions'
 import { destroyWallet } from '~/state/wallet'
+import { getWs, closeWs } from '~/state/websocket'
 import * as authAPI from '~/state/api/auth'
+import Router from 'next/router'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const logout = () => (dispatch, getState) => {
-  return new Promise(async (resolve, reject) => {
-    // cache the token
-    const { auth } = getState()
-    const token = auth.token
+export const logout: () => ThunkAction = () => async (dispatch, getState) => {
+  // send the logout request _before_ we reset redux/auth
+  const logoutReq = authAPI.logout()
 
-    // destroy the wallet
-    destroyWallet()
+  // destroy the wallet
+  destroyWallet()
 
-    // redux state reset
-    dispatch(creators.logout())
+  // close the websocket connection
+  if (getWs()) {
+    closeWs()
+  }
 
-    // remove cookie and invalidate token on server
-    try {
-      console.log(token)
-      await authAPI.logout(token)
-    } catch (e) {
-      console.error('Error in logout request', e)
-    }
+  // redux state reset
+  dispatch(creators.logout())
 
-    resolve(true)
-  })
+  // await the logout request - invalidate token on server, response header unsets cookie
+  try {
+    await logoutReq
+  } catch (e) {
+    log.error('Error in logout request', e)
+  }
+
+  Router.push('/login')
 }

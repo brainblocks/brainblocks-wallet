@@ -4,33 +4,32 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button,
-  withSnackbar,
-  ColorChoice
-} from 'brainblocks-components'
-import type { NormalizedState } from '~/types'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import ColorChoice from 'brainblocks-components/build/ColorChoice'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
+import type { WithRouter, WithSnackbar } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getDefaultAccount } from '~/state/selectors/userSelectors'
 import { updateAccount } from '~/state/thunks/accountsThunks'
 import { createChange } from '~/state/thunks/transactionsThunks'
-import { isValidNanoAddress } from '~/functions/validate'
-import { wallet } from '~/state/wallet'
+import { isValidNanoAddress, isValidAccountName } from '~/functions/validate'
+import { ACCOUNT_LABEL_MAX_CHARS, ACCOUNT_COLORS } from '~/constants/config'
+import log from '~/functions/log'
 
-type Props = {
-  router: Object,
-  accounts: NormalizedState,
-  updateAccount: Object => Promise<string | void>,
-  createChange: (string, string) => Promise<string | void>,
-  enqueueSnackbar: (string, ?Object) => void,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
-}
+type Props = WithRouter &
+  WithSnackbar & {
+    accounts: AccountsState,
+    updateAccount: Object => Promise<string | void>,
+    createChange: (string, string) => Promise<string | void>,
+    /** Given by destyle. Do not pass this to the component as a prop. */
+    styles: Object
+  }
 
 type State = {
   account: string,
@@ -43,6 +42,7 @@ class AccountSettings extends React.Component<Props, State> {
     super(props)
     let routerAccount = null
     if (
+      // XSS-safe
       props.router.query.hasOwnProperty('account') &&
       isValidNanoAddress(props.router.query.account) &&
       props.accounts.allIds.includes(props.router.query.account)
@@ -96,6 +96,10 @@ class AccountSettings extends React.Component<Props, State> {
     errorMsg = "Could'nt update account settings"
   ) => {
     const acc = { ...account, account: this.state.account }
+    if (!isValidAccountName(acc.label)) {
+      log.error('Account label invalid')
+      return
+    }
     this.props
       .updateAccount(acc)
       .then(updatedAccount =>
@@ -126,11 +130,12 @@ class AccountSettings extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, accounts, ...rest }: Props = this.props
+    const { styles, accounts }: Props = this.props
     const { account, rep, label } = this.state
     const accountObj = accounts.byId[account]
     const accountRep = accountObj.representative
     const isLabelDirty = label !== accounts.byId[account].label
+    const isLabelValid = isValidAccountName(label)
     const isRepDirty = !!accountRep && rep !== accountRep
     return (
       <div className={styles.root}>
@@ -156,10 +161,19 @@ class AccountSettings extends React.Component<Props, State> {
             <hr className={styles.divider} />
           </GridItem>
           <GridItem>
-            <FormItem label="Account Name" fieldId="account-name">
+            <FormItem
+              label="Account Name"
+              fieldId="account-name"
+              error={
+                isLabelValid
+                  ? null
+                  : `Up to ${ACCOUNT_LABEL_MAX_CHARS} characters. No symbols.`
+              }
+            >
               <FormField
+                valid={isLabelValid}
                 adornEnd={
-                  isLabelDirty ? (
+                  isLabelDirty && isLabelValid ? (
                     <Button
                       variant="util"
                       color="teal"
@@ -188,7 +202,7 @@ class AccountSettings extends React.Component<Props, State> {
               <FormField>
                 <ColorChoice
                   value={accountObj.color}
-                  options={['gold', 'purple', 'pink', 'aqua', 'orange', 'jade']}
+                  options={ACCOUNT_COLORS}
                   onChange={e =>
                     this.handleUpdateAccount({ color: e.target.value })
                   }
@@ -216,7 +230,7 @@ class AccountSettings extends React.Component<Props, State> {
                 </a>
               }
               description={
-                !!accountRep
+                accountRep
                   ? 'Your representative confirms Nano transactions on your behalf'
                   : 'Your account must be opened before you can set a representative'
               }

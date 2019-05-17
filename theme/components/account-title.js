@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '../theme'
@@ -5,9 +6,9 @@ import { ellipsis } from '../globals/utils'
 
 addStyles('AccountTitle', props => {
   return {
-    root: css`
+    root: css``,
+    top: css`
       display: flex;
-      flex-wrap: wrap;
       align-items: baseline;
     `,
     icon: css`
@@ -19,6 +20,10 @@ addStyles('AccountTitle', props => {
       color: ${props.color === 'light' ? '#FFF' : '#000'};
       svg {
         height: auto;
+      }
+      @media (max-width: ${theme.bp.mobile}px) {
+        /* display: none; */
+        margin-right: 8px;
       }
     `,
     title: css`
@@ -32,6 +37,10 @@ addStyles('AccountTitle', props => {
       letter-spacing: 0.12em;
       margin: 0;
       color: ${theme.color.text.headings};
+      @media (max-width: ${theme.bp.mobile}px) {
+        letter-spacing: 0.03em;
+        max-width: 120px;
+      }
       ${props.color === 'light' &&
         css`
           color: #fff;

@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Head from 'next/head'
@@ -27,18 +27,18 @@ import {
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
-import type { NormalizedState } from '~/types'
-import { TRANSACTIONS_PER_PAGE } from '~/constants'
+import type { TransactionsState, AccountsState } from '~/types/reduxTypes'
+import { TRANSACTIONS_PER_PAGE } from '~/constants/config'
 
 type Props = {
-  preferredCurrency: string,
-  transactions: NormalizedState,
+  preferredCurrency: ?string,
+  transactions: TransactionsState,
   visibleTransactionIds: Array<string>,
   currentAccountTransactions: Array<string>,
   txPagingIndexes: Object,
   txPagingSet: (number, number) => void,
   txPagingReset: () => void,
-  accounts: NormalizedState,
+  accounts: AccountsState,
   didGetChainForAnyAccount: boolean,
   nanoPrice: number,
   totalBalance: number,
@@ -75,12 +75,10 @@ class Index extends Component<Props> {
       transactions,
       visibleTransactionIds,
       currentAccountTransactions,
-      txPagingIndexes,
       accounts,
       didGetChainForAnyAccount,
       totalBalance,
       dashboardAccount,
-      updateDashboardAccount,
       nanoPrice,
       isGettingTransactions
     } = this.props

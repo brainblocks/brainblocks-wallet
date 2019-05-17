@@ -2,10 +2,12 @@
 import * as React from 'react'
 import { destyle } from 'destyle'
 import { cx } from 'emotion'
-import type { NormalizedState } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
-import { FormField, Menu, MenuItem, NanoAddress } from 'brainblocks-components'
+import FormField from 'brainblocks-components/build/FormField'
+import Menu from 'brainblocks-components/build/Menu'
+import MenuItem from 'brainblocks-components/build/MenuItem'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon'
 
@@ -15,11 +17,7 @@ type Props = {
   /** Input name to append to event.target */
   name?: string,
   /** Accounts */
-  accounts: NormalizedState,
-  /** Nano Addresses */
-  addresses: NormalizedState,
-  /** Can a vault be selected? */
-  vaultSelectable?: boolean,
+  accounts: AccountsState,
   /** Nano price */
   nanoPrice?: number,
   /** Include an 'all' option */
@@ -54,23 +52,23 @@ class AccountSelector extends React.Component<Props, State> {
     anchorEl: null
   }
 
-  handleOpen = (e, el = null) => {
+  handleOpen = e => {
     this.setState({
       open: true,
       anchorEl: null || e.currentTarget
     })
   }
 
-  handleClose = e => {
+  handleClose = () => {
     this.setState({
       open: false,
       anchorEl: null
     })
   }
 
-  handleDownArrowOnField = (e, el) => {
+  handleDownArrowOnField = e => {
     if (e.keyCode === 40) {
-      this.handleOpen(e, el)
+      this.handleOpen(e)
     }
   }
 
@@ -106,16 +104,12 @@ class AccountSelector extends React.Component<Props, State> {
       styles,
       account,
       accounts,
-      addresses,
       balances = 'none',
       twoLine = false,
       nanoPrice = -1,
-      vaultSelectable = true,
       theme,
-      onChange,
       all = false,
-      accountTitleProps,
-      ...rest
+      accountTitleProps
     }: Props = this.props
     const { open, anchorEl } = this.state
 

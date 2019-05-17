@@ -1,7 +1,14 @@
+// @flow
 import React from 'react'
 import { destyle } from 'destyle'
 
-const Footer = ({ styles, variant = 'full', ...rest }) => {
+type Props = {
+  styles: Object,
+  variant: ?string
+}
+
+// $FlowFixMe -> https://github.com/facebook/flow/issues/2093
+const Footer = ({ styles, variant = 'full', ...rest }: Props) => {
   return (
     <div className={styles.root}>
       <div className={styles.pageWidth}>

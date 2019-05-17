@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 
 /**
  * This file exports a wallet singleton that needs to be instantiated
@@ -9,27 +9,40 @@
 
 import { Wallet, Block, RaiFunctions } from 'rai-wallet'
 import bigInt from 'big-integer'
-import type { NanoTransactionRedux } from '~/types'
 import nanoTransactionTemplate from '~/state/reducers/transactionsReducer'
 import * as VaultAPI from '~/state/api/vault'
+import log from '~/functions/log'
 import { isValidNanoAddress } from '~/functions/validate'
+import type {
+  MutableReduxNanoTransaction,
+  ReduxNanoTransactionsObject
+} from '~/types/reduxTypes'
+import type {
+  APIAccountsObject,
+  WebsocketReceiveAccountsObject
+} from '~/types/apiTypes'
 
-export let wallet: Object | null = null
+let cachedWallet: Object | null = null
+
+export const getWallet = () => {
+  if (cachedWallet === null) throw new Error('Wallet not instantiated')
+  return cachedWallet
+}
 
 export const createWallet = (password: string) => {
-  wallet = new Wallet(password)
-  wallet.lightWallet(true)
+  cachedWallet = new Wallet(password)
+  cachedWallet.lightWallet(true)
 }
 
 export const destroyWallet = () => {
-  wallet = null
+  cachedWallet = null
 }
 
 /**
  * Pack the wallet and update it on the server
  */
 export const syncVault = async () => {
-  if (wallet === null) throw new Error('Wallet not instantiated')
+  const wallet = getWallet()
   const hex = wallet.pack()
   return await VaultAPI.updateVault(hex)
 }
@@ -37,33 +50,36 @@ export const syncVault = async () => {
 /**
  * Takes an object of accounts as given by the BrainBlocks API
  * and returns them in redux transaction format.
- * @param {Object} accounts
+ * @param {APIAccountsObject} accounts
  */
-export const populateChains = (accounts: Object) => {
-  if (wallet === null) throw new Error('Wallet not instantiated')
+export function populateChains(
+  accounts: APIAccountsObject
+): ReduxNanoTransactionsObject {
+  const wallet = getWallet()
 
   const txs = {}
 
   for (let acc in accounts) {
     let blocks = accounts[acc].blocks
     blocks.reverse()
-    for (let i in blocks) {
-      var blk = new Block(blocks[i].type === 'state')
-      blk.buildFromJSON(blocks[i].contents)
-      if (blocks[i].origin) blk.setOrigin(blocks[i].origin)
+    for (let block of blocks) {
+      const contents = JSON.parse(block.contents)
+      const blk = new Block(contents.type === 'state')
+      blk.buildFromJSON(block.contents)
+      if (block.origin) blk.setOrigin(block.origin)
       blk.setAccount(acc)
-      blk.setAmount(blocks[i].amount)
+      blk.setAmount(block.amount)
       blk.setImmutable(true)
       wallet.importBlock(blk, acc, false)
 
       if (getBlockIntent(blk) !== 'change') {
         const tx = blockToReduxTx(blk)
-        if (isValidNanoAddress(blocks[i].source_account)) {
-          tx.linkAddress = blocks[i].source_account
+        if (isValidNanoAddress(block.source_account)) {
+          tx.linkAddress = block.source_account
         }
-        tx.timestamp = parseInt(blocks[i].local_timestamp, 10) * 1000
-        tx.height = parseInt(blocks[i].height, 10)
-        tx.balanceNano = rawToNano(blocks[i].balance)
+        tx.timestamp = parseInt(block.local_timestamp, 10) * 1000
+        tx.height = parseInt(block.height, 10)
+        tx.balanceNano = rawToNano(block.balance)
         txs[tx.id] = tx
       }
     }
@@ -79,16 +95,19 @@ export const populateChains = (accounts: Object) => {
  * as given by the BrainBlocks API
  * and returns them in both redux transaction format and as block objects.
  * IMPORTANT: The returned blocks array must be in the order of the chain
- * @param {Object} accounts
- * @returns { reduxTxs: Object, blocks: array }
+ * @param {WebsocketReceiveAccountsObject} accounts
+ * @returns { reduxTxs: ReduxNanoTransactionsObject, blocks: array }
  */
-export const getPendingBlocksFromAccountsObject = (accounts: Object) => {
-  if (wallet === null) throw new Error('Wallet not instantiated')
+export function getPendingBlocksFromAccountsObject(
+  accounts: WebsocketReceiveAccountsObject
+): { reduxTxs: ReduxNanoTransactionsObject, blocks: Array<Object> } {
+  const wallet = getWallet()
 
   const txs = {}
   const blocks = []
   for (let acc in accounts) {
     if (!Array.isArray(accounts[acc].blocks)) continue
+
     accounts[acc].blocks.forEach(blk => {
       // wallet format
       const block = wallet.addPendingReceiveBlock(
@@ -98,7 +117,7 @@ export const getPendingBlocksFromAccountsObject = (accounts: Object) => {
         blk.amount
       )
       if (!block) {
-        console.error(`Error adding block ${blk.hash}`)
+        log.error(`Error adding block ${blk.hash}`)
         return
       }
       blocks.push(block)
@@ -130,7 +149,7 @@ const getBlockIntent: Object =>
   | 'change' = block => {
   if (block.getType() !== 'state') return block.getType()
 
-  if (wallet === null) throw new Error('Wallet not instantiated')
+  const wallet = getWallet()
 
   wallet.useAccount(block.getAccount())
   const previousBalance = wallet.getBalanceUpToBlock(block.getPrevious())
@@ -188,8 +207,8 @@ const getBlockAmountNano: Object => number = block =>
 /**
  * Convert a block from the wallet into a redux transaction format
  */
-export const blockToReduxTx: Object => NanoTransactionRedux = block => {
-  const tx: NanoTransactionRedux = {
+export const blockToReduxTx: Object => MutableReduxNanoTransaction = block => {
+  const tx: MutableReduxNanoTransaction = {
     ...nanoTransactionTemplate,
     id: block.getHash(true),
     accountId: block.getAccount(),

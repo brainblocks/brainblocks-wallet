@@ -1,6 +1,6 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
-import theme from '~/theme/theme'
 import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('NewAccountSettings', props => {

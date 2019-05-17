@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 import { withBreakpoints } from 'react-breakpoints'
 import { destyle } from 'destyle'
-import { CollapseTabs, withSnackbar } from 'brainblocks-components'
+import CollapseTabs from 'brainblocks-components/build/CollapseTabs'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
@@ -20,10 +21,12 @@ import {
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
 import { getAccounts } from '~/state/selectors/accountSelectors'
-import type { NormalizedState } from '~/types'
+import type { WithSnackbar, WithRouter, WithBreakpoints } from '~/types'
+import type { AccountsState, UserState } from '~/types/reduxTypes'
 import { updateUser, enableIpAuth } from '~/state/thunks/userThunks'
 import { getKeyByValue } from '~/functions/util'
 import { getSupportedCurrencies } from '~/state/selectors/priceSelectors'
+import { ContentHeightContext } from '~/components/layout/PageContent'
 
 const tabIndexMap = {
   general: 0,
@@ -33,23 +36,19 @@ const tabIndexMap = {
 }
 const collapseBreakpoint = 'small'
 
-type Props = {
-  breakpoints: {
-    mobile?: number,
-    small?: number,
-    tablet?: number,
-    medium?: number,
-    desktop?: number,
-    large?: number
-  },
-  user: Object,
-  accounts: NormalizedState,
-  currentBreakpoint: string,
-  router: Object,
-  supportedCurrencies: Array<string>,
-  /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
-}
+type Props = WithSnackbar &
+  WithRouter &
+  WithBreakpoints & {
+    user: UserState,
+    defaultAccount: string,
+    accounts: AccountsState,
+    currentBreakpoint: string,
+    supportedCurrencies: Array<string>,
+    updateUser: Object => void,
+    enableIpAuth: () => Promise<void>,
+    /** Given by destyle. Do not pass this to the component as a prop. */
+    styles: Object
+  }
 
 type State = {
   activeTab: number,
@@ -57,11 +56,18 @@ type State = {
 }
 
 class SettingsTabs extends React.Component<Props, State> {
+  static contextType = ContentHeightContext
+
   constructor(props) {
-    super()
+    super(props)
     this.state = {
-      activeTab: tabIndexMap[props.router.query.tab] || 0,
-      viewingTab: false
+      // XSS-safe
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0,
+      viewingTab: Boolean(
+        typeof tabIndexMap[props.router.query.tab] === 'number'
+      )
     }
   }
 
@@ -77,6 +83,7 @@ class SettingsTabs extends React.Component<Props, State> {
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index,
@@ -85,7 +92,7 @@ class SettingsTabs extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/settings',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )
@@ -96,6 +103,7 @@ class SettingsTabs extends React.Component<Props, State> {
     successMsg = 'User settings updated',
     errorMsg = "Couldn't update user settings"
   ) => {
+    // $FlowFixMe
     this.props
       .updateUser(user)
       .then(updatedUser =>
@@ -125,16 +133,14 @@ class SettingsTabs extends React.Component<Props, State> {
     const {
       styles,
       router,
-      breakpoints,
-      currentBreakpoint,
       user,
       defaultAccount,
       accounts,
-      supportedCurrencies,
-      ...rest
+      supportedCurrencies
     } = this.props
     const { activeTab, viewingTab } = this.state
     const collapsed = this.getCollapsed()
+    const contentHeight = this.context
     return (
       <div className={styles.root}>
         <CollapseTabs
@@ -163,7 +169,10 @@ class SettingsTabs extends React.Component<Props, State> {
                 </div>
               ),
               content: (
-                <div className={styles.tabPanel}>
+                <div
+                  className={styles.tabPanel}
+                  style={{ minHeight: contentHeight }}
+                >
                   <h3 className={styles.tabPanelTitle}>General Settings</h3>
                   <div className={styles.tabPanelContent}>
                     <GeneralSettings
@@ -255,9 +264,9 @@ const mapDispatchToProps = {
 }
 
 export default compose(
-  withBreakpoints,
   withSnackbar,
   withRouter,
+  withBreakpoints,
   connect(
     mapStateToProps,
     mapDispatchToProps

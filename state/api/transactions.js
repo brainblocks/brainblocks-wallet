@@ -1,6 +1,10 @@
-import { makeAuthorizedApiRequest } from '~/state/helpers'
+// @flow
+import { makeAuthorizedApiRequest } from './helpers'
+import type { APIAccountsObject } from '~/types/apiTypes'
 
-export const getChains = async accounts => {
+export async function getChains(
+  accounts: Array<string>
+): Promise<APIAccountsObject> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/node/chains',
@@ -10,7 +14,11 @@ export const getChains = async accounts => {
   return data.accounts
 }
 
-export const broadcast = async (blockJSON, prevHash, amount = 'false') => {
+export async function broadcast(
+  blockJSON: string,
+  prevHash: string,
+  amount: string = 'false'
+): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
     method: 'post',
     url: '/node/broadcast',

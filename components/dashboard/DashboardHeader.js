@@ -1,25 +1,18 @@
 // @flow
 import React from 'react'
-import moment from 'moment'
 import { Media } from 'react-breakpoints'
-import { formatFiat, formatNano, formatPercent } from '~/functions/format'
+import { formatFiat, formatNano /*formatPercent*/ } from '~/functions/format'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
-import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'
-import {
-  Button,
-  FormField,
-  KeyValue,
-  Select,
-  Typography,
-  Menu,
-  MenuItem
-} from 'brainblocks-components'
+/*import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
+import ArrowUpIcon from '~/static/svg/icons/arrow-down.svg'*/
+import KeyValue from 'brainblocks-components/build/KeyValue'
+import Button from 'brainblocks-components/build/Button'
+import Typography from 'brainblocks-components/build/Typography'
 import AccountMenu from '~/components/accounts/AccountMenu'
 import HistoryChart from '~/components/dashboard/HistoryChart'
 import Link from 'next/link'
 import MoreIcon from '~/static/svg/icons/more.svg'
-import type { NormalizedState } from '~/types'
+import type { AccountsState, TransactionsState } from '~/types/reduxTypes'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import { convert } from '~/functions/convert'
 import { destyle } from 'destyle'
@@ -28,11 +21,11 @@ import theme from '~/theme/theme'
 type Props = {
   nanoPrice: number,
   nano24hChange: number,
-  accounts: NormalizedState,
+  accounts: AccountsState,
   preferredCurrency: string,
   totalBalance: number,
   accountTransactions: Array<string>,
-  transactions: NormalizedState,
+  transactions: TransactionsState,
   /** Account Id */
   account: string,
   /** Handler for changing account */
@@ -84,6 +77,8 @@ class DashboardHeader extends React.Component<Props, State> {
     // keep track of the latest one
     let latestTx = txs[0]
     let maxTimestamp = 0
+    let balance = 0
+    let lastamount = 0
     for (let hash of txs) {
       // pull and break down block for hash
       const tx = transactions.byId[hash]
@@ -97,12 +92,21 @@ class DashboardHeader extends React.Component<Props, State> {
         latestTx = hash
       }
 
-      /**
-       * Calculating 'all' is actually a bit trickier than this.
-       * Will leave it as an exercise for another day
-       */
+      // Graph for all wallets
       if (account === 'all') {
-        dataPoint.balance = totalBalance
+        balance += lastamount
+        // For last transaction in time set balance as the final one
+        if (hash === txs[0]) {
+          balance = totalBalance
+        }
+
+        // Set last amount of transaction for calculations
+        if (tx.type === 'receive') {
+          lastamount = -tx.amountNano
+        } else {
+          lastamount = tx.amountNano
+        }
+        dataPoint.balance = balance
       }
 
       chartData.push(dataPoint)
@@ -110,22 +114,23 @@ class DashboardHeader extends React.Component<Props, State> {
 
     // add a data point for the current moment, equal to the latest balance
     // so that the chart doesn't end in the past
-    chartData.unshift({
-      date: Date.now(),
-      balance: transactions.byId[latestTx].balanceNano
-    })
+    if (account === 'all') {
+      chartData.unshift({
+        date: Date.now(),
+        balance: totalBalance
+      })
+    } else {
+      chartData.unshift({
+        date: Date.now(),
+        balance: transactions.byId[latestTx].balanceNano
+      })
+    }
 
-    // return a history if we don't have one
-    /*
-    if (chartData.length <= 7) {
-      while (chartData.length <= 7) {
-        const today = moment()
-          .subtract(chartData.length, 'days')
-          .format('YYYY-MM-DD')
-        const chartObject = { date: today, balance: 0 }
-        chartData.push(chartObject)
-      }
-    }*/
+    // Set a first point in the chart to 0 - before the first transaction
+    chartData.push({
+      date: transactions.byId[txs[txs.length - 1]].timestamp - 1000000,
+      balance: 0
+    })
 
     // return chart data
     return chartData
@@ -138,7 +143,7 @@ class DashboardHeader extends React.Component<Props, State> {
     })
   }
 
-  handleMoreOptionsClose = e => {
+  handleMoreOptionsClose = () => {
     this.setState({
       moreOptionsOpen: false,
       moreOptionsAnchorEl: null
@@ -235,7 +240,7 @@ class DashboardHeader extends React.Component<Props, State> {
                 value={formatFiat(nanoPrice, preferredCurrency)}
               />
             </div>
-            <div className={styles.change}>
+            {/*<div className={styles.change}>
               <KeyValue
                 theme="header"
                 size="sm"
@@ -247,7 +252,7 @@ class DashboardHeader extends React.Component<Props, State> {
                   </span>
                 }
               />
-            </div>
+            </div>*/}
           </div>
         </div>
         <Link

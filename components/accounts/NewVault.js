@@ -2,30 +2,30 @@
 import React from 'react'
 import { destyle } from 'destyle'
 import { connect } from 'react-redux'
-import { Formik } from 'formik'
-import Link from 'next/link'
-import { wallet, createWallet } from '~/state/wallet'
+import { getWallet, createWallet } from '~/state/wallet'
 import { Wallet } from 'rai-wallet'
 import { createVault } from '~/state/api/vault'
 import { verifyPassword } from '~/state/api/auth'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { addAccount } from '~/state/thunks/accountsThunks'
-import {
-  SwitchTabs,
-  TabComponents,
-  Alert,
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  Checkbox,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
+import TabComponents from 'brainblocks-components/build/Tabs'
+import Alert from 'brainblocks-components/build/Alert'
+import Checkbox from 'brainblocks-components/build/Checkbox'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { getKeyByValue } from '~/functions/util'
 import { isValidNanoSeed } from '~/functions/validate'
+import { setPassword, hashPassword, destroyPassword } from '~/state/password'
+import { getUsername } from '~/state/selectors/userSelectors'
+import log from '~/functions/log'
+import type { WithSnackbar } from '~/types'
 
 const { Tab, TabList, TabPanel } = TabComponents
 
@@ -34,12 +34,12 @@ const tabIndexMap = {
   import: 1
 }
 
-type Props = {
+type Props = WithSnackbar & {
   router: Object,
   updateVault: string => mixed,
-  enqueueSnackbar: (string, ?Object) => mixed,
   /** Given by destyle. Do not pass this to the component as a prop. */
-  styles: Object
+  styles: Object,
+  username: string
 }
 
 type State = {
@@ -64,7 +64,9 @@ class NewVault extends React.Component<Props, State> {
     const wallet = new Wallet('')
     wallet.setRandomSeed()
     this.state = {
-      activeTab: tabIndexMap[this.props.router.query.tab] || 0,
+      activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
+        ? tabIndexMap[this.props.router.query.tab]
+        : 0, // XSS-safe
       createSeed: wallet.getSeed(''),
       createPassword: '',
       createPasswordValid: true,
@@ -88,11 +90,14 @@ class NewVault extends React.Component<Props, State> {
       [`${form}Submitting`]: true
     })
     // verify password
+    setPassword(password)
+    const hashedPassword = hashPassword(this.props.username)
+    destroyPassword()
     try {
-      let correct = await verifyPassword(password)
+      let correct = await verifyPassword(hashedPassword)
       if (!correct) throw new Error('Invalid password')
     } catch (e) {
-      console.error('Error verifying password')
+      log.error('Error verifying password')
       this.setState({
         [`${form}Error`]: 'Incorrect password',
         [`${form}PasswordValid`]: false,
@@ -102,6 +107,7 @@ class NewVault extends React.Component<Props, State> {
     }
     // create wallet with seed
     createWallet(password)
+    const wallet = getWallet()
     wallet.createWallet(seed)
     // name the first account
     const accounts = wallet.getAccounts()
@@ -133,7 +139,8 @@ class NewVault extends React.Component<Props, State> {
     this.submit('import')
   }
 
-  handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
+  handleSwitchTabs = (index: number) => {
+    const tab = getKeyByValue(tabIndexMap, index)
     this.setState(
       {
         activeTab: index
@@ -141,7 +148,7 @@ class NewVault extends React.Component<Props, State> {
       () => {
         this.props.router.push({
           pathname: '/new-account/vault',
-          search: `?tab=${getKeyByValue(tabIndexMap, index)}`
+          search: tab ? `?tab=${tab}` : ''
         })
       }
     )
@@ -166,7 +173,7 @@ class NewVault extends React.Component<Props, State> {
   }
 
   render() {
-    const { styles, ...rest } = this.props
+    const { styles } = this.props
     const {
       activeTab,
       createSeed,
@@ -363,7 +370,7 @@ class NewVault extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  vaults: state.vaults
+  username: getUsername(state)
 })
 
 const mapDispatchToProps = {

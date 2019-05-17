@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
@@ -21,6 +22,9 @@ addStyles('TransactionsList', props => {
   return {
     root: css`
       padding: 0 0 12px;
+      @media (max-width: ${theme.bp.mobile - 1}px) {
+        margin: 0 -6px;
+      }
     `,
     table: css`
       width: 100%;

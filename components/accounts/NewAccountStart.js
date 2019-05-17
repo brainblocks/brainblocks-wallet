@@ -12,7 +12,7 @@ type Props = {
   styles: Object
 }
 
-const NewAccountStart = ({ styles, ...rest }: Props) => {
+const NewAccountStart = ({ styles }: Props) => {
   return (
     <div className={styles.root}>
       <div className={styles.optionsContainer}>

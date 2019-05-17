@@ -1,12 +1,11 @@
-import { wallet, createWallet } from '~/state/wallet'
-import { creators } from '~/state/actions/walletActions'
-import { creators as accountCreators } from '~/state/actions/accountActions'
+// @flow
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import { creators as vaultActions } from '~/state/actions/vaultActions'
-import { password, destroyPassword } from '~/state/password'
 import * as vaultAPI from '~/state/api/vault'
+import log from '~/functions/log'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const getVault = () => {
+export const getVault: () => ThunkAction = () => {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
       // show we're working
@@ -17,7 +16,7 @@ export const getVault = () => {
       try {
         vault = await vaultAPI.getVault()
       } catch (e) {
-        console.error('Error getting vault', e)
+        log.error('Error getting vault', e)
         reject(e)
       }
 
@@ -30,9 +29,12 @@ export const getVault = () => {
   }
 }
 
-export const getOrCreateWallet = () => {
+/*
+export const getOrCreateWallet: () => ThunkAction = () => {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
+      const wallet = getWallet()
+
       // show we're working
       dispatch(uiCreators.addActiveProcess('load-wallet'))
 
@@ -48,8 +50,8 @@ export const getOrCreateWallet = () => {
       try {
         encryptedWallet = await walletAPI.getWallet()
       } catch (e) {
-        console.error('Error getting wallet for user', e)
-        reject(e)
+        log.error('Error getting wallet for user', e)
+        return reject(e)
       }
 
       // if this is a new wallet, name the default account
@@ -60,8 +62,8 @@ export const getOrCreateWallet = () => {
         try {
           await walletAPI.updateWallet()
         } catch (e) {
-          console.warn('Error sending encrypted wallet to server')
-          reject(e)
+          log.warn('Error sending encrypted wallet to server')
+          return reject(e)
         }
       }
 
@@ -74,7 +76,7 @@ export const getOrCreateWallet = () => {
         try {
           encryptedWallet = await walletAPI.getWallet()
         } catch (e) {
-          console.error('Error getting wallet for user', e)
+          log.error('Error getting wallet for user', e)
           reject(e)
         }
         // decrypt
@@ -114,3 +116,4 @@ export const getOrCreateWallet = () => {
     })
   }
 }
+*/

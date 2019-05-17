@@ -1,21 +1,27 @@
+// @flow
 import React from 'react'
 import Head from 'next/head'
 import { destyle } from 'destyle'
-import Layout from '~/components/layout/Layout'
-import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
-import Link from 'next/link'
-import { Button } from 'brainblocks-components'
+import Button from 'brainblocks-components/build/Button'
+import log from '~/functions/log'
+import type { NextJSContext } from '~/types'
 
-class Error extends React.Component {
-  static getInitialProps({ res, err }) {
+type Props = {
+  error?: mixed,
+  statusCode: number,
+  styles: Object
+}
+
+class Error extends React.Component<Props> {
+  static getInitialProps({ res, err }: NextJSContext): Object {
     const statusCode = res ? res.statusCode : err ? err.statusCode : null
     return { statusCode }
   }
 
   render() {
     const { error, statusCode, styles } = this.props
-    if (error) console.error(error)
+    if (error) log.error(error)
     let title,
       pageTitle,
       content,
@@ -66,9 +72,9 @@ class Error extends React.Component {
               </p>
             )}
             <div className={styles.button}>
-              <Link href="/">
-                <Button el="a">Go to the dashboard</Button>
-              </Link>
+              <Button el="a" href="/">
+                Go to the dashboard
+              </Button>
             </div>
           </div>
         </PageContent>

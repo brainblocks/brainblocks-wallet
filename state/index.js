@@ -1,11 +1,11 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+// @flow
+import * as React from 'react'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import { createLogger } from 'redux-logger'
-import { Component } from 'react'
 import getConfig from 'next/config'
-
 import rootReducer from '~/state/reducers'
+import type { ReduxStore } from '~/types/reduxTypes'
 
 const { publicRuntimeConfig } = getConfig()
 const { NODE_ENV, DEBUG } = publicRuntimeConfig
@@ -22,13 +22,9 @@ function initializeStore(initialState) {
   // Redux thunk
   middleware.push(thunk)
 
-  if (DEBUG && isDevelopment && !isServer) {
-    middleware.push(createLogger({ collapsed: true }))
-  }
-
   let appliedMiddleware = applyMiddleware(...middleware)
 
-  if (isDevelopment) {
+  if (isDevelopment || DEBUG === 'true') {
     appliedMiddleware = compose(composeWithDevTools(appliedMiddleware))
   }
 
@@ -60,8 +56,12 @@ export function getClientSideStore() {
   return clientSideStore
 }
 
-export function withReduxStore(App) {
-  return class AppWithRedux extends Component {
+type Props = Object
+
+export function withReduxStore(App: Object): Object {
+  return class AppWithRedux extends React.Component<Props> {
+    reduxStore: ReduxStore
+
     static async getInitialProps(appContext) {
       // Get or Create the store with `undefined` as initialState
       // This allows you to set a custom default initialState

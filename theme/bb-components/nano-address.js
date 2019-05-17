@@ -1,6 +1,6 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
-import theme from '../theme'
 import { styles } from 'brainblocks-components'
 
 addStyles('BB-NanoAddress', props => {
@@ -13,7 +13,10 @@ addStyles('BB-NanoAddress', props => {
       text-transform: lowercase;
       letter-spacing: 0;
       position: relative;
-      padding-right: 2.4em;
+      ${(props.hoverable || props.copyable) &&
+        css`
+          padding-right: 2.4em;
+        `}
     `,
     address: css`
       ${libStyles.address};

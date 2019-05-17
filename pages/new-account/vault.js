@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
@@ -7,8 +8,11 @@ import PageContent from '~/components/layout/PageContent'
 import NewVault from '~/components/accounts/NewVault'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
+import type { WithRouter } from '~/types'
 
-const NewAccountVaultPage = props => {
+type Props = WithRouter
+
+const NewAccountVaultPage = (props: Props) => {
   return (
     <ClientBootstrap getPrice={false} getWallet={false}>
       <Layout headerVariant="logout">

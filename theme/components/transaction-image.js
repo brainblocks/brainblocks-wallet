@@ -1,9 +1,11 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
-const styles = addStyles('TransactionImage', props => {
+addStyles('TransactionImage', props => {
   // helpers
+  /*
   const icon = css`
     width: 16px;
     height: 16px;
@@ -18,7 +20,7 @@ const styles = addStyles('TransactionImage', props => {
     right: 0;
     top: 0;
     transform: none;
-  `
+  `*/
 
   // styles
   return {
@@ -44,6 +46,14 @@ const styles = addStyles('TransactionImage', props => {
         css`
           background: ${theme.color.status.infoLight};
         `}
+      @media (max-width: ${theme.bp.small - 1}px) {
+        width: 36px;
+        height: 36px;
+      }
+      @media (max-width: ${theme.bp.mobile - 1}px) {
+        width: 32px;
+        height: 32px;
+      }
     `,
     icon: css`
       overflow: hidden;

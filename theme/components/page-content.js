@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
@@ -19,12 +20,14 @@ addStyles('PageContent', ({ background, pad }) => ({
             background: #fff;
           `}
         border-radius: ${theme.borderRadius.lg}px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
         overflow: hidden;
         @media (max-width: ${theme.layout.pageWidth -
           theme.layout.pagePadding * 2 -
           1}px) {
-          margin-left: ${theme.layout.pagePadding * -1}px;
-          margin-right: ${theme.layout.pagePadding * -1}px;
+          margin-left: ${theme.layout.mobile.pagePadding * -1}px;
+          margin-right: ${theme.layout.mobile.pagePadding * -1}px;
         }
       `};
   `,
@@ -33,8 +36,8 @@ addStyles('PageContent', ({ background, pad }) => ({
     ${!!pad &&
       css`
         padding: ${theme.layout.contentPadding}px;
-        @media (max-width: ${theme.bp.tablet - 1}px) {
-          padding: 30px ${theme.layout.pagePadding}px;
+        @media (max-width: ${theme.bp.small}px) {
+          padding: 30px ${theme.layout.mobile.contentPadding}px;
         }
       `};
   `

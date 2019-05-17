@@ -3,37 +3,33 @@ import React, { Component } from 'react'
 import QRCode from 'qrcode.react'
 import { destyle } from 'destyle'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { isValidNanoAddress } from '~/functions/validate'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import type { NormalizedState } from '~/types'
+import type { WithRouter, WithSnackbar } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 
-type Props = {
-  enqueueSnackbar: (string, ?Object) => void,
-  router: Object,
-  accounts: NormalizedState,
-  defaultAccount: string,
-  styles: Object
-}
+type Props = WithRouter &
+  WithSnackbar & {
+    accounts: AccountsState,
+    defaultAccount: string,
+    styles: Object
+  }
 
 type State = {
-  account: string,
-  amount: string,
-  copied: boolean
+  account: string
 }
 
 class ReceiveForm extends Component<Props, State> {
   constructor(props) {
     super(props)
     let account = props.defaultAccount || props.accounts.allIds[0]
+    // checking that the router-given account is in the allIds array is a form of XSS prevention
     if (
       props.router.query.account &&
       this.props.accounts.allIds.includes(props.router.query.account)
@@ -41,14 +37,12 @@ class ReceiveForm extends Component<Props, State> {
       account = props.router.query.account
     }
     this.state = {
-      account,
-      amount: '10000000000000000000000000000000',
-      copied: false
+      account
     }
   }
 
-  handleUpdateAccount = acc => {
-    this.setState({ account: acc, copied: false })
+  handleUpdateAccount = e => {
+    this.setState({ account: e.target.value })
   }
 
   handleCopyAddress = () => {
@@ -58,8 +52,8 @@ class ReceiveForm extends Component<Props, State> {
   }
 
   render() {
-    const { router, accounts, styles } = this.props
-    const { account, amount, copied } = this.state
+    const { accounts, styles } = this.props
+    const { account } = this.state
     return (
       <div className={styles.root}>
         <Grid>
@@ -105,9 +99,7 @@ class ReceiveForm extends Component<Props, State> {
                   style={{ textAlign: 'center' }}
                 >
                   <QRCode
-                    value={`xrb:${
-                      accounts.byId[account].account
-                    }?amount=${amount}`}
+                    value={`xrb:${accounts.byId[account].account}`}
                     size={150}
                   />
                 </div>

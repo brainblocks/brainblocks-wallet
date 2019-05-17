@@ -1,14 +1,18 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import { formatNano, formatFiat, formatPercent } from '~/functions/format'
+import { formatNano, formatFiat /*formatPercent*/ } from '~/functions/format'
 import { convert } from '~/functions/convert'
 import Link from 'next/link'
-import { KeyValue, Button } from 'brainblocks-components'
+import Button from 'brainblocks-components/build/Button'
+import KeyValue from 'brainblocks-components/build/KeyValue'
+/*
 import ArrowUpIcon from '~/static/svg/icons/arrow-up.svg'
 import ArrowDownIcon from '~/static/svg/icons/arrow-down.svg'
+*/
+import type { WithSnackbar } from '~/types'
 
-type Props = {
+type Props = WithSnackbar & {
   balance: number,
   nanoPrice: number,
   nano24hChange: number,
@@ -22,10 +26,8 @@ const AccountsHeader = ({
   styles,
   balance,
   nanoPrice,
-  nano24hChange,
-  preferredCurrency,
-  enqueueSnackbar,
-  ...rest
+  //nano24hChange,
+  preferredCurrency
 }: Props) => {
   return (
     <div className={styles.root}>
@@ -58,7 +60,7 @@ const AccountsHeader = ({
           value={formatFiat(nanoPrice, preferredCurrency)}
         />
       </div>
-      <div className={styles.change}>
+      {/*<div className={styles.change}>
         <KeyValue
           theme="header"
           label="Last 24h"
@@ -69,7 +71,7 @@ const AccountsHeader = ({
             </span>
           }
         />
-      </div>
+      </div>*/}
       <div className={styles.new}>
         <Link prefetch href="/new-account/settings">
           <Button block el="a">

@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
@@ -15,6 +16,9 @@ addStyles('PageHeader', props => ({
     font-size: ${theme.type.baseFontSize - 1}px;
     @media (max-width: ${theme.bp.medium - 1}px) {
       margin-top: -10px;
+    }
+    @media (max-width: ${theme.bp.small - 1}px) {
+      margin-bottom: 20px;
     }
   `,
   alertIcon: css`

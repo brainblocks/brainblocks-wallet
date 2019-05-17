@@ -1,14 +1,12 @@
 // @flow
 import React from 'react'
 import { destyle } from 'destyle'
-import type { NormalizedState } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
 import AccountListItem from './AccountListItem'
 
 type Props = {
   /** Accounts */
-  accounts: NormalizedState,
-  /** Addresses */
-  nanoAddresses: NormalizedState,
+  accounts: AccountsState,
   preferredCurrency: string,
   /** Nano price */
   nanoPrice: number,
@@ -21,11 +19,10 @@ type Props = {
 const AccountsList = ({
   styles,
   accounts,
-  nanoAddresses,
   preferredCurrency,
   nanoPrice,
-  type = 'all',
-  ...rest
+  // $FlowFixMe -> https://github.com/facebook/flow/issues/2093
+  type = 'all'
 }: Props) => {
   const filtered = accounts.allIds.filter(
     accId =>
@@ -35,7 +32,7 @@ const AccountsList = ({
   )
   return (
     <div className={styles.root}>
-      {filtered.map((accId, i) => (
+      {filtered.map(accId => (
         <div className={styles.item} key={`account-${accId}`}>
           <AccountListItem
             nanoPrice={nanoPrice}

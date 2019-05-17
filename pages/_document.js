@@ -1,15 +1,23 @@
+// @flow
+import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import { extractCritical } from 'emotion-server'
-import getConfig from 'next/config'
+import type { NextJSContext } from '~/types'
 
-export default class MyDocument extends Document {
-  static getInitialProps(ctx) {
+type Props = {
+  css: string,
+  ids: mixed,
+  __NEXT_DATA__: Object
+}
+
+export default class MyDocument extends Document<Props> {
+  static getInitialProps(ctx: NextJSContext) {
     const page = ctx.renderPage()
     const styles = extractCritical(page.html)
-    return { ...page, ...styles }
+    return { ...page, ...styles, nonce: ctx.res.locals.nonce }
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
     const { __NEXT_DATA__, ids } = props
     if (ids) {
@@ -18,21 +26,30 @@ export default class MyDocument extends Document {
   }
 
   render() {
+    const { nonce } = this.props
     return (
-      <html>
-        <Head>
-          <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
+      <html lang="en">
+        <Head nonce={nonce}>
+          <link
+            href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"
+            rel="stylesheet"
+          />
+          <style
+            nonce={nonce}
+            dangerouslySetInnerHTML={{ __html: this.props.css }}
+          />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+            key="viewport"
+          />
           <meta name="description" content="BrainBlocks Wallet" />
           <meta property="og:title" content="BrainBlocks" />
           <meta
             property="og:image"
             content="/static/pwa/apple-touch-icon-precomposed.png"
           />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, user-scalable=no"
-          />
-          <link rel="manifest" href="/static/pwa/manifest.json" />
+          <link rel="manifest" href="/static/manifest.json" />
           <meta name="theme-color" content="#1a2d58" />
           <meta name="msapplication-TileColor" content="#1a2d58" />
           <link
@@ -68,7 +85,7 @@ export default class MyDocument extends Document {
         </Head>
         <body>
           <Main />
-          <NextScript />
+          <NextScript nonce={nonce} />
         </body>
       </html>
     )

@@ -1,14 +1,11 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
-import {
-  FormItem,
-  FormField,
-  Input,
-  Grid,
-  GridItem,
-  Button
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
 
 type Props = {
   user: Object,
@@ -16,20 +13,14 @@ type Props = {
   styles: Object
 }
 
-const ProfileSettings = ({
-  user,
-  userName,
-  userEmail,
-  styles,
-  ...rest
-}: Props) => (
+const ProfileSettings = ({ user, styles, ...rest }: Props) => (
   <div className={styles.root}>
     <Grid>
       <GridItem>
         <FormItem
           label="User name"
           fieldId="your-name"
-          extra="Your user name cannot be changed"
+          description="Your user name cannot be changed"
         >
           <FormField>
             <Input readOnly id="your-name" value={user.username} />

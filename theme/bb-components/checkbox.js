@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { setStyles } from 'destyle'
 import theme from '../theme'
@@ -22,6 +23,7 @@ setStyles('BB-Checkbox', props => {
       height: ${size}px;
       background: ${props.checked ? theme.color.palette.green : '#FFF'};
       margin-right: 12px;
+      flex-shrink: 0;
     `,
     check: css`
       display: ${props.checked ? 'block' : 'none'};

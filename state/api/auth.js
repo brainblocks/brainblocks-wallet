@@ -1,111 +1,72 @@
-import nextCookie from 'next-cookies'
-import cookie from 'js-cookie'
+/* @flow */
+import log from '~/functions/log'
 import {
   makeApiRequest,
+  makeLocalApiRequest,
+  makeLocalAuthorizedApiRequest,
   makeAuthorizedApiRequest,
   getAuthToken
-} from '~/state/helpers'
-import { isServer } from '~/state'
+} from './helpers'
 
-// Safely attempts to lookup and return the auth token cookie
-export function tryLoadToken() {
-  try {
-    if (isServer) return undefined
-
-    return cookie.get('token')
-  } catch (e) {
-    console.warn('Error while reading token from cookie', e)
-    return undefined
+// Runs in `getInitialProps` only
+export async function init(token: string): Object {
+  if (!token) {
+    throw new Error('No token passed')
   }
-}
 
-// Safely attempts to store an auth token cookie
-export function tryStoreToken(token: string) {
-  try {
-    if (isServer) return
-
-    cookie.set('token', token, { expires: 7 })
-  } catch (e) {
-    console.warn('Error while writing authToken to cookie', e)
-  }
-}
-
-// Safely attempts to delete the auth token cookie
-export function tryDeleteToken() {
-  try {
-    if (isServer) return
-
-    cookie.remove('token')
-  } catch (e) {
-    console.warn('Error while deleting authToken from cookie', e)
-  }
-}
-
-// Isomorphic function to get auth data
-export async function init(token) {
-  let authToken = token || tryLoadToken()
-
-  if (authToken) {
-    const { data } = await makeApiRequest({
-      method: 'get',
-      url: `/auth`,
-      headers: {
-        'x-auth-token': authToken
-      }
-    })
-
-    // Attempt to re-store the toekn from the response in case it's updated
-    tryStoreToken(data.token)
-
-    return data
-  }
-  return false
-}
-
-export async function login(username, password, recaptcha) {
-  // First perform the login to receive an auth token
-  let { data } = await makeApiRequest({
-    method: 'post',
-    url: '/auth',
-    data: { username, password, recaptcha }
+  const { data } = await makeApiRequest({
+    method: 'get',
+    url: `/auth`,
+    headers: {
+      'x-auth-token': token
+    }
   })
-
-  // Keep the auth token in a cookie
-  tryStoreToken(data.token)
 
   return data
 }
 
-export async function logout(token) {
-  // Immediately remove the token from the cookie
-  cookie.remove('token')
+// Runs client-side only, requests from the next server (not API server)
+export async function login(
+  username: string,
+  password: string,
+  recaptcha: string,
+  mfaCode: string
+): Object {
+  let { data } = await makeLocalApiRequest({
+    method: 'post',
+    url: '/auth',
+    data: { username, password, recaptcha, token2fa: mfaCode }
+  })
 
-  // Attempt to make the proper call to the backend as well
-  if (!token) {
-    token = tryLoadToken() || getAuthToken()
-  }
+  return data
+}
+
+export async function logout(): Object {
+  const token = getAuthToken()
   if (token) {
-    const { data } = await makeAuthorizedApiRequest({
-      token,
+    // response header unsets cookie
+    const { data } = await makeLocalAuthorizedApiRequest({
       method: 'delete',
       url: '/auth',
       data: { token }
     })
 
     return data
+  } else {
+    throw new Error('Could not logout - no token found')
   }
 }
 
-export async function verifyPassword(password) {
+export async function verifyPassword(password: string): Promise<boolean> {
   try {
-    let { data } = await makeAuthorizedApiRequest({
+    await makeAuthorizedApiRequest({
       method: 'post',
       url: '/auth/validatepwd',
       data: { password }
     })
     return true
   } catch (e) {
-    console.error('Could not validate password', e)
+    log.error('Could not validate password', e)
     return false
   }
 }

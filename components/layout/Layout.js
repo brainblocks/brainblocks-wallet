@@ -1,11 +1,21 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import { destyle } from 'destyle'
-import Head from 'next/head'
 import Header from './Header'
 import Footer from './Footer'
 
-class Layout extends React.Component {
+type Props = {
+  styles: Object,
+  children: React.Node,
+  headerVariant?: string,
+  footerVariant?: string
+}
+
+type State = {
+  scrollOffset: number
+}
+
+class Layout extends React.Component<Props, State> {
   state = {
     scrollOffset: 0
   }
@@ -25,6 +35,7 @@ class Layout extends React.Component {
 
   handleScroll = () => {
     const { scrollOffset } = this.state
+    // $FlowFixMe
     const top = window.pageYOffset || document.documentElement.scrollTop
     if (
       (top === 0 && scrollOffset !== 0) ||
@@ -41,8 +52,7 @@ class Layout extends React.Component {
       styles,
       children,
       headerVariant = 'full',
-      footerVariant = 'full',
-      ...rest
+      footerVariant = 'full'
     } = this.props
     return (
       <>
@@ -52,20 +62,8 @@ class Layout extends React.Component {
           </div>
         )}
         <div className={styles.root}>
-          <Head>
-            <link
-              href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"
-              rel="stylesheet"
-            />
-            <title>My page title</title>
-            <meta
-              name="viewport"
-              content="initial-scale=1.0, width=device-width"
-              key="viewport"
-            />
-          </Head>
           {children}
-          {footerVariant !== 'none' && (
+          {footerVariant !== 'none' && false && (
             <div className={styles.footer}>
               <Footer variant={footerVariant} />
             </div>

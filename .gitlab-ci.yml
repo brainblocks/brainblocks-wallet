@@ -1,3 +1,6 @@
+# node.js docker image
+image: node:8
+
 before_script:
   ## Install ssh-agent if not already installed, it is required by Docker.
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
@@ -23,13 +26,14 @@ stages:
   - deploy
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
 
 test:
   stage: test
   script:
-    - npm install
+    - npm ci
     - npm run build
     - npm run test
   artifacts:

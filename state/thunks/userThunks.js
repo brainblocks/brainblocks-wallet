@@ -1,8 +1,13 @@
+// @flow
 import { creators } from '~/state/actions/userActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import * as userAPI from '~/state/api/user'
+import type { ThunkAction } from '~/types/reduxTypes'
 
-export const updateUser = user => (dispatch, getState) => {
+export const updateUser: (user: Object) => ThunkAction = user => (
+  dispatch,
+  getState
+) => {
   return new Promise(async (resolve, reject) => {
     const state = getState()
 
@@ -37,10 +42,11 @@ export const updateUser = user => (dispatch, getState) => {
   })
 }
 
-export const enableIpAuth = user => (dispatch, getState) => {
+export const enableIpAuth: (user: Object) => ThunkAction = user => (
+  dispatch,
+  getState
+) => {
   return new Promise(async (resolve, reject) => {
-    const state = getState()
-
     // show we're working
     dispatch(uiCreators.addActiveProcess(`enable-ipauth-${Date.now()}`))
 

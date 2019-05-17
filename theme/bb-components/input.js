@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { setStyles } from 'destyle'
 import theme from '../theme'
@@ -23,6 +24,7 @@ setStyles('BB-Input', props => {
         `};
       &::placeholder {
         color: ${theme.color.text.light};
+        font-weight: 600;
       }
     `
   }

@@ -1,5 +1,5 @@
+// @flow
 import { combineReducers } from 'redux'
-import { reducer as formReducer } from 'redux-form'
 import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 import priceReducer, { priceInitialState } from '~/state/reducers/priceReducer'
 import userReducer, { userInitialState } from '~/state/reducers/userReducer'
@@ -11,9 +11,9 @@ import accountsReducer, {
 import transactionsReducer, {
   transactionsInitialState
 } from '~/state/reducers/transactionsReducer'
+import type { ReduxState } from '~/types/reduxTypes'
 
-export const initialState = {
-  form: {},
+export const initialState: ReduxState = {
   ui: uiInitialState,
   price: priceInitialState,
   user: userInitialState,
@@ -24,7 +24,6 @@ export const initialState = {
 }
 
 const combinedReducers = combineReducers({
-  form: formReducer,
   ui: uiReducer,
   price: priceReducer,
   user: userReducer,

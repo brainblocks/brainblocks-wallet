@@ -1,11 +1,15 @@
-/* @flow */
+// @flow
 import Router from 'next/router'
+import getConfig from 'next/config'
 import nextCookie from 'next-cookies'
 import { creators as authActions } from '~/state/actions/authActions'
 import { creators as uiActions } from '~/state/actions/uiActions'
 import * as AuthAPI from '~/state/api/auth'
 import { getIsAuthorized } from '~/state/selectors/authSelectors'
 import type { NextJSContext } from '~/types'
+
+const { publicRuntimeConfig } = getConfig()
+const { AUTH_TOKEN_COOKIE_KEY } = publicRuntimeConfig
 
 const redirectUnauthorized = res => {
   if (res) {
@@ -24,42 +28,49 @@ const redirectUnauthorized = res => {
  * Run on server for new page loads, and client
  * for page transitions
  */
-export const bootstrapInitialProps = async (ctx: NextJSContext) => {
+export const bootstrapInitialProps: (
+  ctx: NextJSContext
+) => Promise<Object> = async ctx => {
   const { reduxStore, res, pathname } = ctx
+  if (!ctx.hasOwnProperty('reduxStore')) {
+    throw new Error('No Redux Store in bootstrapInitialProps')
+  }
+  // $FlowFixMe
   const { dispatch, getState } = reduxStore
   const props = {}
 
   const state = getState()
   let isAuthorized = getIsAuthorized(state)
 
-  // Get the token from the cookie
-  const { token } = nextCookie(ctx)
-
-  // Add UI process (server only)
+  // If we're on the server
   if (res) {
+    // Add UI process
     dispatch(uiActions.addActiveProcess('hydrating'))
-  }
+    // Get the token from the cookie
+    const cookie = nextCookie(ctx)
+    const token = cookie[AUTH_TOKEN_COOKIE_KEY]
+    // Authorize
+    if (token) {
+      try {
+        const authData = await AuthAPI.init(token)
 
-  if (!isAuthorized) {
-    try {
-      // Authenticate (also gets user)
-      const authData = await AuthAPI.init(token)
-
-      if (authData) {
-        isAuthorized = true
-        // Update redux store (auth + user)
-        dispatch(authActions.update(authData))
+        if (authData) {
+          isAuthorized = true
+          // Update redux store (auth + user)
+          dispatch(authActions.update(authData))
+        }
+      } catch (err) {
+        isAuthorized = false
       }
-    } catch (err) {
-      console.warn('Auth error:', err)
+    } else {
       isAuthorized = false
     }
+  }
 
-    // redirect if still not authorized
-    if (!isAuthorized) {
-      if (pathname !== '/login') {
-        redirectUnauthorized(res)
-      }
+  // redirect if still not authorized
+  if (!isAuthorized) {
+    if (pathname !== '/login') {
+      redirectUnauthorized(res)
     }
   }
 

@@ -1,3 +1,4 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import Color from 'color'
@@ -26,6 +27,9 @@ addStyles('BB-Button', props => {
       ${backgroundGradient(backgroundColor, true)};
       background-position: left top;
       background-size: 200% 150%;
+      @media (max-width: ${theme.bp.small}px) {
+        padding: 0.75em 1.66em;
+      }
       &:hover:not(:disabled) {
         color: #fff;
         background-size: 101% 101%;
@@ -66,11 +70,14 @@ addStyles('BB-Button', props => {
                 .darken(0.2)
                 .toString()};
             }
+            @media (max-width: ${theme.bp.small}px) {
+              padding: 0.3em 0.5em;
+            }
           `
         : null};
       ${props.variant === 'icon'
         ? css`
-            padding: 0;
+            padding: 0 !important;
             width: ${props.size || 24}px;
             height: ${props.size || 24}px;
             border-radius: 100%;

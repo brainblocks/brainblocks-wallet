@@ -4,23 +4,22 @@ import { destyle } from 'destyle'
 import { isValidNanoAddress } from '~/functions/validate'
 import { formatNano, formatFiat } from '~/functions/format'
 import { convert } from '~/functions/convert'
-import {
-  Grid,
-  GridItem,
-  FormItem,
-  FormField,
-  Input,
-  Button,
-  AmountField,
-  withSnackbar
-} from 'brainblocks-components'
+import Grid from 'brainblocks-components/build/Grid'
+import GridItem from 'brainblocks-components/build/GridItem'
+import FormItem from 'brainblocks-components/build/FormItem'
+import FormField from 'brainblocks-components/build/FormField'
+import Input from 'brainblocks-components/build/Input'
+import Button from 'brainblocks-components/build/Button'
+import AmountField from 'brainblocks-components/build/AmountField'
+import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import { Formik } from 'formik'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import type { NormalizedState } from '~/types'
+import type { WithRouter } from '~/types'
+import type { AccountsState } from '~/types/reduxTypes'
+import log from '~/functions/log'
 
-type Props = {
-  router: Object,
-  accounts: NormalizedState,
+type Props = WithRouter & {
+  accounts: AccountsState,
   defaultAccount: string,
   nanoPrice: number,
   preferredCurrency: string,
@@ -50,12 +49,14 @@ class SendForm extends Component<Props, State> {
 
     if (variant === 'transfer') {
       let from = accounts.allIds[0]
+      // XSS-safe
       if (router.query.from && accounts.allIds.includes(router.query.from)) {
         from = router.query.from
       } else if (accounts.allIds.includes(defaultAccount)) {
         from = defaultAccount
       }
       let to = accounts.allIds[1]
+      // XSS-safe
       if (router.query.to && accounts.allIds.includes(router.query.to)) {
         to = router.query.to
       }
@@ -65,9 +66,16 @@ class SendForm extends Component<Props, State> {
       this.initialFrom = from
       this.initialTo = to
     } else {
+      // XSS-safe
       this.initialFrom =
-        router.query.from || defaultAccount || accounts.allIds[0]
-      this.initialTo = router.query.to || ''
+        router.query.from && accounts.allIds.includes(router.query.from)
+          ? router.query.from
+          : defaultAccount || accounts.allIds[0]
+      // XSS-safe, but will need updating when we can send to contacts, aliases etc
+      this.initialTo =
+        Boolean(router.query.to) && isValidNanoAddress(router.query.to)
+          ? router.query.to
+          : ''
     }
   }
 
@@ -107,7 +115,11 @@ class SendForm extends Component<Props, State> {
       errors.amount = 'Required'
     } else if (values.amount <= 0) {
       errors.amount = 'Amount must be positive'
-    } // @todo get account balance here and ensure amount is less
+    } else if (
+      this.getAmountNano(values) > this.props.accounts.byId[values.from].balance
+    ) {
+      errors.amount = 'Insufficient balance'
+    }
 
     return errors
   }
@@ -132,7 +144,7 @@ class SendForm extends Component<Props, State> {
       resetForm({ to: this.initialTo, amount: 0, from: this.initialFrom })
       this.props.onSendComplete()
     } catch (e) {
-      console.error(e)
+      log.error(e)
       this.props.enqueueSnackbar('Could not broadcast transaction', {
         variant: 'error'
       })
@@ -146,7 +158,6 @@ class SendForm extends Component<Props, State> {
       accounts,
       nanoPrice,
       preferredCurrency,
-      defaultAccount,
       router,
       variant = 'send'
     } = this.props
@@ -160,7 +171,9 @@ class SendForm extends Component<Props, State> {
             from: this.initialFrom,
             to: this.initialTo,
             message: '',
-            amount: router.query.amount || 0
+            amount: isNaN(parseFloat(router.query.amount))
+              ? 0
+              : router.query.amount // XSS-safe
           }}
           validate={this.validate}
           onSubmit={this.handleSubmit}
@@ -172,7 +185,8 @@ class SendForm extends Component<Props, State> {
             handleChange,
             handleBlur,
             handleSubmit,
-            isSubmitting
+            isSubmitting,
+            setFieldValue
           }) => {
             const amountFieldNano = this.getAmountNano(values)
             const amountFieldFiat = this.getAmountFiat(values)
@@ -225,7 +239,7 @@ class SendForm extends Component<Props, State> {
                           <Input
                             id="send-to"
                             name="to"
-                            placeholder="NANO address or contact..."
+                            placeholder="NANO address"
                             value={values.to}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -239,6 +253,30 @@ class SendForm extends Component<Props, State> {
                       label="Amount"
                       fieldId="send-amount"
                       error={errors.amount && touched.amount && errors.amount}
+                      extra={
+                        accounts.byId.hasOwnProperty(values.from) && (
+                          <a
+                            href="#"
+                            onClick={e => {
+                              e.preventDefault()
+                              this.setState(
+                                {
+                                  amountFieldEditing: 'nano'
+                                },
+                                () => {
+                                  setFieldValue(
+                                    'amount',
+                                    accounts.byId[values.from].balance,
+                                    true
+                                  )
+                                }
+                              )
+                            }}
+                          >
+                            Max
+                          </a>
+                        )
+                      }
                     >
                       <AmountField
                         value={values.amount}

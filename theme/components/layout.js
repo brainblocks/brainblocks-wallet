@@ -1,4 +1,5 @@
-import { css, injectGlobal } from 'emotion'
+// @flow
+import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
 
@@ -35,5 +36,9 @@ addStyles('Layout', (props, state) => ({
         background: ${theme.color.palette.darkBlue};
       `};
   `,
-  footer: css``
+  footer: css`
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      display: none;
+    }
+  `
 }))

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import Head from 'next/head'
 import Layout from '~/components/layout/Layout'
@@ -7,7 +8,7 @@ import NewAccountSettings from '~/components/accounts/NewAccountSettings'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 
-const NewAccountSettingsPage = props => {
+const NewAccountSettingsPage = () => {
   return (
     <ClientBootstrap>
       <Layout>

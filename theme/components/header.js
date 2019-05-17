@@ -1,3 +1,4 @@
+// @flow
 import { css, injectGlobal } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
@@ -251,7 +252,7 @@ addStyles('Header', props => ({
 injectGlobal`
   @media (max-width: ${theme.bp.tablet - 1}px) {
     body {
-      padding-bottom: 56px;
+      padding-bottom: 50px;
     }
   }
 `

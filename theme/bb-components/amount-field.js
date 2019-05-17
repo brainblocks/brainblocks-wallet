@@ -1,16 +1,21 @@
+// @flow
 import { addStyles } from 'destyle'
 import { css } from 'emotion'
 import theme from '../theme'
 import { styles } from 'brainblocks-components'
 
-const pad = theme.forms.itemPadding.desktop
+const padD = theme.forms.itemPadding.desktop
+const padM = theme.forms.itemPadding.mobile
 
 addStyles('BB-AmountField', props => {
   const libStyles = styles.amountField(props)
   return {
     root: css`
       ${libStyles.root};
-      padding-right: ${pad.r}px;
+      padding-right: ${padD.r}px;
+      @media (max-width: ${theme.bp.small}px) {
+        padding-right: ${padM.r}px;
+      }
     `,
     content: css`
       ${libStyles.content};
@@ -43,7 +48,10 @@ addStyles('BB-AmountField', props => {
       border-top: 1px solid ${theme.color.borders.sep};
       padding-top: 6px;
       padding-right: 4px;
-      margin: 0 0 ${pad.b}px ${pad.l}px;
+      margin: 0 0 ${padD.b}px ${padD.l}px;
+      @media (max-width: ${theme.bp.small}px) {
+        margin: 0 0 ${padM.b}px ${padM.l}px;
+      }
     `,
     bottomVal: css`
       ${libStyles.bottomVal};

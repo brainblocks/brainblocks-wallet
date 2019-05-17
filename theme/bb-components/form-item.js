@@ -1,10 +1,11 @@
+// @flow
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
-import { backgroundGradient } from '../globals/mixins'
 import theme from '../theme'
 import { styles } from 'brainblocks-components'
 
-const pad = theme.forms.itemPadding.desktop
+const padD = theme.forms.itemPadding.desktop
+const padM = theme.forms.itemPadding.mobile
 
 addStyles('BB-FormItem', props => {
   const libStyles = styles.formItem(props)
@@ -19,6 +20,11 @@ addStyles('BB-FormItem', props => {
       margin-bottom: 12px;
       color: ${theme.color.text.headings};
       font-size: 17px;
+      @media (max-width: ${theme.bp.small}px) {
+        margin-left: ${padM.l - 3}px;
+        margin-bottom: 8px;
+        font-size: 15px;
+      }
     `,
     extra: css`
       ${libStyles.extra};
@@ -30,7 +36,10 @@ addStyles('BB-FormItem', props => {
       select,
       textarea,
       .formItemPadding {
-        padding: ${pad.t}px ${pad.r}px ${pad.b}px ${pad.l}px;
+        padding: ${padD.t}px ${padD.r}px ${padD.b}px ${padD.l}px;
+        @media (max-width: ${theme.bp.small}px) {
+          padding: ${padM.t}px ${padM.r}px ${padM.b}px ${padM.l}px;
+        }
       }
     `,
     description: css`
@@ -38,6 +47,10 @@ addStyles('BB-FormItem', props => {
       margin-top: 12px;
       margin-left: 22px;
       color: ${theme.color.text.light};
+      @media (max-width: ${theme.bp.small}px) {
+        margin-left: ${padM.l - 3}px;
+        margin-top: 8px;
+      }
       p {
         margin: 0;
       }

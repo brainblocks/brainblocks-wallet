@@ -1,16 +1,17 @@
 /* @flow */
 import { actions } from '~/state/actions/uiActions'
 import { actions as authActions } from '~/state/actions/authActions'
-import { TRANSACTIONS_PER_PAGE } from '~/constants'
+import { TRANSACTIONS_PER_PAGE } from '~/constants/config'
+import type { UIState, ReduxAction } from '~/types/reduxTypes'
 
-export const uiInitialState = {
+export const uiInitialState: UIState = {
   activeProcesses: [],
   txStartIndex: 0,
   txEndIndex: TRANSACTIONS_PER_PAGE,
   dashboardAccount: 'all'
 }
 
-const uiReducer = (state, action) => {
+const uiReducer = (state: UIState, action: ReduxAction): UIState => {
   if (typeof state === 'undefined' || action.type === authActions.LOGOUT) {
     return uiInitialState
   }
@@ -22,11 +23,10 @@ const uiReducer = (state, action) => {
         activeProcesses: [...state.activeProcesses, action.processId]
       }
     case actions.REMOVE_ACTIVE_PROCESS:
+      var process = action.hasOwnProperty('processId') ? action.processId : ''
       return {
         ...state,
-        activeProcesses: state.activeProcesses.filter(
-          item => item !== action.processId
-        )
+        activeProcesses: state.activeProcesses.filter(item => item !== process)
       }
     case actions.TRANSACTIONS_PAGING_RESET:
       return {
