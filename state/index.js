@@ -14,7 +14,7 @@ export const isServer = typeof window === 'undefined'
 export const isDevelopment = NODE_ENV === 'development'
 
 // Internal cache of the store for client side applications
-let clientSideStore
+let clientSideStore: ?ReduxStore
 
 function initializeStore(initialState) {
   const middleware = []

@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactGA from 'react-ga'
 import Alert from 'brainblocks-components/build/Alert'
 import { destyle } from 'destyle'
 
@@ -26,13 +27,13 @@ const PageHeader = ({
         <Alert destyleMerge={{ root: styles.alert, icon: styles.alertIcon }}>
           We&apos;re in beta! Please test with small amounts of Nano, and leave
           us lots of{' '}
-          <a
-            href="mailto:support@brainblocks.io"
+          <ReactGA.OutboundLink
+            eventLabel="Feedback"
+            to="mailto:support@brainblocks.io"
             target="_blank"
-            rel="noopener noreferrer"
           >
             feedback
-          </a>
+          </ReactGA.OutboundLink>
           .
         </Alert>
         <div className={styles.inner}>

@@ -2,11 +2,12 @@
 import 'focus-visible/dist/focus-visible.js'
 import App, { Container } from 'next/app'
 import React from 'react'
+import ReactGA from 'react-ga'
 import { Provider } from 'react-redux'
 import '~/theme'
 import theme from '~/theme/theme'
 import { creators as uiActions } from '~/state/actions/uiActions'
-import { withReduxStore } from '~/state'
+import { withReduxStore, isServer } from '~/state'
 import Snackbar from 'brainblocks-components/build/Snackbar'
 import ReactBreakpoints from 'react-breakpoints'
 import CheckIcon from '~/static/svg/icons/alert-check.svg'
@@ -16,6 +17,7 @@ import CrossIcon from '~/static/svg/icons/alert-cross.svg'
 import ErrorBoundary from '~/components/error/ErrorBoundary'
 import { hydrate } from 'emotion'
 import type { ReduxStore } from '~/types/reduxTypes'
+import '~/state/router'
 
 if (typeof window !== 'undefined') {
   hydrate(window.__NEXT_DATA__.ids)
@@ -26,9 +28,19 @@ type Props = {
 }
 
 class MyApp extends App<Props> {
+  constructor(props) {
+    super(props)
+    if (!isServer) {
+      ReactGA.initialize('UA-130957297-3')
+      ReactGA.pageview(props.router.asPath)
+    }
+  }
+
   componentDidMount() {
     // this action is added by bootstrapInitialProps on the server
-    this.props.reduxStore.dispatch(uiActions.removeActiveProcess('hydrating'))
+    if (!isServer) {
+      this.props.reduxStore.dispatch(uiActions.removeActiveProcess('hydrating'))
+    }
   }
 
   render() {
