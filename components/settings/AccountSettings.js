@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactGA from 'react-ga'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
@@ -221,13 +222,13 @@ class AccountSettings extends React.Component<Props, State> {
                 'Please enter a valid Nano address'
               }
               extra={
-                <a
-                  href="https://mynano.ninja/"
+                <ReactGA.OutboundLink
+                  eventLabel="Choose a rep"
+                  to="https://mynano.ninja/"
                   target="_blank"
-                  rel="noopener noreferrer"
                 >
                   Choose a rep
-                </a>
+                </ReactGA.OutboundLink>
               }
               description={
                 accountRep

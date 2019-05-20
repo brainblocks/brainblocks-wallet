@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactGA from 'react-ga'
 import { destyle } from 'destyle'
 import { compose } from 'redux'
 import Menu from 'brainblocks-components/build/Menu'
@@ -51,6 +52,12 @@ class AccountMenu extends React.Component<Props> {
   }
 
   handleViewInExplorer = () => {
+    ReactGA.outboundLink(
+      {
+        label: 'View account in explorer'
+      },
+      () => {}
+    )
     this.props.onClose()
     const explorerWindow = window.open(
       `https://nanocrawler.cc/explorer/account/${

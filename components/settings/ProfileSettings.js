@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactGA from 'react-ga'
 import { destyle } from 'destyle'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
@@ -54,13 +55,13 @@ const ProfileSettings = ({ user, styles, ...rest }: Props) => (
                 }?gravatar=yes&set=set3&bgset=bg2&size=44x44`}
                 alt={user.username}
               />
-              <a
-                href="https://gravatar.com/"
+              <ReactGA.OutboundLink
+                eventLabel="Change avatar"
+                to="https://gravatar.com/"
                 target="_blank"
-                rel="noopener noreferrer"
               >
                 Create/change your avatar at Gravatar.com
-              </a>
+              </ReactGA.OutboundLink>
             </div>
           </FormField>
         </FormItem>

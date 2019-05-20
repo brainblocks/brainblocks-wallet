@@ -52,6 +52,7 @@
     "react-breakpoints": "^3.0.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.5.7",
     "react-redux": "^5.0.7",
     "recharts": "^1.3.6",
     "redux": "^4.0.0",

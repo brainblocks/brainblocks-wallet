@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactGA from 'react-ga'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 import {
@@ -64,8 +65,7 @@ type State = {
  * ClientBootstrap
  * This is a special component that wraps every page
  * and coordinates redirection and initial
- * redux hydration of anything that we only want to get
- * on the client (E.g. Nano price).
+ * redux and wallet hydration.
  */
 class Bootstrap extends React.Component<Props, State> {
   isGettingVault = false
@@ -135,6 +135,7 @@ class Bootstrap extends React.Component<Props, State> {
   componentDidMount() {
     const didRedirect = this.maybeRedirect()
     if (!didRedirect) {
+      this.setGAData()
       this.getPrice()
       this.getVault()
       this.createWallet()
@@ -144,10 +145,11 @@ class Bootstrap extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (!this.state.error) {
       const didRedirect = this.maybeRedirect()
       if (!didRedirect) {
+        this.setGAData(prevProps)
         this.getVault()
         this.createWallet()
         this.addAccounts()
@@ -220,6 +222,15 @@ class Bootstrap extends React.Component<Props, State> {
     }*/
 
     return false
+  }
+
+  setGAData = prevProps => {
+    if (
+      this.props.user.id &&
+      (!prevProps || prevProps.user.id !== this.props.user.id)
+    ) {
+      ReactGA.set({ userId: this.props.user.id })
+    }
   }
 
   getVault = () => {

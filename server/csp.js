@@ -63,7 +63,8 @@ module.exports = function useCsp(app) {
           "'self'",
           'data:',
           'https://robohash.org',
-          'https://secure.gravatar.com'
+          'https://secure.gravatar.com',
+          'https://www.google-analytics.com'
         ]
       }
     })
