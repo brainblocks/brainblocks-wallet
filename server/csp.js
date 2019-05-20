@@ -50,6 +50,7 @@ module.exports = function useCsp(app) {
           'wss://staging.app.brainblocks.io',
           'webpack:',
           'https://fonts.googleapis.com',
+          'https://fonts.gstatic.com',
           'https://robohash.org',
           'https://secure.gravatar.com',
           'https://www.google.com',
@@ -63,7 +64,8 @@ module.exports = function useCsp(app) {
           "'self'",
           'data:',
           'https://robohash.org',
-          'https://secure.gravatar.com'
+          'https://secure.gravatar.com',
+          'https://www.google-analytics.com'
         ]
       }
     })
