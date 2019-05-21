@@ -1,20 +1,46 @@
 // @flow
-import Router from 'next/router'
 import ReactGA from 'react-ga'
-import { getClientSideStore } from '~/state'
-import { creators as UIActions } from '~/state/actions/uiActions'
+// import { getClientSideStore } from '~/state'
+// import { creators as UIActions } from '~/state/actions/uiActions'
 
-Router.events.on('routeChangeStart', url => {
-  const reduxStore = getClientSideStore()
-  if (reduxStore) {
-    reduxStore.dispatch(UIActions.addActiveProcess('Routing'))
-  }
-})
+/**
+ * The commented functions here add a loading spinner during routing
+ * They are commented because they create an infinite redirect on
+ * logout (and potentially other instances where ClientBootstrap)
+ * redirects. Maybe one day we can revisit...
+ */
 
-Router.events.on('routeChangeComplete', url => {
-  const reduxStore = getClientSideStore()
-  if (reduxStore) {
-    reduxStore.dispatch(UIActions.removeActiveProcess('Routing'))
-  }
+function startRouting(url: string): void {
+  // const reduxStore = getClientSideStore()
+  // if (reduxStore) {
+  //   reduxStore.dispatch(UIActions.addActiveProcess(`Routing to ${url}`))
+  // }
+}
+
+// function removeRoutingProcess(url: string): void {
+//   const reduxStore = getClientSideStore()
+//   if (reduxStore) {
+//     reduxStore.dispatch(UIActions.addActiveProcess(`Routing to ${url}`))
+//   }
+// }
+
+function finishRouting(url: string): void {
+  // removeRoutingProcess(url)
   ReactGA.pageview(url)
-})
+}
+
+function routingError(err: Object, url: string): void {
+  // if (err.cancelled) {
+  //   removeRoutingProcess(url)
+  // }
+}
+
+export function setupRouterEvents(router: Object): void {
+  router.events.off('routeChangeStart', startRouting)
+  router.events.off('routeChangeComplete', finishRouting)
+  router.events.off('routeChangeError', routingError)
+
+  router.events.on('routeChangeStart', startRouting)
+  router.events.on('routeChangeComplete', finishRouting)
+  router.events.on('routeChangeError', routingError)
+}

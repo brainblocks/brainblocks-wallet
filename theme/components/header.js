@@ -187,6 +187,14 @@ addStyles('Header', props => ({
       display: flex;
       align-items: center;
       color: #808080;
+      a {
+        display: flex;
+        align-items: center;
+        color: #808080;
+        &:hover {
+          color: #404040;
+        }
+      }
       &:hover {
         color: #404040;
       }

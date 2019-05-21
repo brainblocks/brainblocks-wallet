@@ -29,7 +29,7 @@ const PageHeader = ({
           us lots of{' '}
           <ReactGA.OutboundLink
             eventLabel="Feedback"
-            to="mailto:support@brainblocks.io"
+            to="https://brainblockshelp.freshdesk.com/support/tickets/new"
             target="_blank"
           >
             feedback
