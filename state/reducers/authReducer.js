@@ -1,6 +1,5 @@
 // @flow
 import { actions } from '~/state/actions/authActions'
-import produce from 'immer'
 import type { AuthState, ReduxAction } from '~/types/reduxTypes'
 
 export const authInitialState: AuthState = {
@@ -21,31 +20,30 @@ const authReducer: (state: AuthState, action: ReduxAction) => AuthState = (
     return authInitialState
   }
 
-  return produce(state, draft => {
-    switch (action.type) {
-      case actions.UPDATE:
-        var payload = { ...action.payload }
-        // delete anything from payload here
-        draft = {
-          ...draft,
-          ...payload,
-          isChecking: false,
-          isAuthorized: true,
-          didCheck: true
-        }
+  switch (action.type) {
+    case actions.UPDATE: {
+      var payload = { ...action.payload }
+      // delete anything from payload here
+      const auth = {
+        ...state,
+        ...payload,
+        isChecking: false,
+        isAuthorized: true,
+        didCheck: true
+      }
 
-        if (payload.hasOwnProperty('user')) {
-          draft.user = payload.user.id
-        }
-        break
-
-      // Assume that logout will work for immediate response
-      case actions.LOGOUT:
-        draft = authInitialState
-        break
+      if (payload.hasOwnProperty('user')) {
+        auth.user = payload.user.id
+      }
+      return auth
     }
-    return draft
-  })
+    // Assume that logout will work for immediate response
+    case actions.LOGOUT:
+      return authInitialState
+
+    default:
+      return state
+  }
 }
 
 export default authReducer

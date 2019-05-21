@@ -20,7 +20,7 @@ module.exports = function useCsp(app) {
 
   const nonce = (req, res) => `'nonce-${res.locals.nonce}'`
 
-  const scriptSrc = [nonce, "'strict-dynamic'", 'https:']
+  const scriptSrc = [nonce, "'self'", 'https:']
 
   // In dev we allow 'unsafe-eval', so HMR doesn't trigger the CSP
   if (process.env.NODE_ENV !== 'production') {
@@ -54,7 +54,9 @@ module.exports = function useCsp(app) {
           'https://robohash.org',
           'https://secure.gravatar.com',
           'https://www.google.com',
-          'https://www.gstatic.com'
+          'https://www.gstatic.com',
+          'https://ajax.cloudflare.com',
+          'https://www.googletagmanager.com'
         ],
         scriptSrc,
         // styleSrc: [nonce, "'strict-dynamic'", 'https://fonts.googleapis.com'], // Helmet doesn't allow strict-dynamic. I don't think there is any XSS possibility with our inline styles anyway.

@@ -23,9 +23,10 @@ export const getWs: () => WebSocket = () => {
 }
 
 export const closeWs: () => void = () => {
-  const ws = getWs()
-  ws.close()
-  socket = null
+  if (socket) {
+    socket.close()
+    socket = null
+  }
 }
 
 export const subscribeAccounts: (accounts: string[]) => void = accounts => {
