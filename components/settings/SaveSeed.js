@@ -32,13 +32,13 @@ class SaveSeed extends React.Component<Props, State> {
     passwordError: ''
   }
 
-  handleUpdatePassword = e => {
+  handleUpdatePassword = (e: Object) => {
     this.setState({
       password: e.target.value
     })
   }
 
-  handleUnlockSeed = e => {
+  handleUnlockSeed = (e: Object) => {
     let seed
     const wallet = getWallet()
     try {

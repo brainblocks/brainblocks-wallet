@@ -38,6 +38,17 @@ export const destroyWallet = () => {
   cachedWallet = null
 }
 
+export const isPasswordCorrect = (password: string) => {
+  const wallet = getWallet()
+  try {
+    wallet.changePass(password, 'temppassword')
+    wallet.changePass('temppassword', password)
+  } catch (e) {
+    return false
+  }
+  return true
+}
+
 /**
  * Pack the wallet and update it on the server
  */

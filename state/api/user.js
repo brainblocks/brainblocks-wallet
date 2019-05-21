@@ -83,3 +83,21 @@ export async function updateUser(user: Object): Promise<Object> {
 
   return data
 }
+
+export async function updatePassword(
+  currentPassword: string,
+  newPassword: string,
+  wallet: string
+): Promise<Object> {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'patch',
+    url: '/users/password',
+    data: {
+      currentPassword,
+      newPassword,
+      wallet
+    }
+  })
+
+  return data
+}

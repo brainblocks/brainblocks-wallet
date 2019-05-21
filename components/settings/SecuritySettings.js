@@ -78,7 +78,7 @@ class SecuritySettings extends React.Component<Props, State> {
               <LazyChangePassword
                 username={user.username}
                 onCancel={this.handleTogglePasswordForm}
-                onUpdateUser={onUpdateUser}
+                enqueueSnackbar={enqueueSnackbar}
               />
             ) : (
               <Button onClick={this.handleTogglePasswordForm}>
