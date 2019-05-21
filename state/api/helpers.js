@@ -52,9 +52,9 @@ function authorizedRequest(
   }
 
   const options = {
-    headers: {},
     ...opts
   }
+  options.headers = options.headers || {}
   options.headers['x-auth-token'] = authToken
 
   if (local) {
@@ -68,12 +68,12 @@ export function makeAuthorizedApiRequest(
   opts: Object,
   shouldThrow: ?boolean
 ): Promise<Object> {
-  return authorizedRequest(opts, shouldThrow, false)
+  return authorizedRequest(opts, shouldThrow === true, false)
 }
 
 export function makeLocalAuthorizedApiRequest(
   opts: Object,
   shouldThrow: ?boolean
 ): Promise<Object> {
-  return authorizedRequest(opts, shouldThrow, true)
+  return authorizedRequest(opts, shouldThrow === true, true)
 }

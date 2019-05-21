@@ -13,12 +13,15 @@ import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
+import LifeBuoyIcon from '~/static/svg/icons/lifebuoy.svg'
+import ExclaimIcon from '~/static/svg/icons/alert-exclaim.svg'
 import Popover from 'brainblocks-components/build/Popover'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { logout } from '~/state/thunks/authThunks'
 import type { WithRouter } from '~/types'
 import type { UserState } from '~/types/reduxTypes'
+import ReactGA from 'react-ga'
 
 const menuItems = [
   {
@@ -251,6 +254,36 @@ class Header extends React.Component<Props, State> {
                           </i>
                           <span>Contacts</span>
                         </li>*/}
+                        <li
+                          className={styles.userMenuSupport}
+                          onClick={this.logout}
+                        >
+                          <ReactGA.OutboundLink
+                            eventLabel="Support"
+                            to="https://brainblockshelp.freshdesk.com/"
+                            target="_blank"
+                          >
+                            <i>
+                              <LifeBuoyIcon />
+                            </i>
+                            <span>Support</span>
+                          </ReactGA.OutboundLink>
+                        </li>
+                        <li
+                          className={styles.userMenuFeedback}
+                          onClick={this.logout}
+                        >
+                          <ReactGA.OutboundLink
+                            eventLabel="Feedback"
+                            to="https://brainblockshelp.freshdesk.com/support/tickets/new"
+                            target="_blank"
+                          >
+                            <i>
+                              <ExclaimIcon />
+                            </i>
+                            <span>Feedback</span>
+                          </ReactGA.OutboundLink>
+                        </li>
                         <li
                           className={styles.userMenuLogout}
                           onClick={this.logout}

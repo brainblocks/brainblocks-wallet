@@ -9,7 +9,7 @@ import {
 } from './helpers'
 
 // Runs in `getInitialProps` only
-export async function init(token: string): Object {
+export async function init(token: string): Promise<Object> {
   if (!token) {
     throw new Error('No token passed')
   }
@@ -31,7 +31,7 @@ export async function login(
   password: string,
   recaptcha: string,
   mfaCode: string
-): Object {
+): Promise<Object> {
   let { data } = await makeLocalApiRequest({
     method: 'post',
     url: '/auth',
@@ -41,7 +41,7 @@ export async function login(
   return data
 }
 
-export async function logout(): Object {
+export async function logout(): Promise<Object> {
   const token = getAuthToken()
   if (token) {
     // response header unsets cookie

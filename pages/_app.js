@@ -17,7 +17,6 @@ import CrossIcon from '~/static/svg/icons/alert-cross.svg'
 import ErrorBoundary from '~/components/error/ErrorBoundary'
 import { hydrate } from 'emotion'
 import type { ReduxStore } from '~/types/reduxTypes'
-import '~/state/router'
 
 if (typeof window !== 'undefined') {
   hydrate(window.__NEXT_DATA__.ids)
