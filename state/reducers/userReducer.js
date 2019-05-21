@@ -1,7 +1,6 @@
 // @flow
 import { actions } from '~/state/actions/userActions'
 import { actions as authActions } from '~/state/actions/authActions'
-import produce from 'immer'
 import type { UserState, ReduxAction } from '~/types/reduxTypes'
 
 export const userInitialState: UserState = {
@@ -25,18 +24,16 @@ const userReducer: (state: ?UserState, action: ReduxAction) => ?UserState = (
     return userInitialState
   }
 
-  return produce(state, draft => {
-    switch (action.type) {
-      case actions.UPDATE:
-        draft = { ...draft, ...action.payload }
-        break
+  switch (action.type) {
+    case actions.UPDATE:
+      return { ...state, ...action.payload }
 
-      case authActions.UPDATE:
-        draft = { ...draft, ...action.payload.user }
-        break
-    }
-    return draft
-  })
+    case authActions.UPDATE:
+      return { ...state, ...action.payload.user }
+
+    default:
+      return state
+  }
 }
 
 export default userReducer

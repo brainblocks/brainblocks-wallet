@@ -65,7 +65,6 @@ const accountsReducer: (
       case actions.DELETE_ACCOUNT:
         break
     }
-    return draft
   })
 }
 

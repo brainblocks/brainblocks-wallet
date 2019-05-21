@@ -15,6 +15,7 @@ import {
   getCurrentAuth,
   getIsAuthorized
 } from '~/state/selectors/authSelectors'
+import { getActiveProcesses } from '~/state/selectors/uiSelectors'
 import { updatePrice } from '~/state/thunks/priceThunks'
 import Loading from '~/pages/loading'
 import Error from '~/pages/_error'
@@ -34,6 +35,7 @@ import type {
   AccountsState
 } from '~/types/reduxTypes'
 import log from '~/functions/log'
+import { setupRouterEvents } from '~/state/router'
 
 type Props = WithRouter & {
   children: React.Node,
@@ -49,6 +51,7 @@ type Props = WithRouter & {
   cipheredWallet: string,
   accounts: AccountsState,
   didGetChainForAnyAccount: boolean,
+  activeProcesses: Array<string>,
   // From mapDispatchToProps
   updatePrice: (?boolean) => Promise<void>,
   importChains: (?Array<Object>) => Promise<void>,
@@ -133,6 +136,7 @@ class Bootstrap extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    setupRouterEvents(this.props.router)
     const didRedirect = this.maybeRedirect()
     if (!didRedirect) {
       this.setGAData()
@@ -167,6 +171,17 @@ class Bootstrap extends React.Component<Props, State> {
   // returns true if redirected
   maybeRedirect: () => boolean = () => {
     const { router } = this.props
+
+    // Never redirect if we are already routing
+    // but return true to prevent the rest of the
+    // bootstrapping functions from running
+    if (
+      this.props.activeProcesses.find(
+        process => process.indexOf(`Routing to`) === 0
+      )
+    ) {
+      return true
+    }
 
     // Redirect unauthorized to login page
     if (!this.isAuthorized && router.pathname !== '/login') {
@@ -373,7 +388,8 @@ const mapStateToProps = state => ({
   accounts: getAccounts(state),
   didGetChainForAnyAccount: getDidGetChainForAnyAccount(state),
   transactions: getTransactions(state),
-  cipheredWallet: getCipheredWallet(state)
+  cipheredWallet: getCipheredWallet(state),
+  activeProcesses: getActiveProcesses(state)
 })
 
 const mapDispatchToProps = dispatch => ({
