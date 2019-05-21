@@ -8,11 +8,7 @@ import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import { validate as isEmail } from 'isemail'
 import { Formik } from 'formik'
-import zxcvbn from 'zxcvbn'
-
-const testPassword = (password, username) => {
-  return zxcvbn(password, [username, 'brainblocks'])
-}
+import { testPassword } from '~/functions/password'
 
 type Props = {
   submitting: boolean,
