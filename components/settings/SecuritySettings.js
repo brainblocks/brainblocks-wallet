@@ -1,21 +1,30 @@
 // @flow
 import * as React from 'react'
+import dynamic from 'next/dynamic'
 import { destyle } from 'destyle'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
-import FormItem from 'brainblocks-components/build/FormItem'
-import FormField from 'brainblocks-components/build/FormField'
-import Input from 'brainblocks-components/build/Input'
 import Button from 'brainblocks-components/build/Button'
 import Typography from 'brainblocks-components/build/Typography'
+import Spinner from 'brainblocks-components/build/Spinner'
 //import Checkbox from 'brainblocks-components/build/Checkbox'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { getWallet } from '~/state/wallet'
 import MFASettings from '~/components/settings/MFASettings'
+import SaveSeed from '~/components/settings/SaveSeed'
 
-const initialSeed =
-  '0000000000000000000000000000000000000000000000000000000000000000000000'
+// ChangePassword contains zxcvbn which we want to avoid loading if possible
+const LazyChangePassword = dynamic(
+  () => import('~/components/settings/ChangePassword'),
+  {
+    ssr: false,
+    // eslint-disable-next-line react/display-name
+    loading: () => (
+      <div style={{ margin: '50px auto' }}>
+        <Spinner />
+      </div>
+    )
+  }
+)
 
 type Props = {
   user: Object,
@@ -26,68 +35,60 @@ type Props = {
 }
 
 type State = {
-  seed: string,
-  seedInputType: string,
-  password: string,
-  passwordError: string
+  isUpdatingPassword: boolean,
+  isSeedFormActive: boolean
 }
 
 class SecuritySettings extends React.Component<Props, State> {
   state = {
-    seed: initialSeed,
-    seedInputType: 'password',
-    password: '',
-    passwordError: ''
+    isUpdatingPassword: false,
+    isSeedFormActive: false
   }
 
-  handleUpdatePassword = e => {
-    this.setState({
-      password: e.target.value
-    })
+  handleToggleSeedForm = () => {
+    this.setState(prevState => ({
+      isSeedFormActive: !prevState.isSeedFormActive
+    }))
   }
 
-  handleUnlockSeed = e => {
-    let seed
-    const wallet = getWallet()
-    try {
-      seed = wallet.getSeed(this.state.password)
-    } catch (e) {
-      this.setState({ passwordError: 'Incorrect password' })
-      return
-    }
-    this.setState(
-      {
-        seed,
-        password: '',
-        passwordError: '',
-        seedInputType: 'input'
-      },
-      () => {
-        this.props.enqueueSnackbar('Seed will be visible for 30 seconds', {
-          variant: 'info'
-        })
-        setTimeout(() => {
-          this.setState({
-            seed: initialSeed,
-            seedInputType: 'password'
-          })
-        }, 30 * 1000)
-      }
-    )
-  }
-
-  handleCopySeed = () => {
-    this.props.enqueueSnackbar('Seed copied to clipboard', {
-      variant: 'info'
-    })
+  handleTogglePasswordForm = () => {
+    this.setState(prevState => ({
+      isUpdatingPassword: !prevState.isUpdatingPassword
+    }))
   }
 
   render() {
     const { styles, user, onUpdateUser, enqueueSnackbar }: Props = this.props
-    const { seed, password, passwordError, seedInputType } = this.state
+    const { isUpdatingPassword, isSeedFormActive } = this.state
     return (
       <div className={styles.root}>
         <Grid>
+          <GridItem>
+            <div className={styles.textWrap}>
+              <Typography el="h3" spaceAbove={0} spaceBelow={1}>
+                Change your password
+              </Typography>
+              <Typography el="p" spaceBelow={1.66}>
+                Computers can quickly test millions of passwords when trying to
+                access your account. Choosing a strong, unique password is
+                important to secure your funds.
+              </Typography>
+            </div>
+            {isUpdatingPassword ? (
+              <LazyChangePassword
+                username={user.username}
+                onCancel={this.handleTogglePasswordForm}
+                onUpdateUser={onUpdateUser}
+              />
+            ) : (
+              <Button onClick={this.handleTogglePasswordForm}>
+                Change Password
+              </Button>
+            )}
+          </GridItem>
+          <GridItem>
+            <hr className={styles.divider} />
+          </GridItem>
           <GridItem>
             <div className={styles.textWrap}>
               <Typography el="h3" spaceAbove={0} spaceBelow={1}>
@@ -101,59 +102,14 @@ class SecuritySettings extends React.Component<Props, State> {
                 money.
               </Typography>
             </div>
-            <Grid>
-              <GridItem>
-                <FormItem label="Seed" fieldId="wallet-seed">
-                  <FormField
-                    adornEnd={
-                      seed !== initialSeed && (
-                        <CopyToClipboard
-                          text={seed}
-                          onCopy={this.handleCopySeed}
-                        >
-                          <Button variant="util">Copy</Button>
-                        </CopyToClipboard>
-                      )
-                    }
-                  >
-                    <Input
-                      id="wallet-seed"
-                      type={seedInputType}
-                      readOnly
-                      value={seed}
-                    />
-                  </FormField>
-                </FormItem>
-              </GridItem>
-              <GridItem>
-                <FormItem
-                  label="Enter your password to show your seed"
-                  fieldId="seed-password"
-                  error={passwordError}
-                >
-                  <FormField
-                    adornEnd={
-                      password !== '' && (
-                        <Button
-                          variant="util"
-                          color="teal"
-                          onClick={this.handleUnlockSeed}
-                        >
-                          Unlock
-                        </Button>
-                      )
-                    }
-                  >
-                    <Input
-                      id="seed-password"
-                      type="password"
-                      onChange={this.handleUpdatePassword}
-                      value={password}
-                    />
-                  </FormField>
-                </FormItem>
-              </GridItem>
-            </Grid>
+            {isSeedFormActive ? (
+              <SaveSeed
+                onCancel={this.handleToggleSeedForm}
+                enqueueSnackbar={enqueueSnackbar}
+              />
+            ) : (
+              <Button onClick={this.handleToggleSeedForm}>Save Seed</Button>
+            )}
           </GridItem>
           <GridItem>
             <hr className={styles.divider} />
