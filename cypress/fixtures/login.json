@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "user": {
+    "id": "aedb92d3-1842-42b7-8a33-5f50c50247e9",
+    "email": "testuser@example.com",
+    "username": "testuser1",
+    "firstName": null,
+    "lastName": null,
+    "birthday": null,
+    "preferredCurrency": "usd",
+    "defaultAccount": null,
+    "hasVerifiedEmail": true,
+    "is2FAEnabled": false,
+    "vault": {
+      "wallet": "1c05611b3761e9552dee0add6077ed91a1756177ff2fed33cffd573bce227391ac3c2573543fcccbc9740bc13093c688e2fc3be356690861e99da1831409155456e11a39369905c0c9a30bf6bcbe5d2c721cba4223cd8f8e4c8adeace22039580fd59917ba45038c74b855107bf9fa68ff882da0df3d61d300e1a9d44cc9a96b4dcff6ee9f041c77a37f21ee64669028518afaa355d088f8bf7707a62e74c8cd2a0cebdfe0d98bcde37972231cfdc29ea7b6ac6af0be2a45238a2f35ee8c7590f26edc5f8b6ed4abfa3d88d2cd232163a8e0d10fdee982f77e57d1352023ca94fad2f6068381f7d6cb55189272188390ee6b3a1cb18f930c461da8f1f9cc83f4c5162677183e9bbe87b9e78e49f8aa139c6c4d1d655229519cd1186a6e4fdd978e91edee32a61bfeddadb79a9b49a96d3f72f7956b7267996721c6be99003e999b79d79752b7021f4134c9813356cfed",
+      "identifier": "fe9e8351-2865-4092-8f8d-bdece8a5d83d"
+    }
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksInV1aWQiOiJhZWRiOTJkMy0xODQyLTQyYjctOGEzMy01ZjUwYzUwMjQ3ZTkiLCJ0eXBlIjoiYXV0aCIsImV4cGlyZXMiOiIyMDE5LTA2LTIxVDA4OjUwOjQxLjEzM1oiLCJpYXQiOjE1NTg1MTUwNDF9.8SvxWsVdh9bTnZbKitUiHDJPGVOUaa8bRYZvkkyh5Qo",
+  "expires": "2019-06-21T08:50:41.133Z"
+}
