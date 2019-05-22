@@ -26,8 +26,7 @@ module.exports = {
   plugins: ['react', 'prettier', 'flowtype', 'cypress', 'chai-friendly'],
   rules: {
     'prettier/prettier': 'error',
-    'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
-    'chai-friendly/no-unused-expressions': 2
+    'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }]
   },
   settings: {
     react: {
