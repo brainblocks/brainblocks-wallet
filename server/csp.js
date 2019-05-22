@@ -25,6 +25,8 @@ module.exports = function useCsp(app) {
   // In dev we allow 'unsafe-eval', so HMR doesn't trigger the CSP
   if (process.env.NODE_ENV !== 'production') {
     scriptSrc.push("'unsafe-eval'")
+    scriptSrc.push("'strict-dynamic'")
+    scriptSrc.push('webpack:')
   }
 
   app.use(
