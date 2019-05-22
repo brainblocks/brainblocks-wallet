@@ -27,7 +27,7 @@
     "brainblocks-components": "git+https://gitlab+deploy-token-1:inPbzBjEPLPpaBwhd_Pw@git.brainblocks.io/brainblocks/brainblocks-react-components.git#master",
     "color": "^3.1.0",
     "compression": "^1.7.4",
-    "date-fns": "^1.30.1",
+    "dayjs": "^1.8.14",
     "destyle": "^0.3.0",
     "dotenv": "^6.2.0",
     "emotion": "^9.2.12",
