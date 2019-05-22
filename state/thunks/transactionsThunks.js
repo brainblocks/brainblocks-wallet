@@ -51,7 +51,14 @@ export const importChains: (
     }
 
     // put them into the wallet
-    const reduxTxs = populateChains(accountsObject)
+    let reduxTxs
+    try {
+      reduxTxs = populateChains(accountsObject)
+    } catch (e) {
+      dispatch(uiCreators.removeActiveProcess(`get-chains-${time}`))
+      log.error('Error populating chains', e)
+      return reject('Error populating chains')
+    }
 
     // update redux transactions
     dispatch(creators.bulkAddTransactions(reduxTxs))

@@ -94,10 +94,10 @@ class AccountSettings extends React.Component<Props, State> {
   handleUpdateAccount = (
     account,
     successMsg = 'Account settings updated',
-    errorMsg = "Could'nt update account settings"
+    errorMsg = "Couldn't update account settings"
   ) => {
     const acc = { ...account, account: this.state.account }
-    if (!isValidAccountName(acc.label)) {
+    if (acc.label && !isValidAccountName(acc.label)) {
       log.error('Account label invalid')
       return
     }
