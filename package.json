@@ -13,6 +13,8 @@
     "start-prod": "NODE_ENV=production PORT=3010 node server/index.js",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
+    "cy:verify": "cypress verify",
+    "cy:version": "cypress version",
     "cy:test": "RECAPTCHA_REQUIRED=false start-server-and-test start http://localhost:3000 cy:run",
     "jest": "jest",
     "flow": "flow",
