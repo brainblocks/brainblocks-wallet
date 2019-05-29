@@ -24,7 +24,6 @@ stages:
   - test
   - staging
   - deploy
-  
 
 variables:
   npm_config_cache: "$CI_PROJECT_DIR/.npm"
@@ -41,7 +40,6 @@ test:
   stage: test
   script:
     - npm ci
-    - $(npm bin)/print-env CI
     - npm run cy:verify
     - npm run test
     - npm run build
