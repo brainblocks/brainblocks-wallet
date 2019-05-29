@@ -1,5 +1,5 @@
 # node.js docker image
-image: node:8
+image: cypress/base:10
 
 before_script:
   ## Install ssh-agent if not already installed, it is required by Docker.
@@ -24,24 +24,36 @@ stages:
   - test
   - staging
   - deploy
+  
+
+variables:
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+    - node_modules
+    - .npm
+    - cache/Cypress
 
 test:
   stage: test
   script:
-    - apt-get update -y
-    - apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 -y
     - npm ci
-    - npm run build
+    - $(npm bin)/print-env CI
+    - npm run cy:verify
     - npm run test
+    - npm run build
   artifacts:
+    when: always
     paths:
-      - node_modules/
-      - .next/
+      - node_modules
+      - .next
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
+    expire_in: 1 day
+      
 
 staging:
   stage: staging
