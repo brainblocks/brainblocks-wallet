@@ -48,8 +48,8 @@ test:
     paths:
       - node_modules
       - .next
-      - cypress/videos/**/*.mp4
-      - cypress/screenshots/**/*.png
+      #- cypress/videos/**/*.mp4
+      #- cypress/screenshots/**/*.png
     expire_in: 1 day
       
 
