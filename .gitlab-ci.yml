@@ -20,6 +20,10 @@ before_script:
   - ssh-keyscan git.brainblocks.io >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
+  # Create the dotenv file from the gitlab env variables so that npm run cy:env works
+  - chmod +x ./setup_env.sh
+  - ./setup_env.sh
+
 stages:
   - test
   - staging
