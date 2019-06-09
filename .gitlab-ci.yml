@@ -22,7 +22,7 @@ before_script:
 
   # Create the dotenv file from the gitlab env variables so that npm run cy:env works
   - chmod +x ./setup-env.sh
-  - ./setup_env.sh
+  - ./setup-env.sh
 
 stages:
   - test
