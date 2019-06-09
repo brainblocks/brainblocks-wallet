@@ -57,14 +57,14 @@ class EmailVerification extends Component<Props, State> {
 
   get hash() {
     // XSS-safe via validation
-    return isBcryptHash(this.props.router.query.hash)
+    return isBcryptHash(decodeURIComponent(this.props.router.query.hash))
       ? this.props.router.query.hash
       : null
   }
 
   get verification() {
     // XSS-safe via validation
-    return isHex(this.props.router.query.verification)
+    return isHex(decodeURIComponent(this.props.router.query.verification))
       ? this.props.router.query.verification
       : null
   }

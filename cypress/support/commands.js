@@ -1,25 +1,23 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import { users } from '../support/config'
+
+/**
+ * Visit a page that requires auth
+ * This will attempt to load the page, be redirected to login,
+ * complete the login form, then be redirected to the original page
+ */
+Cypress.Commands.add('loginandvisit', (path, userKey, fixture) => {
+  const user = users[userKey] || users.default
+  const stub = fixture || 'fixture:login.json'
+
+  cy.server()
+  cy.route('POST', '/local-api/auth', stub)
+
+  cy.visit(path)
+  cy.get('input[name=username]').type(user.username, { force: true, delay: 0 })
+  cy.get('input[name=password]').type(`${user.password}{enter}`, {
+    force: true,
+    delay: 0
+  })
+
+  cy.url().should('equal', Cypress.config().baseUrl + path)
+})

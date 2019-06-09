@@ -1,0 +1,825 @@
+{
+  "status": "success",
+  "rates": [
+    {
+      "id": "byn",
+      "price": 3.31651,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bzd",
+      "price": 3.19659,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cdf",
+      "price": 2633.23,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "clf",
+      "price": 0.0384642,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "clp",
+      "price": 1099.3,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cop",
+      "price": 5184.77,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "crc",
+      "price": 930.193,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cup",
+      "price": 40.8468,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cve",
+      "price": 156.114,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "czk",
+      "price": 35.839,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "djf",
+      "price": 282.359,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "dkk",
+      "price": 10.4511,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "dop",
+      "price": 81.0988,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "dzd",
+      "price": 188.895,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "egp",
+      "price": 26.5623,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "etb",
+      "price": 46.1926,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "fjd",
+      "price": 3.4171,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "fkp",
+      "price": 1.24542,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gel",
+      "price": 4.33056,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ghs",
+      "price": 8.50249,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gip",
+      "price": 1.24542,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gmd",
+      "price": 78.1642,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gnf",
+      "price": 14665.2,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gtq",
+      "price": 12.227,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gusd",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gyd",
+      "price": 332.177,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "hkd",
+      "price": 12.4407,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "hnl",
+      "price": 39.2924,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "hrk",
+      "price": 10.3849,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "htg",
+      "price": 146.297,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "huf",
+      "price": 448.046,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "idr",
+      "price": 22623.2,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ils",
+      "price": 5.67192,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "inr",
+      "price": 110.072,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kwd",
+      "price": 0.48218,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kyd",
+      "price": 1.32162,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kzt",
+      "price": 607.769,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lak",
+      "price": 13721.4,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lbp",
+      "price": 2397.37,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lkr",
+      "price": 279.914,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lrd",
+      "price": 307.74,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lsl",
+      "price": 23.7467,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "lyd",
+      "price": 2.22009,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mad",
+      "price": 15.2595,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mdl",
+      "price": 28.6412,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mga",
+      "price": 5804.26,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mkd",
+      "price": 86.2321,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mmk",
+      "price": 2416.14,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mnt",
+      "price": 3892.35,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mop",
+      "price": 12.8084,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mru",
+      "price": 58.3753,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mur",
+      "price": 56.0847,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mvr",
+      "price": 24.5081,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mwk",
+      "price": 1182.6,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mxn",
+      "price": 31.1189,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "myr",
+      "price": 6.57991,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "iqd",
+      "price": 1887.68,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "irr",
+      "price": 67766.7,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "isk",
+      "price": 196.097,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "jep",
+      "price": 1.24542,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "jmd",
+      "price": 207.252,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "jod",
+      "price": 1.12468,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kes",
+      "price": 160.541,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kgs",
+      "price": 108.942,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "khr",
+      "price": 6446.66,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kmf",
+      "price": 689.219,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "kpw",
+      "price": 1427.66,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "mzn",
+      "price": 98.7466,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "nad",
+      "price": 23.7467,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ngn",
+      "price": 486.117,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "btc",
+      "price": 0.0002014,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bch",
+      "price": 0.00404964,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "usd",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "eur",
+      "price": 1.40075,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "gbp",
+      "price": 1.24483,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "jpy",
+      "price": 171.612,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cad",
+      "price": 2.10761,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "aud",
+      "price": 2.26648,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "cny",
+      "price": 10.9609,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "chf",
+      "price": 1.56649,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sek",
+      "price": 14.9096,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "nzd",
+      "price": 2.38006,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "krw",
+      "price": 1875.12,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "aed",
+      "price": 5.82645,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "afn",
+      "price": 125.832,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "all",
+      "price": 171.041,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "amd",
+      "price": 760.008,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ang",
+      "price": 2.97352,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "aoa",
+      "price": 529.473,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ars",
+      "price": 71.083,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "awg",
+      "price": 2.85532,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "azn",
+      "price": 2.70065,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bam",
+      "price": 2.75385,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bbd",
+      "price": 3.17257,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bdt",
+      "price": 134.085,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bgn",
+      "price": 2.74037,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bhd",
+      "price": 0.598085,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bif",
+      "price": 2952.08,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bmd",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bnd",
+      "price": 2.14267,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bob",
+      "price": 10.9582,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "brl",
+      "price": 6.15201,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bsd",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "btn",
+      "price": 110.169,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "bwp",
+      "price": 17.2445,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "nio",
+      "price": 52.9819,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "nok",
+      "price": 13.6825,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "npr",
+      "price": 176.266,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "omr",
+      "price": 0.610742,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pab",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pax",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pen",
+      "price": 5.29352,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pgk",
+      "price": 5.35371,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "php",
+      "price": 82.2826,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pkr",
+      "price": 237.213,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pln",
+      "price": 5.96181,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "pyg",
+      "price": 9971.85,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "qar",
+      "price": 5.77566,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ron",
+      "price": 6.60498,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "rsd",
+      "price": 165.18,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "rub",
+      "price": 102.769,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "rwf",
+      "price": 1437.17,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sar",
+      "price": 5.94809,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sbd",
+      "price": 13.02,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "scr",
+      "price": 21.7883,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sdg",
+      "price": 71.6208,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sgd",
+      "price": 2.16027,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "shp",
+      "price": 1.24542,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sll",
+      "price": 13308.9,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "sos",
+      "price": 927.977,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "srd",
+      "price": 11.8305,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "stn",
+      "price": 34.6127,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "svc",
+      "price": 13.8763,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "syp",
+      "price": 816.932,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "szl",
+      "price": 23.7467,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "thb",
+      "price": 49.5611,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "tjs",
+      "price": 14.9544,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "tmt",
+      "price": 5.55197,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "tnd",
+      "price": 4.6866,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "top",
+      "price": 3.62303,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "try",
+      "price": 9.24904,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ttd",
+      "price": 10.741,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "twd",
+      "price": 49.7594,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "tzs",
+      "price": 3644.17,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "uah",
+      "price": 42.0921,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ugx",
+      "price": 5970.68,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "usdc",
+      "price": 1.58628,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "uyu",
+      "price": 56.1083,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "uzs",
+      "price": 13499.3,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "vef",
+      "price": 394172,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "ves",
+      "price": 9368.58,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "vnd",
+      "price": 36854.7,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "vuv",
+      "price": 176.206,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "wst",
+      "price": 4.16693,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xaf",
+      "price": 917.783,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xcd",
+      "price": 4.28701,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xof",
+      "price": 917.783,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xpf",
+      "price": 166.963,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "yer",
+      "price": 397.205,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "zar",
+      "price": 23.7293,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "zmw",
+      "price": 21.0056,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "zwl",
+      "price": 511.347,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xag",
+      "price": 0.105654,
+      "timestamp": "1560062343213"
+    },
+    {
+      "id": "xau",
+      "price": 0.00118327,
+      "timestamp": "1560062343213"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "user": {
+    "id": "aedb92d3-1842-42b7-8a33-5f50c50247e9",
+    "email": "testuser@example.com",
+    "username": "testuser1",
+    "firstName": null,
+    "lastName": null,
+    "birthday": null,
+    "preferredCurrency": "usd",
+    "defaultAccount": null,
+    "hasVerifiedEmail": false,
+    "is2FAEnabled": false
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTksInV1aWQiOiJhZWRiOTJkMy0xODQyLTQyYjctOGEzMy01ZjUwYzUwMjQ3ZTkiLCJ0eXBlIjoiYXV0aCIsImV4cGlyZXMiOiIyMDE5LTA2LTIxVDA4OjUwOjQxLjEzM1oiLCJpYXQiOjE1NTg1MTUwNDF9.8SvxWsVdh9bTnZbKitUiHDJPGVOUaa8bRYZvkkyh5Qo",
+  "expires": "2019-06-21T08:50:41.133Z"
+}

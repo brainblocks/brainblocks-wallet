@@ -1,0 +1,14 @@
+{
+  "id": "d26bd91c-b685-42de-9c04-1ef543fa729e",
+  "email": "email@test.com",
+  "username": "testuser1",
+  "firstName": null,
+  "lastName": null,
+  "birthday": null,
+  "preferredCurrency": "usd",
+  "defaultAccount": null,
+  "hasVerifiedEmail": true,
+  "is2FAEnabled": false,
+  "vault": null,
+  "status": "success"
+}
