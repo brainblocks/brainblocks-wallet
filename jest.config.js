@@ -2,6 +2,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '/cypress/'
+    '/cypress/',
+    '/Cypress/'
   ]
 }
