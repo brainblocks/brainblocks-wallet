@@ -26,8 +26,8 @@ stages:
   - deploy
 
 variables:
-  npm_config_cache: "$CI_PROJECT_DIR/.npm"
-  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
+  CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/Cypress'
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -41,8 +41,8 @@ test:
   script:
     - npm ci
     - npm run cy:verify
-    - npm run test
     - npm run build
+    - npm run test
   artifacts:
     when: always
     paths:
@@ -52,7 +52,6 @@ test:
       #- cypress/videos/**/*.mp4
       #- cypress/screenshots/**/*.png
     expire_in: 1 day
-      
 
 staging:
   stage: staging
