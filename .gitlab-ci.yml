@@ -46,6 +46,8 @@ test:
     - npm ci
     - npm run cy:verify
     - npm run build
+    - npm dedupe
+    - npm cache clean
     - npm run test
   artifacts:
     when: always
