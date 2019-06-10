@@ -7,6 +7,8 @@ export const users = {
     token: '',
     seed: '779128070029A444DED8D9D1CE96B80AA644E49ABB5A8F89D1E067AA0C59B960',
     address1:
-      'nano_1phhc7b4rme1xhtdwc5a548rwk58xrjw5eb8o7afymh3ujgdoonyor76mkbi'
+      'nano_1phhc7b4rme1xhtdwc5a548rwk58xrjw5eb8o7afymh3ujgdoonyor76mkbi',
+    address2:
+      'nano_1ccb93p3odwkwsxuzz6ba3ntcy748xjp34tcf1y7mube38x6e4woank9r7hr'
   }
 }

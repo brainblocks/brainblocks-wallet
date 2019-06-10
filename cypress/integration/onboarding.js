@@ -1,32 +1,11 @@
 import { users } from '../support/config'
-import { PRICE_API_URL } from '../../constants/config'
+import { mockRoutes } from '../support/mock'
 
 const user = users.default
 
 describe('Tests the onboarding process', function() {
   it('Verifies email through to successfully creating wallet', function() {
-    cy.server()
-    cy.route(
-      'POST',
-      `${Cypress.env('BASE_API_URL')}/users/rpc/verify-email`,
-      'fixture:verify-email.json'
-    )
-    cy.route(
-      'POST',
-      `${Cypress.env('BASE_API_URL')}/node/chains`,
-      'fixture:chains.json'
-    )
-    cy.route('GET', PRICE_API_URL, 'fixture:rates.json')
-    cy.route(
-      'POST',
-      `${Cypress.env('BASE_API_URL')}/auth/validatepwd`,
-      'fixture:validatepwd.json'
-    )
-    cy.route(
-      'POST',
-      `${Cypress.env('BASE_API_URL')}/users/vault`,
-      'fixture:post-vault.json'
-    )
+    mockRoutes(['verify-email', 'chains', 'rates', 'validatepwd', 'post-vault'])
 
     cy.loginandvisit(
       '/email-verification?hash=$2b$10$7A/6EqhzvcpkFjAihz4Ce.KVnQSJTFnm2sDPID64bG89heGuyj2R2&verification=c31166d28ea92a92cf2088c2c4881357a4391c91',
