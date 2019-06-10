@@ -21,7 +21,7 @@ before_script:
   - chmod 644 ~/.ssh/known_hosts
 
   # Increase max_user_watches (Cypress fails otherwise)
-  - sudo sysctl fs.inotify.max_user_watches=1048576
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
   # Create the dotenv file from the gitlab env variables so that npm run cy:env works
   - chmod +x ./setup-env.sh
