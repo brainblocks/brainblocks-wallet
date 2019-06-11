@@ -54,9 +54,9 @@ test:
     when: always
     paths:
       - node_modules
-      - .next
-      - cypress
-    expire_in: 1 day
+    #   - .next
+    #   - cypress
+    # expire_in: 1 day
 
 staging:
   stage: staging
