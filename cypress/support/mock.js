@@ -21,6 +21,11 @@ const routeDefs = {
     url: `${Cypress.env('BASE_API_URL')}/auth/validatepwd`,
     response: 'fixture:validatepwd.json'
   },
+  'change-password': {
+    method: 'PATCH',
+    url: `${Cypress.env('BASE_API_URL')}/users/password`,
+    response: 'fixture:change-password.json'
+  },
   'post-vault': {
     method: 'POST',
     url: `${Cypress.env('BASE_API_URL')}/users/vault`,
