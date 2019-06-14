@@ -54,6 +54,8 @@ test:
     when: always
     paths:
       - node_modules
+      - .npm
+      - cache/Cypress
 
 staging:
   stage: staging
