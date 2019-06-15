@@ -49,8 +49,7 @@ export function mockRoutes(routes) {
       throw new Error("That doesn't look like a valid route")
     }
 
-    // eslint-disable-next-line no-console
-    console.log(`Stubbing route: ${def.method} ${def.url}`)
+    cy.task('log', `Stubbing route: ${def.method} ${def.url}`)
     cy.route(def)
   })
 }
