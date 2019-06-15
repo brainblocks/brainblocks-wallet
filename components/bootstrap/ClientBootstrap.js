@@ -214,6 +214,10 @@ class Bootstrap extends React.Component<Props, State> {
     if (
       this.props.isAuthorized &&
       !this.props.user.hasVerifiedEmail &&
+      !(
+        router.query.hasOwnProperty('redirectTo') &&
+        router.query.redirectTo.indexOf('email-verification') >= 0
+      ) &&
       router.pathname !== '/email-verification'
     ) {
       router.push('/email-verification')
@@ -242,9 +246,16 @@ class Bootstrap extends React.Component<Props, State> {
       return true
     }
 
-    // Redirect login to dashboard if authorized
+    // Redirect login to dashboard (or `redirectTo` param) if authorized
     if (router.pathname === '/login' && this.props.isAuthorized) {
-      router.push('/')
+      if (
+        router.query.hasOwnProperty('redirectTo') &&
+        typeof router.query.redirectTo === 'string'
+      ) {
+        router.push(decodeURIComponent(router.query.redirectTo))
+      } else {
+        router.push('/')
+      }
       return true
     }
 

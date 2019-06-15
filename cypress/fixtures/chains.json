@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "accounts": {
+    "nano_1phhc7b4rme1xhtdwc5a548rwk58xrjw5eb8o7afymh3ujgdoonyor76mkbi": {
+      "balance": "0",
+      "pending": "0",
+      "blocks": []
+    }
+  }
+}

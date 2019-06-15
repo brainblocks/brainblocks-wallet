@@ -52,7 +52,7 @@ class SaveSeed extends React.Component<Props, State> {
         seed,
         password: '',
         passwordError: '',
-        seedInputType: 'input'
+        seedInputType: 'text'
       },
       () => {
         this.props.enqueueSnackbar('Seed will be visible for 30 seconds', {

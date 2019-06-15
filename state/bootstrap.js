@@ -11,14 +11,16 @@ import type { NextJSContext } from '~/types'
 const { publicRuntimeConfig } = getConfig()
 const { AUTH_TOKEN_COOKIE_KEY } = publicRuntimeConfig
 
-const redirectUnauthorized = res => {
+const redirectUnauthorized = (res, path) => {
+  const target =
+    path === '/' ? '/login' : `/login?redirectTo=${encodeURIComponent(path)}`
   if (res) {
     res.writeHead(302, {
-      Location: '/login'
+      Location: target
     })
     res.end()
   } else {
-    Router.push('/login')
+    Router.push(target)
   }
   return {}
 }
@@ -31,7 +33,7 @@ const redirectUnauthorized = res => {
 export const bootstrapInitialProps: (
   ctx: NextJSContext
 ) => Promise<Object> = async ctx => {
-  const { reduxStore, res, pathname } = ctx
+  const { reduxStore, res, pathname, asPath } = ctx
   if (!ctx.hasOwnProperty('reduxStore')) {
     throw new Error('No Redux Store in bootstrapInitialProps')
   }
@@ -70,7 +72,7 @@ export const bootstrapInitialProps: (
   // redirect if still not authorized
   if (!isAuthorized) {
     if (pathname !== '/login') {
-      redirectUnauthorized(res)
+      redirectUnauthorized(res, asPath)
     }
   }
 

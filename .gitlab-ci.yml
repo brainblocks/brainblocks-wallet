@@ -1,5 +1,5 @@
 # node.js docker image
-image: node:8
+image: cypress/base:10
 
 before_script:
   ## Install ssh-agent if not already installed, it is required by Docker.
@@ -21,26 +21,41 @@ before_script:
   - ssh-keyscan git.brainblocks.io >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
+  # Increase max_user_watches (Cypress fails otherwise)
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
 stages:
   - test
   - staging
   - deploy
 
+variables:
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
+  CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/Cypress'
+
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+    - node_modules
+    - .npm
+    - cache/Cypress
+    - cypress
 
 test:
   stage: test
   script:
     - npm ci
+    - npm run cy:verify
     - npm run build
     - npm run test
   artifacts:
+    expire_in: 1 week
+    when: always
     paths:
-      - node_modules/
-      - .next/
+      - node_modules
+      - .npm
+      - cypress
+      - cache/Cypress
 
 staging:
   stage: staging

@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "port": 9999,
+  "video": false,
+  "ignoreTestFiles": ["*.hot-update.js", "*.example.spec.js"],
+  "defaultCommandTimeout": 8000
+}
