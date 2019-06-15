@@ -19,6 +19,7 @@ module.exports = (on, config) => {
   // Usage: cy.task('log', 'This will be output to the terminal')
   on('task', {
     log(message) {
+      // eslint-disable-next-line no-console
       console.log(message)
 
       return null
