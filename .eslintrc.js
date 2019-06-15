@@ -3,12 +3,14 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true
+    node: true,
+    'cypress/globals': true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:flowtype/recommended'
+    'plugin:flowtype/recommended',
+    'plugin:cypress/recommended'
   ],
   globals: {
     Atomics: 'readonly',
@@ -21,7 +23,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: ['react', 'prettier', 'flowtype'],
+  plugins: ['react', 'prettier', 'flowtype', 'cypress', 'chai-friendly'],
   rules: {
     'prettier/prettier': 'error',
     'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }]

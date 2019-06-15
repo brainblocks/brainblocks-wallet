@@ -2,6 +2,7 @@
 .*/bundles/.*
 .*/out/.*
 .*/.next/.*
+.*/cache/.*
 
 [include]
 

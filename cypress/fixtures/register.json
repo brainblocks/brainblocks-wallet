@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjAsInV1aWQiOiIxZjZkN2FjYi04ZWFhLTRmYzktYTlkMi0yNmJmNzlkMjc1YWIiLCJ0eXBlIjoiYXV0aCIsImV4cGlyZXMiOiIyMDE5LTA3LTA2VDExOjQwOjQxLjUxMVoiLCJpYXQiOjE1NTk4MjEyNDF9.gk2YwJ02NGpqh-KU_QbZx-eRxS85Qw42bi7PLzgqkA0",
+  "expires": "2019-07-06T11:40:41.511Z",
+  "user": {
+    "id": "1f6d7acb-8eaa-4fc9-a9d2-26bf79d275ab",
+    "email": "email@example.com",
+    "username": "testuser1",
+    "firstName": null,
+    "lastName": null,
+    "birthday": null,
+    "preferredCurrency": "usd",
+    "defaultAccount": null,
+    "hasVerifiedEmail": false,
+    "is2FAEnabled": false,
+    "vault": null
+  }
+}

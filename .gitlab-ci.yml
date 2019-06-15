@@ -1,5 +1,5 @@
 # node.js docker image
-image: node:8
+image: cypress/base:10
 
 before_script:
   ## Install ssh-agent if not already installed, it is required by Docker.
@@ -17,29 +17,45 @@ before_script:
 
   # Use ssh-keyscan to scan the keys of your private server.
   - ssh-keyscan ssh.node1.brainblocks.io >> ~/.ssh/known_hosts
+  - ssh-keyscan ssh.node3.brainblocks.io >> ~/.ssh/known_hosts
   - ssh-keyscan git.brainblocks.io >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
+
+  # Increase max_user_watches (Cypress fails otherwise)
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 stages:
   - test
   - staging
   - deploy
 
+variables:
+  npm_config_cache: '$CI_PROJECT_DIR/.npm'
+  CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/Cypress'
+
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
+    - node_modules
+    - .npm
+    - cache/Cypress
+    - cypress
 
 test:
   stage: test
   script:
     - npm ci
+    - npm run cy:verify
     - npm run build
     - npm run test
   artifacts:
+    expire_in: 1 week
+    when: always
     paths:
-      - node_modules/
-      - .next/
+      - node_modules
+      - .npm
+      - cypress
+      - cache/Cypress
 
 staging:
   stage: staging
@@ -48,6 +64,7 @@ staging:
       - develop
   script:
     - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart staging-wallet"
+    - ssh brainblocks@ssh.node3.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart staging-wallet"
 
 deploy:
   stage: deploy
@@ -56,3 +73,4 @@ deploy:
       - master
   script:
     - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart wallet"
+    - ssh brainblocks@ssh.node3.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart wallet"

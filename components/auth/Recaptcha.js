@@ -4,7 +4,7 @@ import getConfig from 'next/config'
 import { isServer } from '~/state'
 
 const { publicRuntimeConfig } = getConfig()
-const { GOOGLE_RECAPTCHA_SITE_KEY } = publicRuntimeConfig
+const { GOOGLE_RECAPTCHA_SITE_KEY, RECAPTCHA_REQUIRED } = publicRuntimeConfig
 
 // recaptcha loading state flags
 let didRenderRecaptchaScript = false
@@ -36,7 +36,11 @@ export default class Recaptcha extends Component<Props> {
       this.promiseResolver = resolve
       this.promiseRejector = reject
 
-      window.grecaptcha.execute(this.recaptchaId)
+      if (RECAPTCHA_REQUIRED) {
+        window.grecaptcha.execute(this.recaptchaId)
+      } else {
+        resolve('')
+      }
     })
   }
 

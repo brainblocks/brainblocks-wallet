@@ -7,6 +7,7 @@ const nextConfig = {
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
     GOOGLE_RECAPTCHA_SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY,
+    RECAPTCHA_REQUIRED: process.env.RECAPTCHA_REQUIRED !== 'false',
     DEBUG: process.env.DEBUG,
     BASE_API_URL: process.env.BASE_API_URL,
     BASE_API_URL_SERVERSIDE: process.env.BASE_API_URL_SERVERSIDE,

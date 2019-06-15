@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "error": "Please enter 2FA token",
+  "reason": "2FA_REQUIRED"
+}
