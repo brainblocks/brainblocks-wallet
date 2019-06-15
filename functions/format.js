@@ -1,6 +1,9 @@
 // @flow
-import { distanceInWordsToNow, format } from 'date-fns'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import numbro from 'numbro'
+
+dayjs.extend(relativeTime)
 
 function formatNano(nanoVal: number, decimals?: number = 5): string {
   return new Intl.NumberFormat('en-US', {
@@ -40,25 +43,22 @@ function formatTimeAgo(
   shorten?: boolean = false
 ): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return distanceInWordsToNow(new Date(timestamp), {
-    includeSeconds: true,
-    addSuffix: !shorten
-  })
+  return dayjs(timestamp).fromNow(shorten)
 }
 
 function formatTime(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return format(new Date(timestamp), 'hh:mm a')
+  return dayjs(timestamp).format('hh:mm a')
 }
 
 function formatDate(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return format(new Date(timestamp), 'MMM D, YYYY')
+  return dayjs(timestamp).format('MMM D, YYYY')
 }
 
 function formatDayMonth(timestamp: number, unix?: boolean = false): string {
   timestamp = unix ? unixToMs(timestamp) : timestamp
-  return format(new Date(timestamp), 'D MMM')
+  return dayjs(timestamp).format('D MMM')
 }
 
 function abbreviateNumber(num: number, options?: Object = {}): string {

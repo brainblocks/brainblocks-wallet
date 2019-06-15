@@ -25,6 +25,8 @@ module.exports = function useCsp(app) {
   // In dev we allow 'unsafe-eval', so HMR doesn't trigger the CSP
   if (process.env.NODE_ENV !== 'production') {
     scriptSrc.push("'unsafe-eval'")
+    scriptSrc.push("'strict-dynamic'")
+    scriptSrc.push('webpack:')
   }
 
   app.use(
@@ -46,8 +48,7 @@ module.exports = function useCsp(app) {
           'https://127.0.0.1:*',
           'ws://localhost:*',
           'ws://127.0.0.1:*',
-          'wss://app.brainblocks.io',
-          'wss://staging.app.brainblocks.io',
+          'wss://ws.brainblocks.io',
           'webpack:',
           'https://fonts.googleapis.com',
           'https://fonts.gstatic.com',

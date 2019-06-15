@@ -71,14 +71,35 @@ type State = {
  * redux and wallet hydration.
  */
 class Bootstrap extends React.Component<Props, State> {
-  isGettingVault = false
-  isGettingChains = false
-  didAddAccounts = false
-  didGetTransactions = false
-  priceInterval = null
-  socketPingInterval = null
-  state = {
-    error: null
+  isGettingVault: boolean
+  isGettingChains: boolean
+  didAddAccounts: boolean
+  didGetTransactions: boolean
+  priceInterval: ?IntervalID
+  socketPingInterval: ?IntervalID
+
+  constructor(props) {
+    super(props)
+    this.isGettingVault = false
+    this.isGettingChains = false
+    this.didAddAccounts = false
+    this.didGetTransactions = false
+    this.priceInterval = null
+    this.socketPingInterval = null
+
+    // If we navigate between pages while the getTransactions reqeust
+    // is outstanding, it fires twice. This prevents that.
+    if (
+      this.props.activeProcesses.find(
+        process => process.indexOf('get-chains-') === 0
+      )
+    ) {
+      this.isGettingChains = true
+    }
+
+    this.state = {
+      error: null
+    }
   }
 
   // isReady is used to show either the child components or the loading page
