@@ -5,6 +5,8 @@ const user = users.default
 
 describe('Tests account-related functionality', function() {
   it('Creates a new account', function() {
+    // eslint-disable-next-line no-console
+    console.log('Cypress Env', JSON.stringify(Cypress.env(), null, 2))
     mockRoutes(['chains', 'rates', 'patch-vault'])
 
     cy.loginandvisit('/accounts')

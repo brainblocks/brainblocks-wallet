@@ -46,8 +46,11 @@ export function mockRoutes(routes) {
     if (typeof route === 'string' && routeDefs.hasOwnProperty(route)) {
       def = routeDefs[route]
     } else if (typeof route !== 'object' || !route.hasOwnProperty('url')) {
-      throw new Error("That does'nt look like a valid route")
+      throw new Error("That doesn't look like a valid route")
     }
+
+    // eslint-disable-next-line no-console
+    console.log(`Stubbing route: ${def.method} ${def.url}`)
     cy.route(def)
   })
 }
