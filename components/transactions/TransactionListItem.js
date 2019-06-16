@@ -111,7 +111,7 @@ class TransactionListItem extends React.Component<Props, State> {
     const contactInfo = this.getContactInfo(data)
 
     return (
-      <tr>
+      <tr data-hash={tx.id} data-type={tx.type}>
         <td className={styles.imgCol}>
           <TransactionImage transaction={tx} />
         </td>
