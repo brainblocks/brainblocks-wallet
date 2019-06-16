@@ -38,7 +38,8 @@ cache:
     - node_modules
     - .npm
     - cache/Cypress
-    - cypress
+    - cypress/screenshots
+    - cypress/videos
 
 test:
   stage: test
