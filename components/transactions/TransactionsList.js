@@ -72,7 +72,7 @@ class TransactionsList extends React.Component<Props> {
                 )
               }
             </Media>
-            <table className={styles.table}>
+            <table className={styles.table} data-cy="transactions-table">
               <thead>
                 <tr>
                   <th className={styles.imgCol}>Type</th>

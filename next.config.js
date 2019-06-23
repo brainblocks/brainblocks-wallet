@@ -13,7 +13,8 @@ const nextConfig = {
     BASE_API_URL_SERVERSIDE: process.env.BASE_API_URL_SERVERSIDE,
     LOCAL_API: process.env.LOCAL_API,
     WEBSOCKET_URL: process.env.WEBSOCKET_URL,
-    AUTH_TOKEN_COOKIE_KEY: process.env.AUTH_TOKEN_COOKIE_KEY
+    AUTH_TOKEN_COOKIE_KEY: process.env.AUTH_TOKEN_COOKIE_KEY,
+    DISABLE_LOCAL_PROXY: process.env.DISABLE_LOCAL_PROXY
   },
   workboxOpts: {
     runtimeCaching: [

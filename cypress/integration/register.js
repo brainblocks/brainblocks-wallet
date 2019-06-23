@@ -4,7 +4,7 @@ const user = users.default
 describe('Tests the registration process', function() {
   it('Registers a new account', function() {
     cy.server()
-    cy.route('POST', '/local-api/users', 'fixture:register.json')
+    cy.route('POST', '/api/users', 'fixture:register.json')
 
     cy.visit('/')
     cy.get('[role="tab"]')

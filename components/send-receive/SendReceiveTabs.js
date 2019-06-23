@@ -94,6 +94,7 @@ class SendReceiveTabs extends React.Component<Props, State> {
               onClick={this.handleGoToDashboard}
               color="blue"
               style={{ marginBottom: 5 }}
+              data-cy="back-to-dashboard"
             >
               Back to Dashboard
             </Button>{' '}

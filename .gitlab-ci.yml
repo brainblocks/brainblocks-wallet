@@ -39,7 +39,6 @@ cache:
     - node_modules
     - .npm
     - cache/Cypress
-    - cypress
 
 test:
   stage: test
@@ -52,10 +51,8 @@ test:
     expire_in: 1 week
     when: always
     paths:
-      - node_modules
-      - .npm
-      - cypress
-      - cache/Cypress
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
 
 staging:
   stage: staging
