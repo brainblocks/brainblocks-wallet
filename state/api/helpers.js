@@ -4,7 +4,12 @@ import { getClientSideStore, isServer } from '~/state'
 import axios from 'axios'
 
 const { publicRuntimeConfig } = getConfig()
-const { BASE_API_URL, LOCAL_API, BASE_API_URL_SERVERSIDE } = publicRuntimeConfig
+const {
+  BASE_API_URL,
+  LOCAL_API,
+  BASE_API_URL_SERVERSIDE,
+  DISABLE_LOCAL_PROXY
+} = publicRuntimeConfig
 
 export function getAuthToken(): ?string {
   const store = getClientSideStore()
@@ -33,8 +38,10 @@ export function makeApiRequest(opts: Object = {}): Promise<Object> {
 }
 
 export function makeLocalApiRequest(opts: Object = {}): Promise<Object> {
+  const baseURL = DISABLE_LOCAL_PROXY === 'true' ? BASE_API_URL : LOCAL_API
+
   return axios({
-    baseURL: LOCAL_API,
+    baseURL,
     ...opts
   })
 }

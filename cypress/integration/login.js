@@ -4,7 +4,7 @@ const user = users.default
 describe('Tests the login process', function() {
   it('Logs in - no 2fa', function() {
     cy.server()
-    cy.route('POST', '/local-api/auth', 'fixture:login.json')
+    cy.route('POST', '/api/auth', 'fixture:login.json')
 
     cy.visit('/')
     cy.get('input[name=username]').type(user.username, { force: true })
@@ -19,7 +19,7 @@ describe('Tests the login process', function() {
     cy.server()
     cy.route({
       method: 'POST',
-      url: '/local-api/auth',
+      url: '/api/auth',
       status: 401,
       response: 'fixture:login-2fa.json'
     })
@@ -30,7 +30,7 @@ describe('Tests the login process', function() {
       force: true
     })
 
-    cy.route('POST', '/local-api/auth', 'fixture:login.json')
+    cy.route('POST', '/api/auth', 'fixture:login.json')
     cy.get('input[name=mfaCode]').type(`${user.mfaCode}{enter}`, {
       force: true
     })
