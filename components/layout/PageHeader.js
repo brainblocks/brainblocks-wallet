@@ -24,18 +24,6 @@ const PageHeader = ({
   return (
     <div className={styles.root} {...rest}>
       <div className={styles.pageWidth}>
-        <Alert destyleMerge={{ root: styles.alert, icon: styles.alertIcon }}>
-          We&apos;re in beta! Please test with small amounts of Nano, and leave
-          us lots of{' '}
-          <ReactGA.OutboundLink
-            eventLabel="Feedback"
-            to="https://brainblockshelp.freshdesk.com/support/tickets/new"
-            target="_blank"
-          >
-            feedback
-          </ReactGA.OutboundLink>
-          .
-        </Alert>
         <div className={styles.inner}>
           {!!title && <h1 className={styles.title}>{title}</h1>}
           {!!children && <div className={styles.content}>{children}</div>}
