@@ -17,7 +17,6 @@ before_script:
 
   # Use ssh-keyscan to scan the keys of your private server.
   - ssh-keyscan ssh.node1.brainblocks.io >> ~/.ssh/known_hosts
-  - ssh-keyscan ssh.node3.brainblocks.io >> ~/.ssh/known_hosts
   - ssh-keyscan git.brainblocks.io >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
@@ -39,7 +38,6 @@ cache:
     - node_modules
     - .npm
     - cache/Cypress
-    - cypress
 
 test:
   stage: test
@@ -52,10 +50,8 @@ test:
     expire_in: 1 week
     when: always
     paths:
-      - node_modules
-      - .npm
-      - cypress
-      - cache/Cypress
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
 
 staging:
   stage: staging
@@ -64,7 +60,6 @@ staging:
       - develop
   script:
     - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart staging-wallet"
-    - ssh brainblocks@ssh.node3.brainblocks.io "cd /home/brainblocks/staging/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart staging-wallet"
 
 deploy:
   stage: deploy
@@ -73,4 +68,4 @@ deploy:
       - master
   script:
     - ssh brainblocks@ssh.node1.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart wallet"
-    - ssh brainblocks@ssh.node3.brainblocks.io "cd /home/brainblocks/wallet && git stash && git pull https://git.brainblocks.io/brainblocks/wallet.git && rm -rf .next && npm install && npm update && npm run build && pm2 restart wallet"
+ 

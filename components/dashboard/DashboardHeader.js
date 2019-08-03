@@ -171,7 +171,7 @@ class DashboardHeader extends React.Component<Props, State> {
     return (
       <div className={styles.root} {...rest}>
         <div className={styles.info}>
-          <div className={styles.selector}>
+          <div className={styles.selector} data-cy="dashboard-account-selector">
             <AccountSelector
               all
               theme="outlined-on-dark"
@@ -265,7 +265,10 @@ class DashboardHeader extends React.Component<Props, State> {
             destyleMerge={{ root: styles.sendReceiveBtn }}
             color={theme.color.palette.green}
           >
-            <span className={styles.sendReceiveBtnInner}>
+            <span
+              className={styles.sendReceiveBtnInner}
+              data-cy="send-receive-btn"
+            >
               <SendReceiveIcon />
               <span className="send-receive-button-text">
                 Send &amp; Receive

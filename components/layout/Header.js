@@ -113,7 +113,7 @@ class Header extends React.Component<Props, State> {
 
     return (
       <>
-        <div className={styles.root} {...rest}>
+        <header className={styles.root} {...rest}>
           {variant === 'bare' && (
             <div className={styles.pageWidth}>
               <div className={styles.logotype}>
@@ -166,7 +166,7 @@ class Header extends React.Component<Props, State> {
                 )}
 
                 {isWorking && (
-                  <div className={styles.spinner}>
+                  <div className={`${styles.spinner} test-spinner`}>
                     <Spinner size={24} color="#FFF" />
                   </div>
                 )}
@@ -300,7 +300,7 @@ class Header extends React.Component<Props, State> {
               </div>
             </div>
           )}
-        </div>
+        </header>
         {variant === 'full' && (
           <Media>
             {({ breakpoints, currentBreakpoint }) =>
