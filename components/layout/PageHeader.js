@@ -1,7 +1,5 @@
 // @flow
 import * as React from 'react'
-import ReactGA from 'react-ga'
-import Alert from 'brainblocks-components/build/Alert'
 import { destyle } from 'destyle'
 
 type Props = {
