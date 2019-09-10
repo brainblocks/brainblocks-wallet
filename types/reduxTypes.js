@@ -20,6 +20,7 @@ export type ReduxAction =
   | AccountsAction
   | AuthAction
   | PriceAction
+  | TradeAction
   | TransactionAction
   | UIAction
   | UserAction
@@ -182,6 +183,29 @@ export type UpdateNanoPricesAction = {
   payload: Object
 }
 export type PriceAction = UpdateNanoPricesAction
+
+// Trade ===
+// state
+export type CurrentSell = {
+  buyCurrency: string,
+  fromAcc: string,
+  sellAmount: number,
+  receiveAddr: string,
+  extraId: ?string
+}
+export type TradeState = {
+  nanoPairs: Array<Object>,
+  currentSell: CurrentSell
+}
+export type UpdateNanoPairsAction = {
+  type: 'TRADE::UPDATE_NANO_PAIRS',
+  payload: Object
+}
+export type SetCurrentSellAction = {
+  type: 'TRADE::SET_CURRENT_SELL',
+  payload: Object
+}
+export type TradeAction = UpdateNanoPairsAction | SetCurrentSellAction
 
 // UI ===
 // state

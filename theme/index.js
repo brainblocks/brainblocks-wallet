@@ -60,6 +60,9 @@ import './components/new-account-settings'
 import './components/send-receive-tabs'
 import './components/send-form'
 
+// Buy / Sell
+import './components/buy-sell-tabs'
+
 // Settings
 import './components/settings-tabs'
 import './components/settings-form'

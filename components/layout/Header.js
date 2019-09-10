@@ -42,6 +42,12 @@ const menuItems = [
     icon: <SendReceiveIcon />,
     mobile: true
   },
+  {
+    href: '/buy-sell',
+    title: 'Buy & Sell',
+    icon: <SendReceiveIcon />,
+    mobile: true
+  },
   /* This has some problems - like if I'm already on the settings page, clicking it does nothing (regardless of which tab I'm on)
   {
     href: {
