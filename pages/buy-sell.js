@@ -16,20 +16,21 @@ import {
   getPreferredCurrency,
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
-import { createSell, updateNanoPairs } from '~/state/thunks/tradeThunks'
+import {
+  createSell,
+  createBuy,
+  updateNanoPairs
+} from '~/state/thunks/tradeThunks'
 import type { WithRouter } from '~/types'
-import type { AccountsState } from '~/types/reduxTypes'
+import type { AccountsState, CurrentBuy, CurrentSell } from '~/types/reduxTypes'
 
 type Props = WithRouter & {
   accounts: AccountsState,
   nanoPrice: number,
   preferredCurrency: ?string,
   defaultAccount: ?string,
-  handleSell: (
-    fromAddr: string,
-    buyCurrency: string,
-    amountNano: string | number
-  ) => Promise<void>,
+  handleSell: CurrentSell => Promise<void>,
+  handleBuy: CurrentBuy => Promise<void>,
   updateNanoPairs: () => void
 }
 
@@ -49,6 +50,7 @@ const BuySell = (props: Props) => {
             router={props.router}
             defaultAccount={props.defaultAccount}
             onSell={props.handleSell}
+            onBuy={props.handleBuy}
             nanoPairs={props.nanoPairs}
             updateNanoPairs={props.updateNanoPairs}
           />
@@ -72,6 +74,7 @@ export default connect(
   }),
   {
     handleSell: createSell,
+    handleBuy: createBuy,
     updateNanoPairs: updateNanoPairs
   }
 )(withRouter(BuySell))

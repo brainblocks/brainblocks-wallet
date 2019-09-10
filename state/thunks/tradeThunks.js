@@ -5,7 +5,7 @@ import { isValidNanoAddress } from '~/functions/validate'
 import * as tradeAPI from '~/state/api/trade'
 import { getWallet, nanoToRaw } from '~/state/wallet'
 import log from '~/functions/log'
-import type { ThunkAction, CurrentSell } from '~/types/reduxTypes'
+import type { ThunkAction, CurrentSell, CurrentBuy } from '~/types/reduxTypes'
 
 export const updateNanoPairs: boolean => ThunkAction = () => (
   dispatch,
@@ -67,13 +67,13 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
     const tradeAmount = currentSell.sellAmount
     let trade
     try {
-      trade = await tradeAPI.createTrade(
+      trade = await tradeAPI.createTrade({
         pair,
-        currentSell.receiveAddr,
+        receiveAddress: currentSell.receiveAddr,
         tradeAmount,
-        currentSell.extraId,
-        currentSell.fromAcc
-      )
+        extraId: currentSell.extraId || null,
+        refundAddress: currentSell.receiveAddr
+      })
     } catch (e) {
       // @todo catch and display appropriate error messages with generic fallback
       return rejector('Error creating trade', e)
@@ -82,6 +82,49 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
     log.info(trade)
 
     dispatch(uiCreators.removeActiveProcess(`create-sell-${time}`))
+    resolve()
+  })
+}
+
+export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
+  dispatch,
+  getState
+) => {
+  return new Promise(async (resolve, reject) => {
+    const time = Date.now()
+    currentBuy.sellAmount = parseFloat(currentBuy.sellAmount)
+    const rejector = (reason, e) => {
+      log.error(reason, e)
+      dispatch(uiCreators.removeActiveProcess(`create-buy-${time}`))
+      return reject(reason)
+    }
+
+    // show we're working
+    dispatch(uiCreators.addActiveProcess(`create-buy-${time}`))
+
+    // set current buy in redux
+    dispatch(creators.setCurrentBuy(currentBuy))
+
+    // create trade
+    const pair = `${currentBuy.sellCurrency}_NANO`
+    const tradeAmount = currentBuy.sellAmount
+    let trade
+    try {
+      trade = await tradeAPI.createTrade({
+        pair,
+        receiveAddress: currentBuy.receiveAcc,
+        tradeAmount,
+        extraId: null,
+        refundAddress: currentBuy.refundAddr
+      })
+    } catch (e) {
+      // @todo catch and display appropriate error messages with generic fallback
+      return rejector('Error creating trade', e)
+    }
+
+    log.info(trade)
+
+    dispatch(uiCreators.removeActiveProcess(`create-buy-${time}`))
     resolve()
   })
 }

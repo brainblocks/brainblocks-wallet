@@ -16,7 +16,7 @@ import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { WithRouter, WithSnackbar } from '~/types'
-import type { AccountsState } from '~/types/reduxTypes'
+import type { AccountsState, CurrentSell } from '~/types/reduxTypes'
 import log from '~/functions/log'
 
 type Props = WithRouter &
@@ -27,11 +27,7 @@ type Props = WithRouter &
     defaultAccount: string,
     nanoPairs: Array<Object>,
     styles: Object,
-    onSell: (
-      fromAddr: string,
-      buyCurrency: string,
-      amountNano: string | number
-    ) => void
+    onSell: CurrentSell => Promise<void>
   }
 
 type State = {
