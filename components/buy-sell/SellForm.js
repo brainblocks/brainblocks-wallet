@@ -97,7 +97,8 @@ class ReceiveForm extends Component<Props, State> {
         buyCurrency: values.buy,
         sellAmount: this.getAmountNano(values),
         receiveAddr: values.buyAddress,
-        extraId: '' // for now
+        extraId: '', // for now
+        isFinal: true
       })
     } catch (e) {
       log.error(e)

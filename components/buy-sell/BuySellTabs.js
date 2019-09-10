@@ -6,7 +6,12 @@ import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
 import BuyForm from './BuyForm'
 import SellForm from './SellForm'
 import type { WithRouter } from '~/types'
-import type { AccountsState, CurrentSell, CurrentBuy } from '~/types/reduxTypes'
+import type {
+  AccountsState,
+  CurrentSell,
+  CurrentBuy,
+  TradeQuote
+} from '~/types/reduxTypes'
 import { getKeyByValue } from '~/functions/util'
 
 const { Tab, TabList, TabPanel } = TabComponents
@@ -25,6 +30,10 @@ type Props = WithRouter & {
   nanoPairs: Array<Object>,
   /** Given by destyle. Do not pass this to the component as a prop. */
   styles: Object,
+  currentBuy: CurrentBuy,
+  currentSell: CurrentSell,
+  buyQuote: TradeQuote,
+  sellQuote: TradeQuote,
   onSell: CurrentSell => Promise<void>,
   onBuy: CurrentBuy => Promise<void>,
   updateNanoPairs: () => void
@@ -92,7 +101,11 @@ class BuySellTabs extends React.Component<Props, State> {
       preferredCurrency,
       router,
       onSell,
-      onBuy
+      onBuy,
+      currentBuy,
+      currentSell,
+      buyQuote,
+      sellQuote
     } = this.props
     const { activeTab, nanoPairs } = this.state
     return (
@@ -107,6 +120,8 @@ class BuySellTabs extends React.Component<Props, State> {
             <BuyForm
               nanoPrice={nanoPrice}
               onBuy={onBuy}
+              currentBuy={currentBuy}
+              buyQuote={buyQuote}
               accounts={accounts}
               defaultAccount={defaultAccount}
               preferredCurrency={preferredCurrency}
@@ -118,6 +133,8 @@ class BuySellTabs extends React.Component<Props, State> {
             <SellForm
               nanoPrice={nanoPrice}
               onSell={onSell}
+              currentSell={currentSell}
+              sellQuote={sellQuote}
               accounts={accounts}
               defaultAccount={defaultAccount}
               preferredCurrency={preferredCurrency}

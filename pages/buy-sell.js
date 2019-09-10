@@ -11,7 +11,13 @@ import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
-import { getNanoPairs } from '~/state/selectors/tradeSelectors'
+import {
+  getNanoPairs,
+  getCurrentBuy,
+  getCurrentSell,
+  getBuyQuote,
+  getSellQuote
+} from '~/state/selectors/tradeSelectors'
 import {
   getPreferredCurrency,
   getDefaultAccount
@@ -22,13 +28,23 @@ import {
   updateNanoPairs
 } from '~/state/thunks/tradeThunks'
 import type { WithRouter } from '~/types'
-import type { AccountsState, CurrentBuy, CurrentSell } from '~/types/reduxTypes'
+import type {
+  AccountsState,
+  CurrentBuy,
+  CurrentSell,
+  TradeQuote
+} from '~/types/reduxTypes'
 
 type Props = WithRouter & {
   accounts: AccountsState,
   nanoPrice: number,
+  nanoPairs: Array<Object>,
   preferredCurrency: ?string,
   defaultAccount: ?string,
+  currentBuy: CurrentBuy,
+  currentSell: CurrentSell,
+  buyQuote: TradeQuote,
+  sellQuote: TradeQuote,
   handleSell: CurrentSell => Promise<void>,
   handleBuy: CurrentBuy => Promise<void>,
   updateNanoPairs: () => void
@@ -49,6 +65,10 @@ const BuySell = (props: Props) => {
             preferredCurrency={props.preferredCurrency}
             router={props.router}
             defaultAccount={props.defaultAccount}
+            currentSell={props.currentSell}
+            currentBuy={props.currentBuy}
+            sellQuote={props.sellQuote}
+            buyQuote={props.buyQuote}
             onSell={props.handleSell}
             onBuy={props.handleBuy}
             nanoPairs={props.nanoPairs}
@@ -70,7 +90,11 @@ export default connect(
     nanoPrice: getNanoPriceInPreferredCurrency(state),
     preferredCurrency: getPreferredCurrency(state),
     defaultAccount: getDefaultAccount(state),
-    nanoPairs: getNanoPairs(state)
+    nanoPairs: getNanoPairs(state),
+    currentBuy: getCurrentBuy(state),
+    currentSell: getCurrentSell(state),
+    buyQuote: getBuyQuote(state),
+    sellQuote: getSellQuote(state)
   }),
   {
     handleSell: createSell,

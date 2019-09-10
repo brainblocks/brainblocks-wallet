@@ -17,7 +17,9 @@ export const tradeInitialState: TradeState = {
     sellAmount: 0,
     receiveAcc: '',
     refundAddr: ''
-  }
+  },
+  sellQuote: null,
+  buyQuote: null
 }
 
 const tradeReducer: (state: TradeState, action: ReduxAction) => TradeState = (
@@ -43,6 +45,16 @@ const tradeReducer: (state: TradeState, action: ReduxAction) => TradeState = (
       return {
         ...state,
         currentBuy: action.payload
+      }
+    case actions.SET_SELL_QUOTE:
+      return {
+        ...state,
+        sellQuote: action.payload
+      }
+    case actions.SET_BUY_QUOTE:
+      return {
+        ...state,
+        buyQuote: action.payload
       }
     default:
       return state

@@ -199,10 +199,22 @@ export type CurrentBuy = {
   receiveAcc: string,
   refundAddr: string
 }
+export type TradeQuote = {
+  amount: number,
+  fromCurrency: string,
+  id: string,
+  payinAddress: string,
+  payoutAddress: string,
+  payoutExtraId: ?string,
+  refundAddress: string,
+  toCurrency: string
+}
 export type TradeState = {
   nanoPairs: Array<Object>,
   currentSell: CurrentSell,
-  currentBuy: CurrentBuy
+  currentBuy: CurrentBuy,
+  sellQuote: ?TradeQuote,
+  buyQuote: ?TradeQuote
 }
 export type UpdateNanoPairsAction = {
   type: 'TRADE::UPDATE_NANO_PAIRS',
@@ -216,10 +228,20 @@ export type SetCurrentBuyAction = {
   type: 'TRADE::SET_CURRENT_BUY',
   payload: CurrentBuy
 }
+export type SetSellQuoteAction = {
+  type: 'TRADE::SET_SELL_QUOTE',
+  payload: ?TradeQuote
+}
+export type SetBuyQuoteAction = {
+  type: 'TRADE::SET_BUY_QUOTE',
+  payload: ?TradeQuote
+}
 export type TradeAction =
   | UpdateNanoPairsAction
   | SetCurrentSellAction
   | SetCurrentBuyAction
+  | SetBuyQuoteAction
+  | SetSellQuoteAction
 
 // UI ===
 // state

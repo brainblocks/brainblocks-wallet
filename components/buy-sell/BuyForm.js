@@ -16,7 +16,7 @@ import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
 import type { WithRouter, WithSnackbar } from '~/types'
-import type { AccountsState, CurrentBuy } from '~/types/reduxTypes'
+import type { AccountsState, CurrentBuy, TradeQuote } from '~/types/reduxTypes'
 import log from '~/functions/log'
 
 type Props = WithRouter &
@@ -27,7 +27,9 @@ type Props = WithRouter &
     defaultAccount: string,
     nanoPairs: Array<Object>,
     styles: Object,
-    onBuy: CurrentBuy => Promise<void>
+    onBuy: CurrentBuy => Promise<void>,
+    buyQuote: TradeQuote,
+    currentBuy: CurrentBuy
   }
 
 type State = {
@@ -92,7 +94,8 @@ class ReceiveForm extends Component<Props, State> {
         sellCurrency: values.sell,
         sellAmount: this.getAmountNano(values), // @todo - this should be in the sell currency, not NANO
         receiveAcc: values.receiveAcc,
-        refundAddr: values.refundAddr
+        refundAddr: values.refundAddr,
+        isFinal: true
       })
     } catch (e) {
       log.error(e)
@@ -109,159 +112,170 @@ class ReceiveForm extends Component<Props, State> {
       nanoPrice,
       nanoPairs,
       preferredCurrency,
+      currentBuy,
+      buyQuote,
       styles
     } = this.props
     const { amountFieldEditing } = this.state
     return (
       <div className={styles.root}>
-        <Formik
-          initialValues={{
-            receiveAcc: this.initialReceiveAcc,
-            sell: 'btc',
-            amount: 0,
-            refundAddr: ''
-          }}
-          validate={this.validate}
-          onSubmit={this.handleSubmit}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            setFieldValue
-          }) => {
-            const amountFieldNano = this.getAmountNano(values)
-            const amountFieldFiat = this.getAmountFiat(values)
+        {!buyQuote ? (
+          <Formik
+            initialValues={{
+              receiveAcc: this.initialReceiveAcc,
+              sell: 'btc',
+              amount: 0,
+              refundAddr: ''
+            }}
+            validate={this.validate}
+            onSubmit={this.handleSubmit}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              setFieldValue
+            }) => {
+              const amountFieldNano = this.getAmountNano(values)
+              const amountFieldFiat = this.getAmountFiat(values)
 
-            return (
-              <form onSubmit={handleSubmit}>
-                <Grid>
-                  <GridItem spanTablet={6}>
-                    <FormItem label="Buy NANO with" fieldId="sell-currency">
-                      <FormField>
-                        <Select
-                          id="sell-currency"
-                          value={values.sell}
-                          name="sell"
-                          options={nanoPairs}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </FormField>
-                    </FormItem>
-                  </GridItem>
-                  <GridItem spanTablet={6}>
-                    <FormItem
-                      label="Amount"
-                      fieldId="send-amount"
-                      error={errors.amount && touched.amount && errors.amount}
-                      extra={
-                        accounts.byId.hasOwnProperty(values.from) && (
-                          <a
-                            href="#"
-                            onClick={e => {
-                              e.preventDefault()
-                              this.setState(
-                                {
-                                  amountFieldEditing: 'nano'
-                                },
-                                () => {
-                                  setFieldValue(
-                                    'amount',
-                                    accounts.byId[values.from].balance,
-                                    true
-                                  )
-                                }
-                              )
-                            }}
-                          >
-                            Max
-                          </a>
-                        )
-                      }
-                    >
-                      <AmountField
-                        value={values.amount}
-                        name="amount"
-                        fiatCode={preferredCurrency.toUpperCase()}
-                        editing={amountFieldEditing}
-                        nanoFormatted={formatNano(amountFieldNano)}
-                        fiatFormatted={formatFiat(
-                          amountFieldFiat,
-                          preferredCurrency
-                        )}
-                        formFieldProps={{
-                          valid: touched.amount && !errors.amount
-                        }}
-                        onSwitchCurrency={this.handleAmountFieldSwitchCurrency}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </FormItem>
-                  </GridItem>
-                  <GridItem>
-                    <FormItem label="Receive account" fieldId="receive-account">
-                      <FormField>
-                        <AccountSelector
-                          twoLine
-                          balances="all"
-                          name="receiveAcc"
-                          account={values.receiveAcc}
-                          accounts={accounts}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          nanoPrice={nanoPrice}
-                          vaultSelectable={false}
-                        />
-                      </FormField>
-                    </FormItem>
-                  </GridItem>
-
-                  <GridItem>
-                    <FormItem
-                      label="Refund address"
-                      fieldId="refund-address"
-                      error={
-                        errors.refundAddr &&
-                        touched.refundAddr &&
-                        errors.refundAddr
-                      }
-                    >
-                      <FormField
-                        valid={touched.refundAddr && !errors.refundAddr}
+              return (
+                <form onSubmit={handleSubmit}>
+                  <Grid>
+                    <GridItem spanTablet={6}>
+                      <FormItem label="Buy NANO with" fieldId="sell-currency">
+                        <FormField>
+                          <Select
+                            id="sell-currency"
+                            value={values.sell}
+                            name="sell"
+                            options={nanoPairs}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </FormField>
+                      </FormItem>
+                    </GridItem>
+                    <GridItem spanTablet={6}>
+                      <FormItem
+                        label="Amount"
+                        fieldId="send-amount"
+                        error={errors.amount && touched.amount && errors.amount}
+                        extra={
+                          accounts.byId.hasOwnProperty(values.from) && (
+                            <a
+                              href="#"
+                              onClick={e => {
+                                e.preventDefault()
+                                this.setState(
+                                  {
+                                    amountFieldEditing: 'nano'
+                                  },
+                                  () => {
+                                    setFieldValue(
+                                      'amount',
+                                      accounts.byId[values.from].balance,
+                                      true
+                                    )
+                                  }
+                                )
+                              }}
+                            >
+                              Max
+                            </a>
+                          )
+                        }
                       >
-                        <Input
-                          id="refund-address"
-                          name="refundAddr"
-                          placeholder=""
-                          value={values.refundAddr}
+                        <AmountField
+                          value={values.amount}
+                          name="amount"
+                          fiatCode={preferredCurrency.toUpperCase()}
+                          editing={amountFieldEditing}
+                          nanoFormatted={formatNano(amountFieldNano)}
+                          fiatFormatted={formatFiat(
+                            amountFieldFiat,
+                            preferredCurrency
+                          )}
+                          formFieldProps={{
+                            valid: touched.amount && !errors.amount
+                          }}
+                          onSwitchCurrency={
+                            this.handleAmountFieldSwitchCurrency
+                          }
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                      </FormField>
-                    </FormItem>
-                  </GridItem>
-                  <GridItem>
-                    <Button
-                      block
-                      variant="primary"
-                      color="green"
-                      type="submit"
-                      disabled={Object.keys(errors).length > 0}
-                      loading={isSubmitting}
-                    >
-                      Buy Nano
-                    </Button>
-                  </GridItem>
-                </Grid>
-              </form>
-            )
-          }}
-        </Formik>
+                      </FormItem>
+                    </GridItem>
+                    <GridItem>
+                      <FormItem
+                        label="Receive account"
+                        fieldId="receive-account"
+                      >
+                        <FormField>
+                          <AccountSelector
+                            twoLine
+                            balances="all"
+                            name="receiveAcc"
+                            account={values.receiveAcc}
+                            accounts={accounts}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            nanoPrice={nanoPrice}
+                            vaultSelectable={false}
+                          />
+                        </FormField>
+                      </FormItem>
+                    </GridItem>
+
+                    <GridItem>
+                      <FormItem
+                        label="Refund address"
+                        fieldId="refund-address"
+                        error={
+                          errors.refundAddr &&
+                          touched.refundAddr &&
+                          errors.refundAddr
+                        }
+                      >
+                        <FormField
+                          valid={touched.refundAddr && !errors.refundAddr}
+                        >
+                          <Input
+                            id="refund-address"
+                            name="refundAddr"
+                            placeholder=""
+                            value={values.refundAddr}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </FormField>
+                      </FormItem>
+                    </GridItem>
+                    <GridItem>
+                      <Button
+                        block
+                        variant="primary"
+                        color="green"
+                        type="submit"
+                        disabled={Object.keys(errors).length > 0}
+                        loading={isSubmitting}
+                      >
+                        Buy Nano
+                      </Button>
+                    </GridItem>
+                  </Grid>
+                </form>
+              )
+            }}
+          </Formik>
+        ) : (
+          <div>{JSON.stringify(buyQuote, null, 2)}</div>
+        )}
       </div>
     )
   }

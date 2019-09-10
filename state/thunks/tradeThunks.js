@@ -122,7 +122,11 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
       return rejector('Error creating trade', e)
     }
 
-    log.info(trade)
+    if (!trade.status === 'success') {
+      return rejector('Error creating trade')
+    }
+
+    dispatch(creators.setBuyQuote(trade.trade))
 
     dispatch(uiCreators.removeActiveProcess(`create-buy-${time}`))
     resolve()
