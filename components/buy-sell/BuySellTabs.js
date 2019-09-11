@@ -36,6 +36,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   onSell: CurrentSell => Promise<void>,
   onBuy: CurrentBuy => Promise<void>,
+  onResetBuyQuote: () => void,
+  onResetSellQuote: () => void,
   updateNanoPairs: () => void
 }
 
@@ -63,14 +65,18 @@ class BuySellTabs extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps) {
     // Map the nano pairs to a select field format
-    if (!prevProps.nanoPairs.length && this.props.nanoPairs.length) {
-      this.setState({
-        nanoPairs: this.props.nanoPairs.map(pair => ({
-          value: pair.ticker.toUpperCase(),
-          title: pair.ticker.toUpperCase()
-        }))
-      })
+    if (!this.state.nanoPairs.length && this.props.nanoPairs.length) {
+      this.mapNanoPairsToSelect()
     }
+  }
+
+  mapNanoPairsToSelect = () => {
+    this.setState({
+      nanoPairs: this.props.nanoPairs.map(pair => ({
+        value: pair.ticker.toUpperCase(),
+        title: pair.ticker.toUpperCase()
+      }))
+    })
   }
 
   handleSwitchTabs = (index: number, lastIndex: number, event: Event) => {
@@ -102,6 +108,8 @@ class BuySellTabs extends React.Component<Props, State> {
       router,
       onSell,
       onBuy,
+      onResetBuyQuote,
+      onResetSellQuote,
       currentBuy,
       currentSell,
       buyQuote,
@@ -120,6 +128,7 @@ class BuySellTabs extends React.Component<Props, State> {
             <BuyForm
               nanoPrice={nanoPrice}
               onBuy={onBuy}
+              onResetBuyQuote={onResetBuyQuote}
               currentBuy={currentBuy}
               buyQuote={buyQuote}
               accounts={accounts}
@@ -133,6 +142,7 @@ class BuySellTabs extends React.Component<Props, State> {
             <SellForm
               nanoPrice={nanoPrice}
               onSell={onSell}
+              onResetSellQuote={onResetSellQuote}
               currentSell={currentSell}
               sellQuote={sellQuote}
               accounts={accounts}

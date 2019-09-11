@@ -22,6 +22,7 @@ import {
   getPreferredCurrency,
   getDefaultAccount
 } from '~/state/selectors/userSelectors'
+import { creators as tradeActions } from '~/state/actions/tradeActions'
 import {
   createSell,
   createBuy,
@@ -47,6 +48,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   handleSell: CurrentSell => Promise<void>,
   handleBuy: CurrentBuy => Promise<void>,
+  handleSetSellQuote: TradeQuote => void,
+  handleSetBuyQuote: TradeQuote => void,
   updateNanoPairs: () => void
 }
 
@@ -71,6 +74,8 @@ const BuySell = (props: Props) => {
             buyQuote={props.buyQuote}
             onSell={props.handleSell}
             onBuy={props.handleBuy}
+            onResetSellQuote={() => props.handleSetSellQuote(null)}
+            onResetBuyQuote={() => props.handleSetBuyQuote(null)}
             nanoPairs={props.nanoPairs}
             updateNanoPairs={props.updateNanoPairs}
           />
@@ -99,6 +104,8 @@ export default connect(
   {
     handleSell: createSell,
     handleBuy: createBuy,
+    handleSetSellQuote: tradeActions.setSellQuote,
+    handleSetBuyQuote: tradeActions.setBuyQuote,
     updateNanoPairs: updateNanoPairs
   }
 )(withRouter(BuySell))

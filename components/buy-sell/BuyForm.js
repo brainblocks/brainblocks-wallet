@@ -3,14 +3,17 @@ import React, { Component } from 'react'
 import { destyle } from 'destyle'
 import { Formik } from 'formik'
 import { convert } from '~/functions/convert'
-import { formatNano, formatFiat } from '~/functions/format'
+import { formatNano } from '~/functions/format'
 import { isValidNanoAddress } from '~/functions/validate'
+import { getEstimate } from '~/state/api/trade'
+import Alert from 'brainblocks-components/build/Alert'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
 import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
 import Select from 'brainblocks-components/build/Select'
+import Spinner from 'brainblocks-components/build/Spinner'
 import Button from 'brainblocks-components/build/Button'
 import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
@@ -28,49 +31,84 @@ type Props = WithRouter &
     nanoPairs: Array<Object>,
     styles: Object,
     onBuy: CurrentBuy => Promise<void>,
+    onResetBuyQuote: () => void,
     buyQuote: TradeQuote,
     currentBuy: CurrentBuy
   }
 
 type State = {
-  amountFieldEditing: string
+  amountFieldEditing: string,
+  sellCurrency: string,
+  exchangeRate: number,
+  useRefundAddress: boolean,
+  errorMsg: ?string
 }
 
-class ReceiveForm extends Component<Props, State> {
+class BuyForm extends Component<Props, State> {
   initialReceiveAcc: string
+  form: Object
 
   constructor(props) {
     super(props)
     const { accounts, defaultAccount } = props
+    this.form = React.createRef()
     this.initialReceiveAcc =
       defaultAccount && accounts.allIds.includes(defaultAccount)
         ? defaultAccount
         : accounts.allIds[0]
     this.state = {
-      amountFieldEditing: 'nano'
+      amountFieldEditing: 'nano',
+      sellCurrency: props.currentBuy.sellCurrency,
+      exchangeRate: 0,
+      useRefundAddress: false,
+      errorMsg: null
+    }
+  }
+
+  componentDidMount() {
+    this.getRate()
+    // validate form immediately
+    this.form.current.validateForm()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.sellCurrency !== prevState.sellCurrency) {
+      this.getRate()
     }
   }
 
   getAmountNano = values =>
     this.state.amountFieldEditing === 'nano'
       ? values.amount
-      : convert(values.amount, 'fiat', this.props.nanoPrice)
+      : this.state.exchangeRate > 0
+      ? convert(values.amount, 'fiat', 1 / this.state.exchangeRate)
+      : 0
 
-  getAmountFiat = values =>
+  getAmountSellCurrency = values =>
     this.state.amountFieldEditing === 'fiat'
       ? values.amount
-      : convert(values.amount, 'nano', this.props.nanoPrice)
+      : this.state.exchangeRate > 0
+      ? convert(values.amount, 'nano', 1 / this.state.exchangeRate)
+      : 0
+
+  getRate = async () => {
+    const currency = this.state.sellCurrency.toUpperCase()
+    try {
+      const rate = await getEstimate(1, `${currency}_NANO`)
+      this.setState({
+        exchangeRate: rate.estimate.estimatedAmount
+      })
+    } catch (e) {
+      log.error(`Could not get rate for ${currency}_NANO`, e)
+    }
+  }
 
   validate = values => {
     let errors = {}
 
-    if (!values.receiveAcc) {
-      errors.receiveAcc = 'Required'
-    } else if (!isValidNanoAddress(values.from)) {
-      errors.receiveAcc = 'Invalid Nano Address'
+    if (!values.sell) {
+      errors.sell = 'Required'
     }
-
-    // @todo validate buy currency
 
     if (!values.amount) {
       errors.amount = 'Required'
@@ -88,7 +126,39 @@ class ReceiveForm extends Component<Props, State> {
     }))
   }
 
+  handleSellCurrencyChange = (e, formikOnChangeFunc) => {
+    formikOnChangeFunc(e)
+    this.setState({
+      exchangeRate: 0,
+      sellCurrency: e.target.value
+    })
+  }
+
+  handleAmountChange = (e, formikOnChangeFunc) => {
+    formikOnChangeFunc(e)
+    this.form.current.setStatus({
+      amountValid: true
+    })
+  }
+
+  handleRefundAddressChange = (e, formikOnChangeFunc) => {
+    formikOnChangeFunc(e)
+    this.form.current.setStatus({
+      refundAddressValid: true
+    })
+  }
+
+  handleUseRefundAddress = e => {
+    e.preventDefault()
+    this.setState({
+      useRefundAddress: true
+    })
+  }
+
   handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    this.setState({
+      errorMsg: null
+    })
     try {
       await this.props.onBuy({
         sellCurrency: values.sell,
@@ -99,6 +169,25 @@ class ReceiveForm extends Component<Props, State> {
       })
     } catch (e) {
       log.error(e)
+      if (e.response.data.hasOwnProperty('reason')) {
+        switch (e.response.data.reason.error) {
+          case 'not_valid_refund_address':
+            this.form.current.setStatus({
+              refundAddressValid: false
+            })
+            break
+          case 'out_of_range':
+            this.form.current.setStatus({
+              amountValid: false
+            })
+            break
+          default:
+            break
+        }
+        this.setState({
+          errorMsg: `Could not create trade: ${e.response.data.reason.message}`
+        })
+      }
       this.props.enqueueSnackbar('Could not create trade', {
         variant: 'error'
       })
@@ -111,21 +200,28 @@ class ReceiveForm extends Component<Props, State> {
       accounts,
       nanoPrice,
       nanoPairs,
-      preferredCurrency,
       currentBuy,
       buyQuote,
+      onResetBuyQuote,
       styles
     } = this.props
-    const { amountFieldEditing } = this.state
+    const {
+      amountFieldEditing,
+      exchangeRate,
+      useRefundAddress,
+      errorMsg
+    } = this.state
     return (
       <div className={styles.root}>
         {!buyQuote ? (
           <Formik
+            ref={this.form}
+            initialStatus={{}}
             initialValues={{
-              receiveAcc: this.initialReceiveAcc,
-              sell: 'btc',
-              amount: 0,
-              refundAddr: ''
+              receiveAcc: currentBuy.receiveAcc || this.initialReceiveAcc,
+              sell: currentBuy.sellCurrency,
+              amount: currentBuy.sellAmount,
+              refundAddr: currentBuy.refundAddr
             }}
             validate={this.validate}
             onSubmit={this.handleSubmit}
@@ -134,6 +230,7 @@ class ReceiveForm extends Component<Props, State> {
               values,
               errors,
               touched,
+              status,
               handleChange,
               handleBlur,
               handleSubmit,
@@ -141,20 +238,40 @@ class ReceiveForm extends Component<Props, State> {
               setFieldValue
             }) => {
               const amountFieldNano = this.getAmountNano(values)
-              const amountFieldFiat = this.getAmountFiat(values)
+              const amountFieldSellCurrency = this.getAmountSellCurrency(values)
 
               return (
                 <form onSubmit={handleSubmit}>
                   <Grid>
+                    {!!errorMsg && (
+                      <GridItem>
+                        <Alert variant="error">{errorMsg}</Alert>
+                      </GridItem>
+                    )}
                     <GridItem spanTablet={6}>
-                      <FormItem label="Buy NANO with" fieldId="sell-currency">
+                      <FormItem
+                        label="Buy NANO with"
+                        extra={
+                          exchangeRate > 0 ? (
+                            `1 ${values.sell} = ~${formatNano(
+                              exchangeRate,
+                              2
+                            )} NANO`
+                          ) : (
+                            <Spinner size={16} />
+                          )
+                        }
+                        fieldId="sell-currency"
+                      >
                         <FormField>
                           <Select
                             id="sell-currency"
                             value={values.sell}
                             name="sell"
                             options={nanoPairs}
-                            onChange={handleChange}
+                            onChange={e =>
+                              this.handleSellCurrencyChange(e, handleChange)
+                            }
                             onBlur={handleBlur}
                           />
                         </FormField>
@@ -164,49 +281,38 @@ class ReceiveForm extends Component<Props, State> {
                       <FormItem
                         label="Amount"
                         fieldId="send-amount"
-                        error={errors.amount && touched.amount && errors.amount}
-                        extra={
-                          accounts.byId.hasOwnProperty(values.from) && (
-                            <a
-                              href="#"
-                              onClick={e => {
-                                e.preventDefault()
-                                this.setState(
-                                  {
-                                    amountFieldEditing: 'nano'
-                                  },
-                                  () => {
-                                    setFieldValue(
-                                      'amount',
-                                      accounts.byId[values.from].balance,
-                                      true
-                                    )
-                                  }
-                                )
-                              }}
-                            >
-                              Max
-                            </a>
-                          )
+                        error={
+                          status.amountValid === false
+                            ? 'Out of range'
+                            : errors.amount && touched.amount && errors.amount
+                        }
+                        extra={exchangeRate === 0 && <Spinner size={16} />}
+                        description={
+                          <span>
+                            You receive{' '}
+                            <strong>~{formatNano(amountFieldNano)} NANO</strong>
+                          </span>
                         }
                       >
                         <AmountField
                           value={values.amount}
                           name="amount"
-                          fiatCode={preferredCurrency.toUpperCase()}
+                          fiatCode={values.sell}
                           editing={amountFieldEditing}
                           nanoFormatted={formatNano(amountFieldNano)}
-                          fiatFormatted={formatFiat(
-                            amountFieldFiat,
-                            preferredCurrency
-                          )}
+                          fiatFormatted={formatNano(amountFieldSellCurrency, 5)}
                           formFieldProps={{
-                            valid: touched.amount && !errors.amount
+                            valid:
+                              status.amountValid !== false &&
+                              touched.amount &&
+                              !errors.amount
                           }}
                           onSwitchCurrency={
                             this.handleAmountFieldSwitchCurrency
                           }
-                          onChange={handleChange}
+                          onChange={e =>
+                            this.handleAmountChange(e, handleChange)
+                          }
                           onBlur={handleBlur}
                         />
                       </FormItem>
@@ -233,28 +339,58 @@ class ReceiveForm extends Component<Props, State> {
                     </GridItem>
 
                     <GridItem>
-                      <FormItem
-                        label="Refund address"
-                        fieldId="refund-address"
-                        error={
-                          errors.refundAddr &&
-                          touched.refundAddr &&
-                          errors.refundAddr
-                        }
-                      >
-                        <FormField
-                          valid={touched.refundAddr && !errors.refundAddr}
+                      {useRefundAddress || values.refundAddr ? (
+                        <FormItem
+                          label="Refund address"
+                          fieldId="refund-address"
+                          description={`If all or part of your trade cannot be processed, your ${
+                            values.sell
+                          } will be returned to this address. It should be a${
+                            [
+                              'A',
+                              'E',
+                              'I',
+                              'O',
+                              'U',
+                              'F',
+                              'L',
+                              'M',
+                              'N',
+                              'R',
+                              'S',
+                              'X'
+                            ].includes(values.sell[0])
+                              ? 'n'
+                              : ''
+                          } ${values.sell} address that you control.`}
+                          error={
+                            status.refundAddressValid === false &&
+                            'Please enter a valid address'
+                          }
                         >
-                          <Input
-                            id="refund-address"
-                            name="refundAddr"
-                            placeholder=""
-                            value={values.refundAddr}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                        </FormField>
-                      </FormItem>
+                          <FormField
+                            valid={status.refundAddressValid !== false}
+                          >
+                            <Input
+                              id="refund-address"
+                              name="refundAddr"
+                              placeholder=""
+                              value={values.refundAddr}
+                              onChange={e =>
+                                this.handleRefundAddressChange(e, handleChange)
+                              }
+                              onBlur={handleBlur}
+                            />
+                          </FormField>
+                        </FormItem>
+                      ) : (
+                        <div className={styles.textComponent}>
+                          <div>Sending from an exchange?</div>
+                          <a href="#" onClick={this.handleUseRefundAddress}>
+                            + Add a refund address
+                          </a>
+                        </div>
+                      )}
                     </GridItem>
                     <GridItem>
                       <Button
@@ -274,11 +410,14 @@ class ReceiveForm extends Component<Props, State> {
             }}
           </Formik>
         ) : (
-          <div>{JSON.stringify(buyQuote, null, 2)}</div>
+          <div>
+            {JSON.stringify(buyQuote, null, 2)}
+            <button onClick={onResetBuyQuote}>Back</button>
+          </div>
         )}
       </div>
     )
   }
 }
 
-export default withSnackbar(destyle(ReceiveForm, 'ReceiveForm'))
+export default withSnackbar(destyle(BuyForm, 'TxForm'))

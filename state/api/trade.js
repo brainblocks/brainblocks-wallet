@@ -28,3 +28,19 @@ export async function createTrade(tradeData: {
 
   return data
 }
+
+export async function getEstimate(
+  amount: number,
+  pair: string
+): Promise<Object> {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'post',
+    url: '/trade/estimate',
+    data: {
+      amount,
+      pair
+    }
+  })
+
+  return data
+}

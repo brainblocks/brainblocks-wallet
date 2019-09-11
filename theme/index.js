@@ -56,12 +56,9 @@ import './components/new-account-start'
 import './components/new-vault'
 import './components/new-account-settings'
 
-// Send / Receive
-import './components/send-receive-tabs'
-import './components/send-form'
-
-// Buy / Sell
-import './components/buy-sell-tabs'
+// Send / Receive / Buy / Sell
+import './components/tx-form-tabs'
+import './components/tx-form'
 
 // Settings
 import './components/settings-tabs'

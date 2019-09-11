@@ -337,4 +337,4 @@ class SendForm extends Component<Props, State> {
   }
 }
 
-export default withSnackbar(destyle(SendForm, 'SendForm'))
+export default withSnackbar(destyle(SendForm, 'TxForm'))

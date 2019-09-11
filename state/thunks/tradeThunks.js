@@ -76,6 +76,7 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
       })
     } catch (e) {
       // @todo catch and display appropriate error messages with generic fallback
+
       return rejector('Error creating trade', e)
     }
 
@@ -96,7 +97,7 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
     const rejector = (reason, e) => {
       log.error(reason, e)
       dispatch(uiCreators.removeActiveProcess(`create-buy-${time}`))
-      return reject(reason)
+      return reject(e)
     }
 
     // show we're working
@@ -118,7 +119,6 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
         refundAddress: currentBuy.refundAddr
       })
     } catch (e) {
-      // @todo catch and display appropriate error messages with generic fallback
       return rejector('Error creating trade', e)
     }
 

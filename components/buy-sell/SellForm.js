@@ -34,7 +34,7 @@ type State = {
   amountFieldEditing: string
 }
 
-class ReceiveForm extends Component<Props, State> {
+class SellForm extends Component<Props, State> {
   initialFrom: string
 
   constructor(props) {
@@ -272,4 +272,4 @@ class ReceiveForm extends Component<Props, State> {
   }
 }
 
-export default withSnackbar(destyle(ReceiveForm, 'ReceiveForm'))
+export default withSnackbar(destyle(SellForm, 'TxForm'))
