@@ -2,10 +2,13 @@
 import React, { Component } from 'react'
 import { destyle } from 'destyle'
 import { Formik } from 'formik'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import QRCode from 'qrcode.react'
 import { convert } from '~/functions/convert'
 import { formatNano } from '~/functions/format'
-import { isValidNanoAddress } from '~/functions/validate'
 import { getEstimate } from '~/state/api/trade'
+import DefTable from 'brainblocks-components/build/DefTable'
+import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Alert from 'brainblocks-components/build/Alert'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
@@ -18,6 +21,7 @@ import Button from 'brainblocks-components/build/Button'
 import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
+import AccountTitle from '~/components/accounts/AccountTitle'
 import type { WithRouter, WithSnackbar } from '~/types'
 import type { AccountsState, CurrentBuy, TradeQuote } from '~/types/reduxTypes'
 import log from '~/functions/log'
@@ -68,7 +72,9 @@ class BuyForm extends Component<Props, State> {
   componentDidMount() {
     this.getRate()
     // validate form immediately
-    this.form.current.validateForm()
+    if (this.form.current) {
+      this.form.current.validateForm()
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -185,7 +191,10 @@ class BuyForm extends Component<Props, State> {
             break
         }
         this.setState({
-          errorMsg: `Could not create trade: ${e.response.data.reason.message}`
+          errorMsg: `Could not create trade: ${e.response.data.reason.message.replace(
+            'less then minimal',
+            'less than minimal'
+          )}`
         })
       }
       this.props.enqueueSnackbar('Could not create trade', {
@@ -193,6 +202,12 @@ class BuyForm extends Component<Props, State> {
       })
       setSubmitting(false)
     }
+  }
+
+  handleCopyAddress = () => {
+    this.props.enqueueSnackbar('Address copied to clipboard', {
+      variant: 'info'
+    })
   }
 
   render() {
@@ -410,10 +425,80 @@ class BuyForm extends Component<Props, State> {
             }}
           </Formik>
         ) : (
-          <div>
-            {JSON.stringify(buyQuote, null, 2)}
+          <Grid>
+            <GridItem>
+              <Alert variant="info">
+                Your buy order is pending. Review the details then follow the
+                instructions below to complete the trade.
+              </Alert>
+            </GridItem>
+            <GridItem>
+              <FormItem label="Your Buy Order">
+                <FormField>
+                  <div className={styles.defTableInField}>
+                    <DefTable>
+                      <DefTableItem label="Trade ID">
+                        {buyQuote.id}
+                      </DefTableItem>
+                      <DefTableItem label="Status">@todo</DefTableItem>
+                      <DefTableItem label="Sell">
+                        @todo {buyQuote.fromCurrency.toUpperCase()}
+                      </DefTableItem>
+                      <DefTableItem label="Buy">
+                        {formatNano(buyQuote.amount, 5)} NANO
+                      </DefTableItem>
+                      <DefTableItem label="Exchange Rate">@todo</DefTableItem>
+                      <DefTableItem label="Receive Account">
+                        <AccountTitle
+                          account={accounts.byId[buyQuote.payoutAddress]}
+                        />
+                      </DefTableItem>
+                      <DefTableItem label="Refund Address">
+                        {buyQuote.refundAddress ||
+                          'No refund address. Refunds will be returned to the sending address.'}
+                      </DefTableItem>
+                    </DefTable>
+                  </div>
+                </FormField>
+              </FormItem>
+            </GridItem>
+            <GridItem>
+              <FormItem
+                label={`Send @todo ${buyQuote.fromCurrency.toUpperCase()} to`}
+                fieldId="payin-address"
+              >
+                <FormField
+                  adornEnd={
+                    <CopyToClipboard
+                      text={buyQuote.payinAddress}
+                      onCopy={this.handleCopyAddress}
+                    >
+                      <Button variant="util">Copy</Button>
+                    </CopyToClipboard>
+                  }
+                >
+                  <Input
+                    readOnly
+                    id="payin-address"
+                    value={buyQuote.payinAddress}
+                  />
+                </FormField>
+              </FormItem>
+            </GridItem>
+            <GridItem>
+              <FormItem label={`Scan to copy the address`}>
+                <FormField>
+                  <div
+                    className="formItemPadding"
+                    style={{ textAlign: 'center' }}
+                  >
+                    <QRCode value={buyQuote.payinAddress} size={150} />
+                  </div>
+                </FormField>
+              </FormItem>
+            </GridItem>
             <button onClick={onResetBuyQuote}>Back</button>
-          </div>
+          </Grid>
         )}
       </div>
     )
