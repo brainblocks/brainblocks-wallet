@@ -1,87 +1,52 @@
 // @flow
 import React, { Component } from 'react'
 import { destyle } from 'destyle'
-import { isValidNanoAddress } from '~/functions/validate'
-import { formatNano, formatFiat } from '~/functions/format'
+import { Formik } from 'formik'
 import { convert } from '~/functions/convert'
+import { formatNano, formatFiat } from '~/functions/format'
+import { isValidNanoAddress } from '~/functions/validate'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
 import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
+import Select from 'brainblocks-components/build/Select'
 import Button from 'brainblocks-components/build/Button'
 import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
-import { Formik } from 'formik'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import type { WithRouter } from '~/types'
-import type { AccountsState } from '~/types/reduxTypes'
+import type { WithRouter, WithSnackbar } from '~/types'
+import type { AccountsState, CurrentSell } from '~/types/reduxTypes'
 import log from '~/functions/log'
 
-type Props = WithRouter & {
-  accounts: AccountsState,
-  defaultAccount: string,
-  nanoPrice: number,
-  preferredCurrency: string,
-  styles: Object,
-  onSend: (from: string, to: string, amount: string | number) => void,
-  onSendComplete: () => void,
-  variant?: 'send' | 'transfer',
-  enqueueSnackbar: (string, ?Object) => void
-}
+type Props = WithRouter &
+  WithSnackbar & {
+    accounts: AccountsState,
+    nanoPrice: number,
+    preferredCurrency: string,
+    defaultAccount: string,
+    nanoPairs: Array<Object>,
+    styles: Object,
+    onSell: CurrentSell => Promise<void>
+  }
 
 type State = {
   amountFieldEditing: string
 }
 
-class SendForm extends Component<Props, State> {
-  form: Object
+class SellForm extends Component<Props, State> {
   initialFrom: string
-  initialTo: string
 
   constructor(props) {
     super(props)
-    const { accounts, router, defaultAccount, variant } = props
-    this.form = React.createRef()
+    const { accounts, defaultAccount } = props
+    this.initialFrom =
+      defaultAccount && accounts.allIds.includes(defaultAccount)
+        ? defaultAccount
+        : accounts.allIds[0]
     this.state = {
       amountFieldEditing: 'nano'
     }
-
-    if (variant === 'transfer') {
-      let from = accounts.allIds[0]
-      // XSS-safe
-      if (router.query.from && accounts.allIds.includes(router.query.from)) {
-        from = router.query.from
-      } else if (accounts.allIds.includes(defaultAccount)) {
-        from = defaultAccount
-      }
-      let to = accounts.allIds[1]
-      // XSS-safe
-      if (router.query.to && accounts.allIds.includes(router.query.to)) {
-        to = router.query.to
-      }
-      if (from === to) {
-        to = accounts.allIds.find(id => id !== from)
-      }
-      this.initialFrom = from
-      this.initialTo = to
-    } else {
-      // XSS-safe
-      this.initialFrom =
-        router.query.from && accounts.allIds.includes(router.query.from)
-          ? router.query.from
-          : defaultAccount || accounts.allIds[0]
-      // XSS-safe, but will need updating when we can send to contacts, aliases etc
-      this.initialTo =
-        Boolean(router.query.to) && isValidNanoAddress(router.query.to)
-          ? router.query.to
-          : ''
-    }
-  }
-
-  componentDidMount() {
-    // validate form immediately
-    this.form.current.validateForm()
   }
 
   getAmountNano = values =>
@@ -103,13 +68,7 @@ class SendForm extends Component<Props, State> {
       errors.from = 'Invalid Nano Address'
     }
 
-    if (!values.to) {
-      errors.to = 'Required'
-    } else if (!isValidNanoAddress(values.to)) {
-      errors.to = 'Invalid Nano Address'
-    } else if (values.to === values.from) {
-      errors.to = '"From" and "To" must be different accounts'
-    }
+    // @todo validate buy currency
 
     if (!values.amount) {
       errors.amount = 'Required'
@@ -133,19 +92,17 @@ class SendForm extends Component<Props, State> {
 
   handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      await this.props.onSend(
-        values.from,
-        values.to,
-        this.getAmountNano(values)
-      )
-      this.props.enqueueSnackbar('Transaction broadcast successfully', {
-        variant: 'success'
+      await this.props.onSell({
+        fromAcc: values.from,
+        buyCurrency: values.buy,
+        sellAmount: this.getAmountNano(values),
+        receiveAddr: values.buyAddress,
+        extraId: '', // for now
+        isFinal: true
       })
-      resetForm({ to: this.initialTo, amount: 0, from: this.initialFrom })
-      this.props.onSendComplete()
     } catch (e) {
       log.error(e)
-      this.props.enqueueSnackbar('Could not broadcast transaction', {
+      this.props.enqueueSnackbar('Could not create trade', {
         variant: 'error'
       })
       setSubmitting(false)
@@ -154,26 +111,21 @@ class SendForm extends Component<Props, State> {
 
   render() {
     const {
-      styles,
       accounts,
       nanoPrice,
+      nanoPairs,
       preferredCurrency,
-      router,
-      variant = 'send'
+      styles
     } = this.props
-    const { amountFieldEditing = 'nano' } = this.state
-
+    const { amountFieldEditing } = this.state
     return (
       <div className={styles.root}>
         <Formik
-          ref={this.form}
           initialValues={{
             from: this.initialFrom,
-            to: this.initialTo,
-            message: '',
-            amount: isNaN(parseFloat(router.query.amount))
-              ? 0
-              : router.query.amount // XSS-safe
+            buy: 'btc',
+            amount: 0,
+            buyAddress: ''
           }}
           validate={this.validate}
           onSubmit={this.handleSubmit}
@@ -195,12 +147,8 @@ class SendForm extends Component<Props, State> {
               <form onSubmit={handleSubmit}>
                 <Grid>
                   <GridItem>
-                    <FormItem
-                      label="From"
-                      fieldId="send-from"
-                      error={errors.from && touched.from && errors.from}
-                    >
-                      <FormField valid={touched.from && !errors.from}>
+                    <FormItem label="Sell from account" fieldId="sell-account">
+                      <FormField>
                         <AccountSelector
                           twoLine
                           balances="all"
@@ -215,36 +163,17 @@ class SendForm extends Component<Props, State> {
                       </FormField>
                     </FormItem>
                   </GridItem>
-                  <GridItem>
-                    <FormItem
-                      label="To"
-                      fieldId="send-to"
-                      error={errors.to && touched.to && errors.to}
-                    >
-                      <FormField valid={touched.to && !errors.to}>
-                        {variant === 'transfer' ? (
-                          <AccountSelector
-                            twoLine
-                            balances="all"
-                            name="to"
-                            id="send-to"
-                            account={values.to}
-                            accounts={accounts}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            nanoPrice={nanoPrice}
-                            vaultSelectable={false}
-                          />
-                        ) : (
-                          <Input
-                            id="send-to"
-                            name="to"
-                            placeholder="NANO address"
-                            value={values.to}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                        )}
+                  <GridItem spanTablet={6}>
+                    <FormItem label="Currency to buy" fieldId="buy-currency">
+                      <FormField>
+                        <Select
+                          id="buy-currency"
+                          value={values.buy}
+                          name="buy"
+                          options={nanoPairs}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
                       </FormField>
                     </FormItem>
                   </GridItem>
@@ -297,20 +226,26 @@ class SendForm extends Component<Props, State> {
                       />
                     </FormItem>
                   </GridItem>
-                  <GridItem spanTablet={6}>
-                    <FormItem label="Message" fieldId="send-message">
-                      <FormField>
+                  <GridItem>
+                    <FormItem
+                      label="BTC Address"
+                      fieldId="buy-currency-address"
+                      error={
+                        errors.buyAddress &&
+                        touched.buyAddress &&
+                        errors.buyAddress
+                      }
+                    >
+                      <FormField
+                        valid={touched.buyAddress && !errors.buyAddress}
+                      >
                         <Input
-                          multiline
-                          style={{ height: 100 }}
-                          rows={2}
-                          id="send-message"
-                          name="message"
-                          readOnly
-                          placeholder="This feature is coming soon"
+                          id="buy-currency-address"
+                          name="buyAddress"
+                          placeholder="BTC address"
+                          value={values.buyAddress}
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.message}
                         />
                       </FormField>
                     </FormItem>
@@ -324,7 +259,7 @@ class SendForm extends Component<Props, State> {
                       disabled={Object.keys(errors).length > 0}
                       loading={isSubmitting}
                     >
-                      Send
+                      Sell Nano
                     </Button>
                   </GridItem>
                 </Grid>
@@ -337,4 +272,4 @@ class SendForm extends Component<Props, State> {
   }
 }
 
-export default withSnackbar(destyle(SendForm, 'TxForm'))
+export default withSnackbar(destyle(SellForm, 'TxForm'))
