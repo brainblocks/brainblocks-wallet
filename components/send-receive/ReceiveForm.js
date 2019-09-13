@@ -112,4 +112,4 @@ class ReceiveForm extends Component<Props, State> {
   }
 }
 
-export default withSnackbar(destyle(ReceiveForm, 'ReceiveForm'))
+export default withSnackbar(destyle(ReceiveForm, 'TxForm'))
