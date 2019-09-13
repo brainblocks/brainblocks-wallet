@@ -152,4 +152,4 @@ class SendReceiveTabs extends React.Component<Props, State> {
   }
 }
 
-export default destyle(SendReceiveTabs, 'SendReceiveTabs')
+export default destyle(SendReceiveTabs, 'TxFormTabs')

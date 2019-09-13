@@ -3,6 +3,7 @@ import { combineReducers } from 'redux'
 import uiReducer, { uiInitialState } from '~/state/reducers/uiReducer'
 import priceReducer, { priceInitialState } from '~/state/reducers/priceReducer'
 import tradeReducer, { tradeInitialState } from '~/state/reducers/tradeReducer'
+import tradesReducer, { tradesInitialState } from './tradesReducer'
 import userReducer, { userInitialState } from '~/state/reducers/userReducer'
 import authReducer, { authInitialState } from '~/state/reducers/authReducer'
 import vaultReducer, { vaultInitialState } from '~/state/reducers/vaultReducer'
@@ -18,6 +19,7 @@ export const initialState: ReduxState = {
   ui: uiInitialState,
   price: priceInitialState,
   trade: tradeInitialState,
+  trades: tradesInitialState,
   user: userInitialState,
   auth: authInitialState,
   accounts: accountsInitialState,
@@ -29,6 +31,7 @@ const combinedReducers = combineReducers({
   ui: uiReducer,
   price: priceReducer,
   trade: tradeReducer,
+  trades: tradesReducer,
   user: userReducer,
   auth: authReducer,
   accounts: accountsReducer,

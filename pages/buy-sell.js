@@ -18,6 +18,7 @@ import {
   getBuyQuote,
   getSellQuote
 } from '~/state/selectors/tradeSelectors'
+import { getTrades } from '~/state/selectors/tradesSelectors'
 import {
   getPreferredCurrency,
   getDefaultAccount
@@ -31,6 +32,7 @@ import {
 import type { WithRouter } from '~/types'
 import type {
   AccountsState,
+  TradesState,
   CurrentBuy,
   CurrentSell,
   TradeQuote
@@ -38,6 +40,7 @@ import type {
 
 type Props = WithRouter & {
   accounts: AccountsState,
+  trades: TradesState,
   nanoPrice: number,
   nanoPairs: Array<Object>,
   preferredCurrency: ?string,
@@ -48,8 +51,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   handleSell: CurrentSell => Promise<void>,
   handleBuy: CurrentBuy => Promise<void>,
-  handleSetSellQuote: TradeQuote => void,
-  handleSetBuyQuote: TradeQuote => void,
+  handleSetSellQuote: (?TradeQuote) => void,
+  handleSetBuyQuote: (?TradeQuote) => void,
   updateNanoPairs: () => void
 }
 
@@ -64,6 +67,7 @@ const BuySell = (props: Props) => {
         <PageContent pad background>
           <BuySellTabs
             accounts={props.accounts}
+            trades={props.trades}
             nanoPrice={props.nanoPrice}
             preferredCurrency={props.preferredCurrency}
             router={props.router}
@@ -92,6 +96,7 @@ BuySell.getInitialProps = async ctx => {
 export default connect(
   state => ({
     accounts: getAccounts(state),
+    trades: getTrades(state),
     nanoPrice: getNanoPriceInPreferredCurrency(state),
     preferredCurrency: getPreferredCurrency(state),
     defaultAccount: getDefaultAccount(state),

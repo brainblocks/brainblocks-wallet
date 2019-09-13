@@ -1,16 +1,20 @@
 // @flow
 import * as React from 'react'
 import { destyle } from 'destyle'
+import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import TabComponents from 'brainblocks-components/build/Tabs'
 import SwitchTabs from 'brainblocks-components/build/SwitchTabs'
 import BuyForm from './BuyForm'
 import SellForm from './SellForm'
+import Message from '~/components/layout/Message'
+import Button from 'brainblocks-components/build/Button'
 import type { WithRouter } from '~/types'
 import type {
   AccountsState,
   CurrentSell,
   CurrentBuy,
-  TradeQuote
+  TradeQuote,
+  TradesState
 } from '~/types/reduxTypes'
 import { getKeyByValue } from '~/functions/util'
 
@@ -24,6 +28,7 @@ const tabIndexMap = {
 type Props = WithRouter & {
   vaults: Object,
   accounts: AccountsState,
+  trades: TradesState,
   defaultAccount: string,
   nanoPrice: number,
   preferredCurrency: string,
@@ -43,7 +48,9 @@ type Props = WithRouter & {
 
 type State = {
   activeTab: number,
-  nanoPairs: Array<Object>
+  nanoPairs: Array<Object>,
+  buyComplete: boolean,
+  sellComplete: boolean
 }
 
 class BuySellTabs extends React.Component<Props, State> {
@@ -55,7 +62,9 @@ class BuySellTabs extends React.Component<Props, State> {
       activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
         ? tabIndexMap[this.props.router.query.tab]
         : 0,
-      nanoPairs: []
+      nanoPairs: [],
+      buyComplete: false,
+      sellComplete: false
     }
   }
 
@@ -98,10 +107,29 @@ class BuySellTabs extends React.Component<Props, State> {
     this.props.router.push('/')
   }
 
+  handleBack = e => {
+    e.preventDefault()
+    this.props.onResetBuyQuote()
+    this.props.onResetSellQuote()
+  }
+
+  handleBuyComplete = () => {
+    this.setState({
+      buyComplete: true
+    })
+  }
+
+  handleSellComplete = () => {
+    this.setState({
+      sellComplete: true
+    })
+  }
+
   render() {
     const {
       styles,
       accounts,
+      trades,
       defaultAccount,
       nanoPrice,
       preferredCurrency,
@@ -115,9 +143,36 @@ class BuySellTabs extends React.Component<Props, State> {
       buyQuote,
       sellQuote
     } = this.props
-    const { activeTab, nanoPairs } = this.state
+    const { activeTab, nanoPairs, buyComplete } = this.state
+    if (buyComplete) {
+      return (
+        <Message
+          title="Completed Buy Order"
+          subtitle="If you sent the funds, your NANO will be delivered shortly."
+          graphic="/static/svg/success.svg"
+        >
+          <Button
+            onClick={this.handleGoToDashboard}
+            color="blue"
+            style={{ marginBottom: 5 }}
+            data-cy="back-to-dashboard"
+          >
+            Back to Dashboard
+          </Button>
+        </Message>
+      )
+    }
     return (
       <div className={styles.root}>
+        {(buyQuote && activeTab === tabIndexMap.buy) ||
+        (sellQuote && activeTab === tabIndexMap.sell) ? (
+          <a href="#" onClick={this.handleBack} className={styles.back}>
+            <span className={styles.backIcon}>
+              <BackIcon />
+            </span>
+            <span className={styles.backText}>Back</span>
+          </a>
+        ) : null}
         <SwitchTabs selectedIndex={activeTab} onSelect={this.handleSwitchTabs}>
           <TabList>
             <Tab>Buy Nano</Tab>
@@ -132,10 +187,12 @@ class BuySellTabs extends React.Component<Props, State> {
               currentBuy={currentBuy}
               buyQuote={buyQuote}
               accounts={accounts}
+              trades={trades}
               defaultAccount={defaultAccount}
               preferredCurrency={preferredCurrency}
               router={router}
               nanoPairs={nanoPairs}
+              onComplete={this.handleBuyComplete}
             />
           </TabPanel>
           <TabPanel>
@@ -150,6 +207,7 @@ class BuySellTabs extends React.Component<Props, State> {
               preferredCurrency={preferredCurrency}
               router={router}
               nanoPairs={nanoPairs}
+              onComplete={this.handleSellComplete}
             />
           </TabPanel>
         </SwitchTabs>
@@ -158,4 +216,4 @@ class BuySellTabs extends React.Component<Props, State> {
   }
 }
 
-export default destyle(BuySellTabs, 'BuySellTabs')
+export default destyle(BuySellTabs, 'TxFormTabs')

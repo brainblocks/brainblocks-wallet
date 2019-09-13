@@ -7,8 +7,6 @@ import QRCode from 'qrcode.react'
 import { convert } from '~/functions/convert'
 import { formatNano } from '~/functions/format'
 import { getEstimate } from '~/state/api/trade'
-import DefTable from 'brainblocks-components/build/DefTable'
-import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Alert from 'brainblocks-components/build/Alert'
 import Grid from 'brainblocks-components/build/Grid'
 import GridItem from 'brainblocks-components/build/GridItem'
@@ -21,14 +19,20 @@ import Button from 'brainblocks-components/build/Button'
 import AmountField from 'brainblocks-components/build/AmountField'
 import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountSelector from '~/components/accounts/AccountSelector'
-import AccountTitle from '~/components/accounts/AccountTitle'
+import TradeInfo from './TradeInfo'
 import type { WithRouter, WithSnackbar } from '~/types'
-import type { AccountsState, CurrentBuy, TradeQuote } from '~/types/reduxTypes'
+import type {
+  AccountsState,
+  CurrentBuy,
+  TradeQuote,
+  TradesState
+} from '~/types/reduxTypes'
 import log from '~/functions/log'
 
 type Props = WithRouter &
   WithSnackbar & {
     accounts: AccountsState,
+    trades: TradesState,
     nanoPrice: number,
     preferredCurrency: string,
     defaultAccount: string,
@@ -36,6 +40,7 @@ type Props = WithRouter &
     styles: Object,
     onBuy: CurrentBuy => Promise<void>,
     onResetBuyQuote: () => void,
+    onComplete: () => void,
     buyQuote: TradeQuote,
     currentBuy: CurrentBuy
   }
@@ -65,7 +70,8 @@ class BuyForm extends Component<Props, State> {
       sellCurrency: props.currentBuy.sellCurrency,
       exchangeRate: 0,
       useRefundAddress: false,
-      errorMsg: null
+      errorMsg: null,
+      buyComplete: false
     }
   }
 
@@ -168,7 +174,7 @@ class BuyForm extends Component<Props, State> {
     try {
       await this.props.onBuy({
         sellCurrency: values.sell,
-        sellAmount: this.getAmountNano(values), // @todo - this should be in the sell currency, not NANO
+        sellAmount: this.getAmountSellCurrency(values),
         receiveAcc: values.receiveAcc,
         refundAddr: values.refundAddr,
         isFinal: true
@@ -210,15 +216,25 @@ class BuyForm extends Component<Props, State> {
     })
   }
 
+  handleBack = e => {
+    e.preventDefault()
+    this.props.onResetBuyQuote()
+  }
+
+  handleGoToDashboard = () => {
+    this.props.router.push('/')
+  }
+
   render() {
     const {
       accounts,
+      trades,
       nanoPrice,
       nanoPairs,
       currentBuy,
       buyQuote,
-      onResetBuyQuote,
-      styles
+      styles,
+      onComplete
     } = this.props
     const {
       amountFieldEditing,
@@ -226,6 +242,8 @@ class BuyForm extends Component<Props, State> {
       useRefundAddress,
       errorMsg
     } = this.state
+    const tradeStatus =
+      buyQuote && trades.byId[buyQuote.id] ? trades.byId[buyQuote.id] : {}
     return (
       <div className={styles.root}>
         {!buyQuote ? (
@@ -235,7 +253,14 @@ class BuyForm extends Component<Props, State> {
             initialValues={{
               receiveAcc: currentBuy.receiveAcc || this.initialReceiveAcc,
               sell: currentBuy.sellCurrency,
-              amount: currentBuy.sellAmount,
+              amount:
+                amountFieldEditing === 'nano'
+                  ? convert(
+                      currentBuy.sellAmount,
+                      'fiat',
+                      1 / this.state.exchangeRate
+                    )
+                  : currentBuy.sellAmount,
               refundAddr: currentBuy.refundAddr
             }}
             validate={this.validate}
@@ -436,36 +461,32 @@ class BuyForm extends Component<Props, State> {
               <FormItem label="Your Buy Order">
                 <FormField>
                   <div className={styles.defTableInField}>
-                    <DefTable>
-                      <DefTableItem label="Trade ID">
-                        {buyQuote.id}
-                      </DefTableItem>
-                      <DefTableItem label="Status">@todo</DefTableItem>
-                      <DefTableItem label="Sell">
-                        @todo {buyQuote.fromCurrency.toUpperCase()}
-                      </DefTableItem>
-                      <DefTableItem label="Buy">
-                        {formatNano(buyQuote.amount, 5)} NANO
-                      </DefTableItem>
-                      <DefTableItem label="Exchange Rate">@todo</DefTableItem>
-                      <DefTableItem label="Receive Account">
-                        <AccountTitle
-                          account={accounts.byId[buyQuote.payoutAddress]}
-                        />
-                      </DefTableItem>
-                      <DefTableItem label="Refund Address">
-                        {buyQuote.refundAddress ||
-                          'No refund address. Refunds will be returned to the sending address.'}
-                      </DefTableItem>
-                    </DefTable>
+                    <TradeInfo tradeId={buyQuote.id} />
                   </div>
                 </FormField>
               </FormItem>
             </GridItem>
             <GridItem>
+              <div className={styles.intermediateHeader}>
+                <div className={styles.intermediateHeaderInner}>
+                  <h2>Complete your order below</h2>
+                  <p>
+                    Or{' '}
+                    <a href="#" onClick={this.handleBack}>
+                      go back
+                    </a>{' '}
+                    to make changes
+                  </p>
+                </div>
+              </div>
+            </GridItem>
+            <GridItem>
               <FormItem
-                label={`Send @todo ${buyQuote.fromCurrency.toUpperCase()} to`}
+                label={`Send ${
+                  tradeStatus.expectedSendAmount
+                } ${buyQuote.fromCurrency.toUpperCase()} to`}
                 fieldId="payin-address"
+                description={`Your ${buyQuote.fromCurrency.toUpperCase()} will be converted to NANO and sent to your account`}
               >
                 <FormField
                   adornEnd={
@@ -497,7 +518,16 @@ class BuyForm extends Component<Props, State> {
                 </FormField>
               </FormItem>
             </GridItem>
-            <button onClick={onResetBuyQuote}>Back</button>
+            <GridItem>
+              <Button
+                block
+                variant="primary"
+                color="green"
+                onClick={onComplete}
+              >
+                Complete Order
+              </Button>
+            </GridItem>
           </Grid>
         )}
       </div>

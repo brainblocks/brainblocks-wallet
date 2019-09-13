@@ -10,6 +10,7 @@ import { getIsWorking } from '~/state/selectors/uiSelectors'
 import DashboardIcon from '~/static/svg/icons/dashboard.svg'
 import AccountsIcon from '~/static/svg/icons/accounts.svg'
 import SendReceiveIcon from '~/static/svg/icons/send-receive.svg'
+import TradeIcon from '~/static/svg/icons/trade.svg'
 import SettingsIcon from '~/static/svg/icons/settings.svg'
 import UserIcon from '~/static/svg/icons/user.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
@@ -45,7 +46,7 @@ const menuItems = [
   {
     href: '/buy-sell',
     title: 'Buy & Sell',
-    icon: <SendReceiveIcon />,
+    icon: <TradeIcon />,
     mobile: true
   },
   /* This has some problems - like if I'm already on the settings page, clicking it does nothing (regardless of which tab I'm on)

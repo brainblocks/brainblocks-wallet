@@ -1,13 +1,19 @@
 // @flow
 import { makeAuthorizedApiRequest } from './helpers'
 
+export async function getAllPairs(): Promise<Object> {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'get',
+    url: '/trade/pairs'
+  })
+
+  return data
+}
+
 export async function getCurrencyPairs(currency: string): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
-    method: 'post',
-    url: '/trade/currencyPairs',
-    data: {
-      currency
-    }
+    method: 'get',
+    url: `/trade/pairs/${currency}`
   })
 
   return data
@@ -34,12 +40,31 @@ export async function getEstimate(
   pair: string
 ): Promise<Object> {
   const { data } = await makeAuthorizedApiRequest({
-    method: 'post',
+    method: 'get',
     url: '/trade/estimate',
-    data: {
+    params: {
       amount,
       pair
     }
+  })
+
+  return data
+}
+
+export async function getTrades(params: Object = {}): Promise<Object> {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'get',
+    url: '/trade/trades',
+    params
+  })
+
+  return data
+}
+
+export async function getTrade(id: string): Promise<Object> {
+  const { data } = await makeAuthorizedApiRequest({
+    method: 'get',
+    url: `/trade/trades/${id}`
   })
 
   return data

@@ -1,5 +1,6 @@
 // @flow
 import { creators } from '~/state/actions/tradeActions'
+import { creators as tradesCreators } from '~/state/actions/tradesActions'
 import { creators as uiCreators } from '~/state/actions/uiActions'
 import { isValidNanoAddress } from '~/functions/validate'
 import * as tradeAPI from '~/state/api/trade'
@@ -7,7 +8,7 @@ import { getWallet, nanoToRaw } from '~/state/wallet'
 import log from '~/functions/log'
 import type { ThunkAction, CurrentSell, CurrentBuy } from '~/types/reduxTypes'
 
-export const updateNanoPairs: boolean => ThunkAction = () => (
+export const updateNanoPairs: () => ThunkAction = () => (
   dispatch,
   getState
 ) => {
@@ -16,17 +17,28 @@ export const updateNanoPairs: boolean => ThunkAction = () => (
     dispatch(uiCreators.addActiveProcess(`get-nano-pairs`))
 
     try {
+      const allPairs = await tradeAPI.getAllPairs()
+      const buyNanoPairs = allPairs.pairs
+        .filter(pair => pair.indexOf('_nano') >= 0)
+        .map(pair => pair.replace('_nano', ''))
       const response = await tradeAPI.getCurrencyPairs('NANO')
-      // const pairs = response.currencies.filter(currency => currency.isAvailable)
-      const pairs = response.currencies
+      // @todo - this filtering is only for buys, we'll need to figure out
+      // how to also allow sends. Maybe they are two different slices of state
+      const pairs = response.currencies.filter(currency =>
+        buyNanoPairs.includes(currency.ticker)
+      )
       // update in redux
       dispatch(creators.updateNanoPairs(pairs))
     } catch (e) {
       log.error('Error getting Nano trade pairs', e)
+      dispatch(uiCreators.removeActiveProcess(`get-nano-pairs`))
+      return reject('Error getting Nano trade pairs')
     }
 
     // let ui know we're done
     dispatch(uiCreators.removeActiveProcess(`get-nano-pairs`))
+
+    resolve()
   })
 }
 
@@ -110,6 +122,7 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
     const pair = `${currentBuy.sellCurrency}_NANO`
     const tradeAmount = currentBuy.sellAmount
     let trade
+    let tradeStatus
     try {
       trade = await tradeAPI.createTrade({
         pair,
@@ -118,6 +131,7 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
         extraId: null,
         refundAddress: currentBuy.refundAddr
       })
+      tradeStatus = await tradeAPI.getTrade(trade.trade.id)
     } catch (e) {
       return rejector('Error creating trade', e)
     }
@@ -127,6 +141,7 @@ export const createBuy: CurrentBuy => ThunkAction = currentBuy => (
     }
 
     dispatch(creators.setBuyQuote(trade.trade))
+    dispatch(tradesCreators.upsertTrade(tradeStatus.trade))
 
     dispatch(uiCreators.removeActiveProcess(`create-buy-${time}`))
     resolve()

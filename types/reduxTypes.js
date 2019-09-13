@@ -21,6 +21,7 @@ export type ReduxAction =
   | AuthAction
   | PriceAction
   | TradeAction
+  | TradesAction
   | TransactionAction
   | UIAction
   | UserAction
@@ -183,6 +184,45 @@ export type UpdateNanoPricesAction = {
   payload: Object
 }
 export type PriceAction = UpdateNanoPricesAction
+
+// Trades ===
+// state
+export type Trade = {
+  +id: string,
+  +status:
+    | 'new'
+    | 'waiting'
+    | 'confirming'
+    | 'exchanging'
+    | 'sending'
+    | 'finished'
+    | 'failed'
+    | 'refunded'
+    | 'expired',
+  +payinAddress: string,
+  +payoutAddress: string,
+  +fromCurrency: string,
+  +toCurrency: string,
+  +refundAddress: string,
+  +updatedAt: number,
+  +expectedSendAmount: number,
+  +expectedReceiveAmount: number,
+  +createdAt: number
+}
+export type TradesState = {
+  +allIds: Array<string>,
+  +byId: { [string]: Trade }
+}
+// actions
+export type BulkAddTradesAction = {
+  type: 'TRADES::BULK_ADD',
+  payload: Array<Trade>
+}
+export type UpsertTradeAction = {
+  type: 'TRADES::UPSERT',
+  payload: Trade
+}
+export type TradesAction = BulkAddTradesAction | UpsertTradeAction
 
 // Trade ===
 // state
