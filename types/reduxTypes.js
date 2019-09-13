@@ -189,6 +189,7 @@ export type PriceAction = UpdateNanoPricesAction
 // state
 export type Trade = {
   +id: string,
+  // eslint-disable-next-line flowtype/space-after-type-colon
   +status:
     | 'new'
     | 'waiting'

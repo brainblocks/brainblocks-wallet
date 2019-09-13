@@ -8,18 +8,17 @@ import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getTrades } from '~/state/selectors/tradesSelectors'
-import { withSnackbar } from 'brainblocks-components/build/Snackbar'
+// import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountTitle from '~/components/accounts/AccountTitle'
-import type { WithRouter, WithSnackbar } from '~/types'
+import type { WithSnackbar } from '~/types'
 import type { AccountsState, Trade } from '~/types/reduxTypes'
 
-type Props = WithRouter &
-  WithSnackbar & {
-    accounts: AccountsState,
-    tradeId: string,
-    trade: Trade,
-    styles: Object
-  }
+type Props = WithSnackbar & {
+  accounts: AccountsState,
+  tradeId: string,
+  trade: Trade,
+  styles: Object
+}
 
 class TradeInfoTable extends Component<Props> {
   render() {
