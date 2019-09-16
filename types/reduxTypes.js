@@ -1,4 +1,6 @@
 // @flow
+import type { TradeStatus } from '~/types/apiTypes'
+
 export type Dispatch = (
   action: ReduxAction | ThunkAction | PromiseAction
 ) => any
@@ -186,20 +188,11 @@ export type UpdateNanoPricesAction = {
 export type PriceAction = UpdateNanoPricesAction
 
 // Trades ===
+
 // state
 export type Trade = {
   +id: string,
-  // eslint-disable-next-line flowtype/space-after-type-colon
-  +status:
-    | 'new'
-    | 'waiting'
-    | 'confirming'
-    | 'exchanging'
-    | 'sending'
-    | 'finished'
-    | 'failed'
-    | 'refunded'
-    | 'expired',
+  +status: TradeStatus,
   +payinAddress: string,
   +payoutAddress: string,
   +fromCurrency: string,

@@ -60,6 +60,7 @@ import './components/new-account-settings'
 // Send / Receive / Buy / Sell
 import './components/tx-form-tabs'
 import './components/tx-form'
+import './components/trade-info-table'
 
 // Settings
 import './components/settings-tabs'

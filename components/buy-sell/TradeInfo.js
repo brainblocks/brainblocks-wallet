@@ -8,47 +8,102 @@ import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getAccounts } from '~/state/selectors/accountSelectors'
 import { getTrades } from '~/state/selectors/tradesSelectors'
+import { getTrade } from '~/state/thunks/tradesThunks'
 // import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import type { WithSnackbar } from '~/types'
 import type { AccountsState, Trade } from '~/types/reduxTypes'
+import type { TradeStatus } from '~/types/apiTypes'
+
+export const redStatuses: Array<TradeStatus> = ['failed', 'refunded', 'expired']
+export const amberStatuses: Array<TradeStatus> = [
+  'new',
+  'waiting',
+  'confirming',
+  'exchanging',
+  'sending'
+]
+export const greenStatuses: Array<TradeStatus> = ['finished']
 
 type Props = WithSnackbar & {
   accounts: AccountsState,
   tradeId: string,
   trade: Trade,
-  styles: Object
+  styles: Object,
+  getTrade: () => void
 }
 
 class TradeInfoTable extends Component<Props> {
+  pollTimer: IntervalID
+
+  componentDidMount() {
+    this.refresh()
+    this.pollTimer = setInterval(this.refresh, 5000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollTimer)
+  }
+
+  refresh = () => {
+    if (!document.hasFocus()) return
+    if (typeof this.props.trade === 'object') {
+      if (amberStatuses.includes(this.props.trade.status)) {
+        this.props.getTrade()
+      } else {
+        clearInterval(this.pollTimer)
+      }
+    }
+  }
+
   render() {
     const { accounts, trade, styles } = this.props
     return (
       <div className={styles.root}>
         {trade ? (
           <DefTable>
-            <DefTableItem label="Trade ID">{trade.id}</DefTableItem>
-            <DefTableItem label="Status">{trade.status}</DefTableItem>
+            <DefTableItem label="Trade ID">
+              <span className={styles.tradeId}>{trade.id}</span>
+            </DefTableItem>
+            <DefTableItem label="Status">
+              <span className={styles.status}>
+                <span className={styles.statusIndicator} />
+                {trade.status}
+              </span>
+            </DefTableItem>
             <DefTableItem label="Sell">
-              {formatNano(trade.expectedSendAmount, 5)}{' '}
-              {trade.fromCurrency.toUpperCase()}
+              <span className={styles.sell}>
+                {formatNano(trade.expectedSendAmount, 5)}{' '}
+                {trade.fromCurrency.toUpperCase()}
+              </span>
             </DefTableItem>
             <DefTableItem label="Buy">
-              {formatNano(trade.expectedReceiveAmount, 5)}{' '}
-              {trade.toCurrency.toUpperCase()}
+              <span className={styles.buy}>
+                {formatNano(trade.expectedReceiveAmount, 5)}{' '}
+                {trade.toCurrency.toUpperCase()}
+              </span>
             </DefTableItem>
             <DefTableItem label="Expected Exchange Rate">
-              {`1 ${trade.fromCurrency.toUpperCase()} = ~${formatNano(
+              <span
+                className={styles.rate}
+              >{`1 ${trade.fromCurrency.toUpperCase()} = ~${formatNano(
                 trade.expectedReceiveAmount / trade.expectedSendAmount,
                 5
-              )} ${trade.toCurrency.toUpperCase()}`}
+              )} ${trade.toCurrency.toUpperCase()}`}</span>
             </DefTableItem>
             <DefTableItem label="Receive Account">
               <AccountTitle account={accounts.byId[trade.payoutAddress]} />
             </DefTableItem>
+            <DefTableItem
+              label={`${trade.fromCurrency.toUpperCase()} Deposit Address`}
+            >
+              <span className={styles.payinAddress}>{trade.payinAddress}</span>
+            </DefTableItem>
             <DefTableItem label="Refund Address">
-              {trade.refundAddress ||
-                'No refund address. Refunds will be returned to the sending address.'}
+              <span className={styles.refund}>
+                {trade.refundAddress ||
+                  'No refund address. Refunds will be returned to the sending address.'}
+              </span>
             </DefTableItem>
           </DefTable>
         ) : (
@@ -72,5 +127,7 @@ export default connect(
     accounts: getAccounts(state),
     trade: getTrades(state).byId[ownProps.tradeId]
   }),
-  {}
+  (dispatch, ownProps) => ({
+    getTrade: () => dispatch(getTrade(ownProps.tradeId))
+  })
 )(destyle(TradeInfoTable, 'TradeInfoTable'))
