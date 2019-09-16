@@ -199,7 +199,7 @@ class BuyForm extends Component<Props, State> {
         this.setState({
           errorMsg: `Could not create trade: ${e.response.data.reason.message.replace(
             'less then minimal',
-            'less than minimal'
+            'less than minimum'
           )}`
         })
       }
@@ -291,15 +291,13 @@ class BuyForm extends Component<Props, State> {
                     <GridItem spanTablet={6}>
                       <FormItem
                         label="Buy NANO with"
-                        extra={
-                          exchangeRate > 0 ? (
-                            `1 ${values.sell} = ~${formatNano(
-                              exchangeRate,
-                              2
-                            )} NANO`
-                          ) : (
-                            <Spinner size={16} />
-                          )
+                        extra={exchangeRate === 0 && <Spinner size={16} />}
+                        description={
+                          exchangeRate > 0 &&
+                          `1 ${values.sell} = ~${formatNano(
+                            exchangeRate,
+                            2
+                          )} NANO`
                         }
                         fieldId="sell-currency"
                       >
@@ -453,8 +451,10 @@ class BuyForm extends Component<Props, State> {
           <Grid>
             <GridItem>
               <Alert variant="info">
-                Your buy order is pending. Review the details then follow the
-                instructions below to complete the trade.
+                Your buy order will be pending until you send{' '}
+                {buyQuote.fromCurrency.toUpperCase()} to the deposit address.
+                Review the details then follow the instructions below to
+                complete the trade.
               </Alert>
             </GridItem>
             <GridItem>

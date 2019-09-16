@@ -31,3 +31,14 @@ export type WebsocketReceiveAccountsObject = {
     blocks: Array<WebsocketReceiveBlock>
   }
 }
+
+export type TradeStatus =
+  | 'new'
+  | 'waiting'
+  | 'confirming'
+  | 'exchanging'
+  | 'sending'
+  | 'finished'
+  | 'failed'
+  | 'refunded'
+  | 'expired'
