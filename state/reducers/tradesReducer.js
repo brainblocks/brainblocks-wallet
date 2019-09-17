@@ -6,7 +6,8 @@ import type { TradesState, ReduxAction } from '~/types/reduxTypes'
 
 export const tradesInitialState: TradesState = {
   allIds: [],
-  byId: {}
+  byId: {},
+  didGetTrades: false
 }
 
 const tradesReducer: (
@@ -20,27 +21,42 @@ const tradesReducer: (
   return produce(state, draft => {
     switch (action.type) {
       case actions.BULK_ADD_TRADES:
-        draft.allIds = [...draft.allIds, action.payload.map(trade => trade.id)]
-        draft.byId = {
-          ...draft.byId,
-          ...action.payload.reduce((obj, trade) => (obj[trade.id] = trade), {})
-        }
+        draft.allIds = [
+          ...draft.allIds,
+          ...action.payload.map(trade => trade.id)
+        ]
+        draft.byId = {}
+        action.payload.forEach(trade => {
+          draft.byId[trade.id] = trade
+        })
+        draft.didGetTrades = true
+        updateTimestamps()
         dedupeIds()
         sort()
         break
       case actions.UPSERT_TRADE:
         draft.allIds.push(action.payload.id)
         draft.byId[action.payload.id] = action.payload
+        updateTimestamps()
         dedupeIds()
         sort()
         break
       default:
     }
 
+    // Update timestamps
+    function updateTimestamps() {
+      draft.allIds.forEach(tid => {
+        draft.byId[tid].updatedAt = new Date(
+          draft.byId[tid].updatedAt
+        ).getTime()
+      })
+    }
+
     // sort descending by timestamp
     function sort() {
       draft.allIds.sort((a, b) => {
-        return draft.byId[b].createdAt - draft.byId[a].createdAt
+        return draft.byId[b].updatedAt - draft.byId[a].updatedAt
       })
     }
 

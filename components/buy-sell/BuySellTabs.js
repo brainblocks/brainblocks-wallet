@@ -119,9 +119,21 @@ class BuySellTabs extends React.Component<Props, State> {
     })
   }
 
+  handleBuyIncomplete = () => {
+    this.setState({
+      buyComplete: false
+    })
+  }
+
   handleSellComplete = () => {
     this.setState({
       sellComplete: true
+    })
+  }
+
+  handleSellIncomplete = () => {
+    this.setState({
+      buyComplete: false
     })
   }
 
@@ -152,12 +164,19 @@ class BuySellTabs extends React.Component<Props, State> {
           graphic="/static/svg/success.svg"
         >
           <Button
-            onClick={this.handleGoToDashboard}
+            onClick={this.handleBuyIncomplete}
             color="blue"
+            style={{ marginBottom: 5 }}
+          >
+            Go Back
+          </Button>{' '}
+          <Button
+            onClick={this.handleGoToDashboard}
+            color="green"
             style={{ marginBottom: 5 }}
             data-cy="back-to-dashboard"
           >
-            Back to Dashboard
+            Go to Dashboard
           </Button>
         </Message>
       )

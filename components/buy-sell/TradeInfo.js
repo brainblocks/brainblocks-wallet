@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
-import { formatNano } from '~/functions/format'
+import { formatNano, formatTimeAgo } from '~/functions/format'
 import DefTable from 'brainblocks-components/build/DefTable'
 import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Spinner from 'brainblocks-components/build/Spinner'
@@ -92,7 +92,11 @@ class TradeInfoTable extends Component<Props> {
               )} ${trade.toCurrency.toUpperCase()}`}</span>
             </DefTableItem>
             <DefTableItem label="Receive Account">
-              <AccountTitle account={accounts.byId[trade.payoutAddress]} />
+              {accounts.allIds.includes(trade.payoutAddress) ? (
+                <AccountTitle account={accounts.byId[trade.payoutAddress]} />
+              ) : (
+                trade.payoutAddress
+              )}
             </DefTableItem>
             <DefTableItem
               label={`${trade.fromCurrency.toUpperCase()} Deposit Address`}
@@ -103,6 +107,11 @@ class TradeInfoTable extends Component<Props> {
               <span className={styles.refund}>
                 {trade.refundAddress ||
                   'No refund address. Refunds will be returned to the sending address.'}
+              </span>
+            </DefTableItem>
+            <DefTableItem label="Last Updated">
+              <span className={styles.updated}>
+                {formatTimeAgo(trade.updatedAt)}
               </span>
             </DefTableItem>
           </DefTable>

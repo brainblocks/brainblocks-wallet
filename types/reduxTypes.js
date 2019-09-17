@@ -205,7 +205,8 @@ export type Trade = {
 }
 export type TradesState = {
   +allIds: Array<string>,
-  +byId: { [string]: Trade }
+  +byId: { [string]: Trade },
+  +didGetTrades: boolean
 }
 // actions
 export type BulkAddTradesAction = {
