@@ -5,7 +5,7 @@ const user = users.default
 
 describe('Tests account-related functionality', function() {
   it('Creates a new account', function() {
-    mockRoutes(['chains', 'rates', 'patch-vault'])
+    mockRoutes(['chains', 'trades', 'rates', 'patch-vault'])
 
     cy.loginandvisit('/accounts')
 

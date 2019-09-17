@@ -5,7 +5,7 @@ const user = users.default
 
 describe('Tests settings', function() {
   it('Reveals seed', function() {
-    mockRoutes(['chains', 'rates'])
+    mockRoutes(['chains', 'trades', 'rates'])
 
     cy.loginandvisit('/settings')
 
@@ -40,7 +40,7 @@ describe('Tests settings', function() {
 
   it('Changes password', function() {
     const newPass = 'vasna8932oa!B'
-    mockRoutes(['chains', 'rates', 'change-password'])
+    mockRoutes(['chains', 'trades', 'rates', 'change-password'])
     cy.loginandvisit('/settings?tab=security')
 
     // Click seed button
