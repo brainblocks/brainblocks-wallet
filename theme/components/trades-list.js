@@ -2,6 +2,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('TradesList', props => {
   const typeCol = css`
@@ -33,6 +34,7 @@ addStyles('TradesList', props => {
   `
   return {
     root: css`
+      ${formPageWidth};
       padding: 0 0 12px;
       @media (max-width: ${theme.bp.mobile - 1}px) {
         margin: 0 -6px;

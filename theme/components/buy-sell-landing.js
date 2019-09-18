@@ -2,6 +2,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('BuySellLanding', props => {
   const option = css`
@@ -58,7 +59,9 @@ addStyles('BuySellLanding', props => {
     }
   `
   return {
-    root: css``,
+    root: css`
+      ${formPageWidth};
+    `,
     optionsContainer: css`
       display: flex;
       justify-content: space-between;

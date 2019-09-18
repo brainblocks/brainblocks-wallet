@@ -122,7 +122,9 @@ class BuySellTabs extends React.Component<Props, State> {
       },
       () => {
         this.props.router.push(
-          `/buy-sell/trade?tradeId=${this.props.buyQuote.id}`
+          // the first trade ID should always be the one we want
+          // I can't think of any time this wouldn't be the case
+          `/buy-sell/trade?tradeId=${this.props.trades.allIds[0]}`
         )
       }
     )
