@@ -205,7 +205,8 @@ export type Trade = {
 }
 export type TradesState = {
   +allIds: Array<string>,
-  +byId: { [string]: Trade }
+  +byId: { [string]: Trade },
+  +didGetTrades: boolean
 }
 // actions
 export type BulkAddTradesAction = {
@@ -262,6 +263,12 @@ export type SetCurrentBuyAction = {
   type: 'TRADE::SET_CURRENT_BUY',
   payload: CurrentBuy
 }
+export type ResetCurrentSellAction = {
+  type: 'TRADE::RESET_CURRENT_SELL'
+}
+export type ResetCurrentBuyAction = {
+  type: 'TRADE::RESET_CURRENT_BUY'
+}
 export type SetSellQuoteAction = {
   type: 'TRADE::SET_SELL_QUOTE',
   payload: ?TradeQuote
@@ -274,6 +281,8 @@ export type TradeAction =
   | UpdateNanoPairsAction
   | SetCurrentSellAction
   | SetCurrentBuyAction
+  | ResetCurrentSellAction
+  | ResetCurrentBuyAction
   | SetBuyQuoteAction
   | SetSellQuoteAction
 
