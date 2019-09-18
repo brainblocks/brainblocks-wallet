@@ -2,12 +2,13 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import type { Trade } from '~/types/reduxTypes'
 
 import { redStatuses, greenStatuses } from '~/components/buy-sell/TradeInfo'
 
-function getStatusColor(props) {
+export function getStatusColor(trade: Trade) {
   let statusColor = theme.color.status.warning
-  if (typeof props.trade === 'object' && props.trade.hasOwnProperty('status')) {
+  if (typeof trade === 'object' && trade.hasOwnProperty('status')) {
     if (redStatuses.includes(status)) {
       statusColor = theme.color.status.error
     } else if (greenStatuses.includes(status)) {
@@ -36,7 +37,7 @@ addStyles('TradeInfoTable', props => ({
     ${code};
   `,
   status: css`
-    color: ${getStatusColor(props)};
+    color: ${getStatusColor(props.trade)};
   `,
   statusIndicator: css`
     display: inline-block;
@@ -44,7 +45,7 @@ addStyles('TradeInfoTable', props => ({
     height: 8px;
     border-radius: 100%;
     margin-right: 8px;
-    background: ${getStatusColor(props)};
+    background: ${getStatusColor(props.trade)};
   `,
   buy: css`
     ${bold};

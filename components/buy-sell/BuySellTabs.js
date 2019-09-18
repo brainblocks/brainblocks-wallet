@@ -96,7 +96,7 @@ class BuySellTabs extends React.Component<Props, State> {
       },
       () => {
         this.props.router.push({
-          pathname: '/buy-sell',
+          pathname: '/buy-sell/new-trade',
           search: tab ? `?tab=${tab}` : ''
         })
       }
