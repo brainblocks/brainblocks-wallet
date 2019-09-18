@@ -41,6 +41,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   onSell: CurrentSell => Promise<void>,
   onBuy: CurrentBuy => Promise<void>,
+  onResetCurrentBuy: () => void,
+  onResetCurrentSell: () => void,
   onResetBuyQuote: () => void,
   onResetSellQuote: () => void,
   updateNanoPairs: () => void
@@ -96,7 +98,7 @@ class BuySellTabs extends React.Component<Props, State> {
       },
       () => {
         this.props.router.push({
-          pathname: '/buy-sell',
+          pathname: '/buy-sell/new-trade',
           search: tab ? `?tab=${tab}` : ''
         })
       }
@@ -113,15 +115,46 @@ class BuySellTabs extends React.Component<Props, State> {
     this.props.onResetSellQuote()
   }
 
+  handleViewTrade = () => {
+    this.setState(
+      {
+        buyComplete: false
+      },
+      () => {
+        this.props.router.push(
+          `/buy-sell/trade?tradeId=${this.props.buyQuote.id}`
+        )
+      }
+    )
+  }
+
   handleBuyComplete = () => {
-    this.setState({
-      buyComplete: true
-    })
+    this.setState(
+      {
+        buyComplete: true
+      },
+      () => {
+        this.props.onResetCurrentBuy()
+        this.props.onResetBuyQuote()
+      }
+    )
   }
 
   handleSellComplete = () => {
+    this.setState(
+      {
+        sellComplete: true
+      },
+      () => {
+        this.props.onResetCurrentSell()
+        this.props.onResetSellQuote()
+      }
+    )
+  }
+
+  handleSellIncomplete = () => {
     this.setState({
-      sellComplete: true
+      buyComplete: false
     })
   }
 
@@ -152,12 +185,19 @@ class BuySellTabs extends React.Component<Props, State> {
           graphic="/static/svg/success.svg"
         >
           <Button
-            onClick={this.handleGoToDashboard}
+            onClick={this.handleViewTrade}
             color="blue"
+            style={{ marginBottom: 5 }}
+          >
+            View Trade Status
+          </Button>{' '}
+          <Button
+            onClick={this.handleGoToDashboard}
+            color="green"
             style={{ marginBottom: 5 }}
             data-cy="back-to-dashboard"
           >
-            Back to Dashboard
+            Go to Dashboard
           </Button>
         </Message>
       )

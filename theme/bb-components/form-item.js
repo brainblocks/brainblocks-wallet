@@ -32,6 +32,7 @@ addStyles('BB-FormItem', props => {
     `,
     field: css`
       ${libStyles.field};
+      max-width: 100%;
       input,
       select,
       textarea,

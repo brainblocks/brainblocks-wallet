@@ -5,7 +5,14 @@ const user = users.default
 
 describe('Tests the onboarding process', function() {
   it('Verifies email through to successfully creating wallet', function() {
-    mockRoutes(['verify-email', 'chains', 'rates', 'validatepwd', 'post-vault'])
+    mockRoutes([
+      'verify-email',
+      'chains',
+      'trades',
+      'rates',
+      'validatepwd',
+      'post-vault'
+    ])
 
     cy.loginandvisit(
       '/email-verification?hash=$2b$10$7A/6EqhzvcpkFjAihz4Ce.KVnQSJTFnm2sDPID64bG89heGuyj2R2&verification=c31166d28ea92a92cf2088c2c4881357a4391c91',

@@ -11,6 +11,11 @@ const routeDefs = {
     url: `${Cypress.env('BASE_API_URL')}/node/chains`,
     response: 'fixture:chains.json'
   },
+  trades: {
+    method: 'GET',
+    url: `${Cypress.env('BASE_API_URL')}/trade/trades?limit=10000&offset=100`,
+    response: 'fixture:trades.json'
+  },
   rates: {
     method: 'GET',
     url: PRICE_API_URL,

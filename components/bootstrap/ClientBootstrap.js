@@ -17,11 +17,13 @@ import {
 } from '~/state/selectors/authSelectors'
 import { getActiveProcesses } from '~/state/selectors/uiSelectors'
 import { updatePrice } from '~/state/thunks/priceThunks'
+import * as tradesThunks from '~/state/thunks/tradesThunks'
 import Loading from '~/pages/loading'
 import Error from '~/pages/_error'
 import ReEnterPassword from '~/components/bootstrap/ReEnterPassword'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
 import { getTransactions } from '~/state/selectors/transactionSelectors'
+import { getTrades } from '~/state/selectors/tradesSelectors'
 import {
   importChains,
   handlePendingBlocks
@@ -32,6 +34,7 @@ import type { WithRouter } from '~/types'
 import type {
   UserState,
   TransactionsState,
+  TradesState,
   AccountsState
 } from '~/types/reduxTypes'
 import log from '~/functions/log'
@@ -40,12 +43,14 @@ import { setupRouterEvents } from '~/state/router'
 type Props = WithRouter & {
   children: React.Node,
   getPrice?: boolean,
+  loadTrades?: boolean,
   getWallet?: boolean,
   verifyEmail?: boolean,
   requiresAuth?: boolean,
   // From mapStateToProps
   auth: Object,
   transactions: TransactionsState,
+  trades: TradesState,
   isAuthorized: boolean,
   user: UserState,
   cipheredWallet: string,
@@ -56,6 +61,7 @@ type Props = WithRouter & {
   updatePrice: (?boolean) => Promise<void>,
   importChains: (?Array<Object>) => Promise<void>,
   getVault: () => Promise<void>,
+  getTrades: () => Promise<void>,
   bulkAddAccounts: (Array<Object>) => Promise<void>,
   handlePendingBlocks: Object => Promise<void>
 }
@@ -73,6 +79,7 @@ type State = {
 class Bootstrap extends React.Component<Props, State> {
   isGettingVault: boolean
   isGettingChains: boolean
+  isGettingTrades: boolean
   didAddAccounts: boolean
   didGetTransactions: boolean
   priceInterval: ?IntervalID
@@ -82,6 +89,7 @@ class Bootstrap extends React.Component<Props, State> {
     super(props)
     this.isGettingVault = false
     this.isGettingChains = false
+    this.isGettingTrades = false
     this.didAddAccounts = false
     this.didGetTransactions = false
     this.priceInterval = null
@@ -156,6 +164,10 @@ class Bootstrap extends React.Component<Props, State> {
     return this.props.getWallet === false || this.props.didGetChainForAnyAccount
   }
 
+  get didGetTrades() {
+    return this.props.trades.didGetTrades
+  }
+
   componentDidMount() {
     setupRouterEvents(this.props.router)
     const didRedirect = this.maybeRedirect()
@@ -166,6 +178,7 @@ class Bootstrap extends React.Component<Props, State> {
       this.createWallet()
       this.addAccounts()
       this.getTransactions()
+      this.getTrades()
       this.socketInit()
     }
   }
@@ -179,6 +192,7 @@ class Bootstrap extends React.Component<Props, State> {
         this.createWallet()
         this.addAccounts()
         this.getTransactions()
+        this.getTrades()
         this.socketInit()
       }
     }
@@ -333,6 +347,27 @@ class Bootstrap extends React.Component<Props, State> {
     }
   }
 
+  getTrades = () => {
+    if (
+      this.props.loadTrades &&
+      this.props.isAuthorized &&
+      !this.isGettingTrades &&
+      !this.didGetTrades
+    ) {
+      this.isGettingTrades = true
+      this.props
+        .getTrades()
+        .then(() => {
+          this.isGettingTrades = false
+        })
+        .catch(e => {
+          log.error('Error in getTrades', e)
+          this.isGettingTrades = false
+          this.setState({ error: 'Error in getTrades' })
+        })
+    }
+  }
+
   getPrice = () => {
     if (this.props.getPrice !== false) {
       this.priceInterval = setInterval(this.props.updatePrice, 30 * 1000)
@@ -420,6 +455,7 @@ const mapStateToProps = state => ({
   accounts: getAccounts(state),
   didGetChainForAnyAccount: getDidGetChainForAnyAccount(state),
   transactions: getTransactions(state),
+  trades: getTrades(state),
   cipheredWallet: getCipheredWallet(state),
   activeProcesses: getActiveProcesses(state)
 })
@@ -428,6 +464,7 @@ const mapDispatchToProps = dispatch => ({
   updatePrice: focusCheck => dispatch(updatePrice(focusCheck)),
   importChains: () => dispatch(importChains()),
   getVault: () => dispatch(getVault()),
+  getTrades: () => dispatch(tradesThunks.getTrades()),
   bulkAddAccounts: accounts =>
     dispatch(accountActions.bulkAddAccounts(accounts)),
   handlePendingBlocks: accountsObject =>

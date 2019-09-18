@@ -61,6 +61,9 @@ import './components/new-account-settings'
 import './components/tx-form-tabs'
 import './components/tx-form'
 import './components/trade-info-table'
+import './components/buy-sell-landing'
+import './components/trades-list'
+import './components/trade-list-item'
 
 // Settings
 import './components/settings-tabs'
