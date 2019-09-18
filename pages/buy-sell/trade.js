@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { withRouter } from 'next/router'
+import Link from 'next/link'
 import Head from 'next/head'
 import { isUUID } from '~/functions/validate'
 import Layout from '~/components/layout/Layout'
@@ -12,6 +13,7 @@ import FormField from 'brainblocks-components/build/FormField'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import TradeInfo from '~/components/buy-sell/TradeInfo'
 import { bootstrapInitialProps } from '~/state/bootstrap'
+import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import type { WithRouter } from '~/types'
 
 type Props = WithRouter & {}
@@ -23,7 +25,7 @@ const TradeId = ({ router }: Props) => {
       ? router.query.tradeId
       : null
   return (
-    <ClientBootstrap>
+    <ClientBootstrap loadTrades>
       <Layout>
         <Head>
           <title>Trade Status</title>
@@ -31,7 +33,23 @@ const TradeId = ({ router }: Props) => {
         <PageHeader title="Trade Status" indentTitle />
         <PageContent pad background>
           {tradeId ? (
-            <FormItem label="Your Buy Order">
+            <FormItem
+              label="Your Buy Order"
+              extra={
+                <Link
+                  href={{
+                    pathname: '/buy-sell'
+                  }}
+                >
+                  <a href="#" style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ lineHeight: 1, marginRight: 10 }}>
+                      <BackIcon />
+                    </span>
+                    <span>All Trades</span>
+                  </a>
+                </Link>
+              }
+            >
               <FormField>
                 <div style={{ padding: '18px 22px' }}>
                   <TradeInfo tradeId={router.query.tradeId} />

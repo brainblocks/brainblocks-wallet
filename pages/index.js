@@ -94,7 +94,7 @@ class Index extends Component<Props> {
     }
 
     return (
-      <ClientBootstrap>
+      <ClientBootstrap loadTrades>
         <Layout>
           <Head>
             <title>Dashboard</title>

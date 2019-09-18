@@ -1,8 +1,6 @@
 // @flow
 import * as React from 'react'
-import Link from 'next/link'
 import Typography from 'brainblocks-components/build/Typography'
-import Button from 'brainblocks-components/build/Button'
 import Message from '~/components/layout/Message'
 
 type Props = {}

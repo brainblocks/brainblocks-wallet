@@ -43,6 +43,7 @@ import { setupRouterEvents } from '~/state/router'
 type Props = WithRouter & {
   children: React.Node,
   getPrice?: boolean,
+  loadTrades?: boolean,
   getWallet?: boolean,
   verifyEmail?: boolean,
   requiresAuth?: boolean,
@@ -348,6 +349,7 @@ class Bootstrap extends React.Component<Props, State> {
 
   getTrades = () => {
     if (
+      this.props.loadTrades &&
       this.props.isAuthorized &&
       !this.isGettingTrades &&
       !this.didGetTrades

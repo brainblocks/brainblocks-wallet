@@ -51,6 +51,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   handleSell: CurrentSell => Promise<void>,
   handleBuy: CurrentBuy => Promise<void>,
+  handleResetSell: () => void,
+  handleResetBuy: () => void,
   handleSetSellQuote: (?TradeQuote) => void,
   handleSetBuyQuote: (?TradeQuote) => void,
   updateNanoPairs: () => void
@@ -78,6 +80,8 @@ const NewTrade = (props: Props) => {
             buyQuote={props.buyQuote}
             onSell={props.handleSell}
             onBuy={props.handleBuy}
+            onResetCurrentSell={props.handleResetSell}
+            onResetCurrentBuy={props.handleResetBuy}
             onResetSellQuote={() => props.handleSetSellQuote(null)}
             onResetBuyQuote={() => props.handleSetBuyQuote(null)}
             nanoPairs={props.nanoPairs}
@@ -109,6 +113,8 @@ export default connect(
   {
     handleSell: createSell,
     handleBuy: createBuy,
+    handleResetSell: tradeActions.resetCurrentSell,
+    handleResetBuy: tradeActions.resetCurrentBuy,
     handleSetSellQuote: tradeActions.setSellQuote,
     handleSetBuyQuote: tradeActions.setBuyQuote,
     updateNanoPairs: updateNanoPairs

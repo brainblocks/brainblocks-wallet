@@ -9,7 +9,7 @@ addStyles('BuySellLanding', props => {
     background: #fff;
     border-radius: ${theme.borderRadius.md}px;
     text-align: center;
-    padding: ${theme.spacing.paddingLg.desktop}px;
+    padding: 50px ${theme.spacing.paddingLg.desktop}px;
     border: none;
     cursor: pointer;
     &:hover {

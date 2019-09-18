@@ -41,6 +41,8 @@ type Props = WithRouter & {
   sellQuote: TradeQuote,
   onSell: CurrentSell => Promise<void>,
   onBuy: CurrentBuy => Promise<void>,
+  onResetCurrentBuy: () => void,
+  onResetCurrentSell: () => void,
   onResetBuyQuote: () => void,
   onResetSellQuote: () => void,
   updateNanoPairs: () => void
@@ -113,22 +115,41 @@ class BuySellTabs extends React.Component<Props, State> {
     this.props.onResetSellQuote()
   }
 
-  handleBuyComplete = () => {
-    this.setState({
-      buyComplete: true
-    })
+  handleViewTrade = () => {
+    this.setState(
+      {
+        buyComplete: false
+      },
+      () => {
+        this.props.router.push(
+          `/buy-sell/trade?tradeId=${this.props.buyQuote.id}`
+        )
+      }
+    )
   }
 
-  handleBuyIncomplete = () => {
-    this.setState({
-      buyComplete: false
-    })
+  handleBuyComplete = () => {
+    this.setState(
+      {
+        buyComplete: true
+      },
+      () => {
+        this.props.onResetCurrentBuy()
+        this.props.onResetBuyQuote()
+      }
+    )
   }
 
   handleSellComplete = () => {
-    this.setState({
-      sellComplete: true
-    })
+    this.setState(
+      {
+        sellComplete: true
+      },
+      () => {
+        this.props.onResetCurrentSell()
+        this.props.onResetSellQuote()
+      }
+    )
   }
 
   handleSellIncomplete = () => {
@@ -164,11 +185,11 @@ class BuySellTabs extends React.Component<Props, State> {
           graphic="/static/svg/success.svg"
         >
           <Button
-            onClick={this.handleBuyIncomplete}
+            onClick={this.handleViewTrade}
             color="blue"
             style={{ marginBottom: 5 }}
           >
-            Go Back
+            View Trade Status
           </Button>{' '}
           <Button
             onClick={this.handleGoToDashboard}

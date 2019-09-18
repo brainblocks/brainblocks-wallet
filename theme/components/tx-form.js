@@ -11,6 +11,7 @@ addStyles('TxForm', props => ({
   defTableInField: css`
     flex-grow: 1;
     padding: 18px 22px;
+    max-width: 100%;
   `,
   intermediateHeader: css`
     text-align: center;

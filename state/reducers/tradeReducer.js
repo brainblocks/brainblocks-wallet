@@ -46,6 +46,16 @@ const tradeReducer: (state: TradeState, action: ReduxAction) => TradeState = (
         ...state,
         currentBuy: action.payload
       }
+    case actions.RESET_CURRENT_SELL:
+      return {
+        ...state,
+        currentSell: tradeInitialState.currentSell
+      }
+    case actions.RESET_CURRENT_BUY:
+      return {
+        ...state,
+        currentBuy: tradeInitialState.currentBuy
+      }
     case actions.SET_SELL_QUOTE:
       return {
         ...state,

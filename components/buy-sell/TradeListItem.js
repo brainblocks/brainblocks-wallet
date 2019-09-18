@@ -35,11 +35,11 @@ class TradeListItem extends React.Component<Props> {
           )}
         </td>
         <td className={styles.buyCol}>
-          {formatNano(trade.expectedReceiveAmount, 2)}{' '}
+          {formatNano(trade.expectedReceiveAmount, 3)}{' '}
           {trade.toCurrency.toUpperCase()}
         </td>
         <td className={styles.sellCol}>
-          {formatNano(trade.expectedSendAmount, 2)}{' '}
+          {formatNano(trade.expectedSendAmount, 3)}{' '}
           {trade.fromCurrency.toUpperCase()}
         </td>
         <td className={styles.statusCol}>
