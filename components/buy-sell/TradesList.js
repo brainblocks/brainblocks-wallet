@@ -2,16 +2,22 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { destyle } from 'destyle'
-import { getTrades } from '~/state/selectors/tradesSelectors'
+import { getActiveProcesses } from '~/state/selectors/uiSelectors'
+import { getTrades as selectTrades } from '~/state/selectors/tradesSelectors'
+import { getTrades } from '~/state/thunks/tradesThunks'
 import type { TradesState } from '~/types/reduxTypes'
 import TradeListItem from './TradeListItem'
 import NoTrades from './NoTrades'
 import Spinner from 'brainblocks-components/build/Spinner'
 import Typography from 'brainblocks-components/build/Typography'
+import Button from 'brainblocks-components/build/Button'
+import RefreshIcon from 'mdi-react/RefreshIcon'
 
 type Props = {
   trades: TradesState,
-  styles: Object
+  isRefreshing: boolean,
+  styles: Object,
+  getTrades: () => Promise<void>
 }
 
 class TradesList extends React.Component<Props> {
@@ -27,7 +33,7 @@ class TradesList extends React.Component<Props> {
   }
 
   render() {
-    const { styles, trades } = this.props
+    const { styles, trades, isRefreshing, getTrades } = this.props
     return (
       <div className={styles.root}>
         {trades.didGetTrades && trades.allIds.length === 0 ? (
@@ -36,9 +42,22 @@ class TradesList extends React.Component<Props> {
           </div>
         ) : (
           <>
-            <Typography el="h2" spaceBelow={1}>
-              Your Trades
-            </Typography>
+            <div className={styles.header}>
+              <Typography el="h2">Your Trades</Typography>
+              {isRefreshing ? (
+                <Spinner color="blue" size={18} />
+              ) : (
+                <Button
+                  variant="icon"
+                  size={30}
+                  iconSize={20}
+                  destyleMerge={{ root: styles.iconButton }}
+                  onClick={getTrades}
+                >
+                  <RefreshIcon />
+                </Button>
+              )}
+            </div>
             <table className={styles.table} data-cy="trades-table">
               <thead>
                 <tr>
@@ -65,6 +84,14 @@ class TradesList extends React.Component<Props> {
   }
 }
 
-export default connect((state, ownProps) => ({
-  trades: getTrades(state)
-}))(destyle(TradesList, 'TradesList'))
+export default connect(
+  (state, ownProps) => ({
+    trades: selectTrades(state),
+    isRefreshing:
+      getActiveProcesses(state).filter(p => p.indexOf('get-trades') === 0)
+        .length > 0
+  }),
+  (dispatch, ownProps) => ({
+    getTrades: () => dispatch(getTrades())
+  })
+)(destyle(TradesList, 'TradesList'))

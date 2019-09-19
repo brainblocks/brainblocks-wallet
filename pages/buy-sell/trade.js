@@ -13,7 +13,6 @@ import FormField from 'brainblocks-components/build/FormField'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import TradeInfo from '~/components/buy-sell/TradeInfo'
 import { bootstrapInitialProps } from '~/state/bootstrap'
-import BackIcon from '~/static/svg/icons/arrow-left.svg'
 import type { WithRouter } from '~/types'
 
 type Props = WithRouter & {}
@@ -41,12 +40,7 @@ const TradeId = ({ router }: Props) => {
                     pathname: '/buy-sell'
                   }}
                 >
-                  <a href="#" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span style={{ lineHeight: 1, marginRight: 10 }}>
-                      <BackIcon />
-                    </span>
-                    <span>All Trades</span>
-                  </a>
+                  <a href="#">View All Trades</a>
                 </Link>
               }
             >

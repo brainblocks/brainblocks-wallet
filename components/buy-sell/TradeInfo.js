@@ -7,9 +7,9 @@ import DefTable from 'brainblocks-components/build/DefTable'
 import DefTableItem from 'brainblocks-components/build/DefTableItem'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getAccounts } from '~/state/selectors/accountSelectors'
+import { getActiveProcesses } from '~/state/selectors/uiSelectors'
 import { getTrades } from '~/state/selectors/tradesSelectors'
 import { getTrade } from '~/state/thunks/tradesThunks'
-// import { withSnackbar } from 'brainblocks-components/build/Snackbar'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import type { WithSnackbar } from '~/types'
 import type { AccountsState, Trade } from '~/types/reduxTypes'
@@ -29,6 +29,7 @@ type Props = WithSnackbar & {
   accounts: AccountsState,
   tradeId: string,
   trade: Trade,
+  isRefreshing: boolean,
   styles: Object,
   getTrade: () => void
 }
@@ -57,7 +58,7 @@ class TradeInfoTable extends Component<Props> {
   }
 
   render() {
-    const { accounts, trade, styles } = this.props
+    const { accounts, trade, styles, isRefreshing } = this.props
     return (
       <div className={styles.root}>
         {trade ? (
@@ -66,10 +67,14 @@ class TradeInfoTable extends Component<Props> {
               <span className={styles.tradeId}>{trade.id}</span>
             </DefTableItem>
             <DefTableItem label="Status">
-              <span className={styles.status}>
-                <span className={styles.statusIndicator} />
-                {trade.status}
-              </span>
+              {isRefreshing ? (
+                <Spinner size={15} color="blue" />
+              ) : (
+                <span className={styles.status}>
+                  <span className={styles.statusIndicator} />
+                  {trade.status}
+                </span>
+              )}
             </DefTableItem>
             <DefTableItem label="Sell">
               <span className={styles.sell}>
@@ -134,7 +139,10 @@ class TradeInfoTable extends Component<Props> {
 export default connect(
   (state, ownProps) => ({
     accounts: getAccounts(state),
-    trade: getTrades(state).byId[ownProps.tradeId]
+    trade: getTrades(state).byId[ownProps.tradeId],
+    isRefreshing:
+      getActiveProcesses(state).filter(p => p.indexOf('get-trade-') === 0)
+        .length > 0
   }),
   (dispatch, ownProps) => ({
     getTrade: () => dispatch(getTrade(ownProps.tradeId))

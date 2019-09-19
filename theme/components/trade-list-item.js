@@ -13,7 +13,6 @@ addStyles('TradeListItem', props => {
     width: 28px;
     height: 28px;
     border-radius: 100%;
-    color: #fff;
     position: relative;
     svg {
       width: 17px;
@@ -41,11 +40,13 @@ addStyles('TradeListItem', props => {
     `,
     iconBuy: css`
       ${typeIcon};
-      background: ${theme.color.palette.green};
+      background: ${theme.color.status.successLight};
+      color: ${theme.color.status.success};
     `,
     iconSell: css`
       ${typeIcon};
-      background: ${theme.color.palette.gold};
+      background: ${theme.color.status.warningLight};
+      color: ${theme.color.status.warning};
     `,
     buyCol: css`
       ${td};

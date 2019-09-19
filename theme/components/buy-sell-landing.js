@@ -2,6 +2,7 @@
 import { css } from 'emotion'
 import { addStyles } from 'destyle'
 import theme from '~/theme/theme'
+import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('BuySellLanding', props => {
   const option = css`
@@ -24,8 +25,8 @@ addStyles('BuySellLanding', props => {
   `
   const iconOverlay = css`
     position: absolute;
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: 100%;
     color: #fff;
     z-index: 2;
@@ -58,7 +59,9 @@ addStyles('BuySellLanding', props => {
     }
   `
   return {
-    root: css``,
+    root: css`
+      ${formPageWidth};
+    `,
     optionsContainer: css`
       display: flex;
       justify-content: space-between;
@@ -75,8 +78,8 @@ addStyles('BuySellLanding', props => {
     iconContainer: css`
       display: inline-block;
       background: ${theme.color.gray.lightest};
-      width: 126px;
-      height: 126px;
+      width: 100px;
+      height: 100px;
       border-radius: 100%;
       position: relative;
       .bb-svg-icon {
