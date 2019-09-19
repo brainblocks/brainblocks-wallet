@@ -40,6 +40,13 @@ addStyles('TradesList', props => {
         margin: 0 -6px;
       }
     `,
+    header: css`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      height: 32px;
+    `,
     table: css`
       width: 100%;
       border-collapse: collapse;

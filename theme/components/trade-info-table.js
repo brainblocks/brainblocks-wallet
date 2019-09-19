@@ -9,6 +9,7 @@ import { redStatuses, greenStatuses } from '~/components/buy-sell/TradeInfo'
 export function getStatusColor(trade: Trade) {
   let statusColor = theme.color.status.warning
   if (typeof trade === 'object' && trade.hasOwnProperty('status')) {
+    const { status } = trade
     if (redStatuses.includes(status)) {
       statusColor = theme.color.status.error
     } else if (greenStatuses.includes(status)) {
