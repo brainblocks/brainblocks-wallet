@@ -7,6 +7,7 @@ import * as tradeAPI from '~/state/api/trade'
 import { getWallet, nanoToRaw } from '~/state/wallet'
 import log from '~/functions/log'
 import type { ThunkAction, CurrentSell, CurrentBuy } from '~/types/reduxTypes'
+import { VALIDATE_SELL_AMOUNT } from '~/constants/config'
 
 export const updateNanoPairs: () => ThunkAction = () => (
   dispatch,
@@ -17,16 +18,36 @@ export const updateNanoPairs: () => ThunkAction = () => (
     dispatch(uiCreators.addActiveProcess(`get-nano-pairs`))
 
     try {
+      // Get all pairs as nano_btc / btc_nano
       const allPairs = await tradeAPI.getAllPairs()
+      // Filter it to a list of tickers that ended in _nano
       const buyNanoPairs = allPairs.pairs
         .filter(pair => pair.indexOf('_nano') >= 0)
         .map(pair => pair.replace('_nano', ''))
+      // Filter it to a list of tickers that started in nano_
+      const sellNanoPairs = allPairs.pairs
+        .filter(pair => pair.indexOf('nano_') === 0)
+        .map(pair => pair.replace('nano_', ''))
+      // Get a list of currencies with which you can buy NANO
+      // (there is no equivalent call for sells)
       const response = await tradeAPI.getCurrencyPairs('NANO')
-      // @todo - this filtering is only for buys, we'll need to figure out
-      // how to also allow sends. Maybe they are two different slices of state
-      const pairs = response.currencies.filter(currency =>
-        buyNanoPairs.includes(currency.ticker)
-      )
+      // Filter the list to Nano pairs and add availableMethods array
+      const pairs = response.currencies
+        .filter(
+          currency =>
+            buyNanoPairs.includes(currency.ticker) ||
+            sellNanoPairs.includes(currency.ticker)
+        )
+        .map(currency => {
+          const availableMethods = []
+          if (buyNanoPairs.includes(currency.ticker)) {
+            availableMethods.push('buy')
+          }
+          if (buyNanoPairs.includes(currency.ticker)) {
+            availableMethods.push('sell')
+          }
+          return { ...currency, availableMethods }
+        })
       // update in redux
       dispatch(creators.updateNanoPairs(pairs))
     } catch (e) {
@@ -53,7 +74,7 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
     const rejector = (reason, e) => {
       log.error(reason, e)
       dispatch(uiCreators.removeActiveProcess(`create-sell-${time}`))
-      return reject(reason)
+      return reject(e)
     }
 
     // show we're working
@@ -68,7 +89,7 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
     // ensure sufficient balance
     const accountBalance = wallet.getAccountBalance(currentSell.fromAcc)
     const amountRaw = nanoToRaw(currentSell.sellAmount)
-    if (amountRaw.greater(accountBalance))
+    if (amountRaw.greater(accountBalance) && VALIDATE_SELL_AMOUNT)
       return rejector('Insufficient funds in account')
 
     // set current sell in redux
@@ -78,21 +99,26 @@ export const createSell: CurrentSell => ThunkAction = currentSell => (
     const pair = `NANO_${currentSell.buyCurrency}`
     const tradeAmount = currentSell.sellAmount
     let trade
+    let tradeStatus
     try {
       trade = await tradeAPI.createTrade({
         pair,
         receiveAddress: currentSell.receiveAddr,
         tradeAmount,
         extraId: currentSell.extraId || null,
-        refundAddress: currentSell.receiveAddr
+        refundAddress: currentSell.fromAcc
       })
+      tradeStatus = await tradeAPI.getTrade(trade.trade.id)
     } catch (e) {
-      // @todo catch and display appropriate error messages with generic fallback
-
       return rejector('Error creating trade', e)
     }
 
-    log.info(trade)
+    if (!trade.status === 'success') {
+      return rejector('Error creating trade')
+    }
+
+    dispatch(creators.setSellQuote(trade.trade))
+    dispatch(tradesCreators.upsertTrade(tradeStatus.trade))
 
     dispatch(uiCreators.removeActiveProcess(`create-sell-${time}`))
     resolve()

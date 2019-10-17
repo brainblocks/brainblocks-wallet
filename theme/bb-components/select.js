@@ -12,7 +12,7 @@ addStyles('BB-Select', props => {
       border: none;
       background-color: transparent;
       font-family: ${theme.type.baseFontFamily};
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 700;
       padding-left: 10px;
       padding-top: 5px;
