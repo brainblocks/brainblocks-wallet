@@ -76,16 +76,20 @@ class BuyForm extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.getRate()
     // validate form immediately
     if (this.form.current) {
       this.form.current.validateForm()
+      this.getEstimate(this.form.current.state.values)
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.sellCurrency !== prevState.sellCurrency) {
-      this.getRate()
+    if (
+      this.form.current &&
+      this.state.sellCurrency !== prevState.sellCurrency
+    ) {
+      const { values } = this.form.current.state
+      this.getEstimate(values)
     }
   }
 
@@ -103,12 +107,13 @@ class BuyForm extends Component<Props, State> {
       ? convert(values.amount, 'nano', 1 / this.state.exchangeRate)
       : 0
 
-  getRate = async () => {
-    const currency = this.state.sellCurrency.toUpperCase()
+  getEstimate = async values => {
+    const currency = values.sell.toUpperCase()
+    const amountSellCurrency = this.getAmountSellCurrency(values) || 100
     try {
-      const rate = await getEstimate(1, `${currency}_NANO`)
+      const rate = await getEstimate(amountSellCurrency, `${currency}_NANO`)
       this.setState({
-        exchangeRate: rate.estimate.estimatedAmount
+        exchangeRate: rate.estimate.estimatedAmount / amountSellCurrency
       })
     } catch (e) {
       log.error(`Could not get rate for ${currency}_NANO`, e)
@@ -148,6 +153,7 @@ class BuyForm extends Component<Props, State> {
 
   handleAmountChange = (e, formikOnChangeFunc) => {
     formikOnChangeFunc(e)
+    this.getEstimate(this.form.current.state.values)
     this.form.current.setStatus({
       amountValid: true
     })
@@ -291,7 +297,11 @@ class BuyForm extends Component<Props, State> {
                     <GridItem spanTablet={6}>
                       <FormItem
                         label="Buy NANO with"
-                        extra={exchangeRate === 0 && <Spinner size={16} />}
+                        extra={
+                          exchangeRate === 0 && (
+                            <Spinner size={16} color="blue" />
+                          )
+                        }
                         description={
                           exchangeRate > 0 &&
                           `1 ${values.sell} = ~${formatNano(
@@ -324,7 +334,11 @@ class BuyForm extends Component<Props, State> {
                             ? 'Out of range'
                             : errors.amount && touched.amount && errors.amount
                         }
-                        extra={exchangeRate === 0 && <Spinner size={16} />}
+                        extra={
+                          exchangeRate === 0 && (
+                            <Spinner size={16} color="blue" />
+                          )
+                        }
                         description={
                           <span>
                             You receive{' '}

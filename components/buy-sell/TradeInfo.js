@@ -59,6 +59,7 @@ class TradeInfoTable extends Component<Props> {
 
   render() {
     const { accounts, trade, styles, isRefreshing } = this.props
+    const isSell = trade ? trade.fromCurrency === 'nano' : null
     return (
       <div className={styles.root}>
         {trade ? (
@@ -78,13 +79,13 @@ class TradeInfoTable extends Component<Props> {
             </DefTableItem>
             <DefTableItem label="Sell">
               <span className={styles.sell}>
-                {formatNano(trade.expectedSendAmount, 5)}{' '}
+                {formatNano(trade.expectedSendAmount, 7)}{' '}
                 {trade.fromCurrency.toUpperCase()}
               </span>
             </DefTableItem>
             <DefTableItem label="Buy">
               <span className={styles.buy}>
-                {formatNano(trade.expectedReceiveAmount, 5)}{' '}
+                ~{formatNano(trade.expectedReceiveAmount, 7)}{' '}
                 {trade.toCurrency.toUpperCase()}
               </span>
             </DefTableItem>
@@ -93,14 +94,22 @@ class TradeInfoTable extends Component<Props> {
                 className={styles.rate}
               >{`1 ${trade.fromCurrency.toUpperCase()} = ~${formatNano(
                 trade.expectedReceiveAmount / trade.expectedSendAmount,
-                5
+                7
               )} ${trade.toCurrency.toUpperCase()}`}</span>
             </DefTableItem>
-            <DefTableItem label="Receive Account">
+            <DefTableItem
+              label={
+                isSell
+                  ? `${trade.toCurrency.toUpperCase()} Receive Address`
+                  : 'Receive Account'
+              }
+            >
               {accounts.allIds.includes(trade.payoutAddress) ? (
                 <AccountTitle account={accounts.byId[trade.payoutAddress]} />
               ) : (
-                trade.payoutAddress
+                <span className={styles.payoutAddress}>
+                  {trade.payoutAddress}
+                </span>
               )}
             </DefTableItem>
             <DefTableItem
@@ -108,12 +117,14 @@ class TradeInfoTable extends Component<Props> {
             >
               <span className={styles.payinAddress}>{trade.payinAddress}</span>
             </DefTableItem>
-            <DefTableItem label="Refund Address">
-              <span className={styles.refund}>
-                {trade.refundAddress ||
-                  'No refund address. Refunds will be returned to the sending address.'}
-              </span>
-            </DefTableItem>
+            {!isSell && (
+              <DefTableItem label="Refund Address">
+                <span className={styles.refund}>
+                  {trade.refundAddress ||
+                    'No refund address. Refunds will be returned to the sending address.'}
+                </span>
+              </DefTableItem>
+            )}
             <DefTableItem label="Last Updated">
               <span className={styles.updated}>
                 {formatTimeAgo(trade.updatedAt)}
