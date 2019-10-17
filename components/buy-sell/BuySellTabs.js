@@ -45,12 +45,18 @@ type Props = WithRouter & {
   onResetCurrentSell: () => void,
   onResetBuyQuote: () => void,
   onResetSellQuote: () => void,
-  updateNanoPairs: () => void
+  updateNanoPairs: () => void,
+  onExecuteSend: (
+    fromAddr: string,
+    toAddr: string,
+    amountNano: number
+  ) => Promise<void>
 }
 
 type State = {
   activeTab: number,
-  nanoPairs: Array<Object>,
+  buyPairs: Array<Object>,
+  sellPairs: Array<Object>,
   buyComplete: boolean,
   sellComplete: boolean
 }
@@ -64,7 +70,8 @@ class BuySellTabs extends React.Component<Props, State> {
       activeTab: tabIndexMap.hasOwnProperty(this.props.router.query.tab)
         ? tabIndexMap[this.props.router.query.tab]
         : 0,
-      nanoPairs: [],
+      buyPairs: [],
+      sellPairs: [],
       buyComplete: false,
       sellComplete: false
     }
@@ -76,17 +83,29 @@ class BuySellTabs extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps) {
     // Map the nano pairs to a select field format
-    if (!this.state.nanoPairs.length && this.props.nanoPairs.length) {
+    if (!this.state.buyPairs.length && this.props.nanoPairs.length) {
       this.mapNanoPairsToSelect()
     }
   }
 
   mapNanoPairsToSelect = () => {
+    // @todo - for now we are ignoring pairs that require an external ID
+    const pairsWithNoExternalId = this.props.nanoPairs.filter(
+      pair => !pair.hasExternalId
+    )
     this.setState({
-      nanoPairs: this.props.nanoPairs.map(pair => ({
-        value: pair.ticker.toUpperCase(),
-        title: pair.ticker.toUpperCase()
-      }))
+      buyPairs: pairsWithNoExternalId
+        .filter(pair => pair.availableMethods.includes('buy'))
+        .map(pair => ({
+          value: pair.ticker.toUpperCase(),
+          title: `${pair.ticker.toUpperCase()} - ${pair.name}`
+        })),
+      sellPairs: pairsWithNoExternalId
+        .filter(pair => pair.availableMethods.includes('sell'))
+        .map(pair => ({
+          value: pair.ticker.toUpperCase(),
+          title: `${pair.ticker.toUpperCase()} - ${pair.name}`
+        }))
     })
   }
 
@@ -118,7 +137,8 @@ class BuySellTabs extends React.Component<Props, State> {
   handleViewTrade = () => {
     this.setState(
       {
-        buyComplete: false
+        buyComplete: false,
+        sellComplete: false
       },
       () => {
         this.props.router.push(
@@ -176,14 +196,46 @@ class BuySellTabs extends React.Component<Props, State> {
       currentBuy,
       currentSell,
       buyQuote,
-      sellQuote
+      sellQuote,
+      onExecuteSend
     } = this.props
-    const { activeTab, nanoPairs, buyComplete } = this.state
+    const {
+      activeTab,
+      buyPairs,
+      sellPairs,
+      buyComplete,
+      sellComplete
+    } = this.state
     if (buyComplete) {
       return (
         <Message
           title="Completed Buy Order"
           subtitle="If you sent the funds, your NANO will be delivered shortly."
+          graphic="/static/svg/success.svg"
+        >
+          <Button
+            onClick={this.handleViewTrade}
+            color="blue"
+            style={{ marginBottom: 5 }}
+          >
+            View Trade Status
+          </Button>{' '}
+          <Button
+            onClick={this.handleGoToDashboard}
+            color="green"
+            style={{ marginBottom: 5 }}
+            data-cy="back-to-dashboard"
+          >
+            Go to Dashboard
+          </Button>
+        </Message>
+      )
+    }
+    if (sellComplete) {
+      return (
+        <Message
+          title="Executed Sell Order"
+          subtitle={`Your NANO was sent to the deposit address. You will receive your ${sellQuote.toCurrency.toUpperCase()} shortly.`}
           graphic="/static/svg/success.svg"
         >
           <Button
@@ -233,7 +285,7 @@ class BuySellTabs extends React.Component<Props, State> {
               defaultAccount={defaultAccount}
               preferredCurrency={preferredCurrency}
               router={router}
-              nanoPairs={nanoPairs}
+              nanoPairs={buyPairs}
               onComplete={this.handleBuyComplete}
             />
           </TabPanel>
@@ -247,9 +299,11 @@ class BuySellTabs extends React.Component<Props, State> {
               accounts={accounts}
               defaultAccount={defaultAccount}
               preferredCurrency={preferredCurrency}
+              trades={trades}
               router={router}
-              nanoPairs={nanoPairs}
+              nanoPairs={sellPairs}
               onComplete={this.handleSellComplete}
+              onExecuteSend={onExecuteSend}
             />
           </TabPanel>
         </SwitchTabs>

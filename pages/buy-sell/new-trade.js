@@ -29,6 +29,7 @@ import {
   createBuy,
   updateNanoPairs
 } from '~/state/thunks/tradeThunks'
+import { createSend } from '~/state/thunks/transactionsThunks'
 import type { WithRouter } from '~/types'
 import type {
   AccountsState,
@@ -55,7 +56,12 @@ type Props = WithRouter & {
   handleResetBuy: () => void,
   handleSetSellQuote: (?TradeQuote) => void,
   handleSetBuyQuote: (?TradeQuote) => void,
-  updateNanoPairs: () => void
+  updateNanoPairs: () => void,
+  handleSend: (
+    fromAddr: string,
+    toAddr: string,
+    amountNano: number
+  ) => Promise<void>
 }
 
 const NewTrade = (props: Props) => {
@@ -86,6 +92,7 @@ const NewTrade = (props: Props) => {
             onResetBuyQuote={() => props.handleSetBuyQuote(null)}
             nanoPairs={props.nanoPairs}
             updateNanoPairs={props.updateNanoPairs}
+            onExecuteSend={props.handleSend}
           />
         </PageContent>
       </Layout>
@@ -117,6 +124,7 @@ export default connect(
     handleResetBuy: tradeActions.resetCurrentBuy,
     handleSetSellQuote: tradeActions.setSellQuote,
     handleSetBuyQuote: tradeActions.setBuyQuote,
-    updateNanoPairs: updateNanoPairs
+    updateNanoPairs: updateNanoPairs,
+    handleSend: createSend
   }
 )(withRouter(NewTrade))

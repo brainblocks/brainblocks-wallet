@@ -33,7 +33,7 @@ const TradeId = ({ router }: Props) => {
         <PageContent pad background>
           {tradeId ? (
             <FormItem
-              label="Your Buy Order"
+              label="Your Trade"
               extra={
                 <Link
                   href={{

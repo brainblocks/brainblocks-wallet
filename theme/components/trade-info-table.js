@@ -59,5 +59,8 @@ addStyles('TradeInfoTable', props => ({
   `,
   payinAddress: css`
     ${code};
+  `,
+  payoutAddress: css`
+    ${code};
   `
 }))
