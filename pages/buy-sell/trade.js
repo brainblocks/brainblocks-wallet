@@ -8,7 +8,6 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import Alert from 'brainblocks-components/build/Alert'
-import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import TradeInfo from '~/components/buy-sell/TradeInfo'
@@ -29,27 +28,33 @@ const TradeId = ({ router }: Props) => {
         <Head>
           <title>Trade Status</title>
         </Head>
-        <PageHeader title="Trade Status" indentTitle />
-        <PageContent pad background>
-          {tradeId ? (
-            <FormItem
-              label="Your Trade"
-              extra={
-                <Link
-                  href={{
-                    pathname: '/buy-sell'
-                  }}
+        <PageHeader
+          title={
+            <span style={{ display: 'flex', alignItems: 'baseline' }}>
+              <span style={{ marginRight: 12 }}>Trade Status</span>
+              <Link
+                href={{
+                  pathname: '/buy-sell'
+                }}
+              >
+                <a
+                  href="#"
+                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)' }}
                 >
-                  <a href="#">View All Trades</a>
-                </Link>
-              }
-            >
-              <FormField>
-                <div style={{ padding: '18px 22px' }}>
-                  <TradeInfo tradeId={router.query.tradeId} />
-                </div>
-              </FormField>
-            </FormItem>
+                  View All
+                </a>
+              </Link>
+            </span>
+          }
+          indentTitle
+        />
+        <PageContent>
+          {tradeId ? (
+            <FormField>
+              <div style={{ padding: '18px 22px' }}>
+                <TradeInfo tradeId={router.query.tradeId} />
+              </div>
+            </FormField>
           ) : (
             <Alert variant="error">The given trade ID is not valid.</Alert>
           )}

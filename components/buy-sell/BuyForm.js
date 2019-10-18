@@ -497,7 +497,9 @@ class BuyForm extends Component<Props, State> {
             <GridItem>
               <FormItem
                 label={`Send ${
-                  tradeStatus.expectedSendAmount
+                  typeof tradeStatus.expectedSendAmount === 'number'
+                    ? tradeStatus.expectedSendAmount
+                    : 0
                 } ${buyQuote.fromCurrency.toUpperCase()} to`}
                 fieldId="payin-address"
                 description={`Your ${buyQuote.fromCurrency.toUpperCase()} will be converted to NANO and sent to your account`}

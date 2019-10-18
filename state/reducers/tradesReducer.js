@@ -50,6 +50,11 @@ const tradesReducer: (
         draft.byId[tid].updatedAt = new Date(
           draft.byId[tid].updatedAt
         ).getTime()
+        if (typeof draft.byId[tid].depositReceivedAt === 'string') {
+          draft.byId[tid].depositReceivedAt = new Date(
+            draft.byId[tid].depositReceivedAt
+          ).getTime()
+        }
       })
     }
 
