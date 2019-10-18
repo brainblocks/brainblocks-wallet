@@ -199,9 +199,16 @@ export type Trade = {
   +toCurrency: string,
   +refundAddress: string,
   +updatedAt: number,
-  +expectedSendAmount: number,
-  +expectedReceiveAmount: number,
-  +createdAt: number
+  +createdAt: number,
+  +expectedSendAmount?: number,
+  +expectedReceiveAmount?: number,
+  +amountSend?: number,
+  +amountReceive?: number,
+  +depositReceivedAt?: number,
+  +payinExtraId?: string,
+  +payinExtraIdName?: string,
+  +payinHash?: string,
+  +payoutHash?: string
 }
 export type TradesState = {
   +allIds: Array<string>,

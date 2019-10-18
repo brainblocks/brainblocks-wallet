@@ -235,7 +235,7 @@ class BuySellTabs extends React.Component<Props, State> {
       return (
         <Message
           title="Executed Sell Order"
-          subtitle={`Your NANO was sent to the deposit address. You will receive your ${sellQuote.toCurrency.toUpperCase()} shortly.`}
+          subtitle={`Your NANO was sent to the deposit address. You will receive your funds shortly.`}
           graphic="/static/svg/success.svg"
         >
           <Button

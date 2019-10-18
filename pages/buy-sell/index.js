@@ -16,11 +16,10 @@ const BuySell = () => {
         <Head>
           <title>Buy &amp; Sell NANO</title>
         </Head>
-        <PageHeader title="Buy &amp; Sell NANO" indentTitle />
+        <PageHeader>
+          <BuySellLanding />
+        </PageHeader>
         <PageContent pad background>
-          <div style={{ marginBottom: 44 }}>
-            <BuySellLanding />
-          </div>
           <div style={{ marginBottom: 34 }}>
             <TradesList />
           </div>

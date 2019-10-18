@@ -37,7 +37,7 @@ addStyles('TradesList', props => {
       ${formPageWidth};
       padding: 0 0 12px;
       @media (max-width: ${theme.bp.mobile - 1}px) {
-        margin: 0 -6px;
+        margin: -6px -6px 10px;
       }
     `,
     header: css`

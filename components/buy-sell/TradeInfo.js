@@ -60,6 +60,19 @@ class TradeInfoTable extends Component<Props> {
   render() {
     const { accounts, trade, styles, isRefreshing } = this.props
     const isSell = trade ? trade.fromCurrency === 'nano' : null
+    const isFinished = greenStatuses.includes(trade.status)
+    const bestKnownSendAmount =
+      typeof trade.amountSend === 'number'
+        ? trade.amountSend
+        : typeof trade.expectedSendAmount === 'number'
+        ? trade.expectedSendAmount
+        : 0
+    const bestKnownReceiveAmount =
+      typeof trade.amountReceive === 'number'
+        ? trade.amountReceive
+        : typeof trade.expectedReceiveAmount === 'number'
+        ? trade.expectedReceiveAmount
+        : 0
     return (
       <div className={styles.root}>
         {trade ? (
@@ -77,23 +90,45 @@ class TradeInfoTable extends Component<Props> {
                 </span>
               )}
             </DefTableItem>
-            <DefTableItem label="Sell">
-              <span className={styles.sell}>
-                {formatNano(trade.expectedSendAmount, 7)}{' '}
-                {trade.fromCurrency.toUpperCase()}
-              </span>
-            </DefTableItem>
-            <DefTableItem label="Buy">
-              <span className={styles.buy}>
-                ~{formatNano(trade.expectedReceiveAmount, 7)}{' '}
-                {trade.toCurrency.toUpperCase()}
-              </span>
-            </DefTableItem>
-            <DefTableItem label="Expected Exchange Rate">
+            {typeof trade.expectedSendAmount === 'number' && (
+              <DefTableItem label="Expected Send Amount">
+                <span className={styles.sell}>
+                  {formatNano(trade.expectedSendAmount, 7)}{' '}
+                  {trade.fromCurrency.toUpperCase()}
+                </span>
+              </DefTableItem>
+            )}
+            {typeof trade.expectedReceiveAmount === 'number' && (
+              <DefTableItem label="Expected Receive Amount">
+                <span className={styles.buy}>
+                  ~{formatNano(trade.expectedReceiveAmount, 7)}{' '}
+                  {trade.toCurrency.toUpperCase()}
+                </span>
+              </DefTableItem>
+            )}
+            {typeof trade.amountSend === 'number' && (
+              <DefTableItem label="Sent Amount">
+                <span className={styles.sell}>
+                  {formatNano(trade.amountSend, 7)}{' '}
+                  {trade.fromCurrency.toUpperCase()}
+                </span>
+              </DefTableItem>
+            )}
+            {typeof trade.amountReceive === 'number' && (
+              <DefTableItem label="Received Amount">
+                <span className={styles.buy}>
+                  ~{formatNano(trade.amountReceive, 7)}{' '}
+                  {trade.toCurrency.toUpperCase()}
+                </span>
+              </DefTableItem>
+            )}
+            <DefTableItem
+              label={isFinished ? 'Exchange Rate' : 'Expected Exchange Rate'}
+            >
               <span
                 className={styles.rate}
               >{`1 ${trade.fromCurrency.toUpperCase()} = ~${formatNano(
-                trade.expectedReceiveAmount / trade.expectedSendAmount,
+                bestKnownReceiveAmount / bestKnownSendAmount,
                 7
               )} ${trade.toCurrency.toUpperCase()}`}</span>
             </DefTableItem>
@@ -122,6 +157,23 @@ class TradeInfoTable extends Component<Props> {
                 <span className={styles.refund}>
                   {trade.refundAddress ||
                     'No refund address. Refunds will be returned to the sending address.'}
+                </span>
+              </DefTableItem>
+            )}
+            {typeof trade.payinHash === 'string' && (
+              <DefTableItem label="Send Hash">
+                <span className={styles.txHash}>{trade.payinHash}</span>
+              </DefTableItem>
+            )}
+            {typeof trade.payoutHash === 'string' && (
+              <DefTableItem label="Payout Hash">
+                <span className={styles.txHash}>{trade.payoutHash}</span>
+              </DefTableItem>
+            )}
+            {typeof trade.depositReceivedAt === 'number' && (
+              <DefTableItem label="Deposit Received">
+                <span className={styles.updated}>
+                  {formatTimeAgo(trade.depositReceivedAt)}
                 </span>
               </DefTableItem>
             )}

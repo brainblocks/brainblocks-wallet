@@ -6,21 +6,20 @@ import { formPageWidth } from '~/theme/globals/utils'
 
 addStyles('BuySellLanding', props => {
   const option = css`
-    flex: 0 1 48%;
-    background: #fff;
+    flex: 1 1 50%;
+    background: transparent;
     border-radius: ${theme.borderRadius.md}px;
     text-align: center;
-    padding: 50px ${theme.spacing.paddingLg.desktop}px;
+    padding: 30px ${theme.spacing.paddingLg.desktop}px;
     border: none;
     cursor: pointer;
+    transition: background 0.2s ease;
     &:hover {
+      background: rgba(255, 255, 255, 0.05);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
     }
     @media (max-width: ${theme.bp.tablet - 1}px) {
-      flex-basis: 100%;
-      margin-bottom: 20px;
-      padding-top: 30px;
-      padding-bottom: 30px;
+      padding: 16px 10px;
     }
   `
   const iconOverlay = css`
@@ -57,17 +56,19 @@ addStyles('BuySellLanding', props => {
         animation: radiate 2s linear 1s infinite;
       }
     }
+    @media (max-width: ${theme.bp.tablet - 1}px) {
+      left: -10px;
+      top: -10px;
+    }
   `
   return {
     root: css`
       ${formPageWidth};
+      margin: 0 auto;
     `,
     optionsContainer: css`
       display: flex;
-      justify-content: space-between;
-      @media (max-width: ${theme.bp.tablet - 1}px) {
-        flex-wrap: wrap;
-      }
+      align-items: flex-start;
     `,
     sellOption: css`
       ${option};
@@ -77,7 +78,8 @@ addStyles('BuySellLanding', props => {
     `,
     iconContainer: css`
       display: inline-block;
-      background: ${theme.color.gray.lightest};
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
       width: 100px;
       height: 100px;
       border-radius: 100%;
@@ -90,6 +92,10 @@ addStyles('BuySellLanding', props => {
         transform: translate(-50%, -50%);
         width: 40px;
         height: 40px;
+      }
+      @media (max-width: ${theme.bp.tablet - 1}px) {
+        width: 80px;
+        height: 80px;
       }
     `,
     sellIconOverlay: css`
@@ -111,10 +117,11 @@ addStyles('BuySellLanding', props => {
     optionTitle: css`
       font-size: 19px;
       margin: 20px 0 14px;
+      color: #fff;
     `,
     optionDescription: css`
       font-size: ${theme.type.baseFontSize - 1}px;
-      color: ${theme.color.text.light};
+      color: rgba(255, 255, 255, 0.6);
       margin-bottom: 0;
     `
   }
