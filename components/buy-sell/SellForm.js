@@ -233,6 +233,9 @@ class SellForm extends Component<Props, State> {
       const { currentSell, sellQuote, trades } = this.props
       const tradeStatus = trades.byId[sellQuote.id]
       try {
+        if (typeof tradeStatus.expectedSendAmount !== 'number') {
+          throw new Error('tradeStatus.expectedSendAmount is not a number')
+        }
         await this.props.onExecuteSend(
           currentSell.fromAcc,
           tradeStatus.payinAddress,
