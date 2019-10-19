@@ -48,13 +48,9 @@ const TradeId = ({ router }: Props) => {
           }
           indentTitle
         />
-        <PageContent>
+        <PageContent pad background="white">
           {tradeId ? (
-            <FormField>
-              <div style={{ padding: '18px 22px' }}>
-                <TradeInfo tradeId={router.query.tradeId} />
-              </div>
-            </FormField>
+            <TradeInfo tradeId={router.query.tradeId} />
           ) : (
             <Alert variant="error">The given trade ID is not valid.</Alert>
           )}
