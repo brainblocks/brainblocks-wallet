@@ -26,6 +26,7 @@ const code = css`
   font-size: 94%;
   letter-spacing: -0.05em;
   padding: 0 0.4em;
+  word-wrap: break-word;
 `
 const bold = css`
   color: ${theme.color.text.headings};

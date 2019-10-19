@@ -8,7 +8,6 @@ import Layout from '~/components/layout/Layout'
 import PageHeader from '~/components/layout/PageHeader'
 import PageContent from '~/components/layout/PageContent'
 import Alert from 'brainblocks-components/build/Alert'
-import FormField from 'brainblocks-components/build/FormField'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import TradeInfo from '~/components/buy-sell/TradeInfo'
 import { bootstrapInitialProps } from '~/state/bootstrap'
@@ -48,13 +47,9 @@ const TradeId = ({ router }: Props) => {
           }
           indentTitle
         />
-        <PageContent>
+        <PageContent pad background="white">
           {tradeId ? (
-            <FormField>
-              <div style={{ padding: '18px 22px' }}>
-                <TradeInfo tradeId={router.query.tradeId} />
-              </div>
-            </FormField>
+            <TradeInfo tradeId={router.query.tradeId} />
           ) : (
             <Alert variant="error">The given trade ID is not valid.</Alert>
           )}
