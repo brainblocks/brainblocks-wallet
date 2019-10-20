@@ -40,6 +40,35 @@ const routeDefs = {
     method: 'PATCH',
     url: `${Cypress.env('BASE_API_URL')}/users/vault`,
     response: 'fixture:patch-vault.json'
+  },
+  'all-pairs': {
+    method: 'GET',
+    url: `${Cypress.env('BASE_API_URL')}/trade/pairs`,
+    response: 'fixture:all-pairs.json'
+  },
+  'nano-pairs': {
+    method: 'GET',
+    url: `${Cypress.env('BASE_API_URL')}/trade/pairs/NANO`,
+    response: 'fixture:nano-pairs.json'
+  },
+  'estimate-eth-100': {
+    method: 'GET',
+    url: `${Cypress.env(
+      'BASE_API_URL'
+    )}/trade/estimate?amount=100&pair=ETH_NANO`,
+    response: 'fixture:estimate-eth-100.json'
+  },
+  'create-eth-trade': {
+    method: 'POST',
+    url: `${Cypress.env('BASE_API_URL')}/trade/create`,
+    response: 'fixture:create-eth-trade.json'
+  },
+  'get-eth-trade': {
+    method: 'GET',
+    url: `${Cypress.env(
+      'BASE_API_URL'
+    )}/trade/trades/0f248ce7-b9f5-420d-955e-89642725611b`,
+    response: 'fixture:get-eth-trade-incomplete.json'
   }
 }
 

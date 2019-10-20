@@ -313,6 +313,7 @@ class BuyForm extends Component<Props, State> {
                       >
                         <FormField>
                           <Select
+                            data-cy="sell-currency"
                             id="sell-currency"
                             value={values.sell}
                             name="sell"
@@ -347,6 +348,7 @@ class BuyForm extends Component<Props, State> {
                         }
                       >
                         <AmountField
+                          data-cy="amount"
                           value={values.amount}
                           name="amount"
                           fiatCode={values.sell}
@@ -424,6 +426,7 @@ class BuyForm extends Component<Props, State> {
                             valid={status.refundAddressValid !== false}
                           >
                             <Input
+                              data-cy="refund-address"
                               id="refund-address"
                               name="refundAddr"
                               placeholder=""
@@ -438,7 +441,11 @@ class BuyForm extends Component<Props, State> {
                       ) : (
                         <div className={styles.textComponent}>
                           <div>Sending from an exchange?</div>
-                          <a href="#" onClick={this.handleUseRefundAddress}>
+                          <a
+                            data-cy="use-refund-address"
+                            href="#"
+                            onClick={this.handleUseRefundAddress}
+                          >
                             + Add a refund address
                           </a>
                         </div>
@@ -446,6 +453,7 @@ class BuyForm extends Component<Props, State> {
                     </GridItem>
                     <GridItem>
                       <Button
+                        data-cy="create-buy-btn"
                         block
                         variant="primary"
                         color="green"
@@ -536,6 +544,7 @@ class BuyForm extends Component<Props, State> {
             </GridItem>
             <GridItem>
               <Button
+                data-cy="complete-order-btn"
                 block
                 variant="primary"
                 color="green"

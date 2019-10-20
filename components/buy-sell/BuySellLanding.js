@@ -17,7 +17,7 @@ const BuySellLanding = ({ styles, ...rest }: Props) => {
     <div className={styles.root}>
       <div className={styles.optionsContainer}>
         <Link prefetch href="/buy-sell/new-trade?tab=buy">
-          <button className={styles.buyOption}>
+          <button data-cy="buy-btn" className={styles.buyOption}>
             <div className={styles.iconContainer}>
               <BuyIcon />
               <div className={styles.buyIconOverlay}>
@@ -31,7 +31,7 @@ const BuySellLanding = ({ styles, ...rest }: Props) => {
           </button>
         </Link>
         <Link prefetch href="/buy-sell/new-trade?tab=sell">
-          <button className={styles.sellOption}>
+          <button data-cy="sell-btn" className={styles.sellOption}>
             <div className={styles.iconContainer}>
               <SellIcon />
               <div className={styles.sellIconOverlay}>
