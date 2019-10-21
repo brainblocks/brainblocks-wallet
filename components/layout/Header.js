@@ -16,6 +16,7 @@ import UserIcon from '~/static/svg/icons/user.svg'
 import LogoutIcon from '~/static/svg/icons/logout.svg'
 import LifeBuoyIcon from '~/static/svg/icons/lifebuoy.svg'
 import ExclaimIcon from '~/static/svg/icons/alert-exclaim.svg'
+import CheckIcon from '~/static/svg/icons/alert-check.svg'
 import Popover from 'brainblocks-components/build/Popover'
 import Spinner from 'brainblocks-components/build/Spinner'
 import { getCurrentUser } from '~/state/selectors/userSelectors'
@@ -261,10 +262,7 @@ class Header extends React.Component<Props, State> {
                           </i>
                           <span>Contacts</span>
                         </li>*/}
-                        <li
-                          className={styles.userMenuSupport}
-                          onClick={this.logout}
-                        >
+                        <li className={styles.userMenuSupport}>
                           <ReactGA.OutboundLink
                             eventLabel="Support"
                             to="https://brainblockshelp.freshdesk.com/"
@@ -276,10 +274,7 @@ class Header extends React.Component<Props, State> {
                             <span>Support</span>
                           </ReactGA.OutboundLink>
                         </li>
-                        <li
-                          className={styles.userMenuFeedback}
-                          onClick={this.logout}
-                        >
+                        <li className={styles.userMenuFeedback}>
                           <ReactGA.OutboundLink
                             eventLabel="Feedback"
                             to="https://brainblockshelp.freshdesk.com/support/tickets/new"
@@ -289,6 +284,18 @@ class Header extends React.Component<Props, State> {
                               <ExclaimIcon />
                             </i>
                             <span>Feedback</span>
+                          </ReactGA.OutboundLink>
+                        </li>
+                        <li className={styles.userMenuTerms}>
+                          <ReactGA.OutboundLink
+                            eventLabel="Terms of Use"
+                            to="https://brainblocks.io/terms/"
+                            target="_blank"
+                          >
+                            <i>
+                              <CheckIcon />
+                            </i>
+                            <span>Terms of Use</span>
                           </ReactGA.OutboundLink>
                         </li>
                         <li

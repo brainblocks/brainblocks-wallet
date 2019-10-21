@@ -177,7 +177,7 @@ addStyles('Header', props => ({
   `,
   userMenu: css`
     padding: 12px;
-    padding-left: ${12 + 12 + 36}px;
+    padding-left: ${12 + 36}px;
   `,
   userMenuList: css`
     ${resetList};
@@ -189,6 +189,7 @@ addStyles('Header', props => ({
       color: #808080;
       a {
         display: flex;
+        width: 100%;
         align-items: center;
         color: #808080;
         &:hover {
