@@ -27,7 +27,7 @@ describe('Tests the happy paths', function() {
 
     const parseBalance = balance => parseFloat(balance)
 
-    mockRoutes(['rates'])
+    mockRoutes(['rates', 'trades'])
 
     // Alias the requests we need to wait for
     cy.server()
