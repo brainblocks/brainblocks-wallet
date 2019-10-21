@@ -23,12 +23,20 @@ type Props = {
 }
 
 type State = {
-  error: boolean
+  error: boolean,
+  explain: boolean
 }
 
 class ReEnterPassword extends React.Component<Props, State> {
   state = {
-    error: false
+    error: false,
+    explain: false
+  }
+
+  handleToggleExplain = () => {
+    this.setState(prevState => ({
+      explain: !prevState.explain
+    }))
   }
 
   handleSubmit = async (values, { setSubmitting }) => {
@@ -95,6 +103,19 @@ class ReEnterPassword extends React.Component<Props, State> {
                       >
                         Go
                       </Button>
+                    </GridItem>
+                    <GridItem>
+                      <a href="#" onClick={this.handleToggleExplain}>
+                        Why?
+                      </a>
+                      {this.state.explain && (
+                        <p>
+                          For your security, your wallet &mdash; including your
+                          seed and private keys &mdash; is always encrypted with
+                          your password. We never store an un-encrypted copy in
+                          any persistent storage.
+                        </p>
+                      )}
                     </GridItem>
                   </Grid>
                 </form>

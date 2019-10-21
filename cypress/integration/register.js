@@ -13,9 +13,14 @@ describe('Tests the registration process', function() {
     cy.get('input[name=username]').type(user.username, { force: true })
     cy.get('input[name=email]').type(user.email, { force: true })
     cy.get('input[name=password]').type(user.password, { force: true })
-    cy.get('input[name=retype]').type(`${user.password}{enter}`, {
+    cy.get('input[name=retype]').type(`${user.password}`, {
       force: true
     })
+    cy.get('input[name=agreeTerms]')
+      .parents('label')
+      .click()
+
+    cy.get('[data-cy="register-btn"]').click()
 
     cy.url().should('equal', Cypress.config().baseUrl + '/email-verification')
   })

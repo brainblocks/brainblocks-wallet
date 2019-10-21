@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "trade": {
+    "payinAddress": "0x7A17da2F1a3D04ad8a94393CE6c76daf37Ed02F9",
+    "payoutAddress": "nano_1643e5t7ruzwm48ttdxdo9d8w8zn5hcsrxp5s8b54rxx5rrhetggpxety5ni",
+    "payoutExtraId": null,
+    "fromCurrency": "eth",
+    "toCurrency": "nano",
+    "refundAddress": "0x1f9bc6c897799d93980F41B93B03d177360f9486",
+    "id": "0f248ce7-b9f5-420d-955e-89642725611b",
+    "amount": 27.5726296
+  }
+}

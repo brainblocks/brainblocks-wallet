@@ -14,6 +14,7 @@ import './bb-components/snackbar'
 import './bb-components/example'
 import './bb-components/amount-field'
 import './bb-components/typography'
+import './bb-components/def-table'
 import './bb-components/grid'
 import './bb-components/button'
 import './bb-components/form-item'
@@ -56,9 +57,13 @@ import './components/new-account-start'
 import './components/new-vault'
 import './components/new-account-settings'
 
-// Send / Receive
-import './components/send-receive-tabs'
-import './components/send-form'
+// Send / Receive / Buy / Sell
+import './components/tx-form-tabs'
+import './components/tx-form'
+import './components/trade-info-table'
+import './components/buy-sell-landing'
+import './components/trades-list'
+import './components/trade-list-item'
 
 // Settings
 import './components/settings-tabs'

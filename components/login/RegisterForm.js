@@ -5,6 +5,7 @@ import GridItem from 'brainblocks-components/build/GridItem'
 import FormItem from 'brainblocks-components/build/FormItem'
 import FormField from 'brainblocks-components/build/FormField'
 import Input from 'brainblocks-components/build/Input'
+import Checkbox from 'brainblocks-components/build/Checkbox'
 import Button from 'brainblocks-components/build/Button'
 import { validate as isEmail } from 'isemail'
 import { Formik } from 'formik'
@@ -68,7 +69,8 @@ class RegisterForm extends React.Component<Props> {
           username: '',
           email: '',
           password: '',
-          retype: ''
+          retype: '',
+          agreeTerms: false
         }}
         validate={this.validate}
         onSubmit={this.handleSubmit}
@@ -182,12 +184,33 @@ class RegisterForm extends React.Component<Props> {
                   </FormItem>
                 </GridItem>
                 <GridItem>
+                  <Checkbox
+                    checked={values.agreeTerms}
+                    name="agreeTerms"
+                    label={
+                      <span>
+                        I have read and agree to the{' '}
+                        <a
+                          href="https://brainblocks.io/terms/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Terms and Conditions
+                        </a>
+                      </span>
+                    }
+                    onChange={handleChange}
+                  />
+                </GridItem>
+                <GridItem>
                   <Button
+                    data-cy="register-btn"
                     block
                     variant="primary"
                     color="green"
                     type="submit"
                     loading={submitting}
+                    disabled={!values.agreeTerms}
                   >
                     Register
                   </Button>

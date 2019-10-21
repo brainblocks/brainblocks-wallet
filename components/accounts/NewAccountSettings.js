@@ -100,6 +100,7 @@ class NewAccountSettings extends React.Component<Props, State> {
           </GridItem>
           <GridItem>
             <Button
+              data-cy="create-account-btn"
               onClick={this.createAccountWithSettings}
               variant="primary"
               color="green"

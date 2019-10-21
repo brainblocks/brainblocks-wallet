@@ -1,4 +1,6 @@
 // @flow
+import type { TradeStatus } from '~/types/apiTypes'
+
 export type Dispatch = (
   action: ReduxAction | ThunkAction | PromiseAction
 ) => any
@@ -20,6 +22,8 @@ export type ReduxAction =
   | AccountsAction
   | AuthAction
   | PriceAction
+  | TradeAction
+  | TradesAction
   | TransactionAction
   | UIAction
   | UserAction
@@ -182,6 +186,112 @@ export type UpdateNanoPricesAction = {
   payload: Object
 }
 export type PriceAction = UpdateNanoPricesAction
+
+// Trades ===
+
+// state
+export type Trade = {
+  +id: string,
+  +status: TradeStatus,
+  +payinAddress: string,
+  +payoutAddress: string,
+  +fromCurrency: string,
+  +toCurrency: string,
+  +refundAddress: string,
+  +updatedAt: number,
+  +createdAt: number,
+  +expectedSendAmount?: number,
+  +expectedReceiveAmount?: number,
+  +amountSend?: number,
+  +amountReceive?: number,
+  +depositReceivedAt?: number,
+  +payinExtraId?: string,
+  +payinExtraIdName?: string,
+  +payinHash?: string,
+  +payoutHash?: string
+}
+export type TradesState = {
+  +allIds: Array<string>,
+  +byId: { [string]: Trade },
+  +didGetTrades: boolean
+}
+// actions
+export type BulkAddTradesAction = {
+  type: 'TRADES::BULK_ADD',
+  payload: Array<Trade>
+}
+export type UpsertTradeAction = {
+  type: 'TRADES::UPSERT',
+  payload: Trade
+}
+export type TradesAction = BulkAddTradesAction | UpsertTradeAction
+
+// Trade ===
+// state
+export type CurrentSell = {
+  buyCurrency: string,
+  fromAcc: string,
+  sellAmount: number,
+  receiveAddr: string,
+  extraId: ?string
+}
+export type CurrentBuy = {
+  sellCurrency: string,
+  sellAmount: number,
+  receiveAcc: string,
+  refundAddr: string
+}
+export type TradeQuote = {
+  amount: number,
+  fromCurrency: string,
+  id: string,
+  payinAddress: string,
+  payoutAddress: string,
+  payoutExtraId: ?string,
+  refundAddress: string,
+  toCurrency: string
+}
+export type TradeState = {
+  nanoPairs: Array<Object>,
+  currentSell: CurrentSell,
+  currentBuy: CurrentBuy,
+  sellQuote: ?TradeQuote,
+  buyQuote: ?TradeQuote
+}
+export type UpdateNanoPairsAction = {
+  type: 'TRADE::UPDATE_NANO_PAIRS',
+  payload: Object
+}
+export type SetCurrentSellAction = {
+  type: 'TRADE::SET_CURRENT_SELL',
+  payload: CurrentSell
+}
+export type SetCurrentBuyAction = {
+  type: 'TRADE::SET_CURRENT_BUY',
+  payload: CurrentBuy
+}
+export type ResetCurrentSellAction = {
+  type: 'TRADE::RESET_CURRENT_SELL'
+}
+export type ResetCurrentBuyAction = {
+  type: 'TRADE::RESET_CURRENT_BUY'
+}
+export type SetSellQuoteAction = {
+  type: 'TRADE::SET_SELL_QUOTE',
+  payload: ?TradeQuote
+}
+export type SetBuyQuoteAction = {
+  type: 'TRADE::SET_BUY_QUOTE',
+  payload: ?TradeQuote
+}
+export type TradeAction =
+  | UpdateNanoPairsAction
+  | SetCurrentSellAction
+  | SetCurrentBuyAction
+  | ResetCurrentSellAction
+  | ResetCurrentBuyAction
+  | SetBuyQuoteAction
+  | SetSellQuoteAction
 
 // UI ===
 // state
