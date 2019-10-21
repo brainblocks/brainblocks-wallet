@@ -10,13 +10,14 @@ import TransactionImage from './TransactionImage'
 import AccountTitle from '~/components/accounts/AccountTitle'
 import TransactionMenu from './TransactionMenu'
 import MoreIcon from '~/static/svg/icons/more.svg'
-import type { ReduxTransaction, AccountsState } from '~/types/reduxTypes'
+import type { ReduxTransaction, AccountsState, Trade } from '~/types/reduxTypes'
 
 type Props = {
   styles: Object,
   transaction: ReduxTransaction,
   account?: Object,
-  accounts: AccountsState
+  accounts: AccountsState,
+  trade?: Trade
 }
 
 type State = {
@@ -47,8 +48,14 @@ class TransactionListItem extends React.Component<Props, State> {
    * Get the contact info based on the transaction
    */
   getContactInfo = data => {
-    const tx = data.tx
-    const accounts = data.accounts
+    const { tx, accounts, trade } = data
+
+    if (trade) {
+      return {
+        title: 'BrainBlocks',
+        subTitle: 'Buy & Sell'
+      }
+    }
 
     let contactInfo: { title: string, subTitle: string | React.Node } = {
       title: 'Unknown',
@@ -104,16 +111,32 @@ class TransactionListItem extends React.Component<Props, State> {
    * Render a single transaction as a table row
    */
   render() {
-    const { styles, transaction, account, accounts } = this.props
+    const { styles, transaction, account, accounts, trade } = this.props
     const { moreOptionsOpen, moreOptionsAnchorEl } = this.state
     const tx = transaction
-    const data = { tx, accounts }
+    const data = { tx, accounts, trade }
     const contactInfo = this.getContactInfo(data)
+    const isTrade = trade != null
+    let tradeMsg = ''
+    if (trade != null) {
+      const isSell = trade.fromCurrency === 'nano'
+      if (isSell) {
+        let buyAmount = 0
+        if (typeof trade.amountReceive === 'number') {
+          buyAmount = trade.amountReceive
+        } else if (typeof trade.expectedReceiveAmount === 'number') {
+          buyAmount = trade.expectedReceiveAmount
+        }
+        tradeMsg = `Buy ${buyAmount} ${trade.toCurrency.toUpperCase()}`
+      } else {
+        tradeMsg = `Bought NANO with ${trade.fromCurrency.toUpperCase()}`
+      }
+    }
 
     return (
       <tr data-hash={tx.id} data-type={tx.type}>
         <td className={styles.imgCol}>
-          <TransactionImage transaction={tx} />
+          <TransactionImage transaction={tx} trade={trade} />
         </td>
         {!!account && (
           <td className={styles.accountCol}>
@@ -135,6 +158,8 @@ class TransactionListItem extends React.Component<Props, State> {
         <td className={styles.noteCol}>
           {tx.note ? (
             <span className={styles.note}>{tx.note}</span>
+          ) : isTrade ? (
+            <span className={styles.note}>{tradeMsg}</span>
           ) : (
             <span className={styles.noNote}>No description</span>
           )}
@@ -168,6 +193,7 @@ class TransactionListItem extends React.Component<Props, State> {
           )}
           <TransactionMenu
             transaction={tx}
+            trade={trade}
             id="transaction-more-options"
             open={moreOptionsOpen}
             anchorEl={moreOptionsAnchorEl}
