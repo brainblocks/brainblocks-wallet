@@ -59,26 +59,34 @@ class TradeInfoTable extends Component<Props> {
 
   render() {
     const { accounts, trade, styles, isRefreshing } = this.props
-    const isSell = trade ? trade.fromCurrency === 'nano' : null
-    const isFinished = greenStatuses.includes(trade.status)
-    const bestKnownSendAmount =
-      typeof trade.amountSend === 'number'
-        ? trade.amountSend
-        : typeof trade.expectedSendAmount === 'number'
-        ? trade.expectedSendAmount
-        : 0
-    const bestKnownReceiveAmount =
-      typeof trade.amountReceive === 'number'
-        ? trade.amountReceive
-        : typeof trade.expectedReceiveAmount === 'number'
-        ? trade.expectedReceiveAmount
-        : 0
+    let isSell = false
+    let isFinished = false
+    let bestKnownSendAmount = 0
+    let bestKnownReceiveAmount = 0
+    if (trade) {
+      isSell = trade ? trade.fromCurrency === 'nano' : null
+      isFinished = trade ? greenStatuses.includes(trade.status) : null
+      bestKnownSendAmount =
+        typeof trade.amountSend === 'number'
+          ? trade.amountSend
+          : typeof trade.expectedSendAmount === 'number'
+          ? trade.expectedSendAmount
+          : 0
+      bestKnownReceiveAmount =
+        typeof trade.amountReceive === 'number'
+          ? trade.amountReceive
+          : typeof trade.expectedReceiveAmount === 'number'
+          ? trade.expectedReceiveAmount
+          : 0
+    }
     return (
-      <div className={styles.root}>
+      <div className={styles.root} data-cy="trade-status-table">
         {trade ? (
           <DefTable>
             <DefTableItem label="Trade ID">
-              <span className={styles.tradeId}>{trade.id}</span>
+              <span data-cy="trade-status-table-id" className={styles.tradeId}>
+                {trade.id}
+              </span>
             </DefTableItem>
             <DefTableItem label="Status">
               {isRefreshing ? (

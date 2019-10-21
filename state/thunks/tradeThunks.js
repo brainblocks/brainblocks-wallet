@@ -7,7 +7,10 @@ import * as tradeAPI from '~/state/api/trade'
 import { getWallet, nanoToRaw } from '~/state/wallet'
 import log from '~/functions/log'
 import type { ThunkAction, CurrentSell, CurrentBuy } from '~/types/reduxTypes'
-import { VALIDATE_SELL_AMOUNT } from '~/constants/config'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+const { VALIDATE_SELL_AMOUNT } = publicRuntimeConfig
 
 export const updateNanoPairs: () => ThunkAction = () => (
   dispatch,

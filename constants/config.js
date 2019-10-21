@@ -10,4 +10,3 @@ export const ACCOUNT_COLORS = [
   'orange',
   'jade'
 ]
-export const VALIDATE_SELL_AMOUNT = true

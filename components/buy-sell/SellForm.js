@@ -27,8 +27,11 @@ import type {
   TradesState,
   TradeQuote
 } from '~/types/reduxTypes'
-import { VALIDATE_SELL_AMOUNT } from '~/constants/config'
 import log from '~/functions/log'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+const { VALIDATE_SELL_AMOUNT } = publicRuntimeConfig
 
 type Props = WithRouter &
   WithSnackbar & {
@@ -348,6 +351,7 @@ class SellForm extends Component<Props, State> {
                       >
                         <FormField>
                           <Select
+                            data-cy="buy-currency"
                             id="buy-currency"
                             value={values.buy}
                             name="buy"
@@ -404,6 +408,7 @@ class SellForm extends Component<Props, State> {
                         }
                       >
                         <AmountField
+                          data-cy="amount"
                           value={values.amount}
                           name="amount"
                           fiatCode={values.buy}
@@ -443,6 +448,7 @@ class SellForm extends Component<Props, State> {
                           valid={touched.buyAddress && !errors.buyAddress}
                         >
                           <Input
+                            data-cy="payout-address"
                             id="buy-currency-address"
                             name="buyAddress"
                             placeholder={`${values.buy} address`}
@@ -455,6 +461,7 @@ class SellForm extends Component<Props, State> {
                     </GridItem>
                     <GridItem>
                       <Button
+                        data-cy="create-sell-btn"
                         block
                         variant="primary"
                         color="green"
@@ -511,6 +518,7 @@ class SellForm extends Component<Props, State> {
             </GridItem>
             <GridItem>
               <Button
+                data-cy="complete-order-btn"
                 block
                 variant="primary"
                 color="green"
