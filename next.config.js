@@ -14,7 +14,8 @@ const nextConfig = {
     LOCAL_API: process.env.LOCAL_API,
     WEBSOCKET_URL: process.env.WEBSOCKET_URL,
     AUTH_TOKEN_COOKIE_KEY: process.env.AUTH_TOKEN_COOKIE_KEY,
-    DISABLE_LOCAL_PROXY: process.env.DISABLE_LOCAL_PROXY
+    DISABLE_LOCAL_PROXY: process.env.DISABLE_LOCAL_PROXY,
+    VALIDATE_SELL_AMOUNT: process.env.VALIDATE_SELL_AMOUNT !== 'false'
   },
   workboxOpts: {
     runtimeCaching: [

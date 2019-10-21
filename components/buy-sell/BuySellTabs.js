@@ -240,6 +240,7 @@ class BuySellTabs extends React.Component<Props, State> {
           graphic="/static/svg/success.svg"
         >
           <Button
+            data-cy="view-sell-status"
             onClick={this.handleViewTrade}
             color="blue"
             style={{ marginBottom: 5 }}

@@ -19,7 +19,7 @@ export const getTrades: () => ThunkAction = () => (dispatch, getState) => {
     try {
       // @todo these parameters are hard-coded while developing
       // we need to figure out a better way to get the latest trades by user
-      const { trades } = await tradeAPI.getTrades({ limit: 10000, offset: 100 })
+      const { trades } = await tradeAPI.getTrades()
       // update in redux
       dispatch(creators.bulkAddTrades(trades))
     } catch (e) {

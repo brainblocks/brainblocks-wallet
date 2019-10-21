@@ -13,7 +13,7 @@ const routeDefs = {
   },
   trades: {
     method: 'GET',
-    url: `${Cypress.env('BASE_API_URL')}/trade/trades?limit=10000&offset=100`,
+    url: `${Cypress.env('BASE_API_URL')}/trade/trades`,
     response: 'fixture:trades.json'
   },
   rates: {
@@ -51,24 +51,53 @@ const routeDefs = {
     url: `${Cypress.env('BASE_API_URL')}/trade/pairs/NANO`,
     response: 'fixture:nano-pairs.json'
   },
-  'estimate-eth-100': {
+  'chains-trade': {
+    method: 'POST',
+    url: `${Cypress.env('BASE_API_URL')}/node/chains`,
+    response: 'fixture:chains-trade.json'
+  },
+  'estimate-buy-eth-100': {
     method: 'GET',
     url: `${Cypress.env(
       'BASE_API_URL'
     )}/trade/estimate?amount=100&pair=ETH_NANO`,
-    response: 'fixture:estimate-eth-100.json'
+    response: 'fixture:estimate-buy-eth-100.json'
   },
-  'create-eth-trade': {
+  'estimate-sell-eth-100': {
+    method: 'GET',
+    url: `${Cypress.env(
+      'BASE_API_URL'
+    )}/trade/estimate?amount=100&pair=NANO_ETH`,
+    response: 'fixture:estimate-sell-eth-100.json'
+  },
+  'create-buy': {
     method: 'POST',
     url: `${Cypress.env('BASE_API_URL')}/trade/create`,
-    response: 'fixture:create-eth-trade.json'
+    response: 'fixture:create-buy.json'
   },
-  'get-eth-trade': {
+  'create-sell': {
+    method: 'POST',
+    url: `${Cypress.env('BASE_API_URL')}/trade/create`,
+    response: 'fixture:create-sell.json'
+  },
+  'get-buy': {
     method: 'GET',
     url: `${Cypress.env(
       'BASE_API_URL'
     )}/trade/trades/0f248ce7-b9f5-420d-955e-89642725611b`,
-    response: 'fixture:get-eth-trade-incomplete.json'
+    response: 'fixture:get-buy-incomplete.json'
+  },
+  'get-sell': {
+    method: 'GET',
+    url: `${Cypress.env(
+      'BASE_API_URL'
+    )}/trade/trades/d4521dd4-46fb-430c-a352-e21336e7bcb8`,
+    response: 'fixture:get-sell-incomplete.json'
+  },
+  'broadcast-sell': {
+    method: 'POST',
+    url: `${Cypress.env('BASE_API_URL')}/node/broadcast`,
+    response: 'fixture:broadcast-sell.json'
   }
 }
 

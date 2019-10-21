@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "trade": {
+    "status": "waiting",
+    "payinAddress": "nano_3gwwqu6hufekrudrb18g76h6p9i3jwd7ir7sfbj5hjd83du49t63by7twonz",
+    "payoutAddress": "0x1f9bc6c897799d93980F41B93B03d177360f9486",
+    "fromCurrency": "nano",
+    "toCurrency": "eth",
+    "refundAddress": "nano_1phhc7b4rme1xhtdwc5a548rwk58xrjw5eb8o7afymh3ujgdoonyor76mkbi",
+    "id": "d4521dd4-46fb-430c-a352-e21336e7bcb8",
+    "updatedAt": "2019-10-21T00:54:46.853Z",
+    "expectedSendAmount": 50,
+    "expectedReceiveAmount": 0.226162,
+    "createdAt": "2019-10-21T00:54:46.853Z",
+    "isPartner": false
+  }
+}

@@ -17,9 +17,7 @@ describe('Tests account-related functionality', function() {
     // Complete settings form
     cy.get('#account-name').type(`Test Account`, { delay: 0 })
     cy.get('label[for=color-option-1]').click()
-    cy.get('button span')
-      .contains('Create Account')
-      .click()
+    cy.get('[data-cy="create-account-btn"]').click()
 
     // Account should exist and have the expected Nano address
     cy.get('h4').contains('Test Account')
