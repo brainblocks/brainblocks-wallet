@@ -16,7 +16,8 @@ type Props = {
   account: string,
   pagination: React.Node,
   loading: boolean,
-  empty: boolean
+  empty: boolean,
+  tradesByTxHash: Object
 }
 
 class TransactionsList extends React.Component<Props> {
@@ -24,12 +25,15 @@ class TransactionsList extends React.Component<Props> {
    * Render the transactions as table rows
    */
   renderTransactions = txKeys => {
-    const { transactions, account, accounts } = this.props
+    const { transactions, account, accounts, tradesByTxHash } = this.props
     return txKeys.map((txId, i) => {
       const tx = transactions.byId[txId]
+      const trade =
+        tx.type === 'send' ? tradesByTxHash[txId] : tradesByTxHash[tx.link]
       return (
         <TransactionListItem
           key={txId}
+          trade={trade}
           transaction={tx}
           accounts={accounts}
           account={account === 'all' ? accounts.byId[tx.accountId] : null}

@@ -19,7 +19,8 @@ type Props = WithSnackbar &
     onClose: () => mixed,
     /** Given by destyle. Do not pass this to the component as a prop. */
     styles: Object,
-    destyleMerge?: Object
+    destyleMerge?: Object,
+    trade?: ?Object
   }
 
 class TransactionMenu extends React.Component<Props> {
@@ -55,6 +56,13 @@ class TransactionMenu extends React.Component<Props> {
     explorerWindow.opener = null
   }
 
+  handleViewTrade = () => {
+    const { trade } = this.props
+    if (trade) {
+      this.props.router.push(`/buy-sell/trade?tradeId=${trade.id}`)
+    }
+  }
+
   render() {
     const {
       styles,
@@ -67,10 +75,14 @@ class TransactionMenu extends React.Component<Props> {
       onPresentSnackbar,
       destyleMerge,
       closeSnackbar,
+      trade,
       ...rest
     }: Props = this.props
     return (
       <Menu open={open} anchorEl={anchorEl} onClose={onClose} {...rest}>
+        {!!trade && (
+          <MenuItem onClick={this.handleViewTrade}>View trade</MenuItem>
+        )}
         <MenuItem onClick={this.handleResend}>
           {transaction.type === 'send'
             ? 'Make this payment again'

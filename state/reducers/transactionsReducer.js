@@ -11,6 +11,8 @@ import type {
 export const nanoTransactionTemplate: ReduxNanoTransaction = {
   currency: 'nano',
   id: '',
+  previous: '',
+  link: '',
   accountId: '', // which nano address is it associated with?
   timestamp: 0,
   amountNano: 0,
