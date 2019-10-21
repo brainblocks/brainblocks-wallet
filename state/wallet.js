@@ -222,6 +222,8 @@ export const blockToReduxTx: Object => MutableReduxNanoTransaction = block => {
   const tx: MutableReduxNanoTransaction = {
     ...nanoTransactionTemplate,
     id: block.getHash(true),
+    previous: block.getPrevious(),
+    link: block.getLink(),
     accountId: block.getAccount(),
     amountNano: getBlockAmountNano(block),
     type: getBlockIntent(block),

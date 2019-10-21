@@ -33,10 +33,15 @@ addStyles('TransactionImage', props => {
       height: 44px;
       border-radius: 100%;
       overflow: hidden;
-      ${props.transaction.type === 'send' &&
-        css`
-          background: ${theme.color.status.errorLight};
-        `}
+      ${
+        props.transaction.type === 'send' && props.trade
+          ? css`
+              background: ${theme.color.status.warningLight};
+            `
+          : css`
+              background: ${theme.color.status.errorLight};
+            `
+      }
       ${(props.transaction.type === 'receive' ||
         props.transaction.type === 'open') &&
         css`
@@ -58,19 +63,33 @@ addStyles('TransactionImage', props => {
     icon: css`
       overflow: hidden;
       display: block;
-      width: 16px;
-      height: 16px;
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      ${props.trade
+        ? css`
+            width: 20px;
+            height: 20px;
+          `
+        : css`
+            width: 16px;
+            height: 16px;
+          `}
       svg {
-        width: 16px;
-        height: 16px;
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+        ${props.trade
+          ? css`
+              width: 20px;
+              height: 20px;
+            `
+          : css`
+              width: 16px;
+              height: 16px;
+            `}
       }
       ${!!props.transaction.image &&
         css`
@@ -104,6 +123,13 @@ addStyles('TransactionImage', props => {
     `,
     receiveIcon: css`
       color: ${theme.color.status.success};
+    `,
+    buyIcon: css`
+      color: ${theme.color.status.success};
+      }
+    `,
+    sellIcon: css`
+      color: ${theme.color.status.warning};
     `,
     transferIcon: css`
       color: ${theme.color.status.info};

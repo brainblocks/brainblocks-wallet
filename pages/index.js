@@ -25,6 +25,7 @@ import {
   getTotalBalance
 } from '~/state/selectors/accountSelectors'
 import { getNanoPriceInPreferredCurrency } from '~/state/selectors/priceSelectors'
+import { getTradesByTxHash } from '~/state/selectors/tradesSelectors'
 import { bootstrapInitialProps } from '~/state/bootstrap'
 import ClientBootstrap from '~/components/bootstrap/ClientBootstrap'
 import type { TransactionsState, AccountsState } from '~/types/reduxTypes'
@@ -44,7 +45,8 @@ type Props = {
   totalBalance: number,
   updateDashboardAccount: string => void,
   dashboardAccount: string,
-  isGettingTransactions: boolean
+  isGettingTransactions: boolean,
+  tradesByTxHash: Object
 }
 
 class Index extends Component<Props> {
@@ -80,7 +82,8 @@ class Index extends Component<Props> {
       totalBalance,
       dashboardAccount,
       nanoPrice,
-      isGettingTransactions
+      isGettingTransactions,
+      tradesByTxHash
     } = this.props
 
     let transactionsEmpty = false
@@ -94,7 +97,7 @@ class Index extends Component<Props> {
     }
 
     return (
-      <ClientBootstrap>
+      <ClientBootstrap loadTrades>
         <Layout>
           <Head>
             <title>Dashboard</title>
@@ -120,6 +123,7 @@ class Index extends Component<Props> {
               showTransactions={visibleTransactionIds}
               accounts={accounts}
               account={dashboardAccount}
+              tradesByTxHash={tradesByTxHash}
               pagination={
                 currentAccountTransactions.length >
                   visibleTransactionIds.length && (
@@ -148,7 +152,8 @@ export default connect(
     preferredCurrency: getPreferredCurrency(state),
     nanoPrice: getNanoPriceInPreferredCurrency(state),
     dashboardAccount: getDashboardAccount(state),
-    isGettingTransactions: getIsGettingChains(state)
+    isGettingTransactions: getIsGettingChains(state),
+    tradesByTxHash: getTradesByTxHash(state)
   }),
   {
     txPagingSet: uiActions.txPagingSet,
