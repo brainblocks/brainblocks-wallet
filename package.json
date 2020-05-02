@@ -55,7 +55,7 @@
     "numbro": "^2.1.1",
     "pbkdf2": "^3.0.14",
     "qrcode.react": "^0.9.0",
-    "rai-wallet": "^0.4.0",
+    "rai-wallet": "git+https://github.com/brainblocks/rai-wallet.git#master",
     "react": "^16.8.6",
     "react-breakpoints": "^3.0.3",
     "react-copy-to-clipboard": "^5.0.1",
