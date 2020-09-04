@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react'
-import Alert from 'react-bootstrap/Alert'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import { destyle } from 'destyle'
@@ -125,21 +124,6 @@ class Header extends React.Component<Props, State> {
         <header className={styles.root} {...rest}>
           {variant === 'bare' && (
             <div className={styles.pageWidth}>
-              <link
-                rel="stylesheet"
-                href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-                integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-                crossOrigin="anonymous"
-              />
-              <Alert variant="danger">
-                <Alert.Heading>
-                  BrainBlocks will cease operations - Please read our
-                  announcement{' '}
-                  <Alert.Link href="https://medium.com/brainblocks/brainblocks-announces-sunset-6d4016661e27">
-                    here
-                  </Alert.Link>
-                </Alert.Heading>
-              </Alert>
               <div className={styles.logotype}>
                 <img
                   src="/static/svg/brainblocks-logotype-white.svg"
